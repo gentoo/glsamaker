@@ -326,9 +326,11 @@ bodyFooter_invoke();
 				if(!$HTTP_POST_VARS['GLSA_Product'])
 					$HTTP_POST_VARS['GLSA_Product'] = $tmp[1];
 
-				if($HTTP_POST_VARS['GLSA_Workaround'])
-					$HTTP_POST_VARS['GLSA_Workaround'] .= $newLine.$newLine;
-				$HTTP_POST_VARS['GLSA_Workaround'] .= 'There is no known workaround at this time.';
+				if (trim($HTTP_POST_VARS['GLSA_Workaround']) != 'There is no known workaround at this time.') {
+					if($HTTP_POST_VARS['GLSA_Workaround'])
+						$HTTP_POST_VARS['GLSA_Workaround'] .= $newLine.$newLine;
+					$HTTP_POST_VARS['GLSA_Workaround'] .= 'There is no known workaround at this time.';
+				}
 
 				if($HTTP_POST_VARS['GLSA_Resolution'])
 					$HTTP_POST_VARS['GLSA_Resolution'] .= $newLine.$newLine;
