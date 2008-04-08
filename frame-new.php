@@ -305,36 +305,50 @@ bodyFooter_invoke();
 		$newLine = "\n";
 		if($HTTP_POST_VARS['Submit'] == 'Boilerplate')
 		{
-			$haveFixedVersion = false;
+			# Set Workaround if it's not already set
+			if (trim($HTTP_POST_VARS['GLSA_Workaround']) != 'There is no known workaround at this time.') {
+				if($HTTP_POST_VARS['GLSA_Workaround'])
+					$HTTP_POST_VARS['GLSA_Workaround'] .= $newLine.$newLine;
+				$HTTP_POST_VARS['GLSA_Workaround'] .= 'There is no known workaround at this time.';
+			}
+
 			if(count($GLSAVersions) > 0)
 			{
 				foreach($GLSAVersions as $GLSAVersion)
 				{
+					$tmp = explode('/', $GLSAVersion['name']);
+					$product = $tmp[1];
+
+					# Include the ebuild in product if it's not there yet
+					if(!$HTTP_POST_VARS['GLSA_Product'])
+						$HTTP_POST_VARS['GLSA_Product'] = $product;
+					else if (strpos($HTTP_POST_VARS['GLSA_Product'], $product) === FALSE) {
+						# If this product is not listed, list it
+						$HTTP_POST_VARS['GLSA_Product'] .= " ".$product;
+					}
+
+					# Update resolution
 					if(count($GLSAVersion['unaffected']) > 0 && count($GLSAVersion['vulnerable']) > 0)
 					{
-						$haveFixedVersion = true;
-						break;
+						# Give update advice
+						foreach($GLSAVersion['unaffected'] as $FixedVersion) {
+						
+						$tmpV = current($FixedVersion);
+		
+						if($HTTP_POST_VARS['GLSA_Resolution'])
+							$HTTP_POST_VARS['GLSA_Resolution'] .= $newLine.$newLine;
+						$HTTP_POST_VARS['GLSA_Resolution'] .= 'All '.$product.' users should upgrade to the latest version:'.$newLine.$newLine.'<code>'.$newLine.'# emerge --sync'.$newLine.'# emerge --ask --oneshot --verbose ">='.$GLSAVersion['name'].'-'.$tmpV.'"</code>';
+
+						}
+					}
+					else if (count($GLSAVersion['unaffected']) == 0 && count($GLSAVersion['vulnerable']) > 0)
+					{
+						# Give unmerge advice
+						if($HTTP_POST_VARS['GLSA_Resolution'])
+							$HTTP_POST_VARS['GLSA_Resolution'] .= $newLine.$newLine;
+						$HTTP_POST_VARS['GLSA_Resolution'] .= 'We recommend that users unmerge '.$product.':'.$newLine.$newLine.'<code>'.$newLine.'# emerge --unmerge "'.$GLSAVersion['name'].'"</code>';
 					}
 				}
-			}
-			if($haveFixedVersion)
-			{
-				$tmp = explode('/', $GLSAVersion['name']);
-				$tmpV = current($GLSAVersion['unaffected']);
-				$tmpV = current($tmpV);
-
-				if(!$HTTP_POST_VARS['GLSA_Product'])
-					$HTTP_POST_VARS['GLSA_Product'] = $tmp[1];
-
-				if (trim($HTTP_POST_VARS['GLSA_Workaround']) != 'There is no known workaround at this time.') {
-					if($HTTP_POST_VARS['GLSA_Workaround'])
-						$HTTP_POST_VARS['GLSA_Workaround'] .= $newLine.$newLine;
-					$HTTP_POST_VARS['GLSA_Workaround'] .= 'There is no known workaround at this time.';
-				}
-
-				if($HTTP_POST_VARS['GLSA_Resolution'])
-					$HTTP_POST_VARS['GLSA_Resolution'] .= $newLine.$newLine;
-				$HTTP_POST_VARS['GLSA_Resolution'] .= 'All '.$tmp[1].' users should upgrade to the latest version:'.$newLine.$newLine.'<code>'.$newLine.'# emerge --sync'.$newLine.'# emerge --ask --oneshot --verbose ">='.$GLSAVersion['name'].'-'.$tmpV.'"</code>';
 			} else
 				echo generateWarning('Not all fields are completed - please make sure you have completed all the necessary fields!');				
 		}
