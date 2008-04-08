@@ -277,6 +277,10 @@ bodyFooter_invoke();
 			{
 				if(strpos($HTTP_POST_VARS['GLSA_RF_Title'], 'CVE-') === 0)
 					array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_Title'] => 'http://cve.mitre.org/cgi-bin/cvename.cgi?name='.$HTTP_POST_VARS['GLSA_RF_Title']));
+				else if(strpos($HTTP_POST_VARS['GLSA_RF_Title'], 'GLSA ') === 0)
+					array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_Title'] => 'http://www.gentoo.org/security/en/glsa/glsa-'
+					. substr($HTTP_POST_VARS['GLSA_RF_Title'], 5)
+					. '.xml'));
 				else
 					echo generateWarning('The entered reference was ignored - a reference URL is required!');
 			}
