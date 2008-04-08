@@ -1,0 +1,1228 @@
+<?php
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2004 Tim Yamin < plasmaroo@gentoo.org >                 *
+ *                                < plasm@roo.me.uk >                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+require_once 'io.filegrepper';
+
+function reformatString($string, $XMLRewrap = false, $wrapTo = 71)
+{
+	$newLine = "\n";
+	if($XMLRewrap != 1)
+	{
+		// We should only really decode if we're processing into text; otherwise don't to preserve
+		// quoting inside tag attributes...
+		$string = html_entity_decode($string);
+
+		// Remove whitespace between tags
+		$string = preg_replace(array('/\s*<p>\s*/', '/\s*<\/p>\s*</'), array('<p>', '</p><'), $string);
+
+		// Remove the first <P>
+		$string = preg_replace('/<p>/', '', $string, 1);
+
+		// Give lists some space
+		$string = str_replace('</p><ol>', '</p><br><ol>', $string);
+		$string = str_replace('</p><ul>', '</p><br><ul>', $string);
+
+		// Parse <OL> or <UL> tags
+		if($XMLRewrap != 2)
+		{
+			preg_match_all('/(<ol>.*?<\/ol>|<ul>.*?<\/ul>)/s', $string, $OLs, PREG_SET_ORDER);
+			foreach($OLs as $OL)
+			{
+				if(substr_count($OL[0], '<ul>') > 0)
+				{
+					$padLength = 2;
+					$nS = '* ';
+					$OL[0] = preg_replace('/ *<ul> */', '', $OL[0]);
+					$OL[0] = str_replace('</ul>', '', $OL[0]);
+				}
+				else
+				{
+					$padLength = strlen(substr_count($OL[0], '<li>'))+2;
+					$nS = '$i. ';
+					$OL[0] = preg_replace('/ *<ol> */', '', $OL[0]);
+					$OL[0] = str_replace('</ol>', '', $OL[0]);
+				}
+
+				// Parse each <LI> tag
+				$LIs = explode('<li>', $OL[0]);
+
+				$LICounter = 1;
+				$ListOutput = '';
+
+				// Count average length
+				$avgItemLength = -1;
+				if(count($LIs) >= 10)
+				{
+					$LICounter = array();
+					foreach($LIs as $LI)
+					{
+						$LICounter[] = strlen($LI);
+					}
+
+					$avgItemLength = max($LICounter);
+				}
+
+				foreach($LIs as $LI)
+				{
+					if(trim($LI) != '')
+					{
+						if($LICounter == 1)
+							$ListOutput .= $newLine;
+
+						// This is where we do the decision for adding \n or not
+						if($avgItemLength < 0 || $avgItemLength > $wrapTo-$padLength)
+							$ListOutput .= $newLine;
+
+						$ListOutput .= padWordWrap(str_replace('$i', $LICounter++, $nS).trim(str_replace('</li>', '', $LI)), str_repeat(' ', $padLength), $wrapTo-$padLength).$newLine;
+					}
+				}
+
+				if($nS != '* ')
+					$string = preg_replace('/<ol>.*?<\/ol>/s', $ListOutput, $string, 1);
+				else
+					$string = preg_replace('/<ul>.*?<\/ul>/s', $ListOutput, $string, 1);
+			}
+		}
+		// Replace each <P> with a "\n\n" and remove </P>'s
+		$string = str_replace('<br>', $newLine.$newLine, $string);
+		$string = str_replace('<p>', $newLine.$newLine, $string);
+
+		// Remove unneeded tags
+		if($XMLRewrap != 2)
+			$string = preg_replace(array('/<b>(.*?)<\/b>/s', '/<uri link=(\'|")(.*?)(\'|")>.*?<\/uri>/s', '/<\/?(i|e|p|u|uri).*?>/s'), array('*\1*', '\2', ''), $string);
+		else
+			$string = str_replace('</p>', '', $string);
+	}
+	$string = preg_replace(array('/<li> /s', '/ +<\/li>/s'), array('<li>'.$newLine, $newLine.'</li>'), $string);
+
+	// Split up the <pre>'s; wordwrap non-pre elements
+	$StringArray = preg_split('/(<\/?code>)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+	foreach ($StringArray as $Key => $String)
+	{
+		// Since we recode entities be sure to decode first...
+		$String = html_entity_decode($String);
+
+		if(!preg_match('/<\/?code.*>/', $String))
+		{
+			if(preg_match('/<code.*?>/', $StringArray[$Key-1]) && !$XMLRewrap)
+				$OString .= $newLine.preg_replace('/^(\S.*)$/m', '    \1', $String);
+			else if(preg_match('/<code.*?>/', $StringArray[$Key-1]) && $XMLRewrap)
+				$OString .= $newLine.'<code>'.htmlspecialchars(preg_replace('/^    /m', '', $String)).'</code>';
+			else if($wrapTo > 0)
+			{
+				if($XMLRewrap)
+				{
+					$String = str_replace(array('<p> ', '  </p>'), array('<p>'.$newLine, $newLine.'</p>'), $String);
+					$OString .= str_replace('&quot;', '"', wordwrap($String, $wrapTo, $newLine, true));
+				}
+				else
+					$OString .= wordwrap($String, $wrapTo, $newLine, true);
+			}
+			else
+			{
+				if($XMLRewrap)
+					$OString .= str_replace('&quot;', '"', $String);
+				else
+					$OString .= $String;
+			}
+		}
+	}
+
+	if(!$XMLRewrap)
+	{
+		// Remove excessive newlines
+		$OString = preg_replace('/'.$newLine.$newLine.$newLine.'+/s', $newLine.$newLine, $OString);
+
+		// Trim and return
+		return trim($OString, ' '.$newLine);
+	}
+
+	// We're doing an XML rewrap; untangle things otherwise and return.
+	return trim(preg_replace(array('/ *<p> *(\w+)/', '/ *<\/p> */', '/(<\/\w+>)\s*(<\/?\w+>)/', '/(<\w+>)\s+(<\w+>)/', '/(.+)<\/p>/', '/<uri link=&quot;(.+)&quot;>/s', '/<\/(.+)><p>/s'), array('<p>'.$newLine.'\1', '</p>', '\1'.$newLine.'\2', '\1'.$newLine.'\2', '\1'.$newLine.'</p>', '<uri link="\1">', '</\1>'.$newLine.'<p>'), $OString));
+}
+
+/*! Replace excessive whitespace with one whitespace and trim the
+    result.
+*/
+
+function npadOutput($string)
+{
+	return trim(preg_replace('/ +/', ' ', $string), "\n");
+}
+
+/*! Perform newline formatting on a string - the string is trimmed
+    and newlines are replaced with a newline and the requested padding
+    string.
+
+	@param string The input string.
+	@param pad String to pad on at newlines.
+	@param length Line length to wrap to.
+	@return The processed input string.
+
+*/
+
+function padWordWrap($string, $pad = '', $length = 75)
+{
+	$newLine = "\n";
+	$string = wordwrap($string, $length, $newLine, true);
+	$string = str_replace($newLine, $newLine.$pad, $string);
+	$string = preg_replace('/'.$newLine.$pad."(\r?)\n/", $newLine.$newLine, $string);
+	return $string;
+}
+
+function padXML($string, $pad = '')
+{
+	$newLine = "\n";
+	return str_replace($newLine, $newLine.$pad, $string);
+}
+
+/*! Turn double newlines [ = one blank line ] to separate paragraph
+    structures, but preserve other structures such as "<code>" tags. */
+
+function paragraphifyFromPlain($string)
+{
+	/* Split up code tags */
+	$StringArray = preg_split('/(<\/?code>|<\/?ol>|<\/?ul>)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+	$fn = '';
+	$newLine = "\n";
+
+	foreach ($StringArray as $Key => $String)
+	{
+		if(!preg_match('/<\/?(code|ol|ul)>/', $String))
+		{
+			if($StringArray[$Key-1] == '<code>')
+				$OString .= $newLine.'<code>'.htmlspecialchars(rtrim($String)).'</code>';
+			else if($StringArray[$Key-1] == '<ol>')
+				$OString .= $newLine.'<ol>'.rtrim($String).'</ol>';
+			else if($StringArray[$Key-1] == '<ul>')
+				$OString .= $newLine.'<ul>'.rtrim($String).'</ul>';
+			else
+			{
+				$String = preg_replace("/(\r\n|\n|\r)/", $newLine, $String);
+				$Paragraphs = preg_split('/'.$newLine.$newLine.'+/', htmlspecialchars($String, ENT_NOQUOTES), -1, PREG_SPLIT_NO_EMPTY);
+				foreach ($Paragraphs as $Paragraph)
+				{
+					$OString .= $fn.'<p>'.$newLine.trim(npadOutput($Paragraph)).$newLine.'</p>'; $fn = $newLine;
+				}
+			}
+		}
+	}
+
+	return preg_replace(array('/&lt;(\/?(b|e|i|u|uri).*?)&gt;/s', '/<uri link=&quot;(.+)&quot;>/s'), array('<\1>', '<uri link="\1">'), $OString);
+}
+
+/*! Strip un-necessary '<P>' tags to preserve layout structures - this
+    function first checks whether there is only one <P> tag - if so, it
+    is stripped and the string is returned. If the <P> tag is not at the
+    end, it is replaced by <br> and the opening <P> tag is removed.
+
+    If a </P> tag is found to be remaining on the end of the string, it is
+    removed along with the corresponding <P> tag.
+
+	@param string The input string.
+	@return The processed input string.
+
+*/
+
+function stripParagraphTags($string)
+{
+	if(strpos(ltrim($string), '<p>') == 0 || (substr_count($string, '<p>') == 1))
+	{
+		$string = preg_replace('/<p>(.+)<\/p>\s*<pre/', '\1<br><pre', $string);
+		if(substr_count($string, '<p>') > 0)
+			$string = substr_replace($string, '', strpos($string, '<p>'), 3);
+		$string = preg_replace('/<\/p>\s*<p>(.+)<\/p>\s*<pre/', '</p><br><br>\1<pre', $string, 1);
+		if(substr_count($string, '</p>') == 2)
+		{
+			$string = substr_replace($string, '<br><br>', strpos($string, '</p>'), 4);
+		}
+		else if(substr_count($string, '</p>') > 2)
+		{
+			$string = substr_replace($string, '<br>', strpos($string, '</p>'), 4);
+		}
+		else if(substr_count($string, '<p>') == 0 && (substr_count($string, '<ol>') > 0))
+		{
+			$string = substr_replace($string, '<br><br>', strpos($string, '</p>'), 4);
+		}
+		else if(substr_count($string, '</p>') > 0)
+		{
+			$string = substr_replace($string, '', strpos($string, '</p>'), 4);
+		}
+	}
+	if(strrpos(rtrim($string), '</p>') == strlen(rtrim($string))-4)
+	{
+		$pos    = strlen($string) - (strpos(strrev($string), strrev('<p>')) + strlen('<p>'));
+		$string = substr_replace($string, '', $pos, 3);
+		$pos    = strlen($string) - (strpos(strrev($string), strrev('</p>')) + strlen('</p>'));
+		$string = substr_replace($string, '', $pos, 4);
+	}
+	$string = str_replace('</ol>', '</ol><br>', $string);
+
+	// >> PHP5. This will match the whole string and return -8. 
+	//    Change as needed.
+
+	if(strrpos(rtrim($string), '</ol><br>') == strlen(rtrim($string))-4)
+		$string = substr_replace($string, '', strlen(rtrim($string))-4, 4);
+	return $string;
+}
+
+function rangeInt($int, $range)
+{
+	if($int >= $range)
+		return $int;
+	return $range;
+}
+
+function padLinks($string)
+{
+	return preg_replace("/(?<!<uri link=\")((http|ftp)+(s)?:\/\/[^,<>\s]+)/i", "<uri link=\"\\0\">\\0</uri>", $string);
+}
+
+function padHTML($string, $spell = false, $speller = false)
+{
+	$string = __spell__($string, $spell, &$speller);
+
+	$string = str_replace('<code>', '<pre style="text-align: left;">', $string);
+	$string = str_replace('</code>', '</pre>', $string);
+
+	$string = str_replace('<uri link', '<a href', $string);
+	$string = str_replace('</uri>', '</a>', $string);
+
+	$string = str_replace('<i>', '<font color="blue">', $string);
+	$string = str_replace('</i>', '</font>', $string);
+
+	$string = str_replace('<e>', '<i>', $string);
+	$string = str_replace('</e>', '</i>', $string);
+
+	return $string;
+}
+
+/*! Generate a RFC 2822 timestamp for use in metadata...
+
+	@return The timestamp.
+
+*/
+
+function genMetadataTimestamp()
+{
+	return date('r');
+}
+
+/*! Turn 'yes' or 'no' into binary 1 and 0; and vice-versa. 
+
+	@param input The input data.
+	@return The result.
+
+*/
+function SBMod($input)
+{
+	switch($input)
+	{
+		case 0:
+			return 'no';
+		case 1:
+			return 'yes';
+		case 'no':
+			return 0;
+		case 'yes':
+			return 1;
+	}
+}
+
+/*! This function turns a version expression, such as one
+    which is used in GLSAs into a human-readable set of
+    operators.
+
+	@param VXP The input expression.
+	@return A human readable version of the VXP.
+
+*/
+function VXPToText($VXP)
+{
+	switch( $VXP )
+	{
+		case 'eq':
+			return '==';
+		case 'ge':
+			return '&gt;=';
+		case 'le':
+			return '&lt;=';
+		case 'gt':
+			return '&gt;';
+		case 'lt':
+			return '&lt;';
+		case 'rlt':
+			return '*&lt;';
+		case 'rle':
+			return '*&lt;=';
+		case 'rgt':
+			return '*&gt;';
+		case 'rge':
+			return '*&gt;=';
+	}
+}
+
+class GLSAParser {
+
+	var $XMLParser;
+
+	var $GLSAID;
+	var $GLSASeverity;
+
+	var $GLSAShortSummary;
+	var $GLSASynopsis;
+	var $GLSADate;
+
+	var $GLSABugs = array();
+	var $GLSAMetadata = array();
+	var $GLSAPackages = array();
+	var $GLSAReferences = array();
+
+	var $GLSAAccess;
+	var $GLSARevision;
+
+	var $GLSABackground = '';
+	var $GLSADescription = '';
+	var $GLSAImpact = '';
+
+	var $GLSAProduct = '';
+	var $GLSAProductType = '';
+
+	var $GLSAResolution = '';
+	var $GLSAWorkaround = '';
+
+	var $__inMetadata__;
+	var $__inMetadataCounter__ = -1;
+	var $__inMetadataNRST__;
+	var $__inMetadataParentArray__;
+
+	var $__inPackage__;
+	var $__inPreformatted__;
+	var $__inReferences__;
+	var $__inVersion__;
+
+	var $__tagMetadata__;
+	var $__tagMinimal__;
+
+	var $__boolNewline__;
+
+	function GLSAParse($GLSAData, $tagMinimal = false, $tagAddMetadata = false)
+	{
+		$this->XMLParser = xml_parser_create('UTF-8');
+
+		xml_set_object($this->XMLParser, $this);
+		xml_set_character_data_handler($this->XMLParser, '__readContent__');
+		xml_set_element_handler($this->XMLParser, '__tagOpen__', '__tagClose__');
+		xml_parser_set_option($this->XMLParser, XML_OPTION_CASE_FOLDING, false);
+
+		if($tagMinimal)
+			$this->__tagMetadata__ = $tagAddMetadata;
+		else
+			$this->__tagMetadata__ = true;
+		$this->__tagMinimal__ = $tagMinimal;
+
+		xml_parse($this->XMLParser, $GLSAData, true);
+		xml_parser_free($this->XMLParser);
+
+		$this->GLSAAccess = rtrim($this->GLSAAccess);
+		$this->GLSADate = rtrim($this->GLSADate);
+		$this->GLSAProduct = rtrim($this->GLSAProduct);
+		$this->GLSARevision = rtrim($this->GLSARevision);
+		$this->GLSAShortSummary = rtrim(htmlspecialchars($this->GLSAShortSummary, ENT_NOQUOTES));
+		$this->GLSASynopsis = trim(htmlspecialchars($this->GLSASynopsis, ENT_NOQUOTES));
+	}
+
+	function __iterateMetadata__ (&$MetadataSet, $iLevel)
+	{
+		$newLine = "\n";
+		foreach($MetadataSet as $GLSAMetadataItem)
+		{
+			$string .= str_repeat(' ', $iLevel).'<metadata tag="'.$GLSAMetadataItem['tag'].'"'.rtrim($GLSAMetadataItem['revision'] ? ' revision="'.$GLSAMetadataItem['revision'].'"' : '').rtrim($GLSAMetadataItem['author'] ? ' author="'.$GLSAMetadataItem['author'].'"' : '').rtrim($GLSAMetadataItem['timestamp'] ? ' timestamp="'.$GLSAMetadataItem['timestamp'].'"' : '').rtrim($GLSAMetadataItem['flag'] ? ' flag="'.$GLSAMetadataItem['flag'].'"' : '').'>'.$newLine;
+			if($GLSAMetadataItem['cdata'])
+				$string .= str_repeat(' ', $iLevel+2).htmlspecialchars(ltrim($GLSAMetadataItem['cdata'])).$newLine;
+			if(is_array($GLSAMetadataItem['data']) && count($GLSAMetadataItem['data']) > 0)
+				$string .= $this->__iterateMetadata__(&$GLSAMetadataItem['data'], $iLevel+2);
+			$string .= str_repeat(' ', $iLevel).'</metadata>'.$newLine;
+		}
+		return $string;
+	}
+
+	function __readContent__($parser, $data)
+	{
+		if($this->GLSADate && $this->GLSAShortSummary && $this->__tagMinimal__ && !$this->__tagMetadata__)
+			return;
+		if (isset($this->__inPreformatted__))
+		{
+			if($this->__inTag__ != 'code')
+			{
+				if($this->__inTag__ != 'uri')
+				{
+					$data = padLinks($data);
+					$this->__inPreformatted__ .= npadOutput(htmlspecialchars($data), ENT_NOQUOTES);
+				} else
+				{
+					// Strip XML newline indentation whitespace
+					$this->__inPreformatted__ .= npadOutput(preg_replace('/^ +/', '', htmlspecialchars($data)), ENT_NOQUOTES);
+				}
+			}
+			else
+			{
+				/* rtrim is broken; it strips spaces before the end of the string for some reason... */
+				/* Using workaround... */
+				$this->__inPreformatted__ .= $data;
+			}
+		} 
+		elseif (isset($this->__inReferences__))
+		{
+			$key = end(array_keys($this->GLSAReferences));
+			if($key != '0') $this->GLSAReferences[$key] .= rtrim($data);
+		}
+		else
+		{
+			switch ($this->__inTag__)
+			{
+				case 'access':
+					$this->GLSAAccess .= npadOutput($data);
+					break;
+				case 'announced':
+					$this->GLSADate .= npadOutput($data);
+					break;
+				case 'bug':
+					if(trim($data) != '') $this->GLSABugs[] = trim($data);
+					break;
+				case 'product':
+					$this->GLSAProduct .= npadOutput($data);
+					break;
+				case 'metadata':
+					if(!is_array($this->__inMetadata__) || trim($data) == '')
+						break;
+					$this->__inMetadata__['cdata'] .= $data;
+					break;
+				case 'revised':
+					$this->GLSARevision .= npadOutput($data);
+					break;
+				case 'summary':
+					$this->GLSAShortSummary .= npadOutput($data);
+					break;
+				case 'synopsis':
+					$this->GLSASynopsis .= npadOutput($data);
+					break;
+				case 'title':
+					$this->GLSAShortSummary .= npadOutput($data);
+					break;
+				case 'unaffected':
+					if(trim($data) != '') $this->GLSAPackages[count($this->GLSAPackages)-1]['unaffected'][] = array($this->__inVersion__ => $data);
+					break;
+				case 'vulnerable':
+					if(trim($data) != '') $this->GLSAPackages[count($this->GLSAPackages)-1]['vulnerable'][] = array($this->__inVersion__ => $data);
+					break;
+			}
+		}
+	}
+
+	function __tagOpen__($parser, $tag, $attributes)
+	{
+		$this->__inTagPrevious__ = $this->__inTag__;
+		$this->__inTag__ = $tag;
+
+		if($this->GLSADate && $this->GLSAShortSummary && $this->__tagMinimal__ && !$this->__tagMetadata__
+		   || ($this->__tagMinimal__ && $this->__tagMetadata__ && $tag != 'metadata'))
+			return;
+
+		if(isset($this->__inPreformatted__))
+		{
+			if($tag == 'uri')
+			{
+				$this->__inPreformatted__ .= '<uri link="'.htmlspecialchars($attributes['link'], ENT_NOQUOTES).'">';
+			}
+			else
+				$this->__inPreformatted__ .= '<'.$tag.'>';
+			return;
+		}
+
+		switch($tag)
+		{
+			case 'affected':
+				$this->__inVersion__ = &$this->GLSAAffected;
+				break;
+			case 'background':
+				$this->__inPreformatted__ = &$this->GLSABackground;
+				break;
+			case 'description':
+				$this->__inPreformatted__ = &$this->GLSADescription;
+				break;
+			case 'impact':
+				$this->GLSASeverity = $attributes['type'];
+				$this->__inPreformatted__ = &$this->GLSAImpact;
+				break;
+			case 'glsa':
+				if(ereg('^[a-fA-F0-9]{32}$', $attributes['id']))
+					$this->GLSAID = $attributes['id'];
+				else
+				{
+					$__array__ = explode('-', $attributes['id']);
+					$this->GLSAID = sprintf('%04d-%02d', $__array__[0], $__array__[1]);
+				}
+				$this->GLSASeverity = $attributes['severity'];
+				break;
+			case 'metadata':
+				if(isset($this->__inMetadata__) == 0 && $this->__inMetadataCounter__ == -1)
+				{
+					$this->GLSAMetadata[] = array('data' => array(), 'revision' => $attributes['revision'], 'tag' => $attributes['tag'], 'author' => $attributes['author'], 'rootnode' => '', 'timestamp' => $attributes['timestamp'], 'flag' => $attributes['flag']);
+					end($this->GLSAMetadata);
+
+					$this->__inMetadata__ = &$this->GLSAMetadata[key($this->GLSAMetadata)];
+					$this->__inMetadataParentArray__[$this->__inMetadataCounter__++] = &$this->GLSAMetadata[key($this->GLSAMetadata)];
+				}
+				else
+				{
+					$this->__inMetadata__['data'][] = array('data' => array(), 'revision' => $attributes['revision'], 'tag' => $attributes['tag'], 'author' => $attributes['author'], 'timestamp' => $attributes['timestamp'], 'flag' => $attributes['flag']);
+					end($this->__inMetadata__['data']);
+					$this->__inMetadataParentArray__[$this->__inMetadataCounter__] = &$this->__inMetadata__['data'][key($this->__inMetadata__['data'])];
+					$this->__inMetadata__ = &$this->__inMetadata__['data'][key($this->__inMetadata__['data'])];
+					$this->__inMetadataCounter__+=1;
+				}
+				break;
+			case 'package':
+				$this->GLSAPackages[] = array('arch' => $attributes['arch']);
+				$this->__inPackage__ = &$this->GLSAPackages[count($this->GLSAPackages)-1];
+
+				$this->__inPackage__['auto'] = $attributes['auto'];
+				$this->__inPackage__['name'] = $attributes['name'];
+				$this->__inPackage__['unaffected'] = array();
+				$this->__inPackage__['vulnerable'] = array();
+				break;
+			case 'product':
+				$this->GLSAProductType = $attributes['type'];
+				break;
+			case 'resolution':
+				$this->__inPreformatted__ = &$this->GLSAResolution;
+				break;
+			case 'references':
+				$this->__inReferences__ = true;
+				break;
+			case 'workaround':
+				$this->__inPreformatted__ = &$this->GLSAWorkaround;
+				break;
+			case 'unaffected':
+				if($attributes['name'] != '')
+				{
+					array_push($this->GLSAPackages, array('arch' => $this->__inPackage__['arch']));
+					$myPackage = &$this->GLSAPackages[count($this->GLSAPackages)-1];
+
+					$myPackage['auto'] = $this->__inPackage__['auto'];
+					$myPackage['name'] = $attributes['name'];
+					$myPackage['unaffected'] = array();
+					$myPackage['vulnerable'] = array();
+					break;
+				}
+				$this->__inVersion__ = $attributes['range'];
+				break;
+			case 'uri':
+				if($this->__inReferences__)
+					$this->GLSAReferences[$attributes['link']] = '';
+				break;
+			case 'vulnerable':
+				if($attributes['name'] != '')
+				{
+					array_push($this->GLSAPackages, array('arch' => $this->__inPackage__['arch']));
+					$myPackage = &$this->GLSAPackages[count($this->GLSAPackages)-1];
+
+					$myPackage['auto'] = $this->__inPackage__['auto'];
+					$myPackage['name'] = $attributes['name'];
+					$myPackage['unaffected'] = array();
+					$myPackage['vulnerable'] = array();
+					break;
+				}
+				$this->__inVersion__ = $attributes['range'];
+				break;
+		}
+	}
+
+	/*! This function is called internally by the PHP XML Parser. It
+	    processes the given tag and if any actions are required for that
+	    tag, they are applied.
+	*/
+	function __tagClose__($parser, $tag)
+	{ 
+		if($tag == 'metadata')
+		{
+			if(isset($this->__inMetadata__['rootnode']) && !$this->__inMetadataNRST__)
+			{
+				$this->__inMetadataCounter__ = -1;
+				unset($this->__inMetadata__);
+			}
+			else
+			{
+				if($this->__inMetadataCounter__ > 1)
+					$this->__inMetadataNRST__ = true;
+				else
+					$this->__inMetadataNRST__ = false;
+				if($this->__inMetadataParentArray__[$this->__inMetadataCounter__-1]['tag'] != '')
+				{
+					$this->__inMetadata__ = &$this->__inMetadataParentArray__[$this->__inMetadataCounter__-2];
+					$this->__inMetadataCounter__--;
+				}
+//				echo("-*-".$this->__inMetadataCounter__."@".$this->__inMetadataParentArray__[$this->__inMetadataCounter__]['tag']."--\n");
+			}
+		}
+
+		if($tag == 'references')
+			unset($this->__inReferences__);
+
+		if($tag == 'description' || $tag == 'background' || $tag == 'impact' || $tag == 'workaround' || $tag == 'resolution')
+			unset($this->__inPreformatted__);
+
+		if(isset($this->__inPreformatted__))
+		{
+			$this->__inPreformatted__ .= '</'.$tag.'>';
+			if($tag == 'uri')
+			{
+//				$this->__inPreformatted__ .= ' ';
+				if(isset($this->__inTagPrevious__))
+					$this->__inTag__ = $this->__inTagPrevious__;
+			}
+		}
+	}
+
+	function GLSAToXML($reviseDates = true)
+	{
+		$newLine = "\n";
+
+		$string  = '<?xml version="1.0" encoding="utf-8"?>'.$newLine;
+		$string .= '<?xml-stylesheet href="/xsl/glsa.xsl" type="text/xsl"?>'.$newLine;
+		$string .= '<?xml-stylesheet href="/xsl/guide.xsl" type="text/xsl"?>'.$newLine;
+		$string .= '<!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">'.$newLine;
+
+		$string .= $newLine.'<glsa id="'.$this->GLSAID.'">'.$newLine;
+		$string .= '  <title>'.htmlspecialchars($this->GLSAShortSummary).'</title>'.$newLine;
+
+		if($this->GLSASynopsis)
+		{
+			$string .= '  <synopsis>'.$newLine;
+			$string .= '    '.padWordWrap(htmlspecialchars($this->GLSASynopsis, ENT_NOQUOTES), '    ').$newLine;
+			$string .= '  </synopsis>'.$newLine;
+		} else
+			$string .= '  <synopsis/>'.$newLine;
+
+		$string .= '  <product type="'.$this->GLSAProductType.'">'.$this->GLSAProduct.'</product>'.$newLine;
+		$string .= '  <announced>';
+		$string .= $reviseDates === 'reset' ? date('F d, Y') : $this->GLSADate;
+		$string .= '</announced>'.$newLine;
+		$string .= '  <revised>';
+		if($reviseDates === 'reset')
+			$string .= date('F d, Y').': 01';
+		else if($reviseDates)
+		{
+			$temp = explode(':', $this->GLSARevision);
+			count($temp) < 2 ? $temp = 1 : $temp = $temp[1];
+			$string .= date('F d, Y').': '.padNumber(((int) $temp)+1);
+		}
+		else
+			$string .= $this->GLSARevision;
+		$string .= '</revised>'.$newLine;
+
+		foreach( $this->GLSABugs as $GLSABug ){ if(is_numeric($GLSABug)) { $string .= '  <bug>'.$GLSABug.'</bug>'.$newLine; } }
+		if($this->GLSAAccess)
+			$string .= '  <access>'.htmlspecialchars($this->GLSAAccess).'</access>'.$newLine;
+
+		$string .= '  <affected>'.$newLine;
+		foreach( $this->GLSAPackages as $GLSAPackage )
+		{
+			$string .= '    <package name="'.$GLSAPackage['name'].'" auto="'.$GLSAPackage['auto'].'" arch="'.$GLSAPackage['arch'].'">'.$newLine;
+			if(is_array($GLSAPackage['unaffected']))
+			{
+				foreach( $GLSAPackage['unaffected'] as $GLSAUnaffected )
+				{
+					$string .= '      <unaffected range="'.key($GLSAUnaffected).'">'.$GLSAUnaffected[key($GLSAUnaffected)].'</unaffected>'.$newLine;
+				}
+			}
+			else
+				generateWarning('No unaffected packages found for '.$GLSAPackage['name'].'! If this is intended; ignore this warning...');
+			if(is_array($GLSAPackage['vulnerable']))
+			{
+				foreach( $GLSAPackage['vulnerable'] as $GLSAVulnerable )
+				{
+					$string .= '      <vulnerable range="'.key($GLSAVulnerable).'">'.$GLSAVulnerable[key($GLSAVulnerable)].'</vulnerable>'.$newLine;
+				}
+			}
+			else
+				generateWarning('No unaffected packages found for '.$GLSAPackage['name'].'!');
+			$string .= '    </package>'.$newLine;
+		}
+		$string .= '  </affected>'.$newLine;
+
+		if($this->GLSABackground)
+		{
+			$string .= '  <background>'.$newLine;
+			$string .= padXML('    '.reformatString($this->GLSABackground, true), '    ').$newLine;
+			$string .= '  </background>'.$newLine;
+		}
+
+		if($this->GLSADescription)
+		{
+			$string .= '  <description>'.$newLine;
+			$string .= padXML('    '.reformatString($this->GLSADescription, true), '    ').$newLine;
+			$string .= '  </description>'.$newLine;
+		} else
+			$string .= '  <description/>'.$newLine;
+
+		if($this->GLSAImpact)
+		{
+			$string .= '  <impact type="'.$this->GLSASeverity.'">'.$newLine;
+			$string .= padXML('    '.reformatString($this->GLSAImpact, true), '    ').$newLine;
+			$string .= '  </impact>'.$newLine;
+		} else
+			$string .= '  <impact type="'.$this->GLSASeverity.'"/>'.$newLine;
+
+		if($this->GLSAWorkaround)
+		{
+			$string .= '  <workaround>'.$newLine;
+			$string .= padXML('    '.reformatString($this->GLSAWorkaround, true), '    ').$newLine;
+			$string .= '  </workaround>'.$newLine;
+		} else
+			$string .= '  <workaround/>'.$newLine;
+
+		if($this->GLSAResolution)
+		{
+			$string .= '  <resolution>'.$newLine;
+			$string .= padXML('    '.reformatString($this->GLSAResolution, true), '    ').$newLine;
+			$string .= '  </resolution>'.$newLine;
+		} else
+			$string .= '  <resolution/>'.$newLine;
+
+		if(count($this->GLSAReferences) > 0)
+		{
+			$string .= '  <references>'.$newLine;
+			foreach( $this->GLSAReferences as $GLSARef => $GLSAReference ) { $string .= '    <uri link="'.htmlspecialchars($GLSARef).'">'.htmlspecialchars(trim($GLSAReference)).'</uri>'.$newLine; }
+			$string .= '  </references>'.$newLine;
+		} else
+			$string .= '  <references/>'.$newLine;
+
+		if(count($this->GLSAMetadata) > 0)
+			$string .= $this->__iterateMetadata__ (&$this->GLSAMetadata, 2);
+
+		$string .= '</glsa>'.$newLine;
+		return str_replace("\r", '', $string);
+	}
+
+	function GLSAToText($noBanner = false, $updateMode = 0)
+	{
+		$newLine = "\n";
+		$wrapLevel = 71; # Wrap at 71 characters
+
+		if(!$noBanner)
+		{
+			if($updateMode == 1)
+				$titleTag = 'UPDATE: ';
+			if($updateMode == 2)
+				$titleTag = 'ERRATA: ';
+
+			$string .= 'To: gentoo-announce@gentoo.org'.$newLine;
+			$string .= 'CC: '.'bugtraq@securityfocus.com, full-disclosure@lists.grok.org.uk, security-alerts@linuxsecurity.com'.$newLine;
+			$string .= 'Subject: '.rtrim(html_entity_decode($titleTag.'[ GLSA '.$this->GLSAID.' ] '.$this->GLSAShortSummary)).$newLine.$newLine;
+		}
+
+		$GLSARevision = explode(':', $this->GLSARevision);
+		if(count($GLSARevision) < 2)
+		{
+			$GLSARevisionC = 1;
+			$GLSARevisionString = ':01';
+		} else {
+			$GLSARevisionString = ':'.str_replace(' ', '', $GLSARevision[1]);
+			$GLSARevisionC = $GLSARevision[1];
+		}
+		if($GLSARevisionString == ':01')
+			$GLSARevisionString = '';
+
+		if($updateMode == 1)
+			$titleTag = ' [UPDATE] ';
+		if($updateMode == 2)
+			$titleTag = ' [ERRATA UPDATE] ';
+
+		$string .= '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.$newLine;
+		$string .= 'Gentoo Linux Security Advisory'.$titleTag.str_repeat(' ', $wrapLevel-30-strlen($titleTag)-strlen('GLSA '.$this->GLSAID.$GLSARevisionString)).'GLSA '.$this->GLSAID.$GLSARevisionString.$newLine;
+		$string .= '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.$newLine;
+		$string .= '                                            http://security.gentoo.org/'.$newLine;
+		$string .= '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.$newLine;
+		$string .= $newLine;
+		$string .= '  Severity: '.ucfirst($this->GLSASeverity).$newLine;
+		$string .= '     Title: '.rtrim(wordwrap(html_entity_decode($this->GLSAShortSummary).$newLine, $wrapLevel-11, $newLine.'            ')).$newLine;
+		$string .= '      Date: '.$this->GLSADate.$newLine;
+		if($GLSARevisionC > 1)
+			$string .= '   Updated: '.$GLSARevision[0].$newLine;
+		if(count($this->GLSABugs) > 0)
+			$string .= '      Bugs: #'.implode(', #', $this->GLSABugs).$newLine;
+		$string .= '        ID: '.$pool.$this->GLSAID.$GLSARevisionString.$newLine;
+		$string .= $newLine;
+		$string .= '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.$newLine;
+		$string .= $newLine;
+		if($updateMode == 1)
+			$string .= 'Update'.$newLine.'======'.$newLine.$newLine.wordwrap('***'.$newLine.'Insert a summary of the update here and remove any sections which have not been changed (keep Availability, Concerns and License in all cases).', $wrapLevel).$newLine.'***'.$newLine.$newLine.'The updated sections appear below.'.$newLine.$newLine;
+		if($updateMode == 2)
+			$string .= 'Errata'.$newLine.'======'.$newLine.$newLine.wordwrap('***'.$newLine.'Insert a summary of the errata changes here and remove any sections which have not been changed (keep Availability, Concerns and License in all cases).', $wrapLevel).$newLine.'***'.$newLine.$newLine.'The corrected sections appear below.'.$newLine.$newLine;
+		$string .= 'Synopsis'.$newLine.'========'.$newLine.$newLine;
+		$string .= wordwrap(html_entity_decode($this->GLSASynopsis), $wrapLevel);
+		$string .= $newLine.$newLine;
+		if($this->GLSABackground != '')
+		{
+			$string .= 'Background'.$newLine.'=========='.$newLine.$newLine;
+			$string .= reformatString($this->GLSABackground, false, $wrapLevel);
+			$string .= $newLine.$newLine;
+		}
+		if(count($this->GLSAPackages) > 0)
+		{
+			$string .= 'Affected packages'.$newLine.'================='.$newLine.$newLine;
+			foreach ($this->GLSAPackages as $Package)
+			{
+				if(strlen($Package['name']) > $longestPackageName)
+					$longestPackageName = strlen($Package['name']);
+				foreach ($Package['vulnerable'] as $VersionArray)
+				{
+					foreach ($VersionArray as $VXP => $Version)
+					{
+						if(strlen(html_entity_decode(VXPToText($VXP)).' '.$Version) > $longestVulnerableVersion)
+							$longestVulnerableVersion = strlen(html_entity_decode(VXPToText($VXP)).' '.$Version);
+					}
+				}
+				if(isset($Package['unaffected']))
+				{
+					foreach ($Package['unaffected'] as $VersionArray)
+					{
+						foreach ($VersionArray as $VXP => $Version)
+						{
+							if(strlen(html_entity_decode(VXPToText($VXP)).' '.$Version) > $longestUnaffectedVersion)
+								$longestUnaffectedVersion = strlen(html_entity_decode(VXPToText($VXP)).' '.$Version);
+						}
+					}
+				}
+			}
+
+			if($longestPackageName < 7)
+				$longestPackageName = 7;
+			if($longestVulnerableVersion < 10)
+				$longestVulnerableVersion = 10;
+			if($longestUnaffectedVersion < 13)
+				$longestUnaffectedVersion = 13;
+
+			$padLevel = 4;
+			$longestPackageName += 2;
+			if($longestPackageName+$longestVulnerableVersion+$longestUnaffectedVersion > $wrapLevel-12 || $this->GLSAProduct == 'Kernel')
+			{
+				$trimPackageNames = true;
+				$longestPackageName = 0;
+				foreach ($this->GLSAPackages as $Package)
+				{
+					$packageName = explode('/', $Package['name']);
+					if(strlen($packageName[1]) > $longestPackageName)
+						$longestPackageName = strlen($packageName[1]) + 2;
+				}
+			}
+
+			$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+			if($this->GLSAProduct == 'Kernel')
+			{
+				$longestPackageName += 2;
+				if(floor($longestUnaffectedVersion/2) < ceil($longestUnaffectedVersion/2))
+					$Cstring = ' ';
+
+				$string .= str_repeat(' ', $padLevel).' Kernel '.@str_repeat(' ', $longestPackageName-7).'/'.str_repeat(' ', $pad=ceil((($longestUnaffectedVersion-6)/2))).'Unaffected'.str_repeat(' ', $pad).'/'.str_repeat(' ', $wrapLevel-$padLevel-$longestPackageName-$pad-$pad-21).$Cstring.'Remerge'.$newLine;
+			}
+			else
+			{
+				if(floor($longestUnaffectedVersion/2) < ceil($longestUnaffectedVersion/1.5))
+					$Cstring = ' ';
+
+				$string .= str_repeat(' ', $padLevel).' Package '.@str_repeat(' ', $longestPackageName-8).'/'.str_repeat(' ', $pad=ceil((($longestVulnerableVersion-6)/2))).'Vulnerable'.str_repeat(' ', $pad).'/'.str_repeat(' ', $wrapLevel-$padLevel-$longestPackageName-$pad-$pad-25).$Cstring.'Unaffected'.$newLine;
+			}
+			$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+
+			$i = 1;
+			$PackageAutos = 0;
+			$PackageVulns = 0;
+
+			$PackageLast = '';
+			$PackageSame = true;
+			foreach ($this->GLSAPackages as $Package)
+			{
+				$iSet = false;
+				if($PackageLast != '' && $PackageLast != $Package['name'] && $PackageSame)
+					$PackageSame = false;
+				$PackageLast = $Package['name'];
+				foreach ($Package['vulnerable'] as $VersionArray)
+				{
+					$ii = 1;
+					foreach ($VersionArray as $VXP => $Version)
+					{
+						if($trimPackageNames)
+						{
+							$packageName = explode('/', $Package['name']);
+							$package = $packageName[1];
+						}
+						else
+							$package = &$Package['name'];
+
+						$UnaffectedVersion = @$Package['unaffected'][key($Package['unaffected'])];
+						if(!$UnaffectedVersionVXP = @key($UnaffectedVersion))
+						{
+							$UnaffectedVersionVersion = '';
+							if(count($Package['unaffected']) == 0)
+								generateWarning('No unaffected packages found for '.$package.'! If this is intended; ignore this warning...');
+						}
+						else
+							$UnaffectedVersionVersion = $UnaffectedVersion[$UnaffectedVersionVXP];
+
+						if(!$iSet)
+						{
+							$string .= str_repeat(' ', $padLevel-strlen($i)-1).$i.'  ';
+							$iSet = true;
+						} else
+							$string .= str_repeat(' ', $padLevel+1);
+						if($this->GLSAProduct != 'Kernel')
+						{
+							$string .= $package.str_repeat(' ', $longestPackageName-strlen($package)+1);
+							$string .= str_repeat(' ', $pad+5-floor(strlen(html_entity_decode(VXPToText($VXP)).' '.$Version)/2));
+							$string .= html_entity_decode(VXPToText($VXP)).' '.$Version.str_repeat(' ', $pad+5-(ceil(strlen(html_entity_decode(VXPToText($VXP)).' '.$Version)/2)));
+						}
+						else
+							$string .= $package.' '.@str_repeat('.', $longestPackageName-strlen($package)-1);
+
+						if(floor(strlen($Version)/2) > ceil(strlen($Version)/2) && $trimPackageNames)
+							$Ccstring = '';
+						else if($trimPackageNames || isset($Cstring))
+							$Ccstring = ' ';
+
+						if(count($Package['unaffected']) == 0)
+						{
+							$PackageVulns++;
+							if($this->GLSAProduct == 'Kernel')
+							{
+								$string .= str_repeat('.', $pad+6-floor(strlen(' Vulnerable! ')/2)).' Vulnerable! '.str_repeat('.', $pad+5-ceil(strlen(' Vulnerable! ')/2));
+								$string .= str_repeat('.', $wrapLevel-7-$padLevel-$longestPackageName-$longestUnaffectedVersion).$newLine;
+							}
+							else
+							{
+								$string .= @str_repeat(' ', $wrapLevel-$padLevel-$longestPackageName-$pad-$pad-14-strlen('Vulnerable')).'Vulnerable!'.$newLine;
+							}
+						}
+						if(isset($Package['unaffected']))
+						{
+						foreach($Package['unaffected'] as $UnaffectedVersion)
+						{
+							foreach($UnaffectedVersion as $UnaffectedVersionVXP => $UnaffectedVersionVersion)
+							{
+								if($this->GLSAProduct == 'Kernel')
+								{
+									if($ii++ != 1)
+										$string .= @str_repeat(' ', $padLevel+1).@str_repeat('.', $longestPackageName);
+									$string .= @str_repeat('.', $pad+5-floor(strlen(html_entity_decode(VXPToText($UnaffectedVersionVXP)).' '.$UnaffectedVersionVersion)/2));
+								}
+								else
+								{
+									if($ii++ == 1)
+										$string .= @str_repeat(' ', $wrapLevel-$padLevel-$longestPackageName-$pad-$pad-14-strlen(html_entity_decode(VXPToText($UnaffectedVersionVXP)).' '.$UnaffectedVersionVersion));
+									else
+										$string .= @str_repeat(' ', $wrapLevel-2-strlen(html_entity_decode(VXPToText($UnaffectedVersionVXP)).' '.$UnaffectedVersionVersion));
+								}
+								$string .= $Ccstring.html_entity_decode(VXPToText($UnaffectedVersionVXP)).' '.$UnaffectedVersionVersion;
+								if($this->GLSAProduct == 'Kernel')
+								{
+									$string .= ' '.@str_repeat('.', $pad+5-ceil(strlen(html_entity_decode(VXPToText($UnaffectedVersionVXP)).' '.$UnaffectedVersionVersion)/2));
+									$string .= @str_repeat('.', $wrapLevel-12-$padLevel-$longestPackageName-$longestUnaffectedVersion);
+									if($Package['auto'] == 'no')
+										$string .= ' YES';
+									else
+										$string .= '....';
+								}
+								$string .= $newLine;
+							}
+						}
+						}
+					}
+				}
+				if($Package['auto'] == 'no')
+					$PackageAutos++;
+				if($Package['arch'] != '*')
+					$PackageArchs[$i] = array($Package['name'], strtoupper($Package['arch']));
+				else
+					$HaveUniversals++;
+				$i++;
+			}
+			if(isset($PackageArchs))
+			{
+				$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+				foreach($PackageArchs as $Item => $Data)
+				{
+					$string .= str_repeat(' ', $padLevel+1);
+					$Data[1] = str_replace(',', ' ', $Data[1]);
+					$Data[1] = str_replace('X86', 'x86', $Data[1]);
+
+					if($PackageSame)
+						$string .= padWordWrap('# Package '.$Item.' only applies to '.preg_replace(array('/ /', '/(.+), (.+)/'), array(', ', '\1 and \2'), $Data[1]).' users.', str_repeat(' ', $padLevel+3), $wrapLevel-$padLevel-2).$newLine;
+					else
+						$string .= padWordWrap('# Package '.$Item.' ['.$Data[0].'] only applies to '.preg_replace(array('/ /', '/(.+), (.+)/'), array(', ', '\1 and \2'), $Data[1]).' users.', str_repeat(' ', $padLevel+3), $wrapLevel-$padLevel-2).$newLine;
+				}
+				if($HaveUniversals)
+				{
+					$string .= $newLine.str_repeat(' ', $padLevel+1);
+					$string .= padWordWrap('NOTE: Any packages listed without architecture tags apply to all architectures...', str_repeat(' ', $padLevel-strlen($i)+8), $wrapLevel-$padLevel-1).$newLine;
+				}
+			}
+			if($PackageVulns > 0)
+			{
+				$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+				$string .= str_repeat(' ', $padLevel);
+				if($this->GLSAProduct == 'Kernel')
+				{
+					$string .= ' NOTE: Some kernels are still vulnerable. Users should migrate to'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       another kernel if one is available or seek another'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       solution such as patching their existing kernel.';
+				} else {
+					$string .= ' NOTE: Certain packages are still vulnerable. Users should migrate'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       to another package if one is available or wait for the'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       existing packages to be marked stable by their'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       architecture maintainers.';
+				}
+				$string .= $newLine;
+				if($i < 3 && $PackageAutos > 0)
+					$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+			}
+			if($PackageAutos > 0)
+			{
+				$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+				$string .= str_repeat(' ', $padLevel);
+				if($this->GLSAProduct == 'Kernel')
+				{
+					$string .= ' NOTE: Packages marked with "Remerge" as "YES" require a re-merge'.$newLine;
+					$string .= str_repeat(' ', $padLevel).'       even though Portage does not indicate a newer version!';
+				}
+				else
+					$string .= ' NOTE: Packages marked with asterisks require manual intervention!';
+				$string .= $newLine;
+				if($i < 2)
+					$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+			}
+			if($i > 2)
+			{
+				$string .= str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+				$string .= str_repeat(' ', $padLevel).' '.($i-1).' affected packages';
+				if($i-1 == $HaveUniversals)
+					$string .= ' on all of their supported architectures.';
+				else if($i-1 == count($PackageArchs))
+					$string .= '; please see the notes above...';
+				else if($i-1 < count($PackageArchs))
+					$string .= '; '.($i-1-count($PackageArchs)).' on all of their supported architectures.';
+				$string .= $newLine.str_repeat(' ', $padLevel).str_repeat('-', $wrapLevel-$padLevel).$newLine;
+			}
+			$string .= $newLine;
+		}
+		$string .= 'Description'.$newLine.'==========='.$newLine.$newLine;
+		$string .= reformatString($this->GLSADescription, false, $wrapLevel);
+		$string .= $newLine.$newLine;
+		$string .= 'Impact'.$newLine.'======'.$newLine.$newLine;
+		$string .= reformatString($this->GLSAImpact, false, $wrapLevel);
+		$string .= $newLine.$newLine;
+		$string .= 'Workaround'.$newLine.'=========='.$newLine.$newLine;
+		$string .= reformatString($this->GLSAWorkaround, false, $wrapLevel);
+		$string .= $newLine.$newLine;
+		$string .= 'Resolution'.$newLine.'=========='.$newLine.$newLine;
+		$string .= reformatString($this->GLSAResolution, false, $wrapLevel);
+		$string .= $newLine.$newLine;
+		if(count($this->GLSAReferences) > 0)
+		{
+			$string .= 'References'.$newLine.'=========='.$newLine.$newLine;
+			$i = 1;
+			foreach ($this->GLSAReferences as $URI => $Text)
+			{
+				$string .= '  [ '.$i.' ] '.rtrim($Text).$newLine;
+				$string .= '    '.str_repeat(' ', strlen($i)).'   '.$URI.$newLine;
+				$i++;
+			}
+			$string .= $newLine;
+		}
+		if(strlen($this->GLSAID) == 9) // YYYYMM-NN
+		{
+			$string .= 'Availability'.$newLine.'============'.$newLine.$newLine;
+			$string .= 'This GLSA and any updates to it are available for viewing at'.$newLine;
+			$string .= 'the Gentoo Security Website:'.$newLine.$newLine.'  http://security.gentoo.org/glsa/glsa-'.$this->GLSAID.'.xml'.$newLine.$newLine;
+		}
+		$string .= 'Concerns?'.$newLine.'========='.$newLine.$newLine;
+		$string .= 'Security is a primary focus of Gentoo Linux and ensuring the'.$newLine;
+		$string .= 'confidentiality and security of our users machines is of utmost'.$newLine;
+		$string .= 'importance to us. Any security concerns should be addressed to'.$newLine;
+		$string .= 'security@gentoo.org or alternatively, you may file a bug at'.$newLine;
+		$string .= 'http://bugs.gentoo.org.'.$newLine;
+		$string .= $newLine.'License'.$newLine.'======='.$newLine.$newLine.'Copyright '.date('Y').' Gentoo Foundation, Inc; referenced text'.$newLine.'belongs to its owner(s).'.$newLine.$newLine.'The contents of this document are licensed under the'.$newLine.'Creative Commons - Attribution / Share Alike license.'.$newLine.$newLine.'http://creativecommons.org/licenses/by-sa/2.5'.$newLine;
+
+		return $string;
+	}
+
+	/*! This function performs the logical search comparison
+	    for the metadata searcher.
+
+		@param needle The expression to look for.
+		@param haystack The expression to look in.
+		@return A boolean result.
+
+	*/
+	function __searchMetadata__matchCriteria($needle, $haystack)
+	{
+		if($needle === $haystack || $needle === NULL)
+			return true;
+		return false;
+	}
+
+	function &searchMetadata(&$MetadataSet, $maxIteration = NULL, $matchTag = NULL,
+		 $matchAuthor = NULL, $matchRevision = NULL, $matchCData = NULL,
+		 $matchData = NULL, $iterationLevel = 0)
+	{
+		// We have to use a classic $i iteration here since foreach doesn't return
+		// pointers...
+		for ($i = 0; is_array($MetadataSet[$i]); $i++)
+		{
+			if($this->__searchMetadata__matchCriteria($matchTag, $MetadataSet[$i]['tag'])
+			&& $this->__searchMetadata__matchCriteria($matchAuthor, $MetadataSet[$i]['author'])
+			&& $this->__searchMetadata__matchCriteria($matchRevision, $MetadataSet[$i]['revision'])
+			&& $this->__searchMetadata__matchCriteria($matchCData, $MetadataSet[$i]['cdata'])
+			&& $this->__searchMetadata__matchCriteria($matchData, $MetadataSet[$i]['data']))
+				return $MetadataSet[$i];
+			if(is_array($MetadataSet[$i]['data']) && count($MetadataSet[$i]['data']) > 0
+				   && $maxIteration > $iterationLevel)
+			{
+				if(is_array($result = $this->searchMetadata($MetadataSet[$i], $maxIteration,
+					   	$matchTag, $matchAuthor, $matchRevision, $matchCData,
+						$matchData, $iterationLevel+1)))
+							return $result;
+			}
+		}
+		return false;
+	}
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

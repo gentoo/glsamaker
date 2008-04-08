@@ -1,0 +1,148 @@
+<?
+
+/* IF YOU CAN READ THIS SEND A SCREENSHOT TO plasm@roo.me.uk; PHP/APACHE IS
+   CAUSING THIS ANNOYING PRINT-OUT CRAP EVERY SO OFTEN! :-( */
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2003 Tim Yamin < plasmaroo >                            *
+ *               < plasmaroo@plasmaroo.squirrelserver.co.uk >              *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+require_once 'common.auth';
+require_once 'common.version';
+require_once 'ui.css';
+require_once 'ui.newitems';
+
+function bodyFooter_invoke()
+{
+	global $GLSAMVersion, $GLSAMTag, $recentCounter;
+	recentItems_invoke(false);
+
+	?>
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
+		<tr><td><img src="images/icons/flag.png" align="top" alt="">&nbsp;GLSAMaker <? echo($GLSAMVersion."<b>$GLSAMTag</b>"); ?> [ <i><? echo(authGetStatus()); ?></i> ]</td><td align="right" valign="middle"><? echo(date('D F j, G:i a T Y')); ?>&nbsp;</td></tr>
+	</table>
+	<br>
+<? generateKonqBreak(); ?>
+	<form action="frame-view.php" method="get">
+	<table width="100%" border="0" cellspacing="0" cellpadding="3" class="body_rootTable">
+		<tr><td>
+<?		    /* <img src="images/icons/queue.<? generateImageExt(); ?>" align="top" alt="">&nbsp;<i><? if($recentCounter == 0) echo ("No"); else echo("$recentCounter"); ?> new announcement<? if($recentCounter <> 1) echo("s"); ?> in the past week</i> */ ?>
+		    <a target="_top" href="frame-archive.php" class="nav">
+			<img src="images/icons/bugs.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;Archive
+		    </a>
+		    <font color="gray"><b>::</b></font>
+		    <a target="_top" href="frame-recent.php" class="nav">
+			<img src="images/icons/queue.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;Repository
+		    </a>
+		    <font color="gray"><b>::</b></font>
+		    <a target="_top" href="frame-new.php" class="nav">
+			<img src="images/icons/new.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;File an announcement
+		    </a>
+		    <font color="gray"><b>::</b></font>
+		    <a target="_top" href="frame-request.php" class="nav">
+			<img src="images/icons/view_text.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;File a request
+		    </a>
+		    <font color="gray"><b>::</b></font>
+		    <a target="_top" href="frame-search.php" class="nav">
+			<img src="images/icons/query.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;Search
+		    </a>
+		    <font color="gray"><b>::</b></font>
+		    <a target="_top" href="wiki/" class="nav">
+			<img src="images/icons/reporting.<? generateImageExt(); ?>" border="0" align="middle" alt="">&nbsp;Wiki
+		    </a>
+		</td>
+		<td align="right">Jump to <acronym title="Gentoo Linux Security Advisory">GLSA</acronym>: ID <input align="bottom" type="text" maxlength="9" size="9" name="id" class="grayinput">&nbsp;</td></tr>
+	</table>
+	</form>
+	<br>
+<?	
+}
+
+function bodyHeader_invoke($showAnnouncements = false)
+{
+	recentItems_invoke($showAnnouncements);
+	if($showAnnouncements) echo("\n\n\t<br>");
+	bodyFooter_generateCSSSwitcher();
+
+	?>
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
+		<tr><td>Copyright <?echo(date('Y'));?> Gentoo Foundation, Inc.</td><td align="right">Any bugs, comments or suggestions should go to <a href="mailto:plasmaroo@gentoo.org" class="black">plasmaroo</a>.<? /* <a href="http://validator.w3.org/check/referer" class="black">Validate</a>. */ ?>&nbsp;</td></tr>
+	</table>
+
+<?
+}
+
+function generateKonqBreak($break = "\n")
+{
+	if(substr_count($_SERVER['HTTP_USER_AGENT'],'Konqueror/') != 0) echo("<br>\n");
+	echo($break);
+}
+
+function generateHelpIcon($text)
+{
+	echo '<img src="images/icons/help.'.generateImageExt(true).'" class="help" width="16" height="16" alt="" title="'.$text.'">';
+}
+
+function generateInfo($text)
+{
+	echo '<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable"><tr><td width="120" valign="top"><img src="images/icons/resolved.'.generateImageExt(true).'" align="top" alt="">&nbsp;<b>Information: </b></td><td>'.$text.'</td></tr></table><br>';
+}
+
+function generateButton($text, $extra = '', $style = 'grayinput')
+{
+	if(substr_count($_SERVER['HTTP_USER_AGENT'], 'Lynx') != 0)
+	{
+		if($extra)
+			return '<input type="submit"'.$extra.'>';
+		return '<input type="submit" value="'.strip_tags($text).'">';
+	}		
+	else
+	{
+		if($style)
+			return '<button class="'.$style.'"'.$extra.'>'.$text.'</button>';
+		return '<button'.$extra.'>'.$text.'</button>';		
+	}
+}
+
+function generateImageExt($noecho = false, $failover = 'gif', $normal = 'png')
+{
+	if(substr_count($_SERVER['HTTP_USER_AGENT'], 'Opera 7') != 0){ if(!$noecho) echo $normal; return $normal; }
+	if(substr_count($_SERVER['HTTP_USER_AGENT'], 'MSIE') != 0){ if(!$noecho) echo $failover; return $failover; }
+	if(substr_count($_SERVER['HTTP_USER_AGENT'], 'Netscape/4.') != 0){ if(!$noecho) echo $failover; return $failover; }
+	if(!$noecho) echo $normal; return $normal;
+}
+
+function generateWarning($text)
+{
+	global $plainOutput;
+	if($plainOutput)
+		echo($text."\n");
+	else
+		echo '<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable"><tr><td width="120" valign="top"><img src="images/icons/warning.'.generateImageExt(true).'" align="top" alt="">&nbsp;<b>Warning: </b></td><td>'.$text.'</td></tr></table><br>';
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

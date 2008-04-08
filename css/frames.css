@@ -1,0 +1,55 @@
+/* This software is open source; however; you may only use
+/* and distribute this source code as specified by the GNU
+/* General Public License <http://www.gnu.org/copyleft/gpl.html>
+
+/* < (C) Copyright 2003 SquirrelSoft Technologies...> */
+
+body {
+
+	font: 			small Verdana, Sans-serif;
+
+}
+
+.frame_nav_item {
+
+	text-align:     left;
+	font-family:    Verdana, Geneva, Arial, helvetica, sans-serif;
+	font-size:      x-small;
+	text-decoration:none;
+
+	margin-left:	3px;
+	margin-right:	3px;
+
+}
+
+.frame_nav_item a {
+
+	border-top:     1px solid #999;
+	border-right:   1px solid #444;
+	border-bottom:  1px solid #444;
+	border-left:    1px solid #999;
+
+	padding-left:   6px;
+	padding-right:  6px;
+	padding-top:    3px;
+	padding-bottom: 3px;
+
+	margin-top:     1px;
+	margin-right:   1px;
+
+	display:        block;
+
+	color:          #888;
+	background:     #fff;
+	font-weight :   normal;
+
+}
+
+.frame_nav_item a:hover {
+
+	text-decoration:none;
+	color:          #666;
+	font-weight:    normal;
+	background:     #eee;
+
+}

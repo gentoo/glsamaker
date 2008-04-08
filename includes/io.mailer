@@ -1,0 +1,106 @@
+<?php
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2003 Tim Yamin < plasmaroo >                            *
+ *               < plasmaroo@plasmaroo.squirrelserver.co.uk >              *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+function getMailList()
+{
+	$list = array();
+	$input = file('/var/www/dev.gentoo.org/glsamaker/email.alias');
+
+	foreach ($input as $line)
+	{
+		if($line{0} != '#' && $line != '')
+		{
+			list($nick, $email) = explode('::', $line);
+
+			if($email != '' && $nick != '')
+				$list[$nick] = trim($email);
+		}
+	}
+
+	return $list;
+}
+
+function mailGLSA($mailTo, $mailSubject, $mailBody, $mailAttach = false, $mailHeader = '')
+{
+	$mimeBoundary = '<<<'.md5((double)microtime()*rand(1,2)).'>>>';
+	$lineBreak = "\r\n";
+
+	$header = 'From: GLSAMaker <plasmaroo@gentoo.org>'.$lineBreak;
+	if($mailTo{0} == '%')
+	{
+		$mailTo = substr($mailTo, 1);
+		$list = getMailList();
+
+		$i = 0;
+		foreach($list as $nick => $email)
+		{
+			if($i != 0)
+				$cc .= ', ';
+
+			$cc .= $nick.' <'.$email.'>';
+			$i = 1;
+		}
+
+		if(count($list) > 0)
+			$header .= 'Cc: '.$cc.$lineBreak;
+	}
+
+	$header .= $mailHeader.$lineBreak;
+	$header .= 'MIME-Version: 1.0'.$lineBreak;
+	$header .= 'Content-Type: multipart/mixed; boundary="'.$mimeBoundary.'"'.$lineBreak;
+
+	$body    = 'This is a multi-part message in MIME format.'.$lineBreak.$lineBreak;
+	$body   .= '--'.$mimeBoundary.$lineBreak;
+	$body   .= 'Content-Type: text/plain;'.$lineBreak;
+	$body   .= 'Content-Transfer-Encoding: 7bit'.$lineBreak.$lineBreak;
+	$body   .= $mailBody.$lineBreak;
+	
+	if(is_array($mailAttach))
+	{
+		foreach($mailAttach as $fileName => $fileData)
+		{
+			$body .= '--'.$mimeBoundary.$lineBreak;
+			$body .= 'Content-Disposition: attachment;'.$lineBreak;
+			if( !eregi('[[:print:]]+', $fileData) )
+			{
+				$body .= "Content-Type: application/octet-stream; name=\"$fileName\"".$lineBreak;
+				$body .= 'Content-Transfer-Encoding: base64'.$lineBreak;
+				$body .= chunk_split(base64_encode(implode('', $fileData))).$lineBreak;
+			}
+			else
+			{
+				$body .= "Content-Type: text/plain; name=\"$fileName\"".$lineBreak;
+				$body .= 'Content-Transfer-Encoding: 7bit'.$lineBreak;
+				$body .= $fileData.$lineBreak;
+			}
+		}
+	}
+	return mail($mailTo, $mailSubject, $body, $header);
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

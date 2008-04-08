@@ -1,0 +1,66 @@
+<?
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2003 Tim Yamin < plasmaroo >                            *
+ *               < plasmaroo@plasmaroo.squirrelserver.co.uk >              *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+require_once 'io.filegrepper';
+require_once 'xml.glsaparser';
+
+function recentItems_invoke($showAnnouncements) {
+	global $recentCounter;
+	$recentItems = fileGrepper_parseTree();
+
+	if($showAnnouncements)
+	{
+		echo '<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">';
+		for ($i = 0; $i < 4 && $i < count($recentItems); $i++)
+		{
+			echo '<tr><td width="175">';
+			if($i == 0) echo '<b>Latest announcements:</b>';
+
+			echo '</td><td align="center" width="135"><a href="frame-view.php?id='.$recentItems[$i][0].'">GLSA '.$recentItems[$i][0].'</a></td>';
+			echo '<td>'.date('Y-m-d H:i:s', $recentItems[$i][1]);
+			if(sscanf($recentItems[$i][0], '%04d%02d-%d', $ID1, $ID2, $ID3) == 3)
+			{
+				$Parser = new GLSAParser();
+				$Parser->GLSAParse(fileGrepper_getGLSAText($ID1, $ID2, $ID3), true);
+				echo ' :: <i>'.$Parser->GLSAShortSummary.'...</i>';
+			}
+			echo '</td></tr>';
+		}
+		echo '</table>';
+	}
+
+	$recentCounter = 0;
+	for ($i = 0; $i < count($recentItems); $i++) {
+
+		// If not older than one week ...
+		if(time() - $recentItems[$i][1] <= 604800) $recentCounter++;
+
+	}
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

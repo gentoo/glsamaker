@@ -1,0 +1,391 @@
+<?php
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2004 Tim Yamin < plasmaroo@gentoo.org >                 *
+ *                                < plasm@roo.me.uk >                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+$FILEROOT='/var/www/dev.gentoo.org/glsamaker/data';
+$FILEPOOLROOT='/var/www/dev.gentoo.org/glsamaker/pool';
+$FEXT='xml';
+
+require_once 'xml.glsaparser';
+
+/*! Return an array containing a GLSA tree of the available GLSAs
+    in $FILEROOT.
+
+	@param chronologicalOrder Sort the array in earliest to last order.
+	@param releaseOrder Sort the array by GLSA ID; not by modification date.
+	@param treeOrder Return GLSAs as they are in the data tree.
+	@return An array containg the GLSAs.
+
+*/
+
+function fileGrepper_parseTree($chronologicalOrder = false, $releaseOrder = false, $treeOrder = false)
+{
+	global $FILEROOT, $FEXT;
+	if ($GLSAHandle = @opendir($FILEROOT))
+	{
+		$GLSAYears = array();
+		while (false !== ($GLSAHandleItem = readdir($GLSAHandle)))
+		{
+			if ($GLSAHandleItem != '.' && $GLSAHandleItem != '..')
+				$GLSAYears[$GLSAHandleItem] = $GLSAHandleItem;
+		}
+
+		// Sort and parse array
+		arsort( $GLSAYears );
+
+		foreach( $GLSAYears as $GLSAYear )
+		{
+			if ($GLSAHandle = @opendir($FILEROOT.'/'.$GLSAYear))
+			{
+				$GLSAYears[$GLSAYear] = array();
+				while (false !== ($GLSAHandleItem = readdir($GLSAHandle)))
+				{
+					if($GLSAHandleItem != '.' && $GLSAHandleItem != '..')
+						$GLSAYears[$GLSAYear][$GLSAHandleItem] = $GLSAHandleItem;
+				}
+				arsort($GLSAYears[$GLSAYear]);
+			}
+
+			foreach( $GLSAYears[$GLSAYear] as $GLSAMonth )
+			{
+				if ($GLSAHandle = @opendir($FILEROOT.'/'.$GLSAYear.'/'.$GLSAMonth))
+				{
+					$GLSAYears[$GLSAYear][$GLSAMonth] = array();
+					while (false !== ($GLSAHandleItem = readdir($GLSAHandle)))
+					{
+						if($GLSAHandleItem != '.' && $GLSAHandleItem != '..' && strrchr($GLSAHandleItem, '.') == '.'.$FEXT)
+						{
+							$GLSAYears[$GLSAYear][$GLSAMonth][padNumber(basename($GLSAHandleItem, '.'.$FEXT))] = filemtime($FILEROOT.'/'.$GLSAYear.'/'.$GLSAMonth.'/'.$GLSAHandleItem);
+						}
+					}
+					arsort($GLSAYears[$GLSAYear][$GLSAMonth]);
+				}
+			}
+		}
+
+		if($treeOrder && $releaseOrder)
+		{
+			foreach($GLSAYears as $GLSAYear => $GLSAYearArray)
+			{
+				foreach($GLSAYearArray as $GLSAMonth => $GLSAMonthArray)
+				{
+					$GLSAMonthArray = array_flip($GLSAMonthArray);
+					arsort($GLSAMonthArray);
+					$GLSAYears[$GLSAYear][$GLSAMonth] = array_flip($GLSAMonthArray);
+				}
+			}
+			return $GLSAYears;
+		}
+		if($treeOrder)
+			return $GLSAYears;
+
+		// Serialize the array
+
+		$ResultArray = array();
+		$SortArray   = array();
+		$MapArray    = array();
+
+		foreach( $GLSAYears as $GLSAYear => $GLSAYearArray )
+		{
+			foreach( $GLSAYearArray as $GLSAMonth => $GLSAMonthArray )
+			{
+				if(!is_array($GLSAMonthArray))
+				{
+					echo '<b>Assertion from includes.IO.FileGrepper inside [[ ', __FUNCTION__, '//', __LINE__, ' ]] :: Empty monthly key $GLSAYear/$GLSAMonthArray found [ [ Possible permission ] Errors withheld! ] - no GLSAs are thus listed from that key...<br>&nbsp;</b>';
+					$GLSAMonthArray = array();
+				}
+				foreach( $GLSAMonthArray as $GLSAHandleItem => $GLSAHandleKey )
+				{
+					$ResultArray[] = $GLSAYear.$GLSAMonth.'-'.$GLSAHandleItem;
+					$SortArray[] = $GLSAHandleKey;
+				}
+			}
+		}
+
+		$i = 0;
+		if($releaseOrder)
+		{
+			$chronologicalOrder ? asort($ResultArray) : arsort($ResultArray);
+			foreach( $ResultArray as $ResultKey => $ResultItem )
+			{
+				$MapArray[$i++] = array($ResultItem, $SortArray[$ResultKey]);
+			}
+		}
+		else
+		{
+			$chronologicalOrder ? asort($SortArray) : arsort($SortArray);
+			foreach( $SortArray as $SortKey => $SortDate )
+			{
+				$MapArray[$i++] = array($ResultArray[$SortKey], $SortDate);
+			}
+		}
+
+		// DEBUG => echo '<pre>'; print_r($MapArray); echo '</pre>';
+		return $MapArray;
+	}
+	else
+	{
+		print_r('<b>Error: from Includes.IO.FileGrepper :: File tree traversal failed!</b>');
+		return false;
+	}
+
+}
+
+/*! Parse the pooled GLSAs; returning them in an array.
+
+	@param chronologicalOrder Sort the array in earliest to last order.
+	@return An array containg the GLSAs.
+
+*/
+
+function fileGrepper_parsePool($chronologicalOrder = false)
+{
+	global $FILEPOOLROOT, $FEXT;
+	if ($GLSAHandle = @opendir($FILEPOOLROOT))
+	{
+		$GLSAs = array();
+		while (false !== ($GLSAHandleItem = readdir($GLSAHandle)))
+		{
+			if ($GLSAHandleItem != '.' && $GLSAHandleItem != '..' && strrchr($GLSAHandleItem, '.') == '.'.$FEXT)
+			{
+				$GLSAs[str_replace('.'.$FEXT, '', $GLSAHandleItem)] = filemtime($FILEPOOLROOT.'/'.$GLSAHandleItem);
+			}
+		}
+
+		// Sort the modification date array and map the result data
+		$chronologicalOrder ? asort($GLSAs) : arsort($GLSAs);
+
+		$i = 0;
+		$MapArray = array();
+
+		foreach( $GLSAs as $SortKey => $SortDate )
+		{
+			$MapArray[$i] = array($SortKey, $SortDate);
+			$i++;
+		}
+		return $MapArray;	
+	}
+	else
+	{
+		print_r('<b>Error: from Includes.IO.FileGrepper :: File tree traversal failed!</b>');
+		return false;
+	}
+
+}
+
+/*! Retrieve the text of a GLSA; or return the filename of the specified GLSA,
+    or edit the specified GLSA.
+
+	@param year The GLSA Year component; this should be set to NULL if the
+	            GLSA is to be a pooled one.
+	@param month The GLSA Month component; this should be set to NULL if the
+	             GLSA is to be a pooled one.
+	@param id The GLSA ID component; this should be set to NULL if the GLSA is
+	          to be a pooled one.
+	@param override The GLSA Pool ID; this should be set to NULL if the GLSA is
+	                not a pooled one.
+	@param generateStringOnly Return the path to the specified GLSA rather than
+	                          the text.
+	@param editGLSA Edit the specified GLSA to the XML specified in this parameter.
+	@return The GLSA Text or '<nodata>' in an error; the file string if
+	        generateStringOnly is set, or a boolean returning the success or failure
+	        or the edit write action.
+
+*/
+
+function fileGrepper_getGLSAText($year, $month, $id, $override = NULL, $generateStringOnly = false, $editGLSA = '')
+{
+	global $FILEROOT, $FILEPOOLROOT, $FEXT;
+	if($override != NULL)
+	{
+		if($generateStringOnly)
+			return($FILEPOOLROOT.'/'.$override.'.'.$FEXT);
+		else if(@is_file($FILEPOOLROOT.'/'.$override.'.'.$FEXT))
+		{
+			$fp = fopen($FILEPOOLROOT.'/'.$override.'.'.$FEXT, $editGLSA == '' ? 'r' : 'w');
+			if($editGLSA != '')
+				return(fwrite($fp, $editGLSA) == strlen($editGLSA) ? true : false);
+			else
+				$fd = fread($fp, filesize( $FILEPOOLROOT.'/'.$override.'.'.$FEXT));
+
+			return $fd;
+		}
+		return '<nodata>';
+	}	
+
+	$year  = padYear($year);
+	$month = padNumber($month);
+	$id    = padNumber($id);
+
+	if($generateStringOnly === '-')
+		return($FILEROOT.'/'.$year.'/'.$month);
+	else if($generateStringOnly)
+		return($FILEROOT.'/'.$year.'/'.$month.'/'.$id.'.'.$FEXT);
+	else if(@is_file($FILEROOT.'/'.$year.'/'.$month.'/'.$id.'.'.$FEXT))
+	{	
+		$fp = fopen($FILEROOT.'/'.$year.'/'.$month.'/'.$id.'.'.$FEXT, $editGLSA == '' ? 'r' : 'w');
+		if($editGLSA != '')
+			return(fwrite($fp, $editGLSA) == strlen($editGLSA) ? true : false);
+		else
+			$fd = fread($fp, filesize( $FILEROOT.'/'.$year.'/'.$month.'/'.$id.'.'.$FEXT ));
+
+		return $fd;
+	}
+	return '<nodata>';
+}
+
+/*! Add the GLSA to the pool.
+
+	@param data The GLSA XML
+	@param changeID This changes the string '!-- Insert ID here! --!' to
+	                a hash.
+	@return The GLSA ID; or false on failure.
+
+*/
+
+function fileGrepper_commitToPool($data, $changeID = false)
+{
+
+	global $FILEPOOLROOT, $FEXT;
+	do { $hash = md5((double)microtime()*rand(1,2)); } while (@is_file($FILEPOOLROOT.'/'.$hash.'.'.$FEXT));
+	if($changeID) $data=str_replace('!-- Insert ID here! --!', $hash, $data);
+
+	if(!$fp = fopen($FILEPOOLROOT.'/'.$hash.'.'.$FEXT, 'w')) return false;
+	if(fwrite($fp, $data) != strlen($data)) return false;
+
+	return $hash;
+
+}
+
+/*! Move a GLSA.
+
+	@param ID The current GLSA ID
+	@param IDNew The new GLSA ID. If 'AutoMove' is specified
+	             then the ID is automatically generated.
+	@return The new ID; or '<error>'.
+
+*/
+
+function fileGrepper_moveGLSA($ID, $IDNew = '')
+{
+	if($IDNew = 'AutoMove')
+	{
+		$ID1 = date('Y');
+		$ID2 = date('m');
+		$ID3 = '01';
+		$Tree = fileGrepper_parseTree(false, true, true);
+		if(count($Tree[$ID1]) > 0)
+		{
+			// Get the last GLSA = {The first array item}+1
+			if(count($Tree[$ID1][$ID2]) > 0)
+				$ID3 = key($Tree[$ID1][$ID2])+1;
+		}
+		$IDNew = $ID1.$ID2.'-'.padNumber($ID3);
+	}
+	if(ereg('^[A-Fa-f0-9]{32}$', $ID))
+		$oldFile = fileGrepper_getGLSAText(NULL, NULL, NULL, $ID, true);
+	else if(sscanf($ID, '%04d%02d-%d', $ID1, $ID2, $ID3) == 3)
+		$oldFile = fileGrepper_getGLSAText($ID1, $ID2, $ID3, NULL, true);
+	else
+	{
+		echo(generateWarning('Error: from Includes.IO.FileGrepper :: Invalid source ID [ '.$ID.' ] specified!'));
+		return '<error>';
+	}
+
+	if(ereg('^[A-Fa-f0-9]{32}$', $IDNew))
+		$newFile = fileGrepper_getGLSAText(NULL, NULL, NULL, $IDNew, true);
+	else if(sscanf($IDNew, '%04d%02d-%d', $ID1, $ID2, $ID3) == 3)
+	{
+		$newDirectory = fileGrepper_getGLSAText($ID1, $ID2, $ID3, NULL, '-');
+		$newFile = fileGrepper_getGLSAText($ID1, $ID2, $ID3, NULL, true);
+	}
+	else
+	{
+		echo(generateWarning('Error: from Includes.IO.FileGrepper.MoveGLSA :: Invalid destination ID [ '.$IDNew.' ] specified!'));
+		return '<error>';
+	}
+
+	if(@is_file($oldFile) && !@is_file($newFile))
+	{
+		if($newDirectory != '')
+		{
+			if(!@is_dir($newDirectory))
+			{
+				echo(generateInfo('Trying mkdir('.$newDirectory.')...'));
+				mkdir($newDirectory);
+			}
+		}
+		echo(generateInfo('Trying rename('.$oldFile.', '.$newFile.')...'));
+		if(rename($oldFile, $newFile))
+		{
+			$Parser = new GLSAParser();
+			$Parser->GLSAParse(fileGrepper_getGLSAText( $pool ? NULL: $ID1, $pool ? NULL: $ID2, $pool ? NULL: $ID3, $pool ? $ID : NULL ));
+
+			// Update ID
+			$Parser->GLSAID = $IDNew;
+
+			// Sanitize Review Metadata
+			$GLSAReviews =& $Parser->searchMetadata($Parser->GLSAMetadata, 0, 'reviews');
+			$GLSAReviews = NULL;
+			if($GLSAReviewsIndex = array_search(NULL, $Parser->GLSAMetadata, true))
+				unset($Parser->GLSAMetadata[$GLSAReviewsIndex]);
+
+			fileGrepper_getGLSAText( $pool ? NULL: $ID1, $pool ? NULL: $ID2, $pool ? NULL: $ID3, $pool ? $ID : NULL, false, $Parser->GLSAToXML('reset'));
+			return $IDNew;
+		}
+		else
+			return '<error>';
+	}
+	echo(generateWarning('Error: from Includes.IO.FileGrepper.MoveGLSA :: Missing or existing file [ '.$ID.' >> '.$IDNew.' ] specified!'));
+	return '<error>';
+}
+
+/*! Pad a number with a zero to make it at least two characters long. */
+
+function padNumber($input)
+{
+
+	if($input == '') return '00';
+
+	if(strlen($input) == 1) return '0'.$input;
+	return $input;
+
+}
+
+/*! Pad a year with '20' if a two-digit year is given; or return
+    the current year if a null string is given. */
+
+function padYear($input)
+{
+
+	if($input == '') return date('Y');
+	if(strlen($input) == 2) return '20'.$input;
+	return $input;
+
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

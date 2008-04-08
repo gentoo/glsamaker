@@ -1,0 +1,86 @@
+<?
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2005 Tim Yamin < plasmaroo@gentoo.org >                 *
+ *                                < plasm@roo.me.uk >                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+class Speller {
+	var $pspell_handle;
+	var $pspell_config_handle;
+
+	function AddLocal($word)
+	{
+		pspell_add_to_personal($this->pspell_handle, $word);
+		pspell_save_wordlist($this->pspell_handle);
+	}
+
+	function HighlightSpell($text)
+	{
+		$output = '';
+
+		$words = preg_split('/(<\/?code>|\W)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+		foreach ($words as $word)
+		{
+			if($word == '<code>')
+				$state = true;
+			if($word == '</code>')
+				$state = false;
+			if($state)
+			{
+				$output .= $word;
+				continue;
+			}
+
+			if(pspell_check($this->pspell_handle, $word))
+			{
+				$output .= $word;
+			} else
+			{
+				$output .= '<span class="highlightAddedLine">'.$word.'</span>';
+			}
+		}
+		return $output;
+	}
+
+	function Speller($dict = 'en', $pconfig = '')
+	{
+		global $FILEROOT;
+
+		$this->pspell_config_handle = pspell_config_create($dict);
+		pspell_config_ignore($this->pspell_config_handle, 4);
+		pspell_config_mode($this->pspell_config_handle, PSPELL_NORMAL);
+		$this->pspell_handle = pspell_config_personal($this->pspell_config_handle, $FILEROOT.'/../spell.data');
+		$this->pspell_handle = pspell_new_config($this->pspell_config_handle);
+	}
+}
+
+function __spell__($string, $spell, &$speller)
+{
+	if($spell)
+		return $speller->HighlightSpell($string);
+	return $string;
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

@@ -1,0 +1,78 @@
+<?
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2004 Tim Yamin < plasmaroo@gentoo.org >                 *
+ *                                < plasm@roo.me.uk >                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+/*! Highlight a unified diff along with XML tags and output the
+    result.
+
+	@param diff A string containing the patch.
+	@param replaceTarget An expression by which the "new" file name of
+	                     the diff can be replaced.
+
+*/
+
+function diffHighlight($diff, $replaceTarget='\1', $spellOn = false)
+{
+	echo('<pre text-align="left">');
+	$diff = htmlspecialchars($diff);
+	$diff = preg_replace(array('/^\+\+\+ (.+)	(.+)$/m', '/^--- (.+)	(.+)$/m', '/^@@ (.+) (.+) @@$/m', '/^\+(.*)$/m', '/^-(.*)$/m', '/&lt;(\/?.+?)&gt;/'), array('<span class="highlightAddedLine">+++ </span><span class="highlightRemovedLine">'.$replaceTarget.'	</span><span class="highlightComment">\2</span>', '<span class="highlightRemovedLine">--- \1	</span><span class="highlightComment">\2</span>', '<span class="highlightComment">@@ </span><span class="highlightRemovedLine">\1 </span><span class="highlightAddedLine">\2 </span><span class="highlightComment">@@</span>', '<span class="highlightAddedLine">+</span>\1', '<span class="highlightRemovedLine">-</span>\1', '<span class="highlightAddedLine">&lt;<span class="highlightRemovedLine">\1</span>&gt;</span>'), $diff);
+	echo($diff);
+	echo('</pre>');
+}
+
+/*! Run ``diff -u'' against the supplied string and the file. This function
+    does not use any temporary files and should be secure if the system does
+    not allow tracing of std(in|out) paths.
+
+	@param string The string containing the new revision.
+	@param file The file containing the old revision.
+	@return The patch as a string returned by ``diff''.
+
+*/
+
+function diffStringToFile($string, $file)
+{
+	$process = proc_open("diff -u $file -", array(0 => array('pipe', 'r'), 1 => array('pipe', 'w')), $pipes);
+	if (is_resource($process))
+	{
+		fwrite($pipes[0], $string);
+		fclose($pipes[0]);
+
+		while (!feof($pipes[1])) {
+			$outputString .= fgets($pipes[1], 1024);
+		}
+		fclose($pipes[1]);
+		if(($errCode = proc_close($process)) > 2)
+			echo("<b>Error from includes.Diff inside [[ ".__FUNCTION__."//".__LINE__." ]]: Received erroneous code $errCode!</b>");
+	}
+	else
+		echo("<b>Error from includes.Diff inside [[ ".__FUNCTION__."//".__LINE__." ]]: Failed to spawn resource!</b>");
+
+	return $outputString;
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

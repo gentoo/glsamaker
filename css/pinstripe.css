@@ -1,0 +1,91 @@
+body {
+	font: 			small Verdana, sans-serif;
+}
+
+.body_rootTable {
+	-moz-border-radius:	7px 0px 6px 0px;
+	background:		url('../images/bg-grid-dark.gif');
+ 	border:			1px solid gray;
+	text-align:		justify;
+}
+
+.body_rootTable_center {
+	font-style:		italic;
+ 	text-align:		center;
+}
+
+.body_rootTable_light {
+	background:		url('../images/bg-grid.gif');
+ 	border:			1px solid gray;
+	padding:		4px;
+	text-align:		justify;
+}
+
+a, a:visited
+{
+	color:			blue;
+	text-decoration:	underline; /* Opera 7 doesn't do this automatically for some reason */
+}
+a:hover
+{
+	font-weight:		bold;
+}
+
+a.black, a.black:visited
+{
+	color:			black;
+}
+a.black:hover
+{
+	font-weight:		bold;
+}
+
+a.gray,a.gray:visited {
+	color:			#888888;
+	font-weight:		normal;
+	font-style:		normal;
+	text-decoration:	underline;
+	background-color:	transparent;
+}
+
+a.gray:hover {
+	font-weight:		bold;
+}
+
+a.nav, a.nav:visited {
+	color:			black;
+	font-weight:		normal;
+	font-style:		normal;
+	text-decoration:	none;
+}
+
+a.nav:hover {
+	font-weight:		bold;
+}
+
+.grayinput {
+	background-image:	url('../images/bg-grid.gif');
+ 	border:			1px solid gray;
+	padding-bottom:		1px;
+	text-align:		center;
+}
+
+.grayinput_fullWidth, .grayinput_halfWidth {
+	background:		url('../images/bg-grid.gif');
+ 	border:			1px solid gray;
+	font-family:		Verdana, sans-serif;
+	font-size:		small;
+	padding:		2px;
+}
+
+.datestamp {
+	color:			#444444;
+	float:			right;
+	font-weight:		bold;
+	font-size:		x-small;
+	font-style:		italic;
+	padding-top:		2px;
+}
+
+pre { border-right: 2px solid #DDDDDD; }
+

@@ -1,0 +1,60 @@
+<?php
+
+/***************************************************************************
+ *                                                                         *
+ *   Copyright (C) 2004 Tim Yamin < plasmaroo >                            *
+ *               < plasmaroo@plasmaroo.squirrelserver.co.uk >              *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+
+$CSSBodySheet = 'body.css';
+$CSSDefaultSheet = 'pinstripe.css';
+$CSSSheets = array('pinstripe.css');
+
+function bodyFooter_generateCSSHeader()
+{
+	global $CSSBodySheet, $CSSDefaultSheet, $CSSSheets;
+	foreach($CSSSheets as $CSSSheet)
+	{
+		echo("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"css/$CSSSheet\"");
+		if(count($CSSSheets) > 1)
+			echo(' title="'.ucfirst(str_replace('.css', '', $CSSSheet)).'"');
+		echo('>');
+	}
+	echo("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"css/$CSSBodySheet\">");
+}
+
+function bodyFooter_generateCSSSwitcher()
+{
+	global $CSSSheets;
+	if(count($CSSSheets) > 1)
+	{
+?>
+	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
+		<tr><td align="right"><b>Switch CSS:</b> <? foreach($CSSSheets as $CSSSheet) { echo '<a href="#" onclick="setActiveStyleSheet(\''.ucfirst(str_replace('.css', '', $CSSSheet)).'\')">'.ucfirst(str_replace('.css', '', $CSSSheet)).'</a>&nbsp;'; }?></td></tr>
+	</table>
+
+	<br>
+<?	}
+}
+
+// Local Variables: ***
+// truncate-lines:true ***
+// End: ***
+
+?>

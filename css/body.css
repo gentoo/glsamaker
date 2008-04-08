@@ -1,0 +1,22 @@
+.center { text-align: center; }
+
+.grayinput_halfWidth { width: 50%; }
+.grayinput_fullWidth { width: 100%; }
+
+acronym, .help { cursor: help; }
+.monospace { font-family: monospace; }
+
+.highlightAddedLine { color: #DD0000; }
+.highlightComment { color: #007700; }
+.highlightRemovedLine { color: #0000BB; }
+
+OPTION.dtop { border-top: 2px dotted black; }
+OPTION.eq { border-top: 2px dotted black; }
+OPTION.ge { background-color: #D1EFB0; }
+OPTION.gt { background-color: #C6E3A7; }
+OPTION.rge { background-color: #BAEFB0; }
+OPTION.rgt { background-color: #B1E3A7; }
+OPTION.le { background-color: #BEB0EF; }
+OPTION.lt { background-color: #B4A7E3; }
+OPTION.rle { background-color: #D4B0EF; }
+OPTION.rlt { background-color: #C9A7E3; }
