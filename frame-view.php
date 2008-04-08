@@ -262,7 +262,7 @@ if(!$plainOutput && !$plainXML)
 					echo '<table width="100%" border="0" cellspacing="0" cellpadding="3" class="body_rootTable_light"><tr><td width="160" align="right" valign="top"><b>Related bugs:</b></td><td>';
 					foreach ($Parser->GLSABugs as $Bug)
 					{
-						echo '<a href="http://bugs.gentoo.org/show_bug.cgi?id=', $Bug, '">#', $Bug, '</a>&nbsp;';
+						echo '<a href="https://bugs.gentoo.org/show_bug.cgi?id=', $Bug, '">#', $Bug, '</a>&nbsp;';
 					}
 					echo '</td></tr></table><br>';
 				}
@@ -280,7 +280,7 @@ if(!$plainOutput && !$plainXML)
 							{
 								$PackageNames = explode('/', $Package['name']);
 								if($i != 0) echo '<br>'; $i++;
-								echo '<a href="http://packages.gentoo.org/packages/?category=', $PackageNames[0], ';name=', $PackageNames[1], '">', $Package['name'], '</a> ', VXPToText($VXP), ' ', $Version, ' on ', str_replace('*', 'all architectures', $Package['arch']);
+								echo '<a href="http://packages.gentoo.org/package/', $PackageNames[0], '/', $PackageNames[1], '">', $Package['name'], '</a> ', VXPToText($VXP), ' ', $Version, ' on ', str_replace('*', 'all architectures', $Package['arch']);
 
 								if($Package['auto'] == 'no') echo ' - <i>remerge required!</i>';
 							}
@@ -297,7 +297,7 @@ if(!$plainOutput && !$plainXML)
 								$PackageNames = explode('/', $Package['name']);
 
 								if($i != 0) echo '<br>'; $i++;
-								echo '<a href="http://packages.gentoo.org/packages/?category=', $PackageNames[0], ';name=', $PackageNames[1], '">', $Package['name'], '</a> ', VXPToText($VXP), ' ', $Version, ' on ', str_replace('*', 'all architectures', $Package['arch']);
+								echo '<a href="http://packages.gentoo.org/package/', $PackageNames[0], '/', $PackageNames[1], '">', $Package['name'], '</a> ', VXPToText($VXP), ' ', $Version, ' on ', str_replace('*', 'all architectures', $Package['arch']);
 							}
 						}
 					}

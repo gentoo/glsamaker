@@ -25,7 +25,7 @@
 function getMailList()
 {
 	$list = array();
-	$input = file('/var/www/dev.gentoo.org/glsamaker/email.alias');
+	$input = file('/var/www/glsamaker.gentoo.org/email.alias');
 
 	foreach ($input as $line)
 	{
@@ -46,7 +46,7 @@ function mailGLSA($mailTo, $mailSubject, $mailBody, $mailAttach = false, $mailHe
 	$mimeBoundary = '<<<'.md5((double)microtime()*rand(1,2)).'>>>';
 	$lineBreak = "\r\n";
 
-	$header = 'From: GLSAMaker <plasmaroo@gentoo.org>'.$lineBreak;
+	$header = 'From: GLSAMaker <security@gentoo.org>'.$lineBreak;
 	if($mailTo{0} == '%')
 	{
 		$mailTo = substr($mailTo, 1);
@@ -66,7 +66,9 @@ function mailGLSA($mailTo, $mailSubject, $mailBody, $mailAttach = false, $mailHe
 			$header .= 'Cc: '.$cc.$lineBreak;
 	}
 
-	$header .= $mailHeader.$lineBreak;
+	if ($mailHeader != '') {
+		$header .= $mailHeader.$lineBreak;
+	}
 	$header .= 'MIME-Version: 1.0'.$lineBreak;
 	$header .= 'Content-Type: multipart/mixed; boundary="'.$mimeBoundary.'"'.$lineBreak;
 

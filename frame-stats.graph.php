@@ -25,10 +25,16 @@
 require_once './includes/io.filegrepper';
 require_once './includes/xml.glsaparser';
 
-require_once './includes/jpgraph/jpgraph.php';
-require_once './includes/jpgraph/jpgraph_bar.php';
-require_once './includes/jpgraph/jpgraph_line.php';
-require_once './includes/jpgraph/jpgraph_regstat.php';
+#require_once './includes/jpgraph/jpgraph.php';
+#require_once './includes/jpgraph/jpgraph_bar.php';
+#require_once './includes/jpgraph/jpgraph_line.php';
+#require_once './includes/jpgraph/jpgraph_regstat.php';
+#
+require_once 'jpgraph/jpgraph.php';
+require_once 'jpgraph/jpgraph_bar.php';
+#require_once './includes/jpgraph/jpgraph_bar.php';
+require_once 'jpgraph/jpgraph_line.php';
+require_once 'jpgraph/jpgraph_regstat.php';
 
 $GetYear == '';
 $noPooled == false;
@@ -181,10 +187,12 @@ $graph->xaxis->SetLabelFormatCallback('xLabelFormat');
 // Create a bar plot
 $bplot = new BarPlot($XXPlot, $XYPlot);
 $bplot->SetFillColor('skyblue@0.5');
+$bplot->SetWidth(20);
 
 // Create a bar plot
 $bplot2 = new BarPlot($XXPlot2, $XYPlot);
 $bplot2->SetFillColor('yellow@0.8');
+$bplot2->SetWidth(20);
 
 // Setup values
 $bplot->value->Show();

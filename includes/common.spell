@@ -22,6 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
+
 class Speller {
 	var $pspell_handle;
 	var $pspell_config_handle;

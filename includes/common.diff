@@ -52,7 +52,7 @@ function diffHighlight($diff, $replaceTarget='\1', $spellOn = false)
 
 function diffStringToFile($string, $file)
 {
-	$process = proc_open("diff -u $file -", array(0 => array('pipe', 'r'), 1 => array('pipe', 'w')), $pipes);
+	$process = proc_open("diff -u ".escapeshellarg($file)." -", array(0 => array('pipe', 'r'), 1 => array('pipe', 'w')), $pipes);
 	if (is_resource($process))
 	{
 		fwrite($pipes[0], $string);

@@ -1,7 +1,7 @@
 <?
 
 $GLSAMAddress='glsa-commits@gentoo.org';
-$GLSAMVersion='0.4.3.4';
+$GLSAMVersion='0.4.4';
 $GLSAMTag='-devSite';
 $GLSAVNeededReviews=2;
 

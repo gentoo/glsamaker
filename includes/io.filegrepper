@@ -22,8 +22,8 @@
  *                                                                         *
  ***************************************************************************/
 
-$FILEROOT='/var/www/dev.gentoo.org/glsamaker/data';
-$FILEPOOLROOT='/var/www/dev.gentoo.org/glsamaker/pool';
+$FILEROOT='/var/www/glsamaker.gentoo.org/data';
+$FILEPOOLROOT='/var/www/glsamaker.gentoo.org/pool';
 $FEXT='xml';
 
 require_once 'xml.glsaparser';

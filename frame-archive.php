@@ -115,7 +115,7 @@ function stepDay($timeStamp, $direction = 1)
 			foreach($rangeYears as $rangeYear => $rangeMonths)
 			{
 				if($rangeYear == $year)
-					echo, $rangeYear, ' ';
+					echo $rangeYear, ' ';
 				else
 					echo '<a href="frame-archive.php?GLSAYear=', $rangeYear, '&GLSAMonth=', $month, '">', $rangeYear, '</a> ';
 			}

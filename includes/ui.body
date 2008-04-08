@@ -86,7 +86,7 @@ function bodyHeader_invoke($showAnnouncements = false)
 	?>
 
 	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
-		<tr><td>Copyright <?echo(date('Y'));?> Gentoo Foundation, Inc.</td><td align="right">Any bugs, comments or suggestions should go to <a href="mailto:plasmaroo@gentoo.org" class="black">plasmaroo</a>.<? /* <a href="http://validator.w3.org/check/referer" class="black">Validate</a>. */ ?>&nbsp;</td></tr>
+		<tr><td>Copyright <?echo(date('Y'));?> Gentoo Foundation, Inc.</td><td align="right">Any bugs, comments or suggestions should go to the <a href="mailto:security@gentoo.org" class="black">security team</a>.<? /* <a href="http://validator.w3.org/check/referer" class="black">Validate</a>. */ ?>&nbsp;</td></tr>
 	</table>
 
 <?

@@ -420,7 +420,9 @@ bodyFooter_invoke();
 						generateInfo('Updated GLSA successfully committed (ID <a href="frame-view.php?id='.$ID.'">'.$ID.'</a>!');
 					else
 						generateWarning('Could not commit updated GLSA!');
-					mailGLSA('%'.$GLSAMAddress, 'GLSA Update: ['.authGetStatus(true).'] '.$Parser->GLSAShortSummary, $newLine.$diff, array(), 'In-Reply-To: <glsa-'.$ID.'@glsamaker.gentoo.org>');
+					if(!$HTTP_POST_VARS['MailDisable']) {
+						mailGLSA('%'.$GLSAMAddress, 'GLSA Update: ['.authGetStatus(true).'] '.$Parser->GLSAShortSummary, $newLine.$diff, array(), 'In-Reply-To: <glsa-'.$ID.'@glsamaker.gentoo.org>');
+					}
 				}
 				else if($HTTP_POST_VARS['Submit'] == 'Submit')
 				{
@@ -433,10 +435,12 @@ bodyFooter_invoke();
 						$hash = md5(uniqid(''));
 
 					$Parser->GLSAID = $hash;
-					if(mailGLSA('%'.$GLSAMAddress, 'GLSA Draft: ['.authGetStatus(true).'] '.$hash, $Parser->GLSAToText(true), array($hash.'.xml' => $newLine.$Parser->GLSAToXML(false))))
-						echo generateInfo('GLSA successfully queued with ID #<a href="frame-view.php?id='.$hash.'">'.$hash.'</a>...');
-					else
-						echo generateWarning('Could not mail GLSA!');
+					if(!$HTTP_POST_VARS['MailDisable']) {
+						if(mailGLSA('%'.$GLSAMAddress, 'GLSA Draft: ['.authGetStatus(true).'] '.$hash, $Parser->GLSAToText(true), array($hash.'.xml' => $newLine.$Parser->GLSAToXML(false))))
+							echo generateInfo('GLSA successfully queued with ID #<a href="frame-view.php?id='.$hash.'">'.$hash.'</a>...');
+						else
+							echo generateWarning('Could not mail GLSA!');
+					}
 				}
 			}
 			else
@@ -649,7 +653,7 @@ bodyFooter_invoke();
 	</table><br>
 	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
 		<tr><td>
-			<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable_light"><tr><td><? echo generateButton('<b>Confirm</b>', 'name="Submit" value="Confirm"'); if(!$validEdit){ echo '&nbsp;', generateButton('<b>Preview</b>', 'name="Submit" value="Preview"'); } echo '&nbsp;', generateButton('<b>Boilerplate</b>', 'name="Submit" value="Boilerplate"'); ?><input type="checkbox" name="SpellMode"<? if($HTTP_POST_VARS['SpellMode']) echo ' checked'; ?>>Spell-checkify</input></td><td align="right"><? if($canSubmit) echo generateButton('<b>Submit</b>', 'name="Submit" value="Submit"'); else echo '<i>Please confirm your GLSA before submitting it!</i>'; ?></td></tr></table>
+			<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable_light"><tr><td><? echo generateButton('<b>Confirm</b>', 'name="Submit" value="Confirm"'); if(!$validEdit){ echo '&nbsp;', generateButton('<b>Preview</b>', 'name="Submit" value="Preview"'); } echo '&nbsp;', generateButton('<b>Boilerplate</b>', 'name="Submit" value="Boilerplate"'); ?><input type="checkbox" name="SpellMode"<? if($HTTP_POST_VARS['SpellMode']) echo ' checked'; ?>>Spell-checkify</input><input type="checkbox" name="MailDisable"<? if($HTTP_POST_VARS['MailDisable']) echo ' checked'; ?>>Don't email</input></td><td align="right"><? if($canSubmit) echo generateButton('<b>Submit</b>', 'name="Submit" value="Submit"'); else echo '<i>Please confirm your GLSA before submitting it!</i>'; ?></td></tr></table>
 		</td></tr>
 	</table>
 	<?

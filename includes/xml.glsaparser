@@ -280,10 +280,17 @@ function stripParagraphTags($string)
 	}
 	$string = str_replace('</ol>', '</ol><br>', $string);
 
-	// >> PHP5. This will match the whole string and return -8. 
+	// >> PHP5. This will match the whole string and return -9. 
 	//    Change as needed.
+	//
+	// I've changed this to reflect the original behavior
+	// it would have matched the < in <br> in the string
+	// not the < in </ol> - strrpos() only takes one char
+	// in PHP4. So we end up stripping only the <br>.
+	// The function appears to strip the *last* <br>.
+	// - aetius
 
-	if(strrpos(rtrim($string), '</ol><br>') == strlen(rtrim($string))-4)
+	if(strrpos(rtrim($string), '</ol><br>') == strlen(rtrim($string))-9)
 		$string = substr_replace($string, '', strlen(rtrim($string))-4, 4);
 	return $string;
 }
@@ -471,6 +478,15 @@ class GLSAParser {
 
 	function __readContent__($parser, $data)
 	{
+		// remove all line breaks coming from xml
+		// they were just there for formatting purposes and should not bevisible
+		// to the user
+		// -hoffie
+		if($this->__inTag__ != 'code')
+		{
+			$data = str_replace("\n", "", $data);
+		}
+
 		if($this->GLSADate && $this->GLSAShortSummary && $this->__tagMinimal__ && !$this->__tagMetadata__)
 			return;
 		if (isset($this->__inPreformatted__))
@@ -518,7 +534,7 @@ class GLSAParser {
 				case 'metadata':
 					if(!is_array($this->__inMetadata__) || trim($data) == '')
 						break;
-					$this->__inMetadata__['cdata'] .= $data;
+					$this->__inMetadata__['cdata'] .= trim($data);
 					break;
 				case 'revised':
 					$this->GLSARevision .= npadOutput($data);
