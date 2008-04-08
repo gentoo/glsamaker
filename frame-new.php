@@ -222,9 +222,13 @@ bodyFooter_invoke();
 			}
 		}
 
-		if(substr_count($HTTP_POST_VARS['GLSA_UP_Name'], '/') == 1 && $HTTP_POST_VARS['GLSA_UP_VXP'] != '' && $HTTP_POST_VARS['GLSA_UP_Version'] != '' &&
-		   $HTTP_POST_VARS['GLSA_UP_Arch'] != '' && $HTTP_POST_VARS['GLSA_UP_Auto'] != '')
+		if(substr_count($HTTP_POST_VARS['GLSA_UP_Name'], '/') == 1 && $HTTP_POST_VARS['GLSA_UP_VXP'] != '' && $HTTP_POST_VARS['GLSA_UP_Version'] != '' && $HTTP_POST_VARS['GLSA_UP_Auto'] != '')
 		{
+			if($HTTP_POST_VARS['GLSA_UP_Arch'] == '')
+			{
+				$HTTP_POST_VARS['GLSA_UP_Arch'] = '*';
+				echo generateWarning('The entered "unaffected" did not contain an architecture, assuming "*"');
+			}
 			$GLSAVersions_Add = array();
 			$GLSAVersions_Add[0]['arch'] = str_replace('all', '*', strtolower($HTTP_POST_VARS['GLSA_UP_Arch']));
 			$GLSAVersions_Add[0]['auto'] = strtolower($HTTP_POST_VARS['GLSA_UP_Auto']);
@@ -234,19 +238,21 @@ bodyFooter_invoke();
 			array_combine_recursive(&$GLSAVersions, $GLSAVersions_Add);
 //			echo('<pre>!!!* '); print_r($GLSAVersions); echo('!!!</pre>');
 		}
-		else if(($HTTP_POST_VARS['GLSA_UP_Name'] != '' && substr_count($HTTP_POST_VARS['GLSA_UP_Name'], '/') != 1) || $HTTP_POST_VARS['GLSA_UP_Version'] != '' || $HTTP_POST_VARS['GLSA_UP_Arch'] != '')
+		else if(($HTTP_POST_VARS['GLSA_UP_Name'] != '' && substr_count($HTTP_POST_VARS['GLSA_UP_Name'], '/') != 1) || $HTTP_POST_VARS['GLSA_UP_Version'] != '')
 		{
 			if(substr_count($HTTP_POST_VARS['GLSA_UP_Name'], '/') != 1)
 				echo generateWarning('The entered "unaffected" version expression was ignored - a valid package name such as "net-www/mozilla" is required!');
 			else if($HTTP_POST_VARS['GLSA_UP_Version'] == '')
 				echo generateWarning('The entered "unaffected" version expression was ignored - a package version is required!');
-			else if($HTTP_POST_VARS['GLSA_UP_Arch'] == '')
-				echo generateWarning('The entered "unaffected" version expression was ignored - a package architecture is required!');
 		}
 
-		if(substr_count($HTTP_POST_VARS['GLSA_VP_Name'], '/') == 1 && $HTTP_POST_VARS['GLSA_VP_VXP'] != '' && $HTTP_POST_VARS['GLSA_VP_Version'] != '' &&
-		   $HTTP_POST_VARS['GLSA_VP_Arch'] != '' && $HTTP_POST_VARS['GLSA_UP_Auto'] != '')
+		if(substr_count($HTTP_POST_VARS['GLSA_VP_Name'], '/') == 1 && $HTTP_POST_VARS['GLSA_VP_VXP'] != '' && $HTTP_POST_VARS['GLSA_VP_Version'] != '' && $HTTP_POST_VARS['GLSA_VP_Auto'] != '')
 		{
+			if($HTTP_POST_VARS['GLSA_VP_Arch'] == '')
+			{
+				$HTTP_POST_VARS['GLSA_VP_Arch'] = '*';
+				echo generateWarning('The entered "vulnerable" did not contain an architecture, assuming "*"');
+			}
 			$GLSAVersions_Add = array();
 			$GLSAVersions_Add[0]['arch'] = str_replace('all', '*', strtolower($HTTP_POST_VARS['GLSA_VP_Arch']));
 			$GLSAVersions_Add[0]['auto'] = strtolower($HTTP_POST_VARS['GLSA_VP_Auto']);
@@ -255,14 +261,12 @@ bodyFooter_invoke();
 
 			array_combine_recursive(&$GLSAVersions, $GLSAVersions_Add);
 		}
-		else if(($HTTP_POST_VARS['GLSA_VP_Name'] != '' && substr_count($HTTP_POST_VARS['GLSA_VP_Name'], '/') != 1) || $HTTP_POST_VARS['GLSA_VP_Version'] != '' || $HTTP_POST_VARS['GLSA_VP_Arch'] != '')
+		else if(($HTTP_POST_VARS['GLSA_VP_Name'] != '' && substr_count($HTTP_POST_VARS['GLSA_VP_Name'], '/') != 1) || $HTTP_POST_VARS['GLSA_VP_Version'] != '')
 		{
 			if(substr_count($HTTP_POST_VARS['GLSA_VP_Name'], '/') != 1)
 				echo generateWarning('The entered "vulnerable" version expression was ignored - a valid package name such as "net-www/mozilla" is required!');
 			else if($HTTP_POST_VARS['GLSA_VP_Version'] == '')
 				echo generateWarning('The entered "vulnerable" version expression was ignored - a package version is required!');
-			else if($HTTP_POST_VARS['GLSA_VP_Arch'] == '')
-				echo generateWarning('The entered "vulnerable" version expression was ignored - a package architecture is required!');
 		}
 
 		if($HTTP_POST_VARS['GLSA_RF_Title'] != '' && $HTTP_POST_VARS['GLSA_RF_URL'] != '')
