@@ -357,6 +357,24 @@ bodyFooter_invoke();
 							$HTTP_POST_VARS['GLSA_Resolution'] .= $newLine.$newLine;
 						$HTTP_POST_VARS['GLSA_Resolution'] .= 'We recommend that users unmerge '.$product.':'.$newLine.$newLine.'<code>'.$newLine.'# emerge --unmerge "'.$GLSAVersion['name'].'"</code>';
 					}
+
+				}
+
+				# Go through description and see if it lists any GLSAs or CVEs
+				if (preg_match_all("/(CVE-\d{4}-\d{4}|GLSA \d{6}-\d{2})/", $HTTP_POST_VARS['GLSA_Description'], $hits)) {
+					# Stuff we already have in references
+					$names = array();
+					foreach ($GLSAReferences as $index => $array) {
+						$name = array_keys($array);
+						$names[$name[0]] = $name[0];
+					}
+
+					$hits = $hits[0];
+					foreach($hits as $hit) {
+						if (array_key_exists($hit, $names) === FALSE) {
+							array_push($GLSAReferences, array($hit => ""));
+						}
+					}
 				}
 			} else
 				echo generateWarning('Not all fields are completed - please make sure you have completed all the necessary fields!');				
