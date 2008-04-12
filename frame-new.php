@@ -290,6 +290,15 @@ bodyFooter_invoke();
 			}
 		}
 
+		if ($HTTP_POST_VARS['SortReferences']) {
+			$names = array();
+			foreach ($GLSAReferences as $index => $array) {
+				$name = array_keys($array);
+				$names[$index] = $name[0];
+			}
+			array_multisort($names, SORT_ASC, $GLSAReferences);
+		}
+
 		// echo('<pre>'); print_r($GLSAVersions); echo('</pre>');
 
 		/*! Remove duplicate entries from the versions */
@@ -677,7 +686,17 @@ bodyFooter_invoke();
 	</table><br>
 	<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable">
 		<tr><td>
-			<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable_light"><tr><td><? echo generateButton('<b>Confirm</b>', 'name="Submit" value="Confirm"'); if(!$validEdit){ echo '&nbsp;', generateButton('<b>Preview</b>', 'name="Submit" value="Preview"'); } echo '&nbsp;', generateButton('<b>Boilerplate</b>', 'name="Submit" value="Boilerplate"'); ?><input type="checkbox" name="SpellMode"<? if($HTTP_POST_VARS['SpellMode']) echo ' checked'; ?>>Spell-checkify</input><input type="checkbox" name="MailDisable"<? if($HTTP_POST_VARS['MailDisable']) echo ' checked'; ?>>Don't email</input></td><td align="right"><? if($canSubmit) echo generateButton('<b>Submit</b>', 'name="Submit" value="Submit"'); else echo '<i>Please confirm your GLSA before submitting it!</i>'; ?></td></tr></table>
+			<table width="100%" border="0" cellspacing="0" cellpadding="4" class="body_rootTable_light"><tr>
+				<td><? echo generateButton('<b>Confirm</b>', 'name="Submit" value="Confirm"');
+					if(!$validEdit){ echo '&nbsp;', generateButton('<b>Preview</b>', 'name="Submit" value="Preview"'); }
+					echo '&nbsp;', generateButton('<b>Boilerplate</b>', 'name="Submit" value="Boilerplate"'); ?>
+					<input type="checkbox" name="SpellMode"<? if($HTTP_POST_VARS['SpellMode']) echo ' checked'; ?>>Spell-checkify</input>
+					<input type="checkbox" name="MailDisable"<? if($HTTP_POST_VARS['MailDisable']) echo ' checked'; ?>>Don't email</input>
+					<input type="checkbox" name="SortReferences"<? if($HTTP_POST_VARS['SortReferences']) echo ' checked'; ?>>Sort References</input>
+				</td><td align="right">
+					<? if($canSubmit) echo generateButton('<b>Submit</b>', 'name="Submit" value="Submit"');
+					else echo '<i>Please confirm your GLSA before submitting it!</i>'; ?>
+				</td></tr></table>
 		</td></tr>
 	</table>
 	<?
