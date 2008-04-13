@@ -407,6 +407,7 @@ bodyFooter_invoke();
 
 				$Parser->GLSABugs = array();
 				$temp = explode(' ', $HTTP_POST_VARS['GLSA_Bugs']);
+				asort($temp);
 				$HTTP_POST_VARS['GLSA_Bugs'] = '';
 				foreach( $temp as $bug ){ if(is_numeric($bug)) { $Parser->GLSABugs[] = $bug; $HTTP_POST_VARS['GLSA_Bugs'] .= $bug.' '; } }
 
