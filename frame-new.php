@@ -217,6 +217,12 @@ bodyFooter_invoke();
 					{
 						array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_'.$ID1.'_Title'] => $HTTP_POST_VARS['GLSA_RF_'.$ID1.'_URL']));
 					}
+					else if ($HTTP_POST_VARS['GLSA_RF_'.$ID1.'_Title'] != '') {
+						$url = generate_reference_url($HTTP_POST_VARS['GLSA_RF_'.$ID1.'_Title']);
+						if (!($url === FALSE)) {
+							array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_'.$ID1.'_Title']  => $url));
+						}
+					}
 					$GLSAProcessed['RF'.$ID1] = true;
 				}
 			}
@@ -279,14 +285,13 @@ bodyFooter_invoke();
 				echo generateWarning('The entered reference was ignored - a reference title is required!');
 			else if($HTTP_POST_VARS['GLSA_RF_URL'] == '')
 			{
-				if(strpos($HTTP_POST_VARS['GLSA_RF_Title'], 'CVE-') === 0)
-					array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_Title'] => 'http://cve.mitre.org/cgi-bin/cvename.cgi?name='.$HTTP_POST_VARS['GLSA_RF_Title']));
-				else if(strpos($HTTP_POST_VARS['GLSA_RF_Title'], 'GLSA ') === 0)
-					array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_Title'] => 'http://www.gentoo.org/security/en/glsa/glsa-'
-					. substr($HTTP_POST_VARS['GLSA_RF_Title'], 5)
-					. '.xml'));
-				else
+				$url = generate_reference_url($HTTP_POST_VARS['GLSA_RF_Title']);
+				if ($url === FALSE) {
 					echo generateWarning('The entered reference was ignored - a reference URL is required!');
+				}
+				else {
+					array_push($GLSAReferences, array($HTTP_POST_VARS['GLSA_RF_Title'] => $url));
+				}
 			}
 		}
 
@@ -729,4 +734,16 @@ bodyFooter_invoke();
    // Local Variables: ***
    // truncate-lines:true ***
    // End: ***
+
+function generate_reference_url($title) {
+	if(strpos($title, 'CVE-') === 0)
+		return 'http://cve.mitre.org/cgi-bin/cvename.cgi?name='.$title;
+	else if(strpos($title, 'GLSA ') === 0)
+		return 'http://www.gentoo.org/security/en/glsa/glsa-'
+		. substr($title, 5)
+		. '.xml';
+	else
+		return FALSE;
+}
+
 ?>
