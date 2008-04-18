@@ -241,8 +241,8 @@ if(!$plainOutput && !$plainXML)
 				if($Parser->GLSAID != $ID && !$IDNew)
 					echo '<b> &lt;&lt; Mismatch!</b>';
 				echo '</td></tr>';
-				if($Parser->GLSARevision)
-					echo '<tr><td width="160" align="right" valign="top"><b>GLSA Revision:</b></td><td>', $Parser->GLSARevision, '</td></tr>';
+				if($Parser->GLSARevision && $Parser->GLSARevisedDate)
+					echo '<tr><td width="160" align="right" valign="top"><b>GLSA Revision:</b></td><td>', $Parser->GLSARevisedDate,' : ', $Parser->GLSARevision, '</td></tr>';
 				if($Parser->GLSADate)
 					echo '<tr><td width="160" align="right" valign="top"><b>GLSA Release Date:</b></td><td>', $Parser->GLSADate, '</td></tr>';
 				echo '</table><br><table width="100%" border="0" cellspacing="0" cellpadding="3" class="body_rootTable_light">';

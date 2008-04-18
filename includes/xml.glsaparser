@@ -191,6 +191,16 @@ function padWordWrap($string, $pad = '', $length = 75)
 	return $string;
 }
 
+function reformatDate($date) {
+	$ymd = explode("-", $date);
+	if (count($ymd) != 3) {
+		return $date;
+	}
+	$string = date("F d, Y", mktime(0, 0, 0, $ymd[1], $ymd[2], $ymd[0]));
+
+	return $string;
+}
+
 function padXML($string, $pad = '')
 {
 	$newLine = "\n";
@@ -408,6 +418,7 @@ class GLSAParser {
 	var $GLSAReferences = array();
 
 	var $GLSAAccess;
+	var $GLSARevisedDate;
 	var $GLSARevision;
 
 	var $GLSABackground = '';
@@ -456,6 +467,7 @@ class GLSAParser {
 		$this->GLSAAccess = rtrim($this->GLSAAccess);
 		$this->GLSADate = rtrim($this->GLSADate);
 		$this->GLSAProduct = rtrim($this->GLSAProduct);
+		$this->GLSARevisedDate = rtrim($this->GLSARevisedDate);
 		$this->GLSARevision = rtrim($this->GLSARevision);
 		$this->GLSAShortSummary = rtrim(htmlspecialchars($this->GLSAShortSummary, ENT_NOQUOTES));
 		$this->GLSASynopsis = trim(htmlspecialchars($this->GLSASynopsis, ENT_NOQUOTES));
@@ -537,7 +549,10 @@ class GLSAParser {
 					$this->__inMetadata__['cdata'] .= trim($data);
 					break;
 				case 'revised':
-					$this->GLSARevision .= npadOutput($data);
+					$this->GLSARevisedDate .= npadOutput($data);
+					if (empty($this->GLSARevision)) {
+						$this->GLSARevision = "01";
+					}
 					break;
 				case 'summary':
 					$this->GLSAShortSummary .= npadOutput($data);
@@ -635,6 +650,9 @@ class GLSAParser {
 				break;
 			case 'resolution':
 				$this->__inPreformatted__ = &$this->GLSAResolution;
+				break;
+			case 'revised':
+				$this->GLSARevision = $attributes['count'];
 				break;
 			case 'references':
 				$this->__inReferences__ = true;
@@ -745,19 +763,20 @@ class GLSAParser {
 
 		$string .= '  <product type="'.$this->GLSAProductType.'">'.$this->GLSAProduct.'</product>'.$newLine;
 		$string .= '  <announced>';
-		$string .= $reviseDates === 'reset' ? date('F d, Y') : $this->GLSADate;
+		$string .= $reviseDates === 'reset' ? date('Y-m-d') : $this->GLSADate;
 		$string .= '</announced>'.$newLine;
-		$string .= '  <revised>';
-		if($reviseDates === 'reset')
-			$string .= date('F d, Y').': 01';
+		$string .= '  <revised count="';
+		if($reviseDates === 'reset') {
+			$string .= '01">';
+			$string .= date('Y-m-d');
+		}
 		else if($reviseDates)
 		{
-			$temp = explode(':', $this->GLSARevision);
-			count($temp) < 2 ? $temp = 1 : $temp = $temp[1];
-			$string .= date('F d, Y').': '.padNumber(((int) $temp)+1);
+			$string .= padNumber(((int) $this->GLSARevision) + 1).'">';
+			$string .= date('Y-m-d');
 		}
 		else
-			$string .= $this->GLSARevision;
+			$string .= $this->GLSARevision.'">'.$this->GLSARevisedDate;
 		$string .= '</revised>'.$newLine;
 
 		foreach( $this->GLSABugs as $GLSABug ){ if(is_numeric($GLSABug)) { $string .= '  <bug>'.$GLSABug.'</bug>'.$newLine; } }
@@ -861,17 +880,10 @@ class GLSAParser {
 			$string .= 'Subject: '.rtrim(html_entity_decode($titleTag.'[ GLSA '.$this->GLSAID.' ] '.$this->GLSAShortSummary)).$newLine.$newLine;
 		}
 
-		$GLSARevision = explode(':', $this->GLSARevision);
-		if(count($GLSARevision) < 2)
-		{
-			$GLSARevisionC = 1;
-			$GLSARevisionString = ':01';
-		} else {
-			$GLSARevisionString = ':'.str_replace(' ', '', $GLSARevision[1]);
-			$GLSARevisionC = $GLSARevision[1];
-		}
-		if($GLSARevisionString == ':01')
+		if ($this->GLSARevision == "01")
 			$GLSARevisionString = '';
+		else
+			$GLSARevisionString = ':'.$this->GLSARevision;
 
 		if($updateMode == 1)
 			$titleTag = ' [UPDATE] ';
@@ -886,9 +898,9 @@ class GLSAParser {
 		$string .= $newLine;
 		$string .= '  Severity: '.ucfirst($this->GLSASeverity).$newLine;
 		$string .= '     Title: '.rtrim(wordwrap(html_entity_decode($this->GLSAShortSummary).$newLine, $wrapLevel-11, $newLine.'            ')).$newLine;
-		$string .= '      Date: '.$this->GLSADate.$newLine;
-		if($GLSARevisionC > 1)
-			$string .= '   Updated: '.$GLSARevision[0].$newLine;
+		$string .= '      Date: '.reformatDate($this->GLSADate).$newLine;
+		if(!empty($GLSARevisionString))
+			$string .= '   Updated: '.reformatDate($this->GLSARevisedDate).$newLine;
 		if(count($this->GLSABugs) > 0)
 			$string .= '      Bugs: #'.implode(', #', $this->GLSABugs).$newLine;
 		$string .= '        ID: '.$pool.$this->GLSAID.$GLSARevisionString.$newLine;

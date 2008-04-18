@@ -400,10 +400,12 @@ bodyFooter_invoke();
 				$Parser->GLSAProductType = $HTTP_POST_VARS['GLSA_ProductType'];
 				$Parser->GLSAProduct = rtrim(htmlspecialchars($HTTP_POST_VARS['GLSA_Product']));
 
+				if($Parser->GLSARevisedDate == '')
+					$Parser->GLSARevisedDate = date('Y-m-d');
 				if($Parser->GLSARevision == '')
-					$Parser->GLSARevision = date('F d, Y').': 01';
+					$Parser->GLSARevision = '01';
 				if($Parser->GLSADate == '')
-					$Parser->GLSADate = date('F d, Y');
+					$Parser->GLSADate = date('Y-m-d');
 
 				$Parser->GLSABugs = array();
 				$temp = explode(' ', $HTTP_POST_VARS['GLSA_Bugs']);
