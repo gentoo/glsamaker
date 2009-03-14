@@ -1,0 +1,4 @@
+test_user:
+  login: test
+  name: foo
+  email: foo@bar.org
