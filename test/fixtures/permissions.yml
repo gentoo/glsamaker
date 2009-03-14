@@ -1,0 +1,9 @@
+file_draft:
+  id: 1
+  name: file_glsa_draft
+  title: File a new GLSA draft
+  
+add_comment:
+  id: 2
+  name: add_comment
+  title: Comment on GLSA drafts

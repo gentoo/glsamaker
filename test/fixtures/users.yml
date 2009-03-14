@@ -1,4 +1,5 @@
 test_user:
+  id: 1
   login: test
   name: foo
   email: foo@bar.org

@@ -9,7 +9,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090314092539) do
+ActiveRecord::Schema.define(:version => 20090314114539) do
+
+  create_table "permissions", :force => true do |t|
+    t.string   "name"
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "permissions", ["name"], :name => "index_permissions_on_name", :unique => true
+
+  create_table "permissions_users", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "permission_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "permissions_users", ["permission_id"], :name => "permissions_users_permissions"
+  add_index "permissions_users", ["user_id", "permission_id"], :name => "index_permissions_users_on_user_id_and_permission_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"
