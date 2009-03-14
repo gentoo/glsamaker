@@ -9,7 +9,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090314114539) do
+ActiveRecord::Schema.define(:version => 20090314194257) do
+
+  create_table "glsas", :force => true do |t|
+    t.string   "glsa_id"
+    t.integer  "requester"
+    t.integer  "submitter"
+    t.integer  "bugreadymaker"
+    t.string   "status"
+    t.integer  "last_revision_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "glsas", ["bugreadymaker"], :name => "glsas_users_bugreadymakers"
+  add_index "glsas", ["glsa_id"], :name => "index_glsas_on_glsa_id", :unique => true
+  add_index "glsas", ["requester"], :name => "glsas_users_requesters"
+  add_index "glsas", ["status"], :name => "index_glsas_on_status"
+  add_index "glsas", ["submitter"], :name => "glsas_users_submitters"
 
   create_table "permissions", :force => true do |t|
     t.string   "name"

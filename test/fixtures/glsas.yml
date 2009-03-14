@@ -1,0 +1,7 @@
+glsa_one:
+  id: 1
+  glsa_id: GLSA-200901-01
+  
+glsa_two:
+  id: 2
+  glsa_id: GLSA-200901-02
