@@ -14,4 +14,6 @@ class Glsa < ActiveRecord::Base
   has_one :submitter, :class_name => "User", :foreign_key => "user_id"
   has_one :requester, :class_name => "User", :foreign_key => "user_id"
   has_one :bugreadymaker, :class_name => "User", :foreign_key => "user_id"
+  
+  has_many :revisions
 end
