@@ -6,5 +6,9 @@
 # in ./script/server testing environments. The password applies to every user
 GLSAMAKER_DEVEL_PASSWORD = "changeme"
 
+# If you want to force GLSAMaker to use production-style auth in all
+# environments, set this to true
+GLSAMAKER_FORCE_PRODUCTION_AUTH = false
+
 # Email address of the administrative contact
 GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
