@@ -3,3 +3,5 @@ tmp/*
 db/*.sqlite*
 config/database.yml
 config/initializers/glsamaker.rb
+public/stylesheets/all.css
+public/javascripts/all.js
