@@ -55,6 +55,11 @@ module Authentication
       User.find_by_login(user_name)
     end
     
+    # Populate user to views, shamelessly stolen from restful auth. ;)
+    def self.included(base)
+      base.send :helper_method, :current_user if base.respond_to? :helper_method
+    end
+    
   private
     # Tries to find out the user name used for HTTP auth from two sources
     def user_name
