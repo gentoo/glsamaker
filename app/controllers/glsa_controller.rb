@@ -13,11 +13,11 @@ class GlsaController < ApplicationController
   
   def index
     if params[:show] == "requests"
-      @glsas = GLSA.find(:all)
+      @glsas = Glsa.find(:all)
     elsif params[:show] == "drafts"
-      @glsas = GLSA.find(:all)
+      @glsas = Glsa.find(:all)
     elsif params[:show] == "sent"
-      @glsas = GLSA.find(:all)
+      @glsas = Glsa.find(:all)
     else
       flash[:error] = "Don't know what to show you."
       redirect_to :controller => "index", :action => "index"
@@ -38,7 +38,7 @@ class GlsaController < ApplicationController
     if params[:what] == "request"
       bug_ids = params[:bugs].gsub('#', '').split(/,\s*/)
       
-      glsa = GLSA.new
+      glsa = Glsa.new
       glsa.requester = current_user
       glsa.status = "draft"
       
@@ -82,18 +82,18 @@ class GlsaController < ApplicationController
   end
 
   def show
-    @glsa = GLSA.find(params[:id])
+    @glsa = Glsa.find(params[:id])
   end
 
   def edit
-    @glsa = GLSA.find(params[:id])
+    @glsa = Glsa.find(params[:id])
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
     @rev.update_attributes(params[:rev])
   end
 
   def update
-    @glsa = GLSA.find(params[:id])
+    @glsa = Glsa.find(params[:id])
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
     @rev.update_attributes(params[:rev])
