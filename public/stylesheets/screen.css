@@ -1,0 +1,288 @@
+body {
+  border-left: 6px solid #5B4A73;
+  height: 100% !important;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 85%;
+  color: #333;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  background: url(/images/line.png) repeat-y;
+  background-repeat: repeat-y;
+}
+
+a img {
+  border: none !important;
+}
+
+a, a:visited {
+  color: #4C3E61;
+}
+
+a:hover {
+  color: #609317;
+}
+
+/* Menu */
+div#menu {
+  height: 42px;
+  background: #4C3E61 url(/images/menubg.png) repeat-x;
+  position: relative;
+  border-bottom: 3px solid #4C3E61;
+}
+
+div#menu img.logo {
+  float: right;
+  border: 0 !important;
+}
+
+div#menu ul {
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  padding-left: 1em;
+  margin-right: 260px;
+  list-style: none;
+}
+
+div#menu li {
+  float: left;
+  margin: 0;
+  margin-right: 0.25em;
+  padding: 0;
+}
+
+div#menu ul li a {
+  float: left;
+  margin: 0;
+  padding: 0 0 0 4px;
+  text-decoration: none;
+}
+
+div#menu ul li a:hover {
+  background: url("/images/menu-left.png") no-repeat left top;
+}
+
+div#menu ul li a span {
+  float: left;
+  display: block;
+
+  padding-right: 6px;
+  padding-left: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+}
+
+/* I am invisible for IE5 on a Mac \*/
+#header a span {float:none;}
+/* Over */
+
+div#menu ul li a:hover span {
+  background: url("/images/menu-right.png") no-repeat right top;
+}
+
+/* Infobar */
+div#infobar {
+  background-color: #D3CFE5;
+  color: #4C3E61;
+  font-size: 95%;
+  padding: 0.2em;
+  padding-left: 1.5em;
+  border-bottom: 1px solid #8875B0;
+}
+
+div#infobar span {
+  padding-right: 3em;
+}
+
+/* Flash notice stuff */
+div#flash.notice{
+  padding: 0.2em;
+  font-size: 95%;
+  padding-left: 1.5em;
+  background-color: #729FCF;
+  border-bottom: 1px solid #1F3F7E;
+  color: #1F3F7E;
+}
+
+div#flash.error{
+  padding: 0.2em;
+  font-size: 95%;
+  padding-left: 1.5em;
+  background-color: #AA7A82;
+  border-bottom: 1px solid #A21B24;
+  color: #A21B24;
+}
+
+/* Sidebar */
+div#right {
+  float: right;
+  width: 252px;
+  /*dbackground: #FCAF3E url(img/orangebg.png) repeat-y;*/
+  cursor: default;
+}
+
+br.clear {
+  clear: both;
+}
+
+/* Content */
+div#content {
+  padding: 1em;
+  border-right: 1px solid #B2AAC2;
+  padding-bottom: 40px;
+}
+
+div#content h1 {
+  margin-top: -.3em;
+  margin-left: -.2em;
+  margin-bottom: .3em;
+  color: #4C3E61;
+  font-size: 15pt;
+}
+
+div#content h2 {
+  color: #3E3550;
+  font-size: 13pt;
+}
+
+/* Floating */
+img.left, div.left, span.left {
+  float: left;
+}
+
+.oneemright {
+  margin-right: 1em;
+}
+
+.oneembottom {
+  margin-bottom: 1em;
+}
+
+div#footer {
+  border-left: 6px solid #5B4A73;
+  
+  color: #4C3E61;
+  border-top: 3px solid #5B4A73;
+  background-color: #D3CFE5;
+
+  position: fixed;
+  bottom: 0;
+  height: 3em;
+
+  font-size: 85%;
+  margin-top: .3em;
+  margin-left: -6px;
+  width: 100%;
+  padding: 0.4em;
+}
+
+div#footer a {
+  color: #4C3E61;
+}
+
+div#footer span {
+  padding-right: 1.5em;
+}
+
+span.hspacer {
+  padding-right: 3em;
+}
+
+/** Tables **/
+table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+tr {
+  border-spacing: .3em;
+}
+
+tr.odd, p.odd {
+  background-color: #D3CFE5;
+}
+
+td {
+  margin: 0;
+  border: none;
+  padding: .2em;
+}
+
+/** Buttons **/
+div.buttons {
+  padding: 0.4em;
+  background-color: #D3CFE5;
+  border-bottom: 1px solid #8875B0;
+  margin-bottom: 0.5em;
+}
+
+a.button, input.button {
+  border-top: 1px solid #8875B0;
+  border-left: 1px solid #8875B0;
+  border-right: 1px solid #5B4A73;
+  border-bottom: 1px solid #5B4A73;
+  padding: .1em;
+  padding-left: .3em;
+  padding-right: .3em;
+  background: #4C3E61 url(/images/menubg.png) repeat-x;
+  font-size: 90%;
+  color: white;
+  text-decoration: none;
+  margin: .3em;
+  margin-right: .5em;
+}
+
+a.button:hover {
+  color: #2B1C4A;
+}
+
+a.button:active {
+  border-right: 1px solid #8875B0;
+  border-bottom: 1px solid #8875B0;
+  border-top: 1px solid #5B4A73;
+  border-left: 1px solid #5B4A73;
+}
+
+a.button img {
+  vertical-align: top;
+}
+
+/** Form controls **/
+form p {
+  padding: .5em;
+  margin-bottom: .3em;
+  margin-top: .3em;
+}
+
+form.l label {
+  width: 15em;
+  float: left;
+}
+
+input.text {
+  border: 1px solid #4C3E61;
+  /*background-color: #D3CFE5;*/
+}
+
+textarea.nice, input.nice {
+  border: 1px solid #4C3E61;
+  width: 100%;
+}
+
+.largetext {
+  font-size: 150%;
+}
+
+.hugetext {
+  font-size: 180%;
+}
