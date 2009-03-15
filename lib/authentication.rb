@@ -29,21 +29,25 @@ module Authentication
         end
 
         # Auth is fine now.
+        logger.debug "Environment username: #{env_user_name}"
 
       # For all other environments request, HTTP auth by ourselves
       # The password can be set in config/initializers/glsamaker.rb
       else
         authenticate_or_request_with_http_basic("GLSAMaker testing environment") do |username, password|
-          user = User.find_by_login(user)
+          unless (user = User.find_by_login(username)) == nil
+            unless user.disabled
+              password == GLSAMAKER_DEVEL_PASSWORD
+            else
+              false
+            end
+          else
+            false
+          end
           
-          return false if user.nil?
-          return false if user.disabled
-
-          password == GLSAMAKER_DEVEL_PASSWORD
+          logger.debug "Environment username: #{username}"
         end
       end
-      
-      logger.debug "Environment username: #{env_user_name}"
     end
     
     # Returns the ActiveRecord object of the currently logged in user
