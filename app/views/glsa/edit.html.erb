@@ -2,6 +2,8 @@
 
 <% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
 
+<% form_tag :action => 'update', :id => @glsa do -%>
+
 <b>Title:</b> <%= text_field 'rev', 'title' %> <br/>
 <b>Access:</b> <%= text_field 'rev', 'access', :size=>15 %> <br/>
 <b>Synopsis:</b> <%= text_field 'rev', 'synopsis', :size=>50 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %><br/>
@@ -24,11 +26,11 @@
 
 <b>Background:</b> <%= text_field 'rev', 'background' %> <br/>
 <b>Description:</b> <%= text_field 'rev', 'description' %> <br/>
-<b>Impact:</b> <%= @rev.impact %> <br/>
+<b>Impact:</b> <%= text_field 'rev', 'impact' %> <br/>
 <br/>
 
-<b>Workaround:</b> <%= @rev.workaround %> <br/>
-<b>Resolution:</b> <%= @rev.resolution %> <br/>
+<b>Workaround:</b> <%= text_field 'rev', 'workaround' %> <br/>
+<b>Resolution:</b> <%= text_field 'rev', 'resolution' %> <br/>
 <br/>
 
 <% @refs = @rev.references %>
@@ -40,10 +42,10 @@
 
 <b>Requested by:</b> <%= @glsa.requester %> <br/>
 <b>Submitter:</b> <%= @glsa.submitter %> <br/>
-<b>Bug ready:</b> <%= @glsa.bug_ready %> <br/>
+<b>Bug ready:</b> <%= @glsa.bugreadymaker %> <br/>
 </br>
 
 
-<% form_tag :action => 'update', :id => @glsa do -%>
-   <div><%= submit_tag 'Update' %></div>
+
+<div><%= submit_tag 'Update' %></div>
 <% end -%>

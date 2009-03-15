@@ -97,7 +97,7 @@ class GlsaController < ApplicationController
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
     @rev.update_attributes(params[:rev])
-    redirect
+    redirect_to :action => 'show', :id => @glsa
   end
 
   def destroy
