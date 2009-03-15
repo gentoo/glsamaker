@@ -1,0 +1,2 @@
+module GlsaHelper
+end

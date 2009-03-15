@@ -1,0 +1,46 @@
+<p>Find me in app/views/glsa/show.html.erb</p>
+
+<% @rev = @glsa.revisions[@glsa.revisions.length - 1] %>
+
+<b>GLSA ID:</b> <%= @glsa.id %> <br/>
+<b>GLSA revision:</b> <%= @rev.revid %> <br/>
+<b>GLSA release date:</b> <%= @rev.id %> <br/>
+<br/>
+<b>Title:</b> <%= @rev.title %> <br/>
+<b>Access:</b> <%= @rev.access %> <br/>
+<b>Product:</b> <%= @rev.product %> <br/>
+<b>Severity:</b> <%= @rev.severity %> <br/>
+<b>Synopsis:</b> <%= @rev.synopsis %> <br/>
+<br/>
+
+<% @bugs = @rev.bugs %>
+<b>Related bugs:</b>
+<% @bugs.each do |b| %>
+<%= b.bug_id %>
+<% end %>
+<br/>
+
+<b>Unaffected Packages:</b> <%= @rev.product %> <br/>
+<b>Vulnerable Packages:</b> <%= @rev.product %> <br/>
+<br/>
+
+<b>Background:</b> <%= @rev.background %> <br/>
+<b>Description:</b> <%= @rev.description %> <br/>
+<b>Impact:</b> <%= @rev.impact %> <br/>
+<br/>
+
+<b>Workaround:</b> <%= @rev.workaround %> <br/>
+<b>Resolution:</b> <%= @rev.resolution %> <br/>
+<br/>
+
+<% @refs = @rev.references %>
+<b>References:</b> <br/>
+<% @refs.each do |r| %>
+<li><%= link_to r.title, r.url -%></li><br/>
+<% end %>
+
+
+<b>Requested by:</b> <%= @glsa.requester %> <br/>
+<b>Submitter:</b> <%= @glsa.submitter %> <br/>
+<b>Bug ready:</b> <%= @glsa.bug_ready %> <br/>
+</br>

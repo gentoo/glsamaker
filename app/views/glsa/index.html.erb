@@ -1,0 +1,17 @@
+<h1>Glsa#index</h1>
+<p>Find me in app/views/glsa/index.html.erb</p>
+<% if @glsas.blank? %>
+<p>No GLSAs in the pool</p>
+<% else %>
+<p>Found some GLSAs in the pool</p>
+
+<ul id="glsas">
+<% @glsas.each do |g| %>
+<% @rev = g.revisions[g.revisions.length - 1] %>
+<li><%= link_to @rev.title, {:action => 'show', :id => g.id}-%> <%= link_to "edit", {:action => 'edit', :id => g.id}-%></li>
+<% end %>
+</ul>
+
+
+
+<% end %>

@@ -2,7 +2,6 @@ class IndexController < ApplicationController
   before_filter :login_required, :except => :error
   
   def index
-    render :text => request.env.inspect
   end
   
   def error

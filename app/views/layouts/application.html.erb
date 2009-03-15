@@ -27,7 +27,7 @@
     </div>
     <div id="infobar">
       <span><img src="/images/icons/user.png" alt="User" style="vertical-align: middle;" />
-        <strong>Howdy, <%# h current_user.login %></strong> <%= link_to "[log out]", :logout %></span>
+        <strong>Howdy, <%= h current_user.login %></strong></span>
       <span><img src="/images/icons/glsa_ready.png" alt="send" style="vertical-align: middle;" /> <strong>5</strong> of your drafts are ready to be sent.</span>
       <span><img src="/images/icons/time.png" alt="time" style="vertical-align: middle;" /> <%= Time.now.to_s %></span>
     </div>
@@ -48,7 +48,7 @@
       <span>Copyright &copy; 2009 Gentoo Foundation, Inc.</span>
       <span>Created by <a href="mailto:a3li@gentoo.org">Alex Legler</a> and <a href="mailto:py@gentoo.org">Pierre-Yves Rofes</a></span>
       <br />
-      <span><strong>Administrative contact: <a href="mailto:<%= h ADMIN_EMAIL%>"><%= h ADMIN_EMAIL%></a></strong></span></div>
+      <span><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span></div>
     </div>
     <br class="clear" />
 </body>

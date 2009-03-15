@@ -1,0 +1,49 @@
+<p>Find me in app/views/glsa/edit.html.erb</p>
+
+<% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
+
+<b>Title:</b> <%= text_field 'rev', 'title' %> <br/>
+<b>Access:</b> <%= text_field 'rev', 'access', :size=>15 %> <br/>
+<b>Synopsis:</b> <%= text_field 'rev', 'synopsis', :size=>50 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %><br/>
+<br/>
+
+<%= text_field 'glsa', 'id' %><br/>
+<br/>
+
+
+<% @bugs = @rev.bugs %>
+<b>Related bugs:</b>
+<% @bugs.each do |b| %>
+<%= b.bug_id %>
+<% end %>
+<br/>
+
+<b>Unaffected Packages:</b> <%= text_field 'rev', 'product' %> <br/>
+<b>Vulnerable Packages:</b> <%= @rev.product %> <br/>
+<br/>
+
+<b>Background:</b> <%= text_field 'rev', 'background' %> <br/>
+<b>Description:</b> <%= text_field 'rev', 'description' %> <br/>
+<b>Impact:</b> <%= @rev.impact %> <br/>
+<br/>
+
+<b>Workaround:</b> <%= @rev.workaround %> <br/>
+<b>Resolution:</b> <%= @rev.resolution %> <br/>
+<br/>
+
+<% @refs = @rev.references %>
+<b>References:</b> <br/>
+<% @refs.each do |r| %>
+<li><%= link_to r.title, r.url -%></li><br/>
+<% end %>
+
+
+<b>Requested by:</b> <%= @glsa.requester %> <br/>
+<b>Submitter:</b> <%= @glsa.submitter %> <br/>
+<b>Bug ready:</b> <%= @glsa.bug_ready %> <br/>
+</br>
+
+
+<% form_tag :action => 'update', :id => @glsa do -%>
+   <div><%= submit_tag 'Update' %></div>
+<% end -%>
