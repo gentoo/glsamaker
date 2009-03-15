@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090315105326) do
+ActiveRecord::Schema.define(:version => 20090315110119) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -20,6 +20,19 @@ ActiveRecord::Schema.define(:version => 20090315105326) do
   end
 
   add_index "bugs", ["revision_id"], :name => "index_bugs_on_revision_id"
+
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "glsa_id"
+    t.text     "text"
+    t.string   "type"
+    t.boolean  "read",       :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["glsa_id"], :name => "index_comments_on_glsa_id"
+  add_index "comments", ["user_id"], :name => "comments_users_userid"
 
   create_table "glsas", :force => true do |t|
     t.string   "glsa_id"
