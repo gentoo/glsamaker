@@ -1,0 +1,10 @@
+# GLSAMaker local configuration
+# rename this file to glsamaker.rb
+
+# The development environment uses self-issued HTTP basic authentication
+# Since GLSAMaker doesn't track passwords, set a password here for usage e.g.
+# in ./script/server testing environments. The password applies to every user
+GLSAMAKER_DEVEL_PASSWORD = "changeme"
+
+# Email address of the administrative contact
+GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
