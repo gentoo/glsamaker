@@ -1,0 +1,10 @@
+<ul class="ajaxbugs">
+  <% @bugs.each do |bug| %>
+  <% if bug.is_a?(String) %>
+  <li class="ajaxbugs-error"><%= h bug %></li>
+  <% else %>
+  <li><a href="<%= bug.url %>" target="_blank" title="<%= h bug.summary %>">Bug <%= h bug.bug_id %>:</a> 
+    <%= truncate(h(bug.summary), :length => 50) %></li>
+  <% end %>
+  <% end %>
+</ul>
