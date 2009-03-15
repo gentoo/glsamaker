@@ -63,7 +63,7 @@ module Authentication
   private
     # Tries to find out the user name used for HTTP auth from two sources
     def user_name
-      request.env['REMOTE_USER'] || http_authorization_data[0]
+      request.env['REMOTE_USER'] || (auth = http_authorization_data) == nil ? nil : auth[0]
     end
   
     def http_authorization_data
