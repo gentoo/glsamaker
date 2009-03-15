@@ -35,17 +35,8 @@ module Authentication
       # The password can be set in config/initializers/glsamaker.rb
       else
         authenticate_or_request_with_http_basic("GLSAMaker testing environment") do |username, password|
-          unless (user = User.find_by_login(username)) == nil
-            unless user.disabled
-              password == GLSAMAKER_DEVEL_PASSWORD
-            else
-              false
-            end
-          else
-            false
-          end
-          
           logger.debug "Environment username: #{username}"
+          check_auth(username, password)
         end
       end
     end
@@ -64,6 +55,15 @@ module Authentication
     # Tries to find out the user name used for HTTP auth from two sources
     def user_name
       request.env['REMOTE_USER'] || (auth = http_authorization_data) == nil ? nil : auth[0]
+    end
+    
+    def check_auth(username, password)
+      user = User.find_by_login(username)
+      
+      return false if user.nil?
+      return false if user.disabled
+      
+      password == GLSAMAKER_DEVEL_PASSWORD
     end
   
     def http_authorization_data
