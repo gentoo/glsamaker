@@ -9,7 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090314194257) do
+ActiveRecord::Schema.define(:version => 20090315105326) do
+
+  create_table "bugs", :force => true do |t|
+    t.integer  "bug_id"
+    t.text     "title"
+    t.integer  "revision_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bugs", ["revision_id"], :name => "index_bugs_on_revision_id"
 
   create_table "glsas", :force => true do |t|
     t.string   "glsa_id"
@@ -47,6 +57,39 @@ ActiveRecord::Schema.define(:version => 20090314194257) do
 
   add_index "permissions_users", ["permission_id"], :name => "permissions_users_permissions"
   add_index "permissions_users", ["user_id", "permission_id"], :name => "index_permissions_users_on_user_id_and_permission_id"
+
+  create_table "references", :force => true do |t|
+    t.integer  "revision_id"
+    t.text     "title"
+    t.text     "url"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "references", ["revision_id"], :name => "index_references_on_revision_id"
+
+  create_table "revisions", :force => true do |t|
+    t.integer  "glsa_id"
+    t.integer  "revid"
+    t.string   "title"
+    t.string   "access"
+    t.string   "product"
+    t.string   "category"
+    t.string   "severity"
+    t.text     "synopsis"
+    t.text     "background"
+    t.text     "description"
+    t.text     "impact"
+    t.text     "workaround"
+    t.text     "resolution"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "revisions", ["glsa_id"], :name => "index_revisions_on_glsa_id"
+  add_index "revisions", ["revid"], :name => "index_revisions_on_revid"
+  add_index "revisions", ["title"], :name => "index_revisions_on_title"
 
   create_table "users", :force => true do |t|
     t.string   "login"
