@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
+	<%= stylesheet_link_tag "screen", :cache => true %>
+	<%= stylesheet_link_tag "admin", :cache => true %>
+	<%= javascript_include_tag :all, :cache => true %>
+</head>
+<body>
+    <div id="menu">
+      <img src="/images/logo.png" alt="return to start" class="logo" usemap="#m_logo" />
+      <map name="m_logo" id="m_logo">
+        <area shape="rect" coords="95,0,252,42" href="#" alt="Go to homepage" />
+      </map>
+      <ul>
+        <li><a href="/glsa/new"><span><img src="/images/icons/glsa_new.png" alt="New" /> New...</span></a></li>
+        <li style="margin-right: 2em;">&nbsp;</li>
+        <li><a href="/glsa/requests"><span><img src="/images/icons/glsa_request.png" alt="Requests" /> Requests</span></a></li>
+        <li><a href="/glsa/drafts"><span><img src="/images/icons/glsa_draft.png" alt="Drafts" /> Drafts</span></a></li>
+        <li><a href="/glsa/sent"><span><img src="/images/icons/glsa_sent.png" alt="Releases" /> Releases</span></a></li>
+        <li style="margin-right: 2em;">&nbsp;</li>
+        <li><a href="#"><span><img src="/images/icons/profile.png" alt="My Profile" /> My Profile</span></a></li>
+      </ul>
+    </div>
+    <div id="infobar">
+      <span><img src="/images/icons/user.png" alt="User" style="vertical-align: middle;" />
+        <strong>Howdy, <%# h current_user.login %></strong> <%= link_to "[log out]", :logout %></span>
+      <span><img src="/images/icons/glsa_ready.png" alt="send" style="vertical-align: middle;" /> <strong>5</strong> of your drafts are ready to be sent.</span>
+      <span><img src="/images/icons/time.png" alt="time" style="vertical-align: middle;" /> <%= Time.now.to_s %></span>
+    </div>
+    <%- if flash[:notice] or flash[:error] -%>
+    <div id="flash" class="<%= flash[:error] ? "error" : "notice" %>">
+      <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
+        page[:flash].drop_out
+      end %>
+      <img src="/images/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
+      <%= h flash[:error] ? flash[:error] : flash[:notice] %>
+    </div>
+    <%- end -%>
+    <div id="content">
+<%= yield %>
+    </div>
+    <div id="footer">
+      <span><strong>GLSAMaker <%= h GLSAMAKER_VERSION %></strong></span>
+      <span>Copyright &copy; 2009 Gentoo Foundation, Inc.</span>
+      <span>Created by <a href="mailto:a3li@gentoo.org">Alex Legler</a> and <a href="mailto:py@gentoo.org">Pierre-Yves Rofes</a></span>
+      <br />
+      <span><strong>Administrative contact: <a href="mailto:<%= h ADMIN_EMAIL%>"><%= h ADMIN_EMAIL%></a></strong></span></div>
+    </div>
+    <br class="clear" />
+</body>
+</html>
