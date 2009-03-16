@@ -1,51 +1,46 @@
+<h1>Edit a GLSA Announcement</h1>
 <p>Find me in app/views/glsa/edit.html.erb</p>
 
 <% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
 
+<table>
+
 <% form_tag :action => 'update', :id => @glsa do -%>
 
-<b>Title:</b> <%= text_field 'rev', 'title' %> <br/>
-<b>Access:</b> <%= text_field 'rev', 'access', :size=>15 %> <br/>
-<b>Synopsis:</b> <%= text_field 'rev', 'synopsis', :size=>50 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %><br/>
-<br/>
 
-<%= text_field 'glsa', 'id' %><br/>
-<br/>
+<tr><td><b>Title:</b></td><td> <%= text_field 'rev', 'title' %></td></tr>
+<tr><td><b>Access:</b></td><td> <%= text_field 'rev', 'access', :size=>15 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %></td></tr>
+<tr><td><b>Synopsis:</b></td><td> <%= text_field 'rev', 'synopsis', :size => 75 %></td></tr>
 
+<tr><td><b>GLSA ID:</b></td><td> <%= @glsa.id %></td></tr>
 
 <% @bugs = @rev.bugs %>
-<b>Related bugs:</b>
+<tr><td><b>Related bugs:</b></td><td> <%= text_field 'bugs[0]', 'bug_id' %></td></tr>
 <% @bugs.each do |b| %>
-<%= b.bug_id %>
+<tr><td><b>Bug id:</b></td><td><%= text_field 'b', 'bug_id' %></td></tr>
 <% end %>
-<br/>
 
-<b>Unaffected Packages:</b> <%= text_field 'rev', 'product' %> <br/>
-<b>Vulnerable Packages:</b> <%= @rev.product %> <br/>
-<br/>
+<tr><td><b>Product:</b></td><td> <%= text_field 'rev', 'product' %></td></tr>
 
-<b>Background:</b> <%= text_field 'rev', 'background' %> <br/>
-<b>Description:</b> <%= text_field 'rev', 'description' %> <br/>
-<b>Impact:</b> <%= text_field 'rev', 'impact' %> <br/>
-<br/>
+<tr><td><b>Background:</b></td><td><%= text_area 'rev', 'background', :cols => 80, :rows => 2 %></td></tr>
+<tr><td><b>Description:</b></td><td> <%= text_area 'rev', 'description', :cols => 80, :rows => 5 %></td></tr>
+<tr><td><b>Impact:</b></td><td> <%= text_area 'rev', 'impact', :cols => 80, :rows => 5 %></td></tr>
 
-<b>Workaround:</b> <%= text_field 'rev', 'workaround' %> <br/>
-<b>Resolution:</b> <%= text_field 'rev', 'resolution' %> <br/>
-<br/>
+<tr><td><b>Workaround:</b></td><td> <%= text_area 'rev', 'workaround', :cols => 80, :rows => 2 %></td></tr>
+<tr><td><b>Resolution:</b></td><td> <%= text_area 'rev', 'resolution', :cols => 80, :rows => 5 %></td></tr>
 
 <% @refs = @rev.references %>
-<b>References:</b> <br/>
+<tr><td><b>References:</b></td><td><i>Url</i></td></tr>
 <% @refs.each do |r| %>
 <li><%= link_to r.title, r.url -%></li><br/>
 <% end %>
 
 
-<b>Requested by:</b> <%= @glsa.requester %> <br/>
-<b>Submitter:</b> <%= @glsa.submitter %> <br/>
-<b>Bug ready:</b> <%= @glsa.bugreadymaker %> <br/>
-</br>
+<tr><td><b>Requested by:</b></td><td> <%= @glsa.requester %></td></tr>
+<tr><td><b>Submitter:</b></td><td> <%= @glsa.submitter %></td></tr>
+<tr><td><b>Bug ready:</b></td><td> <%= @glsa.bugreadymaker %></td></tr>
 
-
-
-<div><%= submit_tag 'Update' %></div>
+<tr><td> </td> <td><%= submit_tag 'Update' %></td></tr>
 <% end -%>
+
+</table>

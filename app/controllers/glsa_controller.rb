@@ -48,7 +48,7 @@ class GlsaController < ApplicationController
         flash[:error] = "Error while saving GLSA object"
         render :action => "new-request"
       end
-      
+
       revision = Revision.new
       revision.glsa = glsa
       revision.description = params[:description]
