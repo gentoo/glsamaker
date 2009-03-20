@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'fastercsv'
 
 module Bugzilla  
   class Bug
@@ -86,4 +87,27 @@ module Bugzilla
       @date = Time.parse(date)
     end
   end
+  
+  # Looks on bugzilla for all bugs that are in the [glsa] state
+  module_function
+  def find_glsa_bugs
+    url="http://bugs.gentoo.org/buglist.cgi?bug_file_loc=&bug_file_loc_type=allwordssubstr&bug_id=&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bugidtype=include&chfieldfrom=&chfieldto=Now&chfieldvalue=&component=Vulnerabilities&email1=&email2=&emailassigned_to1=1&emailassigned_to2=1&emailcc2=1&emailreporter2=1&emailtype1=substring&emailtype2=substring&field-1-0-0=product&field-1-1-0=component&field-1-2-0=bug_status&field-1-3-0=status_whiteboard&field0-0-0=noop&keywords=&keywords_type=allwords&long_desc=&long_desc_type=substring&product=Gentoo%20Security&query_format=advanced&remaction=&short_desc=&short_desc_type=allwordssubstr&status_whiteboard=%5Bglsa%5D&status_whiteboard_type=substring&type-1-0-0=anyexact&type-1-1-0=anyexact&type-1-2-0=anyexact&type-1-3-0=substring&type0-0-0=noop&value-1-0-0=Gentoo%20Security&value-1-1-0=Vulnerabilities&value-1-2-0=UNCONFIRMED%2CNEW%2CASSIGNED%2CREOPENED&value-1-3-0=%5Bglsa%5D&value0-0-0=&votes=&ctype=csv"
+    bugs = []
+    
+    FasterCSV.parse(Glsamaker::HTTP.get(url)) do |row|
+      bugs << { "bug_id" => row.shift,
+                "severity" => row.shift,
+                "priority" => row.shift,
+                "os" => row.shift,
+                "assignee" => row.shift,
+                "status" => row.shift,
+                "resolution" => row.shift,
+                "summary" => row.shift
+              }
+    end
+    
+    bugs.shift
+    bugs
+  end
+  
 end
