@@ -1,7 +1,6 @@
 require 'nokogiri'
-require 'open-uri'
 
-module Bugzilla
+module Bugzilla  
   class Bug
     attr_reader :summary, :created_at, :reporter, :alias, :assigned_to, :cc, :status_whiteboard,
                 :product, :component, :status, :resolution, :url, :comments, :bug_id
@@ -14,12 +13,20 @@ module Bugzilla
       end
       
       begin
-        xml = Nokogiri::XML(open("http://bugs.gentoo.org/show_bug.cgi?ctype=xml&id=#{id}"))
+        xml = Nokogiri::XML(Glsamaker::HTTP.get("http://bugs.gentoo.org/show_bug.cgi?ctype=xml&id=#{id}"))
       rescue Exception => e
         raise ArgumentError, "Couldn't load bug: #{e.message}"
       end
       
       self.new(xml.root.xpath("bug").first)
+    end
+    
+    def self.str2bugIDs(str)
+      bug_ids = str.split(/,\s*/)
+
+      bug_ids.map do |bug|
+        bug.gsub(/\D/, '')
+      end
     end
     
     def url(secure = true)
