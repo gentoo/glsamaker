@@ -17,4 +17,9 @@ class Glsa < ActiveRecord::Base
 
   has_many :revisions
   has_many :comments
+
+  # Returns the last revision object, referring to the current state of things
+  def last_revision
+    @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
+  end
 end
