@@ -40,8 +40,8 @@ class GlsaController < ApplicationController
       
       glsa = Glsa.new
       glsa.requester = current_user
-      glsa.glsa_id = Digest::MD5.hexdigest(Time.now.to_s)
-      glsa.status = "draft"
+      glsa.glsa_id = Digest::MD5.hexdigest(params[:description] + Time.now.to_s)[0...10]
+      glsa.status = "request"
       
       begin
         glsa.save!
@@ -52,6 +52,7 @@ class GlsaController < ApplicationController
       end
 
       revision = Revision.new
+      revision.revid = glsa.next_revid
       revision.glsa = glsa
       revision.description = params[:description]
       

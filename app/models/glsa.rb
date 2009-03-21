@@ -22,4 +22,13 @@ class Glsa < ActiveRecord::Base
   def last_revision
     @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
   end
+  
+  # Returns the next revision ID to be given for this GLSA
+  def next_revid
+    if (rev = last_revision)
+      rev.revid + 1
+    else
+      1
+    end
+  end
 end
