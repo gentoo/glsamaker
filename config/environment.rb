@@ -41,3 +41,5 @@ Rails::Initializer.run do |config|
 end
 
 GLSAMAKER_VERSION="1.9-git"
+
+require 'digest/md5'

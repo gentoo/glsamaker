@@ -36,17 +36,19 @@ class GlsaController < ApplicationController
 
   def create
     if params[:what] == "request"
-      bug_ids = params[:bugs].gsub('#', '').split(/,\s*/)
+      bug_ids = Bugzilla::Bug.str2bugIDs(params[:bugs])
       
       glsa = Glsa.new
       glsa.requester = current_user
+      glsa.glsa_id = Digest::MD5.hexdigest(Time.now.to_s)
       glsa.status = "draft"
       
       begin
         glsa.save!
       rescue Exception => e
-        flash[:error] = "Error while saving GLSA object"
+        flash[:error] = "Error while saving GLSA object #{e.message}"
         render :action => "new-request"
+        return
       end
 
       revision = Revision.new
@@ -58,6 +60,7 @@ class GlsaController < ApplicationController
       rescue Exception => e
         flash[:error] = "Error while saving Revision object"
         render :action => "new-request"
+        return
       end
       
       bug_ids.each do |bug|
@@ -75,6 +78,7 @@ class GlsaController < ApplicationController
         rescue Exception => e
           flash[:error] = "Error while saving Bug object"
           render :action => "new-request"
+          return
         end
       end
     end

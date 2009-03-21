@@ -11,7 +11,7 @@ class ToolsController < ApplicationController
   end
   
   def ajaxbugs
-    bug_ids = params[:bugs].split(/,\s*/)
+    bug_ids = Bugzilla::Bug.str2bugIDs(params[:bugs])
     
     @bugs = []
     bug_ids.each do |bug_id|
@@ -26,7 +26,7 @@ class ToolsController < ApplicationController
   end
   
   def ajaxdescr
-    bug_ids = params[:bugs].split(/,\s*/)
+    bug_ids = Bugzilla::Bug.str2bugIDs(params[:bugs])
     
     @bugs = []
     bug_ids.each do |bug_id|
@@ -65,6 +65,5 @@ class ToolsController < ApplicationController
 
     render :text => "(no suggestion available)", :layout => false
   end
-    
 
 end
