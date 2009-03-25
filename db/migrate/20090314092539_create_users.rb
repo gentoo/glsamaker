@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email
       t.boolean :disabled, :default => false
       t.text :preferences
+      t.integer :access
       t.timestamps
     end
     

@@ -6,7 +6,7 @@ class CreateGlsas < ActiveRecord::Migration
       t.integer :submitter
       t.integer :bugreadymaker
       t.string :status
-      t.integer :last_revision_id
+      t.boolean :restricted, :default => false
       t.timestamps
     end
     
