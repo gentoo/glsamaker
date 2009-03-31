@@ -1,12 +1,20 @@
-# Access levels
-# +---+---------------------+------------------------------------------------+
-# | # | Description         | Permissions                                    |
-# +---+---------------------+------------------------------------------------+
-# | 0 | Contributor         | can see own drafts, can fill in requests       |
-# | 1 | Padawan             | all of the above, plus see and edit all drafts |
-# | 2 | Full member         | all of the above, plus voting                  |
-# | 3 | Confidential member | all of the above, including restricted drafts  |
-# +---+---------------------+------------------------------------------------+
+# ===GLSAMaker v2
+#  Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# For more information, see the LICENSE file.
+
+# =Access levels
+#
+# [<b>0 (Contributor)</b>] Can see own drafts, can fill in requests
+# [<b>1 (Padawan)</b>] all of the above, plus see and edit all drafts
+# [<b>2 (Full member)</b>] all of the above, plus voting
+# [<b>3 (Confidential member)</b>] all of the above, including restricted drafts
 class User < ActiveRecord::Base
   has_and_belongs_to_many :permissions
   

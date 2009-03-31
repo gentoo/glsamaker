@@ -1,13 +1,15 @@
-# GLSAMaker v2
-# Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
-# Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
+# ===GLSAMaker v2
+#  Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; version 2 of the License.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
 # For more information, see the LICENSE file.
 
+# GLSA controller
 class GlsaController < ApplicationController
   before_filter :login_required
   
@@ -41,6 +43,7 @@ class GlsaController < ApplicationController
       glsa = Glsa.new
       glsa.requester = current_user
       glsa.glsa_id = Digest::MD5.hexdigest(params[:description] + Time.now.to_s)[0...10]
+      glsa.restricted = params[:access] == "confidential"
       glsa.status = "request"
       
       begin

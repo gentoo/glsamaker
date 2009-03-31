@@ -32,11 +32,18 @@
   <p><textarea name="comment" id="comment" class="nice" rows="2"></textarea></p>
 </div>
 <br />
+<%- if current_user.access >= 1 -%>
 <div class="buttons" style="padding: 1em; display: inline-block; width: 40em;">
   <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
-  <p>Set what access level is needed to view this draft: <em>not yet implemented</em></p>
+  <p><label for="access">Mark this request as</label>: 
+    <select name="access" id="access">
+      <option value="public" selected="selected">public</option>
+      <option value="confidential">confidential</option>
+    </select>
+  </p>
 </div>
 <br />
+<%- end -%>
 <div style="width: 40em; text-align: right; display: inline-block;">
   <input type="submit" class="button" value="File request &raquo;"/>
 </div>
