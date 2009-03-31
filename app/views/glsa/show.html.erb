@@ -1,8 +1,7 @@
-<p>Find me in app/views/glsa/show.html.erb</p>
+<h1>GLSA <%= h @glsa.glsa_id %>:<%= h @glsa.last_revision.revid %></h1>
 
 <% @rev = @glsa.revisions[@glsa.revisions.length - 1] %>
 
-<b>GLSA ID:</b> <%= @glsa.id %> <br/>
 <b>GLSA revision:</b> <%= @rev.revid %> <br/>
 <b>GLSA release date:</b> <%= @rev.id %> <br/>
 <br/>

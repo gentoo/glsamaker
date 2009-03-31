@@ -1,7 +1,7 @@
 <h1>New GLSA request</h1>
 
 <% form_tag(:action => "create") do %>
-<div class="buttons" style="padding: 1em; display: inline-block; width: 40em;">
+<div class="box w40em">
   <input type="hidden" name="what" value="request" />
   <h2 style="margin-top: 0;"><img src="/images/icons/bug.png" alt="bug" /> Bugs</h2>
   <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one Bug with a comma:</label></p>
@@ -18,22 +18,22 @@
   <div id="ajaxbugs"></div>
 </div>
 <br />
-<div class="buttons" style="padding: 1em; display: inline-block; width: 40em;">
-  <h2 style="margin-top: 0;"><img src="/images/icons/edit.png" alt="description" /> Description</h2>
-  <p><label for="description">Either take the suggested description or enter a new custom one:</label></p>
+<div class="box w40em">
+  <h2 style="margin-top: 0;"><img src="/images/icons/edit.png" alt="description" /> Title</h2>
+  <p><label for="title">Either take the suggested title or enter a new custom one:</label></p>
   <div id="suggesteddescr"></div>
-  <p><textarea name="description" id="description" class="largetext nice" rows="2"></textarea></p>
+  <p><textarea name="title" id="title" class="largetext nice" rows="2"></textarea></p>
   
 </div>
 <br />
-<div class="buttons" style="padding: 1em; display: inline-block; width: 40em;">
+<div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comment <small>(optional)</small></h2>
   <p><label for="comment">If you want to add a comment, enter it here:</label></p>
   <p><textarea name="comment" id="comment" class="nice" rows="2"></textarea></p>
 </div>
 <br />
 <%- if current_user.access >= 1 -%>
-<div class="buttons" style="padding: 1em; display: inline-block; width: 40em;">
+<div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
   <p><label for="access">Mark this request as</label>: 
     <select name="access" id="access">

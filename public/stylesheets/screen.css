@@ -218,6 +218,22 @@ td {
   padding: .2em;
 }
 
+div.box {
+  padding: 1em; 
+  display: inline-block; 
+  background-color: #D3CFE5;
+  border-bottom: 1px solid #8875B0;
+  margin-bottom: 0.5em;
+}
+
+.w40em {
+  width: 40em;
+}
+
+.w100p {
+  width: 100%;
+}
+
 /** Buttons **/
 div.buttons {
   padding: 0.4em;

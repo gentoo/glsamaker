@@ -42,7 +42,7 @@ class GlsaController < ApplicationController
       
       glsa = Glsa.new
       glsa.requester = current_user
-      glsa.glsa_id = Digest::MD5.hexdigest(params[:description] + Time.now.to_s)[0...10]
+      glsa.glsa_id = Digest::MD5.hexdigest(params[:title] + Time.now.to_s)[0...10]
       glsa.restricted = params[:access] == "confidential"
       glsa.status = "request"
       
@@ -57,7 +57,7 @@ class GlsaController < ApplicationController
       revision = Revision.new
       revision.revid = glsa.next_revid
       revision.glsa = glsa
-      revision.description = params[:description]
+      revision.title = params[:title]
       
       begin
         revision.save!
