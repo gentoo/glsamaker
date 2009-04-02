@@ -45,6 +45,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.newglsa '/glsa/new/:what', :controller => 'glsa', :action => 'new'
   
+  map.showglsa '/glsa/show/:id.:format', :controller => 'glsa', :action => 'show'
+  
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

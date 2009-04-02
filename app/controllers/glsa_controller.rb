@@ -91,6 +91,12 @@ class GlsaController < ApplicationController
 
   def show
     @glsa = Glsa.find(params[:id])
+    
+    respond_to do |wants|
+      wants.html { render }
+      wants.xml { }
+      wants.txt { render :text => "text to render..." }
+    end
   end
 
   def edit
