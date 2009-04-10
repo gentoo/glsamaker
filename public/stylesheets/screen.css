@@ -150,7 +150,7 @@ div#content h1 {
   font-size: 15pt;
 }
 
-div#content h2 {
+h2 {
   color: #3E3550;
   font-size: 13pt;
 }
@@ -218,6 +218,7 @@ td {
   padding: .2em;
 }
 
+/** boxes **/
 div.box {
   padding: 1em; 
   display: inline-block; 
@@ -232,6 +233,49 @@ div.box {
 
 .w100p {
   width: 100%;
+}
+
+/** leftright **/
+div#right {
+  width: 40%;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+}
+
+div#left {
+  width: 65%;
+}
+
+div.box2 {
+  padding: .4em;
+  background-color: #D3CFE5;
+  border-bottom: 1px solid #8875B0;
+  margin-bottom: 0.5em;
+}
+
+div.box2 h2 {
+  color: #3E3550;
+  font-size: 11pt;
+  margin: 0;
+}
+
+div.box2 p {
+  margin: 0;
+}
+
+table.padcells td {
+  padding: 0.3em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+table.swap .odd {
+  background-color: #E6E5EE;
+}
+
+table.centercells td {
+  text-align: center;
 }
 
 /** Buttons **/
@@ -301,4 +345,49 @@ textarea.nice, input.nice {
 
 .hugetext {
   font-size: 180%;
+}
+
+/** ajax window stuff **/
+.window {  
+    background-image:url("/images/window_background.png");  
+    background-position:top left;  
+    -moz-border-radius: 10px;  
+    -webkit-border-radius: 10px;  
+    padding:10px;  
+    font-family:"Lucida Grande",Verdana;  
+    font-size:13px;  
+    font-weight:bold;  
+    color:#fff;  
+    text-align:center;  
+    min-width:150px;  
+    min-height:100px;  
+} 
+ 
+.window .window_contents {  
+    margin-top:10px;  
+    width:100%;  
+    height:100%;      
+} 
+ 
+.window .window_header {  
+    text-align:center;  
+} 
+ 
+.window .window_title {  
+    margin-top:-7px;  
+    margin-bottom:7px;  
+    font-size:11px;  
+    cursor:move;  
+} 
+ 
+.window .window_close {  
+    display:block;  
+    position:absolute;  
+    top:4px;  
+    right:5px;  
+    height:13px;  
+    width:13px;  
+    background-image:url("/images/window_close.gif");  
+    cursor:pointer;  
+    cursor:hand;  
 }

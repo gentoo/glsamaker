@@ -11,4 +11,12 @@
 
 # GLSA Helper
 module GlsaHelper
+  
+  def glsa_content(g, field)
+    (params[:glsa][field.to_sym] if params[:glsa]) || g[field]
+  end
+  
+  def lastrev_content(g, field)
+    (params[:glsa][field.to_sym] if params[:glsa]) || g.last_revision[field]
+  end
 end

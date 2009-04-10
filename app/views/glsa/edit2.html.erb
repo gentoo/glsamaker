@@ -1,0 +1,219 @@
+<h1>Edit GLSA <code><%= h @glsa.glsa_id %></code></h1>
+
+<% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
+
+<% form_tag :action => 'update', :id => @glsa do |f| -%>
+<div style="float: right; width: 34%;">
+  <div class="box2">
+    <h2 style="margin: 0;"><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
+    <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
+      <select name="glsa[access]" id="access">
+        <option value="local">local</option>
+        <option value="remote">remote</option>
+        <option value="both">local, remote</option>
+      </select>
+    </p>
+    <p><label for="severity"><img src="/images/icons/severity.png" alt="severity" /> Severity:</label>
+      <select name="glsa[severity]" id="severity">
+        <option value="low">low</option>
+        <option value="normal">normal</option>
+        <option value="high">high</option>
+      </select>
+    </p>
+    <p><label for="keyword"><img src="/images/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
+      <input type="text" name="glsa[keyword]" id="keyword" class="nice" /></p>
+  </div>
+
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript://" onclick="addBugDialog(<%= @glsa.id %>);" title="Add bug">
+          <img src="/images/icons/bug_add.png" alt="Add bug" />
+        </a>
+      </span>
+      <img src="/images/icons/bug.png" alt="bug" /> <label for="title">Bugs</label>
+    </h2>
+    <% @rev.bugs.each do |bug| %>
+      <p><a href="<%= bug.bug_url %>"><%= bug.bug_id %></a>: <%= h bug.title %></p>
+    <% end %> 
+  </div>
+  
+  <div class="box2">
+    <h2 style="margin: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comments</h2>
+  </div>
+</div>
+
+<div id="left">
+  <div class="box2">
+    <h2 style="margin: 0;"><img src="/images/icons/title.png" alt="title" /> <label for="title">Title</label></h2>
+    <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= h lastrev_content(@glsa, 'title') %></textarea></p>
+  </div>
+  
+  <div class="box2">
+    <h2 style="margin: 0;"><img src="/images/icons/synopsis.png" alt="synopsis" /> <label for="synopsis">Synopsis</label></h2>
+    <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
+  </div>
+  
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="" title="Add package">
+          <img src="/images/icons/package-add.png" alt="Add package" />
+        </a>
+        <a href="javascript:///" onclick="" title="Remove package">
+          <img src="/images/icons/package-remove.png" alt="Remove package" />
+        </a>
+      </span>
+      <img src="/images/icons/package.png" alt="Packages" />
+      Packages
+    </h2>
+
+    <table class="padcells swap centercells">
+      <tr>
+        <th><img src="/images/icons/atom.png" alt="atom" /> Atom</th>
+        <th colspan="2" class="odd"><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable versions</th>
+        <th><img src="/images/icons/unaffected.png" alt="unaffected" /> Fixed</th>
+        <th class="odd"><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
+        <th><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
+      </tr>
+      <tr>
+        <td><input class="nice" type="text" name="glsa[package][atom][]" /></td>
+        <td class="odd"><select name="glsa[package][comp_vuln][]"><option value="1">&lt;=</option></select></td>
+        <td class="odd"><input class="nice" type="text" name="glsa[package][vuln][]" size="10" /></td>
+        <td><input class="nice" type="checkbox" name="glsa[package][unaff][]" value="1" /></td>
+        <td class="odd"><input class="nice" type="text" name="glsa[package][arch][]" size="7" /></td>
+        <td><select name="glsa[package][auto][]"><option value="1">yes</option><option value="0">no</select></td>
+      </tr>
+      <tr>
+        <td><input class="nice" type="text" name="glsa[package][atom][]" /></td>
+        <td class="odd"><select name="glsa[package][comp_vuln][]"><option value="1">&lt;=</option></select></td>
+        <td class="odd"><input class="nice" type="text" name="glsa[package][vuln][]" size="10" /></td>
+        <td><input class="nice" type="checkbox" name="glsa[package][unaff][]" value="1" /></td>
+        <td class="odd"><input class="nice" type="text" name="glsa[package][arch][]" size="7" /></td>
+        <td><select name="glsa[package][auto][]"><option value="1">yes</option><option value="0">no</select></td>
+      </tr>
+    </table>
+    
+  </div>
+  
+  <div class="box2" id="desc-box">
+    <h2>
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="lines('description', -5);" title="Fewer lines">
+          <img src="/images/icons/zoom_out.png" alt="Fewer lines" />
+        </a>
+        <a href="javascript:///" onclick="$('description').rows = 15;" title="Reset lines">
+          <img src="/images/icons/zoom_100.png" alt="Reset lines" />
+        </a>
+        <a href="javascript:///" onclick="lines('description', 5);" title="More lines">
+          <img src="/images/icons/zoom_in.png" alt="More lines" />
+        </a>
+        <a href="javascript:///" onclick="toggleWide('desc-box')" title="More columns" id="desc-box-widebtn">
+          <img src="/images/icons/more_width.png" alt="More columns" />
+        </a>
+        <img src="/images/separator.png" />
+        <a href="javascript:///" onclick="" title="Open Intel editor (CVE and other data)">
+          <img src="/images/intel-editor.png" alt="Intel editor" />
+        </a>
+      </span>
+      <img src="/images/icons/edit.png" alt="description" />
+      <label for="description">Description</label>
+    </h2>
+    <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= h lastrev_content(@glsa, 'description') %></textarea></p>
+  </div>
+  
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="$('workaround').value = 'There is no known workaround at the moment.'" title="No known workaround">
+          <img src="/images/icons/workaround-no.png" alt="No known workaround" />
+        </a>
+      </span>
+      <img src="/images/icons/workaround.png" alt="Workaround" />
+      <label for="workaround">Workaround</label>
+    </h2>
+    <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="3"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
+  </div>
+  
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="$('resolution').value = 'There is no known workaround at the moment.'" title="Set default resolution">
+          <img src="/images/icons/resolution-go.png" alt="Set default resolution" />
+        </a>
+      </span>
+      <img src="/images/icons/resolution.png" alt="Resolution" />
+      <label for="resolution">Resolution</label>
+    </h2>
+    <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="3"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
+  </div>
+
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="" title="Add reference">
+          <img src="/images/icons/reference-add.png" alt="Add reference" />
+        </a>
+        <a href="javascript:///" onclick="" title="Remove reference">
+          <img src="/images/icons/reference-remove.png" alt="Remove reference" />
+        </a>
+      </span>
+      <img src="/images/icons/reference.png" alt="Packages" />
+      References
+    </h2>
+  </div>
+
+</div>
+
+<!-->
+<div id="right">
+  <div class="box2">
+    <h3>Comments</h3>
+  </div>
+</div>
+
+-->
+<%- end -%>
+<!--
+
+<table>
+
+<% form_tag :action => 'update', :id => @glsa do -%>
+
+
+<tr><td><b>Title:</b></td><td> <%= text_field 'rev', 'title' %></td></tr>
+<tr><td><b>Access:</b></td><td> <%= text_field 'rev', 'access', :size=>15 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %></td></tr>
+<tr><td><b>Synopsis:</b></td><td> <%= text_field 'rev', 'synopsis', :size => 75 %></td></tr>
+
+<tr><td><b>GLSA ID:</b></td><td> <%= @glsa.id %></td></tr>
+
+<% @bugs = @rev.bugs %>
+<tr><td><b>Related bugs:</b></td><td> <%= text_field 'bugs[0]', 'bug_id' %></td></tr>
+<% @bugs.each do |b| %>
+<tr><td><b>Bug id:</b></td><td><%= text_field 'b', 'bug_id' %></td></tr>
+<% end %>
+
+<tr><td><b>Product:</b></td><td> <%= text_field 'rev', 'product' %></td></tr>
+
+<tr><td><b>Background:</b></td><td><%= text_area 'rev', 'background', :cols => 80, :rows => 2 %></td></tr>
+<tr><td><b>Description:</b></td><td> <%= text_area 'rev', 'description', :cols => 80, :rows => 5 %></td></tr>
+<tr><td><b>Impact:</b></td><td> <%= text_area 'rev', 'impact', :cols => 80, :rows => 5 %></td></tr>
+
+<tr><td><b>Workaround:</b></td><td> <%= text_area 'rev', 'workaround', :cols => 80, :rows => 2 %></td></tr>
+<tr><td><b>Resolution:</b></td><td> <%= text_area 'rev', 'resolution', :cols => 80, :rows => 5 %></td></tr>
+
+<% @refs = @rev.references %>
+<tr><td><b>References:</b></td><td><i>Url</i></td></tr>
+<% @refs.each do |r| %>
+<li><%= link_to r.title, r.url -%></li><br/>
+<% end %>
+
+
+<tr><td><b>Requested by:</b></td><td> <%= @glsa.requester %></td></tr>
+<tr><td><b>Submitter:</b></td><td> <%= @glsa.submitter %></td></tr>
+<tr><td><b>Bug ready:</b></td><td> <%= @glsa.bugreadymaker %></td></tr>
+
+<tr><td> </td> <td><%= submit_tag 'Update' %></td></tr>
+<% end -%>
+
+</table>-->

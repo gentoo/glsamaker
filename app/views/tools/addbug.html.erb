@@ -1,0 +1,13 @@
+<% form_remote_tag (:url => '/tools/addbugsave/' + @glsa_id) do -%>
+<p><label for="addbugs"><img src="/images/icons/bug.png" alt="bug" />
+  Please enter the relevant bug ID(s), separate more than one bug with a comma:</label></p>
+
+<p><input type="text" name="addbugs" id="addbugs" class="hugetext nice"/></p>
+<%= observe_field :addbugs, :url => { :controller => 'tools', :action => 'ajaxbugs' },
+                :frequency => 2,
+                :update => :ajaxbugs,
+                :with => 'bugs',
+                :complete => 'Modalbox.resizeToContent();' %>
+<div id="ajaxbugs"></div>
+<p style="text-align: right;"><input type="submit" class="button" value="Add bugs"></p>
+<% end -%>

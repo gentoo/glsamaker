@@ -77,5 +77,15 @@ class ToolsController < ApplicationController
 
     render :text => "(no suggestion available)", :layout => false
   end
+  
+  def addbug
+    @glsa_id = params[:id]
+    render :layout => false
+  end
+  
+  def addbugsave
+    @glsa_iud = params[:id]
+    
+  end
 
 end

@@ -104,6 +104,8 @@ class GlsaController < ApplicationController
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
     @rev.update_attributes(params[:rev])
+    
+    render :action => "edit2"
   end
 
   def update

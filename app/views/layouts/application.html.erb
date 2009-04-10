@@ -7,7 +7,8 @@
 	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
 	<%= stylesheet_link_tag "screen", :cache => true %>
 	<%= stylesheet_link_tag "admin", :cache => true %>
-	<%= javascript_include_tag :all, :cache => true %>
+	<%= stylesheet_link_tag "modalbox", :cache => true %>
+  <%= javascript_include_tag :all %>
 </head>
 <body>
     <div id="menu">
@@ -28,7 +29,7 @@
     <div id="infobar">
       <span><img src="/images/icons/user.png" alt="User" style="vertical-align: middle;" />
         <strong>Howdy, <%= h current_user.login %></strong></span>
-      <span><img src="/images/icons/glsa_ready.png" alt="send" style="vertical-align: middle;" /> <strong>5</strong> of your drafts are ready to be sent.</span>
+      <span><img src="/images/#icons/glsa_ready.png" alt="send" style="vertical-align: middle;" /> <strong>5</strong> of your drafts are ready to be sent.</span>
       <span><img src="/images/icons/time.png" alt="time" style="vertical-align: middle;" /> <%= Time.now.to_s %></span>
     </div>
     <%- if flash[:notice] or flash[:error] -%>
