@@ -27,11 +27,23 @@
   <div class="box2">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript://" onclick="backgroundDialog();" title="Get background">
+          <img src="/images/icons/background-go.png" alt="Get background" />
+        </a>
+      </span>
+      <label for="background"><img src="/images/icons/background.png" alt="background" /> Background</label>
+      <p><textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea></p>
+    </h2>
+  </div>
+
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript://" onclick="addBugDialog(<%= @glsa.id %>);" title="Add bug">
           <img src="/images/icons/bug_add.png" alt="Add bug" />
         </a>
       </span>
-      <img src="/images/icons/bug.png" alt="bug" /> <label for="title">Bugs</label>
+      <img src="/images/icons/bug.png" alt="bug" /> Bugs
     </h2>
     <% @rev.bugs.each do |bug| %>
       <p><a href="<%= bug.bug_url %>"><%= bug.bug_id %></a>: <%= h bug.title %></p>

@@ -26,6 +26,9 @@ function addBugDialog(glsaid) {
   Modalbox.show("/tools/addbug/"+glsaid, {title: "Add bug", width: 600});
 }
 
+function backgroundDialog() {
+  Modalbox.show("/tools/background", {title: "Get background", width: 600});
+}
 
 //document.observe('dom:loaded', function() {
                         
