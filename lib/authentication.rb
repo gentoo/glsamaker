@@ -29,14 +29,14 @@ module Authentication
         
         # User not known to GLSAMaker
         if user == nil
-          logger.warn "Unknown user #{env_user_name} tried to log in from #{request.request_origin}"
+          logger.warn "Unknown user #{env_user_name} tried to log in from #{request.remote_ip}"
           redirect_to :controller => 'index', :action => 'error', :type => 'user'
           return
         end
 
         # User is marked as disabled in the DB
         if user.disabled
-          logger.warn "Disabled user #{env_user_name} tried to log in from #{request.request_origin}"
+          logger.warn "Disabled user #{env_user_name} tried to log in from #{request.remote_ip}"
           redirect_to :controller => 'index', :action => 'error', :type => 'disabled'
           return
         end
