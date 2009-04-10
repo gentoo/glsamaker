@@ -5,10 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
-	<%= stylesheet_link_tag "screen", :cache => true %>
-	<%= stylesheet_link_tag "admin", :cache => true %>
-	<%= stylesheet_link_tag "modalbox", :cache => true %>
-  <%= javascript_include_tag :all %>
+	<%= stylesheet_link_tag "screen", :cache => false %>
+	<%= stylesheet_link_tag "admin", :cache => false %>
+	<%= stylesheet_link_tag "modalbox", :cache => false %>
+  <%= javascript_include_tag :all, :cache => false %>
 </head>
 <body>
     <div id="menu">
