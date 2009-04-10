@@ -5,6 +5,28 @@
 <% form_tag :action => 'update', :id => @glsa do |f| -%>
 <div style="float: right; width: 34%;">
   <div class="box2">
+    <h2 style="margin: 0;"><img src="/images/icons/info.png" alt="info" />
+      GLSA <%= @glsa.status %> <%= @glsa.glsa_id %> &mdash; Revision <%= @glsa.last_revision.revid %></h2>
+    <% if false %>
+      <p><img src="/images/icons/ok.png" alt="ok" /> This draft is marked <strong>bug ready.</strong></p>
+    <% else %>
+      <p><img src="/images/icons/pending.png" alt="pending" /> There are some bugs <strong>pending.</strong></p>
+    <% end %>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
+      Requester: <strong><%= h @glsa.requester.name %></strong>
+    </p>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
+      Submitter: <strong><%= h @glsa.submitter.name %></strong>
+    </p>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
+      Editor: <strong><%= h @glsa.last_revision.user.name %></strong>
+    </p>
+  </div>
+  
+  <div class="box2">
     <h2 style="margin: 0;"><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">
@@ -22,6 +44,7 @@
     </p>
     <p><label for="keyword"><img src="/images/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
       <input type="text" name="glsa[keyword]" id="keyword" class="nice" /></p>
+    
   </div>
 
   <div class="box2">
@@ -185,55 +208,4 @@
 
 </div>
 
-<!-->
-<div id="right">
-  <div class="box2">
-    <h3>Comments</h3>
-  </div>
-</div>
-
--->
 <%- end -%>
-<!--
-
-<table>
-
-<% form_tag :action => 'update', :id => @glsa do -%>
-
-
-<tr><td><b>Title:</b></td><td> <%= text_field 'rev', 'title' %></td></tr>
-<tr><td><b>Access:</b></td><td> <%= text_field 'rev', 'access', :size=>15 %> <b>Severity:</b> <%= collection_select(:rev,:severity,@sev_tab,:values,:values) %></td></tr>
-<tr><td><b>Synopsis:</b></td><td> <%= text_field 'rev', 'synopsis', :size => 75 %></td></tr>
-
-<tr><td><b>GLSA ID:</b></td><td> <%= @glsa.id %></td></tr>
-
-<% @bugs = @rev.bugs %>
-<tr><td><b>Related bugs:</b></td><td> <%= text_field 'bugs[0]', 'bug_id' %></td></tr>
-<% @bugs.each do |b| %>
-<tr><td><b>Bug id:</b></td><td><%= text_field 'b', 'bug_id' %></td></tr>
-<% end %>
-
-<tr><td><b>Product:</b></td><td> <%= text_field 'rev', 'product' %></td></tr>
-
-<tr><td><b>Background:</b></td><td><%= text_area 'rev', 'background', :cols => 80, :rows => 2 %></td></tr>
-<tr><td><b>Description:</b></td><td> <%= text_area 'rev', 'description', :cols => 80, :rows => 5 %></td></tr>
-<tr><td><b>Impact:</b></td><td> <%= text_area 'rev', 'impact', :cols => 80, :rows => 5 %></td></tr>
-
-<tr><td><b>Workaround:</b></td><td> <%= text_area 'rev', 'workaround', :cols => 80, :rows => 2 %></td></tr>
-<tr><td><b>Resolution:</b></td><td> <%= text_area 'rev', 'resolution', :cols => 80, :rows => 5 %></td></tr>
-
-<% @refs = @rev.references %>
-<tr><td><b>References:</b></td><td><i>Url</i></td></tr>
-<% @refs.each do |r| %>
-<li><%= link_to r.title, r.url -%></li><br/>
-<% end %>
-
-
-<tr><td><b>Requested by:</b></td><td> <%= @glsa.requester %></td></tr>
-<tr><td><b>Submitter:</b></td><td> <%= @glsa.submitter %></td></tr>
-<tr><td><b>Bug ready:</b></td><td> <%= @glsa.bugreadymaker %></td></tr>
-
-<tr><td> </td> <td><%= submit_tag 'Update' %></td></tr>
-<% end -%>
-
-</table>-->
