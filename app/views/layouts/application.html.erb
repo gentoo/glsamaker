@@ -47,7 +47,7 @@
     <div id="footer">
       <span><strong>GLSAMaker <%= h GLSAMAKER_VERSION %></strong></span>
       <span>Copyright &copy; 2009 Gentoo Foundation, Inc.</span>
-      <span>Created by <a href="mailto:a3li@gentoo.org">Alex Legler</a> and <a href="mailto:py@gentoo.org">Pierre-Yves Rofes</a></span>
+      <span><%= link_to "About&hellip;", :controller => 'index', :action => 'about' %></span>
       <br />
       <span><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span></div>
     </div>

@@ -26,4 +26,7 @@ class IndexController < ApplicationController
     end
   end
   
+  def about
+  end
+  
 end
