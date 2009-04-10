@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   has_many :submitted_glsas, :class_name => "Glsa", :foreign_key => "submitter"
   has_many :requested_glsas, :class_name => "Glsa", :foreign_key => "requester"
   has_many :bugreadymade_glsas, :class_name => "Glsa", :foreign_key => "bugreadymaker"
+  
+  has_many :revisions
 
   validates_uniqueness_of :login, :message => "User name must be unique"
   validates_presence_of :login, :message => "User name can't be blank"

@@ -14,4 +14,7 @@ class Revision < ActiveRecord::Base
   belongs_to :glsa, :class_name => "Glsa", :foreign_key => "glsa_id"
   has_many :bugs
   has_many :references
+  belongs_to :user
+  
+  validates_numericality_of :user_id, :message => "user id needed"
 end
