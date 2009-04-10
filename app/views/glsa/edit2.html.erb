@@ -133,6 +133,14 @@
     </h2>
     <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= h lastrev_content(@glsa, 'description') %></textarea></p>
   </div>
+
+  <div class="box2">
+    <h2 style="margin: 0;">
+      <img src="/images/icons/impact.png" alt="Impact" />
+      <label for="Impact">Impact</label>
+    </h2>
+    <p><textarea name="glsa[impact]" id="impact" class="nice" rows="3"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
+  </div>
   
   <div class="box2">
     <h2 style="margin: 0;">
