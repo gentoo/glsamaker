@@ -16,10 +16,12 @@
       <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
       Requester: <strong><%= h @glsa.requester.name %></strong>
     </p>
+    <% if @glsa.submitter %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
       Submitter: <strong><%= h @glsa.submitter.name %></strong>
     </p>
+    <% end %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
       Editor: <strong><%= h @glsa.last_revision.user.name %></strong>
