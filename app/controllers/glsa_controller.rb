@@ -58,6 +58,7 @@ class GlsaController < ApplicationController
       revision.revid = glsa.next_revid
       revision.glsa = glsa
       revision.title = params[:title]
+      revision.user = current_user
       
       begin
         revision.save!
