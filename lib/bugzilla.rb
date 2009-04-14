@@ -23,6 +23,8 @@ module Bugzilla
     def self.load_from_id(bugid)
       begin
         id = Integer(bugid)
+        
+        raise ArgumentError if id == 0
       rescue ArgumentError => e
         raise ArgumentError, "Invalid Bug ID"
       end
@@ -48,6 +50,10 @@ module Bugzilla
     def initialize(bug)
       unless bug.is_a? Nokogiri::XML::Element
         raise ArgumentError, "Nokogiri failure"
+      end
+      
+      if bug["error"] == "NotFound"
+        raise ArgumentError, "Bug not found"
       end
       
       @bug_id = xml_content(bug, 'bug_id')
