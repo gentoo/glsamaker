@@ -67,7 +67,7 @@ class GlsaController < ApplicationController
         render :action => "new-request"
         return
       end
-      
+ 
       bug_ids.each do |bug|
         begin
           bugzie = Bugzilla::Bug.load_from_id(bug)
@@ -87,25 +87,28 @@ class GlsaController < ApplicationController
         end
       end
     end
-    
+
   end
 
   def show
+
     @glsa = Glsa.find(params[:id])
-    
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
       wants.txt { render :text => "text to render..." }
     end
+
+    flash[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] ]
+    @rev = Revision.find(params[:rev_id])
   end
 
   def edit
     @glsa = Glsa.find(params[:id])
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
-    @rev.update_attributes(params[:rev])
-    
+
+    #@rev.update_attributes(params[:rev])
     render :action => "edit2"
   end
 
@@ -114,7 +117,7 @@ class GlsaController < ApplicationController
     @rev = @glsa.revisions[@glsa.revisions.length - 1]
     @glsa.update_attributes(params[:glsa])
     @rev.update_attributes(params[:rev])
-    redirect_to :action => 'show', :id => @glsa
+    redirect_to :action => 'show', :id => @glsa, :rev_id => @rev
   end
 
   def destroy

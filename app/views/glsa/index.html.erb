@@ -20,7 +20,9 @@
 </td>
 <td> date </td>
 
-<td><%= link_to g.last_revision.title, {:action => 'show', :id => g} -%> <%= link_to "edit", {:action => 'edit', :id => g} -%></li></td>
+
+<td><%= link_to g.last_revision.title, {:action => 'show', :id => g.id, :rev_id => @rev}-%> <%= link_to "edit", {:action => 'edit', :id => g.id}-%></li></td>
+
 </tr>
 <% end %>
 </ul>

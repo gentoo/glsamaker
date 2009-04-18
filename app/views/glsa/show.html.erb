@@ -1,6 +1,9 @@
 <h1>GLSA <%= h @glsa.glsa_id %>:<%= h @glsa.last_revision.revid %></h1>
 
-<% @rev = @glsa.revisions[@glsa.revisions.length - 1] %>
+
+Show version: <% @glsa.revisions.each do |r| %>
+<%= link_to r.id, :controller => "glsa", :action => "show", :id => @glsa, :rev_id => r %>
+<% end %> <br/>
 
 <b>GLSA revision:</b> <%= @rev.revid %> <br/>
 <b>GLSA release date:</b> <%= @rev.id %> <br/>
@@ -42,4 +45,5 @@
 <b>Requested by:</b> <%= @glsa.requester %> <br/>
 <b>Submitter:</b> <%= @glsa.submitter %> <br/>
 <b>Bug ready:</b> <%= @glsa.bugreadymaker %> <br/>
-</br>
+</br
+>
