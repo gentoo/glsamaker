@@ -30,7 +30,7 @@ class ToolsController < ApplicationController
       begin
         @bugs << Bugzilla::Bug.load_from_id(bug_id.to_i)
       rescue Exception => e
-        @bugs << "Errorneous ID #{CGI.escapeHTML(bug_id)}, ignoring."
+        @bugs << "Ignoring #{CGI.escapeHTML(bug_id)} (#{CGI.escapeHTML(e.message)})"
       end
     end
     
@@ -84,8 +84,18 @@ class ToolsController < ApplicationController
   end
   
   def addbugsave
-    @glsa_iud = params[:id]
-    
+    glsa_id = params[:id]
+
+    unless Glsa.find(glsa_id) == nil
+      session[:addbugs][glsa_id] ||= []
+      Bugzilla::Bug.str2bugIDs(params[:bugs]).each do |bugid|
+        session[:addbugs][glsa_id] << bugid
+      end
+    end
+  end
+  
+  def background
+    render :layout => false
   end
 
 end

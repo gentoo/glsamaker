@@ -9,29 +9,5 @@
 #
 # For more information, see the LICENSE file.
 
-require 'net/http'
-require 'net/https'
-
-# GLSAMaker library
-module Glsamaker
-  # GLSAMaker HTTP utilities
-  module HTTP
-    # Tries to fetch +url+ via HTTP GET, sending a GLSAMaker custom User-Agent header.
-    # The body part is returned.
-    def get(url)
-      uri = URI.parse(url)
-      
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true if uri.scheme == "https"
-      res = http.start {
-        http.request_get(uri.request_uri, {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"})
-      }
-            
-      # Raises an exception if HTTP status suggests something went wrong
-      res.value
-      res.body
-    end
-    
-    module_function :get
-  end
-end
+require 'glsamaker/http'
+require 'glsamaker/portage'

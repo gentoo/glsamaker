@@ -91,8 +91,8 @@ class GlsaController < ApplicationController
   end
 
   def show
-
     @glsa = Glsa.find(params[:id])
+    
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
@@ -105,19 +105,60 @@ class GlsaController < ApplicationController
 
   def edit
     @glsa = Glsa.find(params[:id])
-    @rev = @glsa.revisions[@glsa.revisions.length - 1]
-    @glsa.update_attributes(params[:glsa])
+    @rev = @glsa.last_revision
+    
+    # Reset added bugs in the meantime
+    session[:addbugs] ||= []
+    session[:addbugs][@glsa.id] = []
 
-    #@rev.update_attributes(params[:rev])
     render :action => "edit2"
   end
 
   def update
     @glsa = Glsa.find(params[:id])
-    @rev = @glsa.revisions[@glsa.revisions.length - 1]
-    @glsa.update_attributes(params[:glsa])
-    @rev.update_attributes(params[:rev])
-    redirect_to :action => 'show', :id => @glsa, :rev_id => @rev
+    
+    if @glsa.nil?
+      flash[:error] = "Unknown GLSA ID"
+      redirect_to :action => "index"
+      return
+    end
+    
+    # GLSA object
+    # The first editor is submitter
+    # TODO: Maybe take a better condition (adding bugs would make so. the submitter)
+    if @glsa.submitter.nil?
+      @glsa.submitter = current_user
+    end
+    
+    unless @glsa.save
+      flash[:error] = "Errors occurred while saving the GLSA object"
+      render :action => "edit2"
+    end
+    
+    revision = Revision.new
+    revision.revid = @glsa.next_revid
+    revision.glsa = @glsa
+    revision.user = current_user    
+    revision.title = params[:glsa][:title]
+    revision.synopsis = params[:glsa][:synopsis]
+    # TODO: secure
+    revision.access = params[:glsa][:access]
+    revision.product = params[:glsa][:keyword]
+    revision.description = params[:glsa][:description]
+    revision.background = params[:glsa][:background]
+    revision.impact = params[:glsa][:impact]
+    revision.workaround = params[:glsa][:workaround]
+    revision.resolution = params[:glsa][:resolution]
+    
+    unless revision.save
+      flash[:error] = "Errors occurred while saving the GLSA object"
+      render :action => "edit2"
+    end
+    
+    # TODO: bugs, packages, references
+    flash[:notice] = "Saving was successful."
+    redirect_to :action => 'show', :id => @glsa
+    
   end
 
   def destroy

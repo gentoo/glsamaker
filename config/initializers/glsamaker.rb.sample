@@ -12,3 +12,6 @@ GLSAMAKER_FORCE_PRODUCTION_AUTH = false
 
 # Email address of the administrative contact
 GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
+
+# Location of the Portage tree, set to false if you are not running on Gentoo.
+GLSAMAKER_PORTDIR = "/usr/portage/"
