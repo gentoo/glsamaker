@@ -92,15 +92,16 @@ class GlsaController < ApplicationController
 
   def show
     @glsa = Glsa.find(params[:id])
-    
+    @rev = @glsa.revisions.find(:first, :conditions => ['revid = ?', params[:rev_id]])
+
+    flash[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] ]
+
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
       wants.txt { render :text => "text to render..." }
     end
 
-    flash[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] ]
-    @rev = Revision.find(params[:rev_id])
   end
 
   def edit
