@@ -110,7 +110,12 @@ div#menu li a {
   opacity: 1;
 }
 
-#menu li a.selected {
+#menu li a.selected,
+body#new #menu li a.new,
+body#requests #menu li a.requests,
+body#drafts #menu li a.drafts,
+body#archive #menu li a.archive,
+body#secunia #menu li a.secunia {
   background: #fff;
   color: #555; 
   opacity: 1;

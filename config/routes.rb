@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.requests '/glsa/requests', :controller => 'glsa', :action => 'index', :show => 'requests'
   map.drafts   '/glsa/drafts'  , :controller => 'glsa', :action => 'index', :show => 'drafts'
-  map.sent     '/glsa/sent'    , :controller => 'glsa', :action => 'index', :show => 'sent'
+  map.sent     '/glsa/archive'    , :controller => 'glsa', :action => 'index', :show => 'archive'
   
   map.newglsa '/glsa/new/:what', :controller => 'glsa', :action => 'new'
   

@@ -18,7 +18,7 @@ class GlsaController < ApplicationController
       @glsas = Glsa.find(:all)
     elsif params[:show] == "drafts"
       @glsas = Glsa.find(:all)
-    elsif params[:show] == "sent"
+    elsif params[:show] == "archive"
       @glsas = Glsa.find(:all)
     else
       flash[:error] = "Don't know what to show you."
@@ -27,6 +27,9 @@ class GlsaController < ApplicationController
   end
   
   def new
+    @pageID = "new"
+    @pageTitle = "New GLSA"
+    
     if params[:what] == "request"
       render :action => "new-request"
     elsif params[:what] == "draft"
