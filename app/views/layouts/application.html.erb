@@ -10,28 +10,58 @@
 	<%= stylesheet_link_tag "modalbox", :cache => false %>
   <%= javascript_include_tag :all, :cache => false %>
 </head>
-<body>
-    <div id="menu">
-      <img src="/images/logo.png" alt="return to start" class="logo" usemap="#m_logo" />
-      <map name="m_logo" id="m_logo">
-        <area shape="rect" coords="95,0,252,42" href="#" alt="Go to homepage" />
-      </map>
+<body id="<%= h @pageID if @PageID %>">
+  <div id="top-menu">
+    <div class="floatright">
       <ul>
-        <li><a href="/glsa/new"><span><img src="/images/icons/glsa_new.png" alt="New" /> New...</span></a></li>
-        <li style="margin-right: 2em;">&nbsp;</li>
-        <li><a href="/glsa/requests"><span><img src="/images/icons/glsa_request.png" alt="Requests" /> Requests</span></a></li>
-        <li><a href="/glsa/drafts"><span><img src="/images/icons/glsa_draft.png" alt="Drafts" /> Drafts</span></a></li>
-        <li><a href="/glsa/sent"><span><img src="/images/icons/glsa_sent.png" alt="Releases" /> Releases</span></a></li>
-        <li style="margin-right: 2em;">&nbsp;</li>
-        <li><a href="#"><span><img src="/images/icons/profile.png" alt="My Profile" /> My Profile</span></a></li>
+        <li><a href="/my/account" class="my-account">My account</a></li>
       </ul>
     </div>
-    <div id="infobar">
-      <span><img src="/images/icons/user.png" alt="User" style="vertical-align: middle;" />
-        <strong>Howdy, <%= h current_user.login %></strong></span>
-      <span><img src="/images/icons/glsa_ready.png" alt="send" style="vertical-align: middle;" /> <strong>5</strong> of your drafts are ready to be sent.</span>
-      <span><img src="/images/icons/time.png" alt="time" style="vertical-align: middle;" /> <%= Time.now.to_s %></span>
-    </div>
+    <div id="loggedas">Logged in as <a href="#"><%= h current_user.login %> (<%= h current_user.name %>)</a></div>
+    <ul>
+      <li><a href="/" class="home">Home</a></li>
+      <li><a href="/admin" class="administration">Administration</a></li>
+      <li><a href="#" class="help">Help</a></li>
+    </ul>
+  </div>
+
+  <div id="menu">
+        <img src="/images/logo.png" alt="Home" class="logo" usemap="#m_logo" />
+        <map name="m_logo" id="m_logo">
+          <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
+        </map>
+        <div id="search">
+          <form action="/search/index/glsamaker2" method="get">
+            <a href="/search/index/glsamaker2" accesskey="4">Search</a>:
+            <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+
+            <select name="at">
+              <option selected="selected">Everywhere</option>
+              <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
+              <option value="glsa">GLSAs</option>
+              <option value="glsa-request">&nbsp;&nbsp;Requests</option>
+              <option value="glsa-draft">&nbsp;&nbsp;Drafts</option>
+              <option value="glsa-sent">&nbsp;&nbsp;Archive</option>
+              <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
+              <option disabled="disabled">Vulnerability intelligence</option>
+              <option value="cve">&nbsp;&nbsp;CVEs</option>
+              <option value="secunia">&nbsp;&nbsp;Secunia Advisories</option>
+            </select>
+          </form>
+        </div>
+        <ul>
+          <li><a href="/glsa/new" class="new">New...</a></li>
+          <li style="margin-right: 2em;">&nbsp;</li>
+          <li><a href="/glsa/requests" class="requests">Requests</a></li>
+          <li><a href="/glsa/drafts" class="requests">Drafts</a></li>
+          <li><a href="/glsa/sent" class="requests">Releases</a></li>
+          <% if Module.constants.include? "Secunia" %>
+          <li style="margin-right: 2em;">&nbsp;</li>
+          <li><a href="/" class="secunia">Secunia Advisories</a></li>
+          <% end %>
+        </ul>
+      </div>
+
     <%- if flash[:notice] or flash[:error] -%>
     <div id="flash" class="<%= flash[:error] ? "error" : "notice" %>">
       <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
