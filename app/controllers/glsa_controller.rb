@@ -114,8 +114,6 @@ class GlsaController < ApplicationController
     # Reset added bugs in the meantime
     session[:addbugs] ||= []
     session[:addbugs][@glsa.id] = []
-
-    render :action => "edit2"
   end
 
   def update
