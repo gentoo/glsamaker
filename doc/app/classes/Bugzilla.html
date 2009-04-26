@@ -86,7 +86,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000017">find_glsa_bugs</a>&nbsp;&nbsp;
+      <a href="#M000032">find_glsa_bugs</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -115,40 +115,40 @@ Class <a href="Bugzilla/Comment.html" class="link">Bugzilla::Comment</a><br />
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000017" class="method-detail">
-        <a name="M000017"></a>
+      <div id="method-M000032" class="method-detail">
+        <a name="M000032"></a>
 
         <div class="method-heading">
-          <a href="#M000017" class="method-signature">
+          <a href="#M000032" class="method-signature">
           <span class="method-name">find_glsa_bugs</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000017-source">
+            onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000032-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/bugzilla.rb, line 109</span>
-109:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_glsa_bugs</span>
-110:     <span class="ruby-identifier">url</span>=<span class="ruby-value str">&quot;http://bugs.gentoo.org/buglist.cgi?bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;bug_id=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bugidtype=include&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;component=Vulnerabilities&amp;email1=&amp;email2=&amp;emailassigned_to1=1&amp;emailassigned_to2=1&amp;emailcc2=1&amp;emailreporter2=1&amp;emailtype1=substring&amp;emailtype2=substring&amp;field-1-0-0=product&amp;field-1-1-0=component&amp;field-1-2-0=bug_status&amp;field-1-3-0=status_whiteboard&amp;field0-0-0=noop&amp;keywords=&amp;keywords_type=allwords&amp;long_desc=&amp;long_desc_type=substring&amp;product=Gentoo%20Security&amp;query_format=advanced&amp;remaction=&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;status_whiteboard=%5Bglsa%5D&amp;status_whiteboard_type=substring&amp;type-1-0-0=anyexact&amp;type-1-1-0=anyexact&amp;type-1-2-0=anyexact&amp;type-1-3-0=substring&amp;type0-0-0=noop&amp;value-1-0-0=Gentoo%20Security&amp;value-1-1-0=Vulnerabilities&amp;value-1-2-0=UNCONFIRMED%2CNEW%2CASSIGNED%2CREOPENED&amp;value-1-3-0=%5Bglsa%5D&amp;value0-0-0=&amp;votes=&amp;ctype=csv&quot;</span>
-111:     <span class="ruby-identifier">bugs</span> = []
-112:     
-113:     <span class="ruby-constant">FasterCSV</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">url</span>)) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">row</span><span class="ruby-operator">|</span>
-114:       <span class="ruby-identifier">bugs</span> <span class="ruby-operator">&lt;&lt;</span> { <span class="ruby-value str">&quot;bug_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-115:                 <span class="ruby-value str">&quot;severity&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-116:                 <span class="ruby-value str">&quot;priority&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-117:                 <span class="ruby-value str">&quot;os&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-118:                 <span class="ruby-value str">&quot;assignee&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-119:                 <span class="ruby-value str">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-120:                 <span class="ruby-value str">&quot;resolution&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
-121:                 <span class="ruby-value str">&quot;summary&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>
-122:               }
-123:     <span class="ruby-keyword kw">end</span>
-124:     
-125:     <span class="ruby-identifier">bugs</span>.<span class="ruby-identifier">shift</span>
-126:     <span class="ruby-identifier">bugs</span>
-127:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/bugzilla.rb, line 115</span>
+115:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_glsa_bugs</span>
+116:     <span class="ruby-identifier">url</span>=<span class="ruby-value str">&quot;http://bugs.gentoo.org/buglist.cgi?bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;bug_id=&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bugidtype=include&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;component=Vulnerabilities&amp;email1=&amp;email2=&amp;emailassigned_to1=1&amp;emailassigned_to2=1&amp;emailcc2=1&amp;emailreporter2=1&amp;emailtype1=substring&amp;emailtype2=substring&amp;field-1-0-0=product&amp;field-1-1-0=component&amp;field-1-2-0=bug_status&amp;field-1-3-0=status_whiteboard&amp;field0-0-0=noop&amp;keywords=&amp;keywords_type=allwords&amp;long_desc=&amp;long_desc_type=substring&amp;product=Gentoo%20Security&amp;query_format=advanced&amp;remaction=&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;status_whiteboard=%5Bglsa%5D&amp;status_whiteboard_type=substring&amp;type-1-0-0=anyexact&amp;type-1-1-0=anyexact&amp;type-1-2-0=anyexact&amp;type-1-3-0=substring&amp;type0-0-0=noop&amp;value-1-0-0=Gentoo%20Security&amp;value-1-1-0=Vulnerabilities&amp;value-1-2-0=UNCONFIRMED%2CNEW%2CASSIGNED%2CREOPENED&amp;value-1-3-0=%5Bglsa%5D&amp;value0-0-0=&amp;votes=&amp;ctype=csv&quot;</span>
+117:     <span class="ruby-identifier">bugs</span> = []
+118:     
+119:     <span class="ruby-constant">FasterCSV</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">url</span>)) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">row</span><span class="ruby-operator">|</span>
+120:       <span class="ruby-identifier">bugs</span> <span class="ruby-operator">&lt;&lt;</span> { <span class="ruby-value str">&quot;bug_id&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+121:                 <span class="ruby-value str">&quot;severity&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+122:                 <span class="ruby-value str">&quot;priority&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+123:                 <span class="ruby-value str">&quot;os&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+124:                 <span class="ruby-value str">&quot;assignee&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+125:                 <span class="ruby-value str">&quot;status&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+126:                 <span class="ruby-value str">&quot;resolution&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>,
+127:                 <span class="ruby-value str">&quot;summary&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">shift</span>
+128:               }
+129:     <span class="ruby-keyword kw">end</span>
+130:     
+131:     <span class="ruby-identifier">bugs</span>.<span class="ruby-identifier">shift</span>
+132:     <span class="ruby-identifier">bugs</span>
+133:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

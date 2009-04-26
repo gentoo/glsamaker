@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/glsamaker_rb.html">
-                lib/glsamaker.rb
+                <a href="../../files/lib/glsamaker/http_rb.html">
+                lib/glsamaker/http.rb
                 </a>
         <br />
             </td>
@@ -86,7 +86,7 @@ GLSAMaker <a href="HTTP.html">HTTP</a> utilities
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000026">get</a>&nbsp;&nbsp;
+      <a href="#M000056">get</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -108,11 +108,11 @@ GLSAMaker <a href="HTTP.html">HTTP</a> utilities
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000026" class="method-detail">
-        <a name="M000026"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000026" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">get</span><span class="method-args">(url)</span>
           </a>
         </div>
@@ -124,19 +124,23 @@ GLSAMaker custom <a href="../User.html">User</a>-Agent header. The body
 part is returned.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000026-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/glsamaker.rb, line 20</span>
-20:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">url</span>)
-21:       <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">url</span>)
-22:       <span class="ruby-identifier">req</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Get</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">request_uri</span>, {<span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)&quot;</span>})
-23:       <span class="ruby-identifier">res</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">port</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">http</span><span class="ruby-operator">|</span> <span class="ruby-identifier">http</span>.<span class="ruby-identifier">request</span>(<span class="ruby-identifier">req</span>) }
-24:       
-25:       <span class="ruby-comment cmt"># Raises an exception if HTTP status is not a successful one</span>
-26:       <span class="ruby-identifier">res</span>.<span class="ruby-identifier">value</span>
-27:       <span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>
-28:     <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/glsamaker/http.rb, line 21</span>
+21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">url</span>)
+22:       <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">url</span>)
+23:       
+24:       <span class="ruby-identifier">http</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">port</span>)
+25:       <span class="ruby-identifier">http</span>.<span class="ruby-identifier">use_ssl</span> = <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;https&quot;</span>
+26:       <span class="ruby-identifier">res</span> = <span class="ruby-identifier">http</span>.<span class="ruby-identifier">start</span> {
+27:         <span class="ruby-identifier">http</span>.<span class="ruby-identifier">request_get</span>(<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">request_uri</span>, {<span class="ruby-value str">'User-Agent'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)&quot;</span>})
+28:       }
+29:             
+30:       <span class="ruby-comment cmt"># Raises an exception if HTTP status suggests something went wrong</span>
+31:       <span class="ruby-identifier">res</span>.<span class="ruby-identifier">value</span>
+32:       <span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>
+33:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

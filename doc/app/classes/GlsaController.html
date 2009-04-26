@@ -94,9 +94,10 @@ GLSA controller
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000008">comment</a>&nbsp;&nbsp;
+      <a href="#M000009">comment</a>&nbsp;&nbsp;
       <a href="#M000003">create</a>&nbsp;&nbsp;
-      <a href="#M000007">destroy</a>&nbsp;&nbsp;
+      <a href="#M000008">destroy</a>&nbsp;&nbsp;
+      <a href="#M000007">diff</a>&nbsp;&nbsp;
       <a href="#M000005">edit</a>&nbsp;&nbsp;
       <a href="#M000001">index</a>&nbsp;&nbsp;
       <a href="#M000002">new</a>&nbsp;&nbsp;
@@ -123,23 +124,23 @@ GLSA controller
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000008" class="method-detail">
-        <a name="M000008"></a>
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
 
         <div class="method-heading">
-          <a href="#M000008" class="method-signature">
+          <a href="#M000009" class="method-signature">
           <span class="method-name">comment</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000008-source">
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
 <pre>
-     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 114</span>
-114:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comment</span>
-115:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 194</span>
+194:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comment</span>
+195:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -159,59 +160,82 @@ GLSA controller
             onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000003-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 39</span>
-39:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
-40:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;request&quot;</span>
-41:       <span class="ruby-identifier">bug_ids</span> = <span class="ruby-constant">Bugzilla</span><span class="ruby-operator">::</span><span class="ruby-constant">Bug</span>.<span class="ruby-identifier">str2bugIDs</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:bugs</span>])
-42:       
-43:       <span class="ruby-identifier">glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">new</span>
-44:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">requester</span> = <span class="ruby-identifier">current_user</span>
-45:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">glsa_id</span> = <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:description</span>] <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">10</span>]
-46:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">restricted</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:access</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;confidential&quot;</span>
-47:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value str">&quot;request&quot;</span>
+    <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 45</span>
+45:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+46:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;request&quot;</span>
+47:       <span class="ruby-identifier">bug_ids</span> = <span class="ruby-constant">Bugzilla</span><span class="ruby-operator">::</span><span class="ruby-constant">Bug</span>.<span class="ruby-identifier">str2bugIDs</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:bugs</span>])
 48:       
-49:       <span class="ruby-keyword kw">begin</span>
-50:         <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">save!</span>
-51:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-52:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-node">&quot;Error while saving GLSA object #{e.message}&quot;</span>
-53:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
-54:         <span class="ruby-keyword kw">return</span>
-55:       <span class="ruby-keyword kw">end</span>
-56: 
-57:       <span class="ruby-identifier">revision</span> = <span class="ruby-constant">Revision</span>.<span class="ruby-identifier">new</span>
-58:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">revid</span> = <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">next_revid</span>
-59:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">glsa</span> = <span class="ruby-identifier">glsa</span>
-60:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">description</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:description</span>]
-61:       
-62:       <span class="ruby-keyword kw">begin</span>
-63:         <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">save!</span>
-64:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-65:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Error while saving Revision object&quot;</span>
-66:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
-67:         <span class="ruby-keyword kw">return</span>
-68:       <span class="ruby-keyword kw">end</span>
-69:       
-70:       <span class="ruby-identifier">bug_ids</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bug</span><span class="ruby-operator">|</span>
-71:         <span class="ruby-keyword kw">begin</span>
-72:           <span class="ruby-identifier">bugzie</span> = <span class="ruby-constant">Bugzilla</span><span class="ruby-operator">::</span><span class="ruby-constant">Bug</span>.<span class="ruby-identifier">load_from_id</span>(<span class="ruby-identifier">bug</span>)
-73:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-74:         <span class="ruby-keyword kw">end</span>
-75: 
-76:         <span class="ruby-keyword kw">begin</span>
-77:           <span class="ruby-identifier">b</span> = <span class="ruby-constant">Bug</span>.<span class="ruby-identifier">new</span>
-78:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">revision</span> = <span class="ruby-identifier">revision</span>
-79:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">bug_id</span> = <span class="ruby-identifier">bugzie</span>.<span class="ruby-identifier">bug_id</span>.<span class="ruby-identifier">to_i</span>
-80:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">bugzie</span>.<span class="ruby-identifier">summary</span>
-81:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">save!</span>
-82:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-83:           <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Error while saving Bug object&quot;</span>
-84:           <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
-85:           <span class="ruby-keyword kw">return</span>
-86:         <span class="ruby-keyword kw">end</span>
-87:       <span class="ruby-keyword kw">end</span>
-88:     <span class="ruby-keyword kw">end</span>
-89:     
-90:   <span class="ruby-keyword kw">end</span>
+49:       <span class="ruby-identifier">glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">new</span>
+50:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">requester</span> = <span class="ruby-identifier">current_user</span>
+51:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">glsa_id</span> = <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:title</span>] <span class="ruby-operator">+</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">10</span>]
+52:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">restricted</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:access</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;confidential&quot;</span>
+53:       <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value str">&quot;request&quot;</span>
+54:       
+55:       <span class="ruby-keyword kw">begin</span>
+56:         <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">save!</span>
+57:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+58:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-node">&quot;Error while saving GLSA object #{e.message}&quot;</span>
+59:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
+60:         <span class="ruby-keyword kw">return</span>
+61:       <span class="ruby-keyword kw">end</span>
+62: 
+63:       <span class="ruby-identifier">revision</span> = <span class="ruby-constant">Revision</span>.<span class="ruby-identifier">new</span>
+64:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">revid</span> = <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">next_revid</span>
+65:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">glsa</span> = <span class="ruby-identifier">glsa</span>
+66:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:title</span>]
+67:       <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">user</span> = <span class="ruby-identifier">current_user</span>
+68:       
+69:       <span class="ruby-keyword kw">begin</span>
+70:         <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">save!</span>
+71:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+72:         <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Error while saving Revision object&quot;</span>
+73:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
+74:         <span class="ruby-keyword kw">return</span>
+75:       <span class="ruby-keyword kw">end</span>
+76:  
+77:       <span class="ruby-identifier">bug_ids</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bug</span><span class="ruby-operator">|</span>
+78:         <span class="ruby-keyword kw">begin</span>
+79:           <span class="ruby-identifier">bugzie</span> = <span class="ruby-constant">Bugzilla</span><span class="ruby-operator">::</span><span class="ruby-constant">Bug</span>.<span class="ruby-identifier">load_from_id</span>(<span class="ruby-identifier">bug</span>)
+80:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+81:         <span class="ruby-keyword kw">end</span>
+82: 
+83:         <span class="ruby-keyword kw">begin</span>
+84:           <span class="ruby-identifier">b</span> = <span class="ruby-constant">Bug</span>.<span class="ruby-identifier">new</span>
+85:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">revision</span> = <span class="ruby-identifier">revision</span>
+86:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">bug_id</span> = <span class="ruby-identifier">bugzie</span>.<span class="ruby-identifier">bug_id</span>.<span class="ruby-identifier">to_i</span>
+87:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">bugzie</span>.<span class="ruby-identifier">summary</span>
+88:           <span class="ruby-identifier">b</span>.<span class="ruby-identifier">save!</span>
+89:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+90:           <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Error while saving Bug object&quot;</span>
+91:           <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
+92:           <span class="ruby-keyword kw">return</span>
+93:         <span class="ruby-keyword kw">end</span>
+94:       <span class="ruby-keyword kw">end</span>
+95:     <span class="ruby-keyword kw">end</span>
+96: 
+97:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="#M000008" class="method-signature">
+          <span class="method-name">destroy</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000008-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 191</span>
+191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
+192:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -222,7 +246,7 @@ GLSA controller
 
         <div class="method-heading">
           <a href="#M000007" class="method-signature">
-          <span class="method-name">destroy</span><span class="method-args">()</span>
+          <span class="method-name">diff</span><span class="method-args">()</span>
           </a>
         </div>
       
@@ -231,9 +255,28 @@ GLSA controller
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 111</span>
-111:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>
-112:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 169</span>
+169:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">diff</span>
+170:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
+171:     
+172:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">nil?</span>
+173:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;GLSA not found.&quot;</span>
+174:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>
+175:       <span class="ruby-keyword kw">return</span>
+176:     <span class="ruby-keyword kw">end</span>
+177:     
+178:     <span class="ruby-ivar">@rev_from</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:from</span>])
+179:     <span class="ruby-ivar">@rev_to</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:to</span>])
+180:     
+181:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@rev_from</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@rev_to</span>.<span class="ruby-identifier">nil?</span> 
+182:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Invalid revision given&quot;</span>
+183:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>
+184:       <span class="ruby-keyword kw">return</span>
+185:     <span class="ruby-keyword kw">end</span>
+186:     
+187:     <span class="ruby-ivar">@diffs</span> = {}
+188:     <span class="ruby-ivar">@diff</span> = <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Diff</span><span class="ruby-operator">::</span><span class="ruby-constant">DiffContainer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rev_from</span>.<span class="ruby-identifier">description</span>, <span class="ruby-ivar">@rev_to</span>.<span class="ruby-identifier">description</span>)
+189:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -253,13 +296,15 @@ GLSA controller
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 96</span>
- 96:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
- 97:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
- 98:     <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>[<span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>]
- 99:     <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>])
-100:     <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:rev</span>])
-101:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 113</span>
+113:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit</span>
+114:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
+115:     <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+116:     
+117:     <span class="ruby-comment cmt"># Reset added bugs in the meantime</span>
+118:     <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:addbugs</span>] <span class="ruby-operator">||=</span> []
+119:     <span class="ruby-identifier">session</span>[<span class="ruby-identifier">:addbugs</span>][<span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">id</span>] = []
+120:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -283,15 +328,18 @@ GLSA controller
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
 17:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;requests&quot;</span>
 18:       <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>)
-19:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;drafts&quot;</span>
-20:       <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>)
-21:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;sent&quot;</span>
-22:       <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>)
-23:     <span class="ruby-keyword kw">else</span>
-24:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Don't know what to show you.&quot;</span>
-25:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>
-26:     <span class="ruby-keyword kw">end</span>
-27:   <span class="ruby-keyword kw">end</span>
+19:       <span class="ruby-ivar">@pageID</span> = <span class="ruby-value str">&quot;requests&quot;</span>
+20:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;drafts&quot;</span>
+21:       <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>)
+22:       <span class="ruby-ivar">@pageID</span> = <span class="ruby-value str">&quot;drafts&quot;</span>
+23:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;archive&quot;</span>
+24:       <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:all</span>)
+25:       <span class="ruby-ivar">@pageID</span> = <span class="ruby-value str">&quot;archive&quot;</span>
+26:     <span class="ruby-keyword kw">else</span>
+27:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Don't know what to show you.&quot;</span>
+28:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>
+29:     <span class="ruby-keyword kw">end</span>
+30:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -311,16 +359,19 @@ GLSA controller
             onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000002-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 29</span>
-29:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
-30:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;request&quot;</span>
-31:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
-32:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;draft&quot;</span>
-33:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-draft&quot;</span>
-34:     <span class="ruby-keyword kw">else</span>
-35:       <span class="ruby-identifier">render</span>
-36:     <span class="ruby-keyword kw">end</span>
-37:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 32</span>
+32:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
+33:     <span class="ruby-ivar">@pageID</span> = <span class="ruby-value str">&quot;new&quot;</span>
+34:     <span class="ruby-ivar">@pageTitle</span> = <span class="ruby-value str">&quot;New GLSA&quot;</span>
+35:     
+36:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;request&quot;</span>
+37:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-request&quot;</span>
+38:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;draft&quot;</span>
+39:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new-draft&quot;</span>
+40:     <span class="ruby-keyword kw">else</span>
+41:       <span class="ruby-identifier">render</span>
+42:     <span class="ruby-keyword kw">end</span>
+43:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -340,10 +391,20 @@ GLSA controller
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 92</span>
-92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
-93:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
-94:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 99</span>
+ 99:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+100:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
+101:     <span class="ruby-ivar">@rev</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:rev_id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:rev_id</span>])
+102: 
+103:     <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;[debug] id = %d, rev_id = %d&quot;</span> <span class="ruby-operator">%</span> [ <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>], <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:rev_id</span>] ]
+104: 
+105:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wants</span><span class="ruby-operator">|</span>
+106:       <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> }
+107:       <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">xml</span> { }
+108:       <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">txt</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;text to render...&quot;</span> }
+109:     <span class="ruby-keyword kw">end</span>
+110: 
+111:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -363,14 +424,53 @@ GLSA controller
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 103</span>
-103:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
-104:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
-105:     <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>[<span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>]
-106:     <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>])
-107:     <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:rev</span>])
-108:     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'show'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
-109:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File app/controllers/glsa_controller.rb, line 122</span>
+122:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>
+123:     <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-identifier">:id</span>])
+124:     
+125:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">nil?</span>
+126:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Unknown GLSA ID&quot;</span>
+127:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;index&quot;</span>
+128:       <span class="ruby-keyword kw">return</span>
+129:     <span class="ruby-keyword kw">end</span>
+130:     
+131:     <span class="ruby-comment cmt"># GLSA object</span>
+132:     <span class="ruby-comment cmt"># The first editor is submitter</span>
+133:     <span class="ruby-comment cmt"># TODO: Maybe take a better condition (adding bugs would make so. the submitter)</span>
+134:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">submitter</span>.<span class="ruby-identifier">nil?</span>
+135:       <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">submitter</span> = <span class="ruby-identifier">current_user</span>
+136:     <span class="ruby-keyword kw">end</span>
+137:     
+138:     <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">save</span>
+139:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Errors occurred while saving the GLSA object&quot;</span>
+140:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;edit2&quot;</span>
+141:     <span class="ruby-keyword kw">end</span>
+142:     
+143:     <span class="ruby-identifier">revision</span> = <span class="ruby-constant">Revision</span>.<span class="ruby-identifier">new</span>
+144:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">revid</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">next_revid</span>
+145:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">glsa</span> = <span class="ruby-ivar">@glsa</span>
+146:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">user</span> = <span class="ruby-identifier">current_user</span>    
+147:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:title</span>]
+148:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">synopsis</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:synopsis</span>]
+149:     <span class="ruby-comment cmt"># TODO: secure</span>
+150:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">access</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:access</span>]
+151:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">product</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:keyword</span>]
+152:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">description</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:description</span>]
+153:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">background</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:background</span>]
+154:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">impact</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:impact</span>]
+155:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">workaround</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:workaround</span>]
+156:     <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">resolution</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:glsa</span>][<span class="ruby-identifier">:resolution</span>]
+157:     
+158:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">save</span>
+159:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:error</span>] = <span class="ruby-value str">&quot;Errors occurred while saving the GLSA object&quot;</span>
+160:       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;edit2&quot;</span>
+161:     <span class="ruby-keyword kw">end</span>
+162:     
+163:     <span class="ruby-comment cmt"># TODO: bugs, packages, references</span>
+164:     <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:notice</span>] = <span class="ruby-value str">&quot;Saving was successful.&quot;</span>
+165:     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'show'</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+166:     
+167:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
