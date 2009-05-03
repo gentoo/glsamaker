@@ -9,7 +9,7 @@
 
 <% form_tag :action => 'update', :id => @glsa do |f| -%>
 <div style="float: right; width: 34%;">
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/info.png" alt="info" />
       GLSA <%= @glsa.status %> <%= @glsa.glsa_id %> &mdash; Revision <%= @glsa.last_revision.revid %></h2>
     <% if false %>
@@ -33,7 +33,7 @@
     </p>
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">
@@ -54,7 +54,7 @@
     
   </div>
 
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript://" onclick="backgroundDialog();" title="Get background">
@@ -66,7 +66,7 @@
     </h2>
   </div>
 
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript://" onclick="addBugDialog(<%= @glsa.id %>);" title="Add bug">
@@ -80,23 +80,23 @@
     <% end %> 
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comments</h2>
   </div>
 </div>
 
 <div id="left">
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/title.png" alt="title" /> <label for="title">Title</label></h2>
     <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= h lastrev_content(@glsa, 'title') %></textarea></p>
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/synopsis.png" alt="synopsis" /> <label for="synopsis">Synopsis</label></h2>
     <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript:///" onclick="" title="Add package">
@@ -138,7 +138,7 @@
     
   </div>
   
-  <div class="box2" id="desc-box" style="z-index: 4000; position: relative;">
+  <div class="box" id="desc-box" style="z-index: 4000; position: relative;">
     <h2 style="position: relative;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript:///" onclick="lines('description', -5);" title="Fewer lines">
@@ -164,7 +164,7 @@
     <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= h lastrev_content(@glsa, 'description') %></textarea></p>
   </div>
 
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <img src="/images/icons/impact.png" alt="Impact" />
       <label for="Impact">Impact</label>
@@ -172,7 +172,7 @@
     <p><textarea name="glsa[impact]" id="impact" class="nice" rows="3"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript:///" onclick="$('workaround').value = 'There is no known workaround at the moment.'" title="No known workaround">
@@ -185,7 +185,7 @@
     <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="3"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
   </div>
   
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript:///" onclick="$('resolution').value = 'There is no known workaround at the moment.'" title="Set default resolution">
@@ -198,7 +198,7 @@
     <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="3"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
   </div>
 
-  <div class="box2">
+  <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript:///" onclick="" title="Add reference">
