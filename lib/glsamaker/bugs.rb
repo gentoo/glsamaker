@@ -9,6 +9,7 @@
 #
 # For more information, see the LICENSE file.
 
-require 'glsamaker/http'
-require 'glsamaker/portage'
-require 'glsamaker/diff'
+module Glsamaker
+  module Bugs
+  end
+end

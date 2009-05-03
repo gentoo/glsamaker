@@ -16,10 +16,13 @@ class GlsaController < ApplicationController
   def index
     if params[:show] == "requests"
       @glsas = Glsa.find(:all)
+      @pageID = "requests"
     elsif params[:show] == "drafts"
       @glsas = Glsa.find(:all)
+      @pageID = "drafts"
     elsif params[:show] == "archive"
       @glsas = Glsa.find(:all)
+      @pageID = "archive"
     else
       flash[:error] = "Don't know what to show you."
       redirect_to :controller => "index", :action => "index"
@@ -120,6 +123,28 @@ class GlsaController < ApplicationController
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     
+  end
+  
+  def diff
+    @glsa = Glsa.find(params[:id])
+    
+    if @glsa.nil?
+      flash[:error] = "GLSA not found."
+      redirect_to :action => "index"
+      return
+    end
+    
+    @rev_from = @glsa.revisions.find_by_revid(params[:from])
+    @rev_to = @glsa.revisions.find_by_revid(params[:to])
+    
+    if @rev_from.nil? || @rev_to.nil? 
+      flash[:error] = "Invalid revision given"
+      redirect_to :action => "index"
+      return
+    end
+    
+    @diffs = {}
+    @diff = Glsamaker::Diff::DiffContainer.new(@rev_from.description, @rev_to.description)
   end
 
   def destroy
