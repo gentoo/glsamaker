@@ -284,13 +284,21 @@ td {
 
 /** boxes **/
 div.box {
-  padding: 1em; 
-  display: inline-block; 
+  padding: .4em; 
   background-color: #D3CFE5;
   border-bottom: 1px solid #8875B0;
   margin-bottom: 0.5em;
 }
 
+div.box h2 {
+  color: #3E3550;
+  font-size: 11pt;
+  margin: 0;
+}
+
+div.box p {
+  margin: 0;
+}
 .w40em {
   width: 40em;
 }
@@ -309,23 +317,6 @@ div#right {
 
 div#left {
   width: 65%;
-}
-
-div.box2 {
-  padding: .4em;
-  background-color: #D3CFE5;
-  border-bottom: 1px solid #8875B0;
-  margin-bottom: 0.5em;
-}
-
-div.box2 h2 {
-  color: #3E3550;
-  font-size: 11pt;
-  margin: 0;
-}
-
-div.box2 p {
-  margin: 0;
 }
 
 table.padcells td {
@@ -421,4 +412,17 @@ textarea.nice, input.nice {
 
 .smalltext {
   font-size: 80%;
+}
+
+/** diff **/
+.diff_in, .diff_out {
+  padding: 0.1em;
+}
+
+.diff_in {
+  background-color: #A54F5D;
+}
+
+.diff_out {
+  background-color: #7E9557;
 }

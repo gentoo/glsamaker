@@ -6,7 +6,7 @@
   <h2 style="margin-top: 0;"><img src="/images/icons/bug.png" alt="bug" /> Bugs</h2>
   <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one Bug with a comma:</label></p>
 
-  <p><input type="text" name="bugs" id="bugs" class="hugetext nice"/></p>
+  <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= h params[:bugs] %>"/></p>
   <%= observe_field :bugs, :url => { :controller => 'tools', :action => 'ajaxbugs' },
                   :frequency => 2,
                   :update => :ajaxbugs,
