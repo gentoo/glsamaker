@@ -34,4 +34,59 @@ class Glsa < ActiveRecord::Base
       1
     end
   end
+  
+  # Files a new GLSA request
+  def self.new_request(title, bugs, comment, access, user)
+    glsa = Glsa.new
+    glsa.requester = user
+    glsa.glsa_id = Digest::MD5.hexdigest(title + Time.now.to_s)[0...10]
+    glsa.restricted = (access == "confidential")
+    glsa.status = "request"
+
+    begin
+      glsa.save!
+    rescue Exception => e
+      raise Exception, "Error while saving the GLSA object: #{e.message}"
+    end
+
+    revision = Revision.new
+    revision.revid = glsa.next_revid
+    revision.glsa = glsa
+    revision.title = title
+    revision.user = user
+
+    begin
+      revision.save!
+    rescue Exception => e
+      glsa.delete
+      raise Exception, "Error while saving Revision object: #{e.message}"
+    end
+    
+    bug_ids = Bugzilla::Bug.str2bugIDs(bugs)
+
+    bug_ids.each do |bug|
+      begin
+        bugzie = Bugzilla::Bug.load_from_id(bug)
+      rescue Exception => e
+        glsa.delete
+        revision.delete
+        raise Exception, "Error while loading bug id #{bug}: #{e.message}"
+      end
+
+      begin
+        b = Bug.new
+        b.revision = revision
+        b.bug_id = bugzie.bug_id.to_i
+        b.title = bugzie.summary
+        b.save!
+      rescue Exception => e
+        glsa.delete
+        revision.delete
+        raise Exception, "Error while saving Bug object: #{e.message}"
+      end
+    end
+  
+    glsa
+  end
+  
 end
