@@ -178,7 +178,35 @@ module Bugzilla
           )
         end
       end
-    end  
+    end
+    
+    # Returns an Array of Changes made to the field +field+
+    def by_field(field)
+      raise(ArgumentError, "Symbol expected") unless field.is_a? Symbol
+      
+      changes = []
+      
+      @changes.each do |change|
+        if change.changes.has_key?(field)
+          changes << change
+        end
+      end
+    
+      changes
+    end
+    
+    # Returns an Array of Changes made by the user +user+
+    def by_user(user)
+      changes = []
+      
+      @changes.each do |change|
+        if change.user == user
+          changes << change
+        end
+      end
+      
+      changes
+    end
   end
   
   # This represents a single Change made to a Bug
@@ -194,16 +222,16 @@ module Bugzilla
     
     # Adds a changed +field+ to the Change object. +removed+ denotes the removed text
     # and +added+ is the new text
-    def add_change(field, removed, added)
+    def add_change(field, removed, added)    
       raise(ArgumentError, "A change to this field is already registered.") if @changes.has_key?(field)
       raise(ArgumentError, "field has to be a symbol") unless field.is_a? Symbol
       
       @changes[field] = [removed, added]
     end
-    
+
     # Returns a string representation
     def to_s
-      "#{@user} changed at #{@time.to_s}: #{@changes.to_s}"
+      "#{@user} changed at #{@time.to_s}: #{@changes.inspect}"
     end
   end
   
