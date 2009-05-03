@@ -87,7 +87,7 @@ application.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000048">simple_format_without_paragraph</a>&nbsp;&nbsp;
+      <a href="#M000056">simple_format_without_paragraph</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -109,11 +109,11 @@ application.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000048" class="method-detail">
-        <a name="M000048"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000048" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">simple_format_without_paragraph</span><span class="method-args">(text)</span>
           </a>
         </div>
@@ -123,16 +123,16 @@ application.
 Same as Rails&#8217; simple_format helper without using paragraphs
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000048-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
-    <span class="ruby-comment cmt"># File app/helpers/application_helper.rb, line 17</span>
-17:    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">simple_format_without_paragraph</span>(<span class="ruby-identifier">text</span>)
-18:      <span class="ruby-identifier">text</span>.<span class="ruby-identifier">to_s</span>.
-19:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\r\n?/</span>, <span class="ruby-value str">&quot;\n&quot;</span>).                    <span class="ruby-comment cmt"># \r\n and \r -&gt; \n</span>
-20:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n\n+/</span>, <span class="ruby-value str">&quot;&lt;br /&gt;&lt;br /&gt;&quot;</span>).          <span class="ruby-comment cmt"># 2+ newline  -&gt; 2 br</span>
-21:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([^\n]\n)(?=[^\n])/</span>, <span class="ruby-value str">'\1&lt;br /&gt;'</span>)  <span class="ruby-comment cmt"># 1 newline   -&gt; br</span>
-22:    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File app/helpers/application_helper.rb, line 16</span>
+16:    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">simple_format_without_paragraph</span>(<span class="ruby-identifier">text</span>)
+17:      <span class="ruby-identifier">text</span>.<span class="ruby-identifier">to_s</span>.
+18:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\r\n?/</span>, <span class="ruby-value str">&quot;\n&quot;</span>).                    <span class="ruby-comment cmt"># \r\n and \r -&gt; \n</span>
+19:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n\n+/</span>, <span class="ruby-value str">&quot;&lt;br /&gt;&lt;br /&gt;&quot;</span>).          <span class="ruby-comment cmt"># 2+ newline  -&gt; 2 br</span>
+20:        <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([^\n]\n)(?=[^\n])/</span>, <span class="ruby-value str">'\1&lt;br /&gt;'</span>)  <span class="ruby-comment cmt"># 1 newline   -&gt; br</span>
+21:    <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

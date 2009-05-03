@@ -47,6 +47,10 @@ module Bugzilla
       end
     end
     
+    def history()
+      @history ||= History.new(self)
+    end
+    
     def initialize(bug)
       unless bug.is_a? Nokogiri::XML::Element
         raise ArgumentError, "Nokogiri failure"
@@ -130,6 +134,77 @@ module Bugzilla
     
     bugs.shift
     bugs
+  end
+  
+  # Encapsulates a bug's history
+  class History
+    attr_reader :changes
+    
+    # Creates a new History for the Bug object +bug+.
+    def initialize(bug)
+      unless bug.respond_to? :bug_id
+        raise ArgumentError, "Need a bug (or something that at least looks like a bug)"
+      end
+      
+      begin
+        html = Nokogiri::HTML(Glsamaker::HTTP.get("http://bugs.gentoo.org/show_activity.cgi?id=#{bug.bug_id}"))
+      rescue Exception => e
+        raise ArgumentError, "Couldn't load the bug history: #{e.message}"
+      end
+      
+      @changes = []
+      change_cache = nil
+      
+      html.xpath("/html/body/table/tr").each do |change|
+        # ignore header line
+        next if change.children.first.name == "th"
+    
+        # First line in a multi-change set
+        unless (chcount = change.children.first["rowspan"]) == nil
+          change_cache = Change.new(change.children.first.content.strip, change.children[2].content.strip)
+          
+          change_cache.add_change(
+            change.children[4].content.strip.downcase.to_sym,
+            change.children[6].content.strip,
+            change.children[8].content.strip
+          )
+          
+          @changes << change_cache          
+        else
+          change_cache.add_change(
+            change.children[0].content.strip.downcase.to_sym,
+            change.children[2].content.strip,
+            change.children[4].content.strip
+          )
+        end
+      end
+    end  
+  end
+  
+  # This represents a single Change made to a Bug
+  class Change
+    attr_reader :user, :time, :changes
+    
+    # Creates a new Change made by +user+ at +time+.
+    def initialize(user, time)
+      @user = user || ""
+      @time = Time.parse(time)
+      @changes = {}
+    end
+    
+    # Adds a changed +field+ to the Change object. +removed+ denotes the removed text
+    # and +added+ is the new text
+    def add_change(field, removed, added)
+      raise(ArgumentError, "A change to this field is already registered.") if @changes.has_key?(field)
+      raise(ArgumentError, "field has to be a symbol") unless field.is_a? Symbol
+      
+      @changes[field] = [removed, added]
+    end
+    
+    # Returns a string representation
+    def to_s
+      "#{@user} changed at #{@time.to_s}: #{@changes.to_s}"
+    end
   end
   
 end
