@@ -1,0 +1,4 @@
+  <tr>
+    <td><a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);"><strong><%= h bug.bug_id %></strong></td>
+    <td><%= truncate(h(bug.title), 60) %></td>
+  </tr>

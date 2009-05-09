@@ -97,5 +97,15 @@ class ToolsController < ApplicationController
   def background
     render :layout => false
   end
+  
+  def buginfo
+    @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    render :layout => false
+  end
+  
+  def bughistory
+    @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    render :layout => false
+  end
 
 end

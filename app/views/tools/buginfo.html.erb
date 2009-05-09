@@ -1,2 +1,48 @@
-<h1>Tools#buginfo</h1>
-<p>Find me in app/views/tools/buginfo.html.erb</p>
+<% if @bug.restricted %>
+
+<h2 style="margin-top: 0;"><img src="/images/icons/restricted.png" alt="restricted" /> This bug is restricted</h2>
+
+<p>Currently, GLSAMaker cannot process restricted bugs. :(</p>
+<p>Try to <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
+
+<% else %>
+
+<h2 style="margin-top: 0;"><%= h @bug.summary %></h2>
+
+<div style="margin-bottom: 1.5em;">
+  <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('/tools/bughistory/<%= h @bug.bug_id %>');" class="button"><img src="/images/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
+</div>
+
+<div style="float: right; width: 49%;">
+  Status/Resolution: <strong><%= h @bug.status %> <%= h @bug.resolution %></strong><br />
+  Status Whiteboard: <strong style="color: #3E3550;"><%= h @bug.status_whiteboard %></strong><br />
+  <% arches = @bug.arch_cc %> Arches (<%= arches.size %>): <% arches = @bug.arch_cc %><strong><%= h (arches.map {|a| a.gsub("@gentoo.org", "") }.join(", ")) %></strong><br /><br />
+
+  CC: <small><%= h (@bug.cc - arches).map {|a| a.gsub("@gentoo.org", "@g.o")}.join(", ") %></small>
+</div>
+
+<div style="width: 50%">
+  Assigned to: <strong><%= h @bug.assigned_to %></strong><br />
+  Reported: <strong><%= h @bug.reporter %></strong> <small><%= @bug.created_at %></small><br /><br />
+  
+  Depends on: <strong><% @bug.depends.each do |d| %><a href="javascript://" onclick="Modalbox.show('/tools/buginfo/<%= d.to_i %>');"><%= d.to_i %></a> <% end %></strong><br />
+  Blocks: <strong><% @bug.blocks.each do |d| %><a href="javascript://" onclick="Modalbox.show('/tools/buginfo/<%= d.to_i %>');"><%= d.to_i %></a> <% end %></strong><br />
+</div>
+<br style="clear: both;" />
+
+<h3>Comments</h3>
+<ol class="comments" style="height: 300px; overflow-y: scroll; padding-right: 1em;">
+<% bugid = 1 ; @bug.comments.each do |comment| %>
+  <li>
+    <p style="background-color: #D3CFE5; padding: 3px; color: #3E3550;">
+      <span style="float: right; font-size: 80%;"><a href="<%= h @bug.url %>#c<%= bugid %>" target="_blank">&rarr; Bugzilla</a></span>
+      <strong><%= h(comment.author) %></strong>
+      <small>at <%= comment.date %></small>
+    </p>
+    <p><code><%= simple_format_without_paragraph(comment.text) %></code></p>
+  </li>
+<% bugid +=1 ; end %>
+</ol>
+
+<% end %>

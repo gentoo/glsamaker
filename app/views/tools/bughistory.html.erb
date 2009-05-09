@@ -1,0 +1,33 @@
+<% if @bug.restricted %>
+
+<h2 style="margin-top: 0;"><img src="/images/icons/restricted.png" alt="restricted" /> This bug is restricted</h2>
+
+<p>Currently, GLSAMaker cannot process restricted bugs. :(</p>
+<p>Try to <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
+
+<% else %>
+
+
+<h2 style="margin-top: 0;"><%= h @bug.summary %></h2>
+<div style="margin-top: 1.5em;">
+  <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('/tools/buginfo/<%= h @bug.bug_id %>');" class="button"><img src="/images/icons/larr.png" alt="Back" /> <strong>Back to overview</strong></a>
+</div>
+
+<h3>History</h3>
+<ol class="comments" style="height: 300px; overflow-y: scroll; padding-right: 1em;">
+<% @bug.history.changes.each do |change| %>
+  <li>
+    <p style="background-color: #D3CFE5; padding: 3px; color: #3E3550;">
+      <strong><%= h(change.user) %></strong> <small>at <%= change.time %></small>
+    </p>
+    <p>
+      <% change.changes.each do |where, what| %>
+        <strong><%= h where.to_s.capitalize %>:</strong> <code><%= h what[0] %> &rarr; <%= h what[1] %></code><br />
+      <% end %>    
+    </p>
+  </li>
+<% end %>
+</ol>
+
+<% end %>

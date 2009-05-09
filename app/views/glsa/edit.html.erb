@@ -75,9 +75,9 @@
       </span>
       <img src="/images/icons/bug.png" alt="bug" /> Bugs
     </h2>
-    <% @rev.bugs.each do |bug| %>
-      <p><a href="<%= bug.bug_url %>"><%= bug.bug_id %></a>: <%= h bug.title %></p>
-    <% end %> 
+    <table>
+      <%= render :partial => "edit_bug_row", :collection => @rev.bugs, :as => :bug %>
+    </table>
   </div>
   
   <div class="box">

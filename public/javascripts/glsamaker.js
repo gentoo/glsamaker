@@ -27,8 +27,18 @@ function addBugDialog(glsaid) {
 }
 
 function backgroundDialog() {
-  Modalbox.show("/tools/background", {title: "Get background", width: 600});
+  Modalbox.show("/tools/background/?id=dev-lang/ruby", {title: "Get background", width: 600});
 }
+
+
+function getClientWidth() {
+  return document.compatMode=='CSS1Compat' && !window.opera?document.documentElement.clientWidth:document.body.clientWidth;
+}
+
+function buginfo(bugid) {
+  Modalbox.show("/tools/buginfo/" + bugid, {title: "Bug " + bugid, width: getClientWidth() / 2});
+}
+
 
 //document.observe('dom:loaded', function() {
                         
