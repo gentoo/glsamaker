@@ -1,4 +1,10 @@
-<% if @bug.restricted %>
+<% if @bug == nil %>
+
+<h2 style="margin-top: 0;"><img src="/images/icons/error.png" alt="error" /> Invalid Bug ID</h2>
+
+<p>There is no such bug on Gentoo's Bugzilla.</p>
+
+<% elsif @bug.restricted %>
 
 <h2 style="margin-top: 0;"><img src="/images/icons/restricted.png" alt="restricted" /> This bug is restricted</h2>
 

@@ -99,12 +99,20 @@ class ToolsController < ApplicationController
   end
   
   def buginfo
-    @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    begin
+      @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    rescue ArgumentError => e
+      @bug = nil
+    end
     render :layout => false
   end
   
   def bughistory
-    @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    begin
+      @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    rescue ArgumentError => e
+      @bug = nil
+    end
     render :layout => false
   end
 
