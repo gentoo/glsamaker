@@ -32,6 +32,8 @@ module Bugzilla
       
       begin
         xml = Nokogiri::XML(Glsamaker::HTTP.get("http://bugs.gentoo.org/show_bug.cgi?ctype=xml&id=#{id}"))
+      rescue SocketError => e
+        raise SocketError, "Bugzilla is unreachable: #{e.message}"
       rescue Exception => e
         raise ArgumentError, "Couldn't load bug: #{e.message}"
       end

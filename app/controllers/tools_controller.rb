@@ -101,6 +101,8 @@ class ToolsController < ApplicationController
   def buginfo
     begin
       @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    rescue SocketError => e
+      @bug = "down"
     rescue ArgumentError => e
       @bug = nil
     end
@@ -110,6 +112,8 @@ class ToolsController < ApplicationController
   def bughistory
     begin
       @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    rescue SocketError => e
+      @bug = "down"
     rescue ArgumentError => e
       @bug = nil
     end

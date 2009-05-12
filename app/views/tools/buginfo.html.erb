@@ -1,8 +1,12 @@
 <% if @bug == nil %>
 
 <h2 style="margin-top: 0;"><img src="/images/icons/error.png" alt="error" /> Invalid Bug ID</h2>
-
 <p>There is no such bug on Gentoo's Bugzilla.</p>
+
+<% elsif (@bug.is_a? String and @bug == "down") %>
+
+<h2 style="margin-top: 0;"><img src="/images/icons/error.png" alt="error" /> Bugzilla is unreachable</h2>
+<p>Sorry, but the Gentoo Bugzilla is unreachable at the moment.</p>
 
 <% elsif @bug.restricted %>
 
