@@ -21,7 +21,7 @@
 
 <div style="margin-bottom: 1.5em;">
   <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
-  <a href="javascript:///" onclick="Modalbox.show('/tools/bughistory/<%= h @bug.bug_id %>');" class="button"><img src="/images/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('/tools/bug/<%= h @bug.bug_id %>/history');" class="button"><img src="/images/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
 </div>
 
 <div style="float: right; width: 49%;">

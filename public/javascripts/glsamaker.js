@@ -36,7 +36,7 @@ function getClientWidth() {
 }
 
 function buginfo(bugid) {
-  Modalbox.show("/tools/buginfo/" + bugid, {title: "Bug " + bugid, width: getClientWidth() / 2});
+  Modalbox.show("/tools/bug/" + bugid + "/info", {title: "Bug " + bugid, width: getClientWidth() / 2});
 }
 
 

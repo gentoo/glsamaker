@@ -97,27 +97,22 @@ class ToolsController < ApplicationController
   def background
     render :layout => false
   end
-  
-  def buginfo
-    begin
-      @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
-    rescue SocketError => e
-      @bug = "down"
-    rescue ArgumentError => e
-      @bug = nil
-    end
-    render :layout => false
-  end
-  
-  def bughistory
-    begin
-      @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
-    rescue SocketError => e
-      @bug = "down"
-    rescue ArgumentError => e
-      @bug = nil
-    end
-    render :layout => false
-  end
 
+  def bugzie
+    begin
+      @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
+    rescue SocketError => e
+      @bug = "down"
+    rescue ArgumentError => e
+      @bug = nil
+    end
+
+    if params[:what] == "info"
+      render :action => "buginfo", :layout => false
+    elsif params[:what] == "history"
+      render :action => "bughistory", :layout => false
+    else
+      render :text => "Don't know what to show you", :layout => false
+    end
+  end
 end

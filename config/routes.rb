@@ -49,6 +49,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.showglsa '/glsa/show/:id.:format', :controller => 'glsa', :action => 'show'
   
+  map.bugzie '/tools/bug/:id/:what', :controller => 'tools', :action => 'bugzie'
+  
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end
