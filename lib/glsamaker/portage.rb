@@ -54,7 +54,7 @@ module Glsamaker
         
         # Validates the atom +atom+
         def validAtom?(atom)
-          /[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/.match(atom)
+          atom =~ /[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/
         end
       end
     end
