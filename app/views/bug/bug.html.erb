@@ -21,7 +21,7 @@
 
 <div style="margin-bottom: 1.5em;">
   <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
-  <a href="javascript:///" onclick="Modalbox.show('/tools/bug/<%= h @bug.bug_id %>/history');" class="button"><img src="/images/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('<%= bughistory_url(:id => @bug.bug_id) %>');" class="button"><img src="/images/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
 </div>
 
 <div style="float: right; width: 49%;">
@@ -36,23 +36,23 @@
   Assigned to: <strong><%= h @bug.assigned_to %></strong><br />
   Reported: <strong><%= h @bug.reporter %></strong> <small><%= @bug.created_at %></small><br /><br />
   
-  Depends on: <strong><% @bug.depends.each do |d| %><a href="javascript://" onclick="Modalbox.show('/tools/buginfo/<%= d.to_i %>');"><%= d.to_i %></a> <% end %></strong><br />
-  Blocks: <strong><% @bug.blocks.each do |d| %><a href="javascript://" onclick="Modalbox.show('/tools/buginfo/<%= d.to_i %>');"><%= d.to_i %></a> <% end %></strong><br />
+  Depends on: <strong><% @bug.depends.each do |d| %><a href="javascript://" onclick="buginfo('<%= h d %>');"><%= h d %></a> <% end %></strong><br />
+  Blocks: <strong><% @bug.blocks.each do |d| %><a href="javascript://" onclick="buginfo('<%= h d %>');"><%= h d %></a> <% end %></strong><br />
 </div>
 <br style="clear: both;" />
 
 <h3>Comments</h3>
 <ol class="comments" style="height: 300px; overflow-y: scroll; padding-right: 1em;">
-<% bugid = 1 ; @bug.comments.each do |comment| %>
-  <li>
+<% commentID = 1 ; @bug.comments.each do |comment| %>
+  <li id="comment-<%= commentID %>">
     <p style="background-color: #D3CFE5; padding: 3px; color: #3E3550;">
-      <span style="float: right; font-size: 80%;"><a href="<%= h @bug.url %>#c<%= bugid %>" target="_blank">&rarr; Bugzilla</a></span>
+      <span style="float: right; font-size: 80%;"><a href="<%= h @bug.url %>#c<%= commentID %>" target="_blank">&rarr; Bugzilla</a></span>
       <strong><%= h(comment.author) %></strong>
       <small>at <%= comment.date %></small>
     </p>
-    <p><code><%= simple_format_without_paragraph(comment.text) %></code></p>
+    <p><code><%= simple_format_without_paragraph(linkify_comment(comment.text)) %></code></p>
   </li>
-<% bugid +=1 ; end %>
+<% commentID +=1 ; end %>
 </ol>
 
 <% end %>

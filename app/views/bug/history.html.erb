@@ -21,7 +21,7 @@
 <h2 style="margin-top: 0;"><%= h @bug.summary %></h2>
 <div style="margin-top: 1.5em;">
   <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
-  <a href="javascript:///" onclick="Modalbox.show('/tools/bug/<%= h @bug.bug_id %>/info');" class="button"><img src="/images/icons/larr.png" alt="Back" /> <strong>Back to overview</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('<%= bug_url(:id => @bug.bug_id) %>');" class="button"><img src="/images/icons/larr.png" alt="Back" /> <strong>Back to overview</strong></a>
 </div>
 
 <h3>History</h3>
