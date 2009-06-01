@@ -17,4 +17,13 @@ class Revision < ActiveRecord::Base
   belongs_to :user
   
   validates_numericality_of :user_id, :message => "user id needed"
+  
+  # Returns an Array of Integers of the bugs linked to this revision
+  def get_linked_bugs
+    self.bugs.map do |bug|
+      bug.bug_id.to_i
+    end
+  end
+  
+  
 end

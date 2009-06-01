@@ -1,4 +1,13 @@
-<% form_remote_tag (:url => '/tools/addbugsave/' + @glsa_id) do -%>
+<% if @glsa_id.nil? %>
+<p>Need a GLSA id.</p>
+<% else %>
+<% form_remote_tag (
+        :url => addbugsave_url(:id => @glsa_id.to_s),
+        :update => 'bugtable',
+        :position => :bottom,
+        :before => '$("addbugsubmit").value="Loading...";',
+        :success => 'Modalbox.hide();',
+        :failure => 'alert(request.responseText);') do -%>
 <p><label for="addbugs"><img src="/images/icons/bug.png" alt="bug" />
   Please enter the relevant bug ID(s), separate more than one bug with a comma:</label></p>
 
@@ -9,5 +18,7 @@
                 :with => 'bugs',
                 :complete => 'Modalbox.resizeToContent();' %>
 <div id="ajaxbugs"></div>
-<p style="text-align: right;"><input type="submit" class="button" value="Add bugs"></p>
+<p style="text-align: right;"><input type="submit" class="button" value="Add bugs" id="addbugsubmit" /></p>
 <% end -%>
+
+<% end %>

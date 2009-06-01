@@ -23,7 +23,7 @@ function toggleWide(id) {
 }
 
 function addBugDialog(glsaid) {
-  Modalbox.show("/tools/addbug/"+glsaid, {title: "Add bug", width: 600});
+  Modalbox.show("/glsa/"+glsaid+"/addbug", {title: "Add bugs", width: 600});
 }
 
 function backgroundDialog() {
@@ -36,7 +36,18 @@ function getClientWidth() {
 }
 
 function buginfo(bugid) {
-  Modalbox.show("/bug/" + bugid, {title: "Bug " + bugid, width: getClientWidth() / 2});
+  Modalbox.show("/bug/" + bugid, {title: "Bug " + bugid, width: 800});
+}
+
+/** Marks a bug row as deleted **/
+function markBugAsDeleted(bug) {
+  $('bug-' + bug).className = 'delbug';
+  
+  var minus = new Image();
+  minus.src = '/images/icons/minus-small.png';
+  minus.alt = 'This bug will be removed when saving';
+  
+  $('bug-' + bug).getElementsByTagName('td')[0].appendChild(minus);
 }
 
 

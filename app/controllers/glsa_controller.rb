@@ -73,13 +73,16 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     @rev = @glsa.last_revision
     
-    # Reset added bugs in the meantime
+    # Reset added or removed bugs in the meantime
     session[:addbugs] ||= []
+    session[:delbugs] ||= []
     session[:addbugs][@glsa.id] = []
+    session[:delbugs][@glsa.id] = []
   end
 
   def update
     @glsa = Glsa.find(params[:id])
+    @rev = @glsa.last_revision
     
     if @glsa.nil?
       flash[:error] = "Unknown GLSA ID"
@@ -119,7 +122,30 @@ class GlsaController < ApplicationController
       render :action => "edit"
     end
     
-    # TODO: bugs, packages, references
+    # Bugs...
+    bugs = @rev.get_linked_bugs
+    
+    logger.debug { "Bugs: " + bugs.inspect }
+    
+    bugs += (session[:addbugs][@glsa.id] || [])
+    
+    logger.debug { "After adding new ones: " + bugs.inspect }
+    
+    bugs -= (session[:delbugs][@glsa.id] || [])
+    
+    logger.debug { "To remove: " + session[:delbugs][@glsa.id].inspect }
+    logger.debug { "After removing: " + bugs.inspect }
+    
+    bugs.each do |bug|
+      b = Bugzilla::Bug.load_from_id(bug)
+      
+      revision.bugs.create(
+        :bug_id => bug,
+        :title => b.summary
+      )
+    end
+    
+    # TODO: packages, references
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     
@@ -145,6 +171,47 @@ class GlsaController < ApplicationController
     
     @diffs = {}
     @diff = Glsamaker::Diff::DiffContainer.new(@rev_from.description, @rev_to.description)
+  end
+
+  def addbug
+    begin
+      @glsa_id = Integer(params[:id])
+    rescue Exception => e
+      @glsa_id = nil
+    end
+    render :layout => false
+  end
+  
+  def addbugsave
+    @glsa = Glsa.find(params[:id].to_i)
+
+    unless @glsa.nil?
+      session[:addbugs][@glsa.id] ||= []
+      (@addedBugs = Bugzilla::Bug.str2bugIDs(params[:addbugs])).each do |bugid|
+        session[:addbugs][@glsa.id] << bugid.to_i
+      end
+      
+      begin
+        render :layout => false
+      rescue Exception => e
+        render :text => "Error: #{e.message}", :status => 500
+      end
+    else
+      render :text => "fail", :status => 500
+    end
+  end
+  
+  def delbug
+    glsa = params[:id].to_i
+    bug  = params[:bugid].to_i
+
+    session[:addbugs][glsa] ||= []    
+    session[:addbugs][glsa].delete(bug)
+
+    session[:delbugs][glsa] ||= []
+    session[:delbugs][glsa] << bug    
+    
+    render :text => ""
   end
 
   def destroy

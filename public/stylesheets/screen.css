@@ -333,6 +333,21 @@ table.centercells td {
   text-align: center;
 }
 
+tr.addbug {
+  background-color: #D2DEBF;
+}
+
+tr.delbug {
+  background-color: #AD9095;
+}
+
+div.progress {
+  display: none;
+  position: absolute;
+  top: 10%;
+  left: 45%;
+}
+
 /** Buttons **/
 div.buttons {
   padding: 0.4em;

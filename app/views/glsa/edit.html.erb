@@ -75,7 +75,7 @@
       </span>
       <img src="/images/icons/bug.png" alt="bug" /> Bugs
     </h2>
-    <table>
+    <table id="bugtable">
       <%= render :partial => "edit_bug_row", :collection => @rev.bugs, :as => :bug %>
     </table>
   </div>

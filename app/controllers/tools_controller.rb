@@ -77,23 +77,7 @@ class ToolsController < ApplicationController
 
     render :text => "(no suggestion available)", :layout => false
   end
-  
-  def addbug
-    @glsa_id = params[:id]
-    render :layout => false
-  end
-  
-  def addbugsave
-    glsa_id = params[:id]
 
-    unless Glsa.find(glsa_id) == nil
-      session[:addbugs][glsa_id] ||= []
-      Bugzilla::Bug.str2bugIDs(params[:bugs]).each do |bugid|
-        session[:addbugs][glsa_id] << bugid
-      end
-    end
-  end
-  
   def background
     render :layout => false
   end
