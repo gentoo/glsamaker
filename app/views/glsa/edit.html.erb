@@ -34,7 +34,7 @@
   </div>
   
   <div class="box">
-    <h2 style="margin: 0;"><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
+    <h2><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">
         <option value="local">local</option>
@@ -55,8 +55,8 @@
   </div>
 
   <div class="box">
-    <h2 style="margin: 0;">
-      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+    <h2>
+      <span class="toolbar">
         <a href="javascript://" onclick="backgroundDialog();" title="Get background">
           <img src="/images/icons/background-go.png" alt="Get background" />
         </a>
@@ -70,7 +70,7 @@
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
         <a href="javascript://" onclick="addBugDialog(<%= @glsa.id %>);" title="Add bug">
-          <img src="/images/icons/bug_add.png" alt="Add bug" />
+          <img src="/images/icons/plus.png" alt="Add bug" />
         </a>
       </span>
       <img src="/images/icons/bug.png" alt="bug" /> Bugs
@@ -114,7 +114,7 @@
       <tr>
         <th><img src="/images/icons/atom.png" alt="atom" /> Atom</th>
         <th colspan="2" class="odd"><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable versions</th>
-        <th><img src="/images/icons/unaffected.png" alt="unaffected" /> Fixed</th>
+        <th colspan="2"><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected versions</th>
         <th class="odd"><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
         <th><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
       </tr>
@@ -122,15 +122,8 @@
         <td><input class="nice" type="text" name="glsa[package][atom][]" /></td>
         <td class="odd"><select name="glsa[package][comp_vuln][]"><option value="1">&lt;=</option></select></td>
         <td class="odd"><input class="nice" type="text" name="glsa[package][vuln][]" size="10" /></td>
-        <td><input class="nice" type="checkbox" name="glsa[package][unaff][]" value="1" /></td>
-        <td class="odd"><input class="nice" type="text" name="glsa[package][arch][]" size="7" /></td>
-        <td><select name="glsa[package][auto][]"><option value="1">yes</option><option value="0">no</select></td>
-      </tr>
-      <tr>
-        <td><input class="nice" type="text" name="glsa[package][atom][]" /></td>
-        <td class="odd"><select name="glsa[package][comp_vuln][]"><option value="1">&lt;=</option></select></td>
-        <td class="odd"><input class="nice" type="text" name="glsa[package][vuln][]" size="10" /></td>
-        <td><input class="nice" type="checkbox" name="glsa[package][unaff][]" value="1" /></td>
+        <td><select name="glsa[package][comp_unaff][]"><option value="1">&lt;=</option></select></td>
+        <td><input class="nice" type="text" name="glsa[package][unaff][]" size="10" /></td>
         <td class="odd"><input class="nice" type="text" name="glsa[package][arch][]" size="7" /></td>
         <td><select name="glsa[package][auto][]"><option value="1">yes</option><option value="0">no</select></td>
       </tr>
@@ -163,10 +156,22 @@
 
   <div class="box">
     <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <a href="javascript:///" onclick="lines('impact', -2);" title="Fewer lines">
+          <img src="/images/icons/zoom_out.png" alt="Fewer lines" />
+        </a>
+        <a href="javascript:///" onclick="$('impact').rows = 5;" title="Reset lines">
+          <img src="/images/icons/zoom_100.png" alt="Reset lines" />
+        </a>
+        <a href="javascript:///" onclick="lines('impact', 2);" title="More lines">
+          <img src="/images/icons/zoom_in.png" alt="More lines" />
+        </a>
+        <img src="/images/separator.png" />
+      </span>
       <img src="/images/icons/impact.png" alt="Impact" />
       <label for="Impact">Impact</label>
     </h2>
-    <p><textarea name="glsa[impact]" id="impact" class="nice" rows="3"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
+    <p><textarea name="glsa[impact]" id="impact" class="nice" rows="5"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
   </div>
   
   <div class="box">
@@ -179,7 +184,7 @@
       <img src="/images/icons/workaround.png" alt="Workaround" />
       <label for="workaround">Workaround</label>
     </h2>
-    <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="3"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
+    <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="2"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
   </div>
   
   <div class="box">
@@ -192,7 +197,7 @@
       <img src="/images/icons/resolution.png" alt="Resolution" />
       <label for="resolution">Resolution</label>
     </h2>
-    <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="3"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
+    <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="5"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
   </div>
 
   <div class="box">

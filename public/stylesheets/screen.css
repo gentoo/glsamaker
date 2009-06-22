@@ -329,7 +329,7 @@ table.swap .odd {
   background-color: #E6E5EE;
 }
 
-table.centercells td {
+table.centercells th {
   text-align: center;
 }
 
@@ -441,3 +441,5 @@ textarea.nice, input.nice {
 .diff_out {
   background-color: #7E9557;
 }
+
+@import url("/stylesheets/screen.css");
