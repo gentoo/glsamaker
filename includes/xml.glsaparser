@@ -1201,7 +1201,7 @@ class GLSAParser {
 		$string .= 'confidentiality and security of our users machines is of utmost'.$newLine;
 		$string .= 'importance to us. Any security concerns should be addressed to'.$newLine;
 		$string .= 'security@gentoo.org or alternatively, you may file a bug at'.$newLine;
-		$string .= 'http://bugs.gentoo.org.'.$newLine;
+		$string .= 'https://bugs.gentoo.org.'.$newLine;
 		$string .= $newLine.'License'.$newLine.'======='.$newLine.$newLine.'Copyright '.date('Y').' Gentoo Foundation, Inc; referenced text'.$newLine.'belongs to its owner(s).'.$newLine.$newLine.'The contents of this document are licensed under the'.$newLine.'Creative Commons - Attribution / Share Alike license.'.$newLine.$newLine.'http://creativecommons.org/licenses/by-sa/2.5'.$newLine;
 
 		return $string;
