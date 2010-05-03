@@ -39,7 +39,8 @@ class UserTest < ActiveSupport::TestCase
   test "successful creation" do
     user = User.new(:login => 'not_yet_taken_login',
                     :name => 'doesntmatteranyway',
-                    :email => 'foo@bar.org')
+                    :email => 'foo@bar.org',
+                    :access => 0)
 
     assert user.save
   end
