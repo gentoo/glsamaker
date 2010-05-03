@@ -16,8 +16,6 @@
 # [<b>2 (Full member)</b>] all of the above, plus voting
 # [<b>3 (Confidential member)</b>] all of the above, including restricted drafts
 class User < ActiveRecord::Base
-  has_and_belongs_to_many :permissions
-  
   has_many :submitted_glsas, :class_name => "Glsa", :foreign_key => "submitter"
   has_many :requested_glsas, :class_name => "Glsa", :foreign_key => "requester"
   has_many :bugreadymade_glsas, :class_name => "Glsa", :foreign_key => "bugreadymaker"
