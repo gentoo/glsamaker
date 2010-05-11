@@ -1,12 +1,12 @@
-<h1><%= h @glsa.glsa_id %>:<%= h @glsa.last_revision.revid %></h1>
+<h1><%= h @glsa.glsa_id %>:<%= h @rev.revid %></h1>
 
 
 Show version: <% @glsa.revisions.each do |r| %>
-<%= link_to r.id, :controller => "glsa", :action => "show", :id => @glsa, :rev_id => r.revid %>
+<%= link_to r.revid, :controller => "glsa", :action => "show", :id => @glsa, :rev_id => r.revid %>
 <% end %> <br/>
 
 <b>GLSA revision:</b> <%= @rev.revid %> <br/>
-<b>GLSA release date:</b> <%= @rev.id %> <br/>
+<b>GLSA revision date:</b> <%= @rev.created_at %> <br/>
 <br/>
 <b>Title:</b> <%= @rev.title %> <br/>
 <b>Access:</b> <%= @rev.access %> <br/>

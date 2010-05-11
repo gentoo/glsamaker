@@ -31,7 +31,7 @@ class Glsa < ActiveRecord::Base
     if (rev = last_revision)
       rev.revid + 1
     else
-      1
+      0
     end
   end
   

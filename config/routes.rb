@@ -51,9 +51,9 @@ ActionController::Routing::Routes.draw do |map|
   
   
   
-  map.requests '/glsa/requests', :controller => 'glsa', :action => 'index', :show => 'requests'
-  map.drafts   '/glsa/drafts'  , :controller => 'glsa', :action => 'index', :show => 'drafts'
-  map.sent     '/glsa/archive' , :controller => 'glsa', :action => 'index', :show => 'archive'
+  map.requests '/glsa/requests', :controller => 'glsa', :action => 'requests'
+  map.drafts   '/glsa/drafts'  , :controller => 'glsa', :action => 'drafts'
+  map.sent     '/glsa/archive' , :controller => 'glsa', :action => 'archive'
   
   map.diff '/glsa/diff/:id/rev/:from/to/:to', :controller => 'glsa', :action => 'diff'
   

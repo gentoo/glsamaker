@@ -12,21 +12,17 @@
 # GLSA controller
 class GlsaController < ApplicationController
   before_filter :login_required
-  
-  def index
-    if params[:show] == "requests"
-      @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
-      @pageID = "requests"
-    elsif params[:show] == "drafts"
-      @glsas = Glsa.find(:all, :conditions => "status = 'draft'", :order => "updated_at DESC")
-      @pageID = "drafts"
-    elsif params[:show] == "archive"
-      @glsas = Glsa.find(:all, :conditions => "status = 'release'", :order => "updated_at DESC")
-      @pageID = "archive"
-    else
-      flash[:error] = "Don't know what to show you."
-      redirect_to :controller => "index", :action => "index"
-    end
+
+  def requests
+    @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
+  end
+
+  def drafts
+    @glsas = Glsa.find(:all, :conditions => "status = 'draft'", :order => "updated_at DESC")
+  end
+
+  def archive
+    @glsas = Glsa.find(:all, :conditions => "status = 'release'", :order => "updated_at DESC")
   end
   
   def new
@@ -47,7 +43,7 @@ class GlsaController < ApplicationController
       begin
         glsa = Glsa.new_request(params[:title], params[:bugs], params[:comment], params[:access], current_user)
         flash[:notice] = "Successfully created GLSA #{glsa.glsa_id}"
-        redirect_to :action => "show", :id => glsa.id
+        redirect_to :action => "requests"
       rescue Exception => e
         flash.now[:error] = e.message
         render :action => "new-request"
@@ -59,7 +55,7 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
 
-    flash[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] ]
+    flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
 
     respond_to do |wants|
       wants.html { render }
@@ -97,6 +93,8 @@ class GlsaController < ApplicationController
       @glsa.submitter = current_user
     end
 
+    @glsa.status = "draft" if @glsa.status == "request"
+    
     # Force update
     @glsa.updated_at = 0
     

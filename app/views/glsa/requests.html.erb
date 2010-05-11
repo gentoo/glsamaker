@@ -1,0 +1,29 @@
+<h1>Pooled GLSA requests</h1>
+
+<table>
+<ul id="glsas">
+<tr align="left">
+  <th>ID</th>
+  <th>Title</th>
+  <th>Date requested</th>
+  <th>Bug IDs</th>
+</tr>
+<% @glsas.each do |g| %>
+<tr>
+
+<td><%= g.glsa_id %></td>
+<td><%= g.last_revision.title -%>
+<%= link_to ' <img src="/images/icons/edit.png" alt="edit" />', {:action => 'edit', :id => g}%></td>
+<td><%= g.updated_at %>, <%= g.last_revision.user.name %></td>
+
+<td>
+<% if g.last_revision and (@bugs = g.last_revision.bugs) -%>
+<%= @bugs.map {|b| b.bug_id}.join(', ') %>
+
+<% end -%>
+</td>
+
+</tr>
+<% end %>
+</ul>
+</table>

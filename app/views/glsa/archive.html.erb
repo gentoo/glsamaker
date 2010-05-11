@@ -1,20 +1,19 @@
-<h1>Pooled GLSAs</h1>
+<h1>Released GLSAs</h1>
 
 <table>
 <ul id="glsas">
 <tr align="left">
   <th>ID</th>
   <th>Title</th>
-  <th>Last Update</th>
+  <th>Release date</th>
   <th>Bug IDs</th>
 </tr>
 <% @glsas.each do |g| %>
 <tr>
 
 <td><%= g.glsa_id %></td>
-<td><%= link_to g.last_revision.title, {:action => 'show', :id => g}-%>
-<%= link_to ' <img src="/images/icons/edit.png" alt="edit" />', {:action => 'edit', :id => g}%></td>
-<td><%= g.updated_at %>, <%= g.last_revision.user.name %></td>
+<td><%= link_to g.last_revision.title, {:action => 'show', :id => g}-%></td>
+<td><%= g.updated_at %></td>
 
 <td>
 <% if g.last_revision and (@bugs = g.last_revision.bugs) -%>
