@@ -121,8 +121,9 @@ class GlsaController < ApplicationController
     revision.resolution = params[:glsa][:resolution]
     
     unless revision.save
-      flash[:error] = "Errors occurred while saving the Revision object"
+      flash.now[:error] = "Errors occurred while saving the Revision object"
       render :action => "edit"
+      return
     end
     
     # Bugs...

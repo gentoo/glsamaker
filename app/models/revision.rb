@@ -17,6 +17,7 @@ class Revision < ActiveRecord::Base
   belongs_to :user
   
   validates_numericality_of :user_id, :message => "user id needed"
+  validates_presence_of :title
   
   # Returns an Array of Integers of the bugs linked to this revision
   def get_linked_bugs
