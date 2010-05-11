@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090501114107) do
+ActiveRecord::Schema.define(:version => 20100511192546) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20090501114107) do
     t.integer  "user_id"
     t.integer  "glsa_id"
     t.text     "text"
-    t.string   "type"
+    t.string   "rating"
     t.boolean  "read",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"

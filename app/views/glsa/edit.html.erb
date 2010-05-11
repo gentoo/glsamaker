@@ -82,6 +82,11 @@
   
   <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comments</h2>
+      <ul>
+        <% @glsa.comments.each do |c| -%>
+          <li><%=h c.text %></li>
+        <% end -%>
+      </ul>
   </div>
 </div>
 

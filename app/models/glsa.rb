@@ -43,6 +43,10 @@ class Glsa < ActiveRecord::Base
     glsa.restricted = (access == "confidential")
     glsa.status = "request"
 
+    unless comment.strip.blank?
+      glsa.comments << Comment.new(:rating => "neutral", :text => comment, :user => user)
+    end
+    
     begin
       glsa.save!
     rescue Exception => e
