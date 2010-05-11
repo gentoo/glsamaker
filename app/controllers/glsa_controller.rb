@@ -15,13 +15,13 @@ class GlsaController < ApplicationController
   
   def index
     if params[:show] == "requests"
-      @glsas = Glsa.find(:all)
+      @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
       @pageID = "requests"
     elsif params[:show] == "drafts"
-      @glsas = Glsa.find(:all)
+      @glsas = Glsa.find(:all, :conditions => "status = 'draft'", :order => "updated_at DESC")
       @pageID = "drafts"
     elsif params[:show] == "archive"
-      @glsas = Glsa.find(:all)
+      @glsas = Glsa.find(:all, :conditions => "status = 'release'", :order => "updated_at DESC")
       @pageID = "archive"
     else
       flash[:error] = "Don't know what to show you."
@@ -49,7 +49,7 @@ class GlsaController < ApplicationController
         flash[:notice] = "Successfully created GLSA #{glsa.glsa_id}"
         redirect_to :action => "show", :id => glsa.id
       rescue Exception => e
-        flash[:error] = e.message
+        flash.now[:error] = e.message
         render :action => "new-request"
       end
     end
@@ -96,6 +96,9 @@ class GlsaController < ApplicationController
     if @glsa.submitter.nil?
       @glsa.submitter = current_user
     end
+
+    # Force update
+    @glsa.updated_at = 0
     
     unless @glsa.save
       flash[:error] = "Errors occurred while saving the GLSA object"
