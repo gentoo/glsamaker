@@ -4,7 +4,7 @@
 <div class="box w40em">
   <input type="hidden" name="what" value="request" />
   <h2 style="margin-top: 0;"><img src="/images/icons/bug.png" alt="bug" /> Bugs</h2>
-  <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one Bug with a comma:</label></p>
+  <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one bug with a comma:</label></p>
 
   <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= h params[:bugs] %>"/></p>
   <%= observe_field :bugs, :url => { :controller => 'tools', :action => 'ajaxbugs' },
@@ -22,23 +22,22 @@
   <h2 style="margin-top: 0;"><img src="/images/icons/edit.png" alt="description" /> Title</h2>
   <p><label for="title">Either take the suggested title or enter a new custom one:</label></p>
   <div id="suggesteddescr"></div>
-  <p><textarea name="title" id="title" class="largetext nice" rows="2"></textarea></p>
+  <p><textarea name="title" id="title" class="largetext nice" rows="2"><%= h params[:title] %></textarea></p>
   
 </div>
 <br />
 <div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comment <small>(optional)</small></h2>
   <p><label for="comment">If you want to add a comment, enter it here:</label></p>
-  <p><textarea name="comment" id="comment" class="nice" rows="2"></textarea></p>
+  <p><textarea name="comment" id="comment" class="nice" rows="2"><%= h params[:comment] %></textarea></p>
 </div>
 <br />
 <%- if current_user.access >= 1 -%>
 <div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
-  <p><label for="access">Mark this request as</label>: 
+  <p><label for="access">Mark this request as</label>:
     <select name="access" id="access">
-      <option value="public" selected="selected">public</option>
-      <option value="confidential">confidential</option>
+      <%= options_for_select %w{ public confidential }, params[:access] || "public" %>
     </select>
   </p>
 </div>
