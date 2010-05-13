@@ -104,34 +104,24 @@
   <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
-        <a href="javascript:///" onclick="" title="Add package">
-          <img src="/images/icons/package-add.png" alt="Add package" />
-        </a>
-        <a href="javascript:///" onclick="" title="Remove package">
-          <img src="/images/icons/package-remove.png" alt="Remove package" />
-        </a>
+        <%= add_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>
       </span>
       <img src="/images/icons/package.png" alt="Packages" />
       Packages
     </h2>
 
-    <table class="padcells swap centercells">
+    <table class="padcells swap centercells" id="packages_table">
       <tr>
         <th><img src="/images/icons/atom.png" alt="atom" /> Atom</th>
         <th colspan="2" class="odd"><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable versions</th>
         <th colspan="2"><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected versions</th>
         <th class="odd"><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
         <th><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
+	<th></th>
       </tr>
-      <tr>
-        <td><input class="nice" type="text" name="glsa[package][atom][]" /></td>
-        <td class="odd"><select name="glsa[package][comp_vuln][]"><option value="1">&lt;=</option></select></td>
-        <td class="odd"><input class="nice" type="text" name="glsa[package][vuln][]" size="10" /></td>
-        <td><select name="glsa[package][comp_unaff][]"><option value="1">&lt;=</option></select></td>
-        <td><input class="nice" type="text" name="glsa[package][unaff][]" size="10" /></td>
-        <td class="odd"><input class="nice" type="text" name="glsa[package][arch][]" size="7" /></td>
-        <td><select name="glsa[package][auto][]"><option value="1">yes</option><option value="0">no</select></td>
-      </tr>
+      
+      <%= render :partial => 'package', :collection => @rev.packages %>
+
     </table>
     
   </div>

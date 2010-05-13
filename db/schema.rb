@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100511192546) do
+ActiveRecord::Schema.define(:version => 20100513183324) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -52,6 +52,21 @@ ActiveRecord::Schema.define(:version => 20100511192546) do
   add_index "glsas", ["requester"], :name => "glsas_users_requesters"
   add_index "glsas", ["status"], :name => "index_glsas_on_status"
   add_index "glsas", ["submitter"], :name => "glsas_users_submitters"
+
+  create_table "packages", :force => true do |t|
+    t.integer  "revision_id"
+    t.string   "atom"
+    t.string   "vulnerable_version"
+    t.string   "vulnerable_version_comp"
+    t.string   "unaffected_version"
+    t.string   "unaffected_version_comp"
+    t.string   "arch"
+    t.boolean  "automatic",               :default => true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "packages", ["revision_id"], :name => "index_packages_on_revision_id"
 
   create_table "references", :force => true do |t|
     t.integer  "revision_id"

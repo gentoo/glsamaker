@@ -74,6 +74,9 @@ class GlsaController < ApplicationController
     session[:delbugs] ||= []
     session[:addbugs][@glsa.id] = []
     session[:delbugs][@glsa.id] = []
+    
+    # Packages
+    @rev.packages.build if @rev.packages.length == 0
   end
 
   def update
@@ -146,8 +149,15 @@ class GlsaController < ApplicationController
         :title => b.summary
       )
     end
+    logger.debug params[:glsa][:package].inspect
     
-    # TODO: packages, references
+    # Packages...
+    params[:glsa][:package].reject {|e| e.has_key? 'ignore'}.each do |package|
+      logger.debug package.inspect
+      revision.packages.create(package)
+    end
+    
+    # TODO: references
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     

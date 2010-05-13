@@ -50,7 +50,19 @@ function markBugAsDeleted(bug) {
   $('bug-' + bug).getElementsByTagName('td')[0].appendChild(minus);
 }
 
-
+function markPackageAsDeleted(elem) {
+  if (elem.up('.package').hasClassName('delbug')) {
+    //elem.up('.package').select('input[value="ignore"]').each(function(s) { s.remove() });
+    $('description').value = elem.up('.package').select('input[type=hidden][value=ignore]').each(function(s) { s.remove() });
+  } else {
+    var hiddenField = document.createElement("input");
+    hiddenField.name = "glsa[package][][ignore]";
+    hiddenField.type = "hidden";
+    hiddenField.value = "ignore";
+    elem.up('.package').appendChild(hiddenField);
+  }
+  elem.up('.package').toggleClassName("delbug");
+}
 //document.observe('dom:loaded', function() {
                         
 //});

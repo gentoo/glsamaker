@@ -57,4 +57,11 @@ module GlsaHelper
     end
     simple_format_without_paragraph(words.join(" "))
   end
+  
+  def add_package_link(name)
+    link_to_function name, :title => "Add package" do |page|
+      page.insert_html :bottom, :packages_table, :partial => 'package', :object => Package.new
+    end
+  end
+        
 end

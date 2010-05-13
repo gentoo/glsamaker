@@ -1,0 +1,16 @@
+<% comps = %w{ >= > *>= *> <= < *<= *< == } -%>
+<tr class="package">
+<% fields_for "glsa[package][]", package do |pf| %>
+  <td><%= pf.text_field :atom, :class => :nice, :index => nil %></td>
+  <td class="odd"><%= pf.select :vulnerable_version_comp, comps, {}, :index => nil %></td>
+  <td class="odd"><%= pf.text_field :vulnerable_version, :class => :nice, :size => 10, :index => nil %></td>
+  <td><%= pf.select :unaffected_version_comp, comps, {}, :index => nil %></td>
+  <td><%= pf.text_field :unaffected_version, :class => :nice, :size => 10, :index => nil %></td>
+  <td class="odd"><%= pf.text_field :arch, :class => :nice, :size => 7, :index => nil %></td>
+  <td><%= pf.select :automatic, [["yes", true], ["no", false]], {}, :index => nil %></td>
+  <td><%= link_to_function(
+              image_tag('icons/package-remove.png', :alt => 'Remove package'), 
+	      'markPackageAsDeleted($(this))',
+	      :title => 'Remove package') %></td>
+<% end %>
+</tr>
