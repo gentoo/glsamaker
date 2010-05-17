@@ -62,6 +62,57 @@ function markEntryAsDeleted(elem, type) {
   }
   elem.up('.entry').toggleClassName("delbug");
 }
+
+function generateResolution() {
+  $('resolution').value = "";
+  resolution = "";
+  for (i = 0; i < $('packages_table').select('.entry').length; i++) {
+    if ($('packages_table').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
+      continue;
+    
+    atom = $('packages_table').down(".entry", i).down("#glsa_package__atom").value;
+    name = atom.split("/")[1];
+    comp = $('packages_table').down(".entry", i).down("#glsa_package__unaffected_version_comp").value;
+    version = $('packages_table').down(".entry", i).down("#glsa_package__unaffected_version").value;
+       
+    resolution += "All " + name + " users should upgrade to the latest version:\n\n\
+<code>\n\
+# emerge --sync\n\
+# emerge --ask --oneshot --verbose \"" + comp + atom + "-" + version + "\"</code>\n\n";
+  }
+  
+  
+  $('resolution').value = resolution;
+}
+
+function generateDescription() {
+  // This code is pretty ugly. You have been warned.
+  // cnt is the number of 'entry's
+  // act_cnt is cnt minus the number of to be ignored 'entry's
+  // i is used to walk down into the i'th entry element
+  // act_i is used to keep track of how many packages have been / will be added
+  
+  name = "";
+  cnt = $('packages_table').select('.entry').length;
+  act_cnt = cnt - $('packages_table').select('.entry input[type=hidden][value=ignore]').length;
+  
+  act_i = 0;
+  for (i = 0; i < cnt; i++) {
+    if ($('packages_table').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
+      continue;
+    
+        atom = $('packages_table').down(".entry", i).down("#glsa_package__atom").value;
+    if (act_cnt > 1 && act_i == act_cnt - 1) {
+      name += ", and ";
+    } else if (act_cnt > 1 && act_i != 0) {
+      name += ", ";
+    }
+    act_i++;
+    name += atom.split("/")[1];
+  }
+    
+  $('description').value = "Multiple vulnerabilities have been discovered in " + name + ". Please view the CVE identifiers referenced below for details.";
+}
 //document.observe('dom:loaded', function() {
                         
 //});
