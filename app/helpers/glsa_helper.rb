@@ -60,8 +60,14 @@ module GlsaHelper
   
   def add_package_link(name)
     link_to_function name, :title => "Add package" do |page|
-      page.insert_html :bottom, :packages_table, :partial => 'package', :object => Package.new
+      page.insert_html :bottom, :packages_table, :partial => 'package', :object => Package.new(:vulnerable_version_comp => "<")
     end
   end
-        
+
+  def add_reference_link(name)
+    link_to_function name, :title => "Add reference" do |page|
+      page.insert_html :bottom, :references_table, :partial => 'reference', :object => Reference.new
+    end
+  end
+
 end

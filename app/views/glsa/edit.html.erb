@@ -198,15 +198,21 @@
   <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
-        <a href="javascript:///" onclick="" title="Add reference">
-          <img src="/images/icons/reference-add.png" alt="Add reference" />
-        </a>
-        <a href="javascript:///" onclick="" title="Remove reference">
-          <img src="/images/icons/reference-remove.png" alt="Remove reference" />
-        </a>
+        <%= add_reference_link '<img src="/images/icons/reference-add.png" alt="Add reference" />' %>
       </span>
       <img src="/images/icons/reference.png" alt="Packages" />
       References
+
+      <table class="padcells swap centercells" id="references_table">
+      <tr>
+        <th><img src="/images/icons/atom.png" alt="title" /> Title</th>
+        <th><img src="/images/icons/reference.png" alt="URL" /> URL</th>
+        <th></th>
+      </tr>
+
+      <%= render :partial => 'reference', :collection => @rev.references %>
+
+      </table>
     </h2>
   </div>
 

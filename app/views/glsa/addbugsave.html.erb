@@ -1,11 +1,11 @@
 <% @addedBugs.each do |bug| -%>
-  <tr class="addbug" id="bug-<%= h bug %>">
-    <td><a href="javascript:///" onclick="buginfo(<%= h bug %>);"><strong><%= h bug %></strong></a><%= image_tag('icons/plus-small.png', :alt => 'Click on Save to permanently add this bug') %></td>
-    <td><%= truncate(h(Bugzilla::Bug.load_from_id(bug).summary), :length => 60) %></td>
+  <tr class="addbug" id="bug-<%= h bug.bug_id %>">
+    <td><a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);"><strong><%= h bug.bug_id %></strong></a><%= image_tag('icons/plus-small.png', :alt => 'Click on Save to permanently add this bug') %></td>
+    <td><%= truncate((h bug.summary), :length => 60) %></td>
     <td><%= link_to_remote(
               image_tag('icons/minus.png', :alt => 'Mark as deleted'), 
-              :url => delbug_url(:glsaid => @glsa.id, :bugid => bug), 
-              :success => "markBugAsDeleted('#{h(bug)}');", 
+              :url => delbug_url(:glsaid => @glsa.id, :bugid => bug.bug_id), 
+              :success => "markBugAsDeleted('#{h(bug.bug_id)}');", 
               :html => {:title => 'Mark as deleted'}) %></td>
   </tr>
 <% end -%>

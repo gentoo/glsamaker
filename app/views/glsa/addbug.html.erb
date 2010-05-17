@@ -3,9 +3,10 @@
 <% else %>
 <% form_remote_tag (
         :url => addbugsave_url(:id => @glsa_id.to_s),
-        :update => 'bugtable',
+        :update => {:success => 'bugtable'},
         :position => :bottom,
         :before => '$("addbugsubmit").value="Loading...";',
+        :after  => '$("addbugsubmit").value="Add bugs";',
         :success => 'Modalbox.hide();',
         :failure => 'alert(request.responseText);') do -%>
 <p><label for="addbugs"><img src="/images/icons/bug.png" alt="bug" />

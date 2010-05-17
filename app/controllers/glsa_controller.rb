@@ -55,7 +55,7 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
 
-    flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
+    #flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
 
     respond_to do |wants|
       wants.html { render }
@@ -76,7 +76,10 @@ class GlsaController < ApplicationController
     session[:delbugs][@glsa.id] = []
     
     # Packages
-    @rev.packages.build if @rev.packages.length == 0
+    @rev.packages.build(:vulnerable_version_comp => "<") if @rev.packages.length == 0
+    
+    # References
+    @rev.references.build if @rev.references.length == 0
   end
 
   def update
@@ -156,8 +159,13 @@ class GlsaController < ApplicationController
       logger.debug package.inspect
       revision.packages.create(package)
     end
-    
-    # TODO: references
+
+    # References
+    params[:glsa][:reference].reject {|e| e.has_key? 'ignore'}.each do |reference|
+      logger.debug reference.inspect
+      revision.references.create(reference)
+    end
+
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     
@@ -199,9 +207,18 @@ class GlsaController < ApplicationController
 
     unless @glsa.nil?
       session[:addbugs][@glsa.id] ||= []
-      (@addedBugs = Bugzilla::Bug.str2bugIDs(params[:addbugs])).each do |bugid|
-        session[:addbugs][@glsa.id] << bugid.to_i
+      @addedBugs = []
+      Bugzilla::Bug.str2bugIDs(params[:addbugs]).map do |bugid|
+        begin
+          @addedBugs << Bugzilla::Bug.load_from_id(bugid)
+          session[:addbugs][@glsa.id] << bugid.to_i
+        rescue Exception => e
+          # Silently ignore invalid bugs
+        end
+          
       end
+      
+      logger.debug session[:addbugs][@glsa.id].inspect
       
       begin
         render :layout => false
