@@ -12,7 +12,7 @@ class CreateCpes < ActiveRecord::Migration
     end
     
     add_index :cpes_cves, [:cve_id, :cpe_id]
-    add_index :cpes, :cpe
+    add_index :cpes, :cpe, :unique => true
     
     execute "ALTER TABLE cpes_cves ADD CONSTRAINT cpes_cves_cpe_id FOREIGN KEY (cpe_id) REFERENCES cpes (id)"
     execute "ALTER TABLE cpes_cves ADD CONSTRAINT cpes_cves_cve_id FOREIGN KEY (cve_id) REFERENCES cves (id)"

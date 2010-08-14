@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(:version => 20100814142647) do
     t.datetime "updated_at"
   end
 
-  add_index "cpes", ["cpe"], :name => "index_cpes_on_cpe"
+  add_index "cpes", ["cpe"], :name => "index_cpes_on_cpe", :unique => true
 
   create_table "cpes_cves", :id => false, :force => true do |t|
     t.integer  "cpe_id"
