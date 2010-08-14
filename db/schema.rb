@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100814105345) do
+ActiveRecord::Schema.define(:version => 20100814142647) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -35,6 +35,24 @@ ActiveRecord::Schema.define(:version => 20100814105345) do
 
   add_index "comments", ["glsa_id"], :name => "index_comments_on_glsa_id"
   add_index "comments", ["user_id"], :name => "comments_users_userid"
+
+  create_table "cpes", :force => true do |t|
+    t.string   "cpe"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cpes", ["cpe"], :name => "index_cpes_on_cpe"
+
+  create_table "cpes_cves", :id => false, :force => true do |t|
+    t.integer  "cpe_id"
+    t.integer  "cve_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cpes_cves", ["cpe_id"], :name => "cpes_cves_cpe_id"
+  add_index "cpes_cves", ["cve_id", "cpe_id"], :name => "index_cpes_cves_on_cve_id_and_cpe_id"
 
   create_table "cve_changes", :force => true do |t|
     t.integer  "cve_id"
