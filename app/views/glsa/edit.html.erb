@@ -87,12 +87,15 @@
   </div>
   
   <div class="box">
-    <h2 style="margin: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comments</h2>
-      <ul>
-        <% @glsa.comments.each do |c| -%>
-          <li><%=h c.text %></li>
-        <% end -%>
-      </ul>
+    <h2 style="margin: 0;">
+      <span style="float: right; margin-right: 5px; margin-top: 5px;">
+        <%= add_comment_link '<img src="/images/icons/plus.png" alt="Add comment" />' %>
+      </span>
+      <img src="/images/icons/comment.png" alt="comment" /> Comments
+    </h2>
+    <ul id="commentslist">
+      <%= render :partial => "comment", :collection => @glsa.comments %>
+    </ul>
   </div>
 </div>
 

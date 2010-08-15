@@ -263,6 +263,9 @@ span.hspacer {
   padding-right: 3em;
 }
 
+ul#commentslist  {
+  list-style-type: none;
+
 /** Tables **/
 table {
   border-spacing: 0;
@@ -389,7 +392,7 @@ a.button img {
 }
 
 /** Form controls **/
-form p {
+form p, form ul {
   padding: .5em;
   margin-bottom: .3em;
   margin-top: .3em;

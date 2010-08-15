@@ -1,0 +1,27 @@
+<li>
+  <span style="float: right;">
+    <%= if comment.read then '<img src="/images/icons/flag-green.png" alt="Done." />'
+        else '<img src="/images/icons/flag.png" alt="Todo" />' end %>
+  </span>
+   
+  <div style="float: left;">
+    <%= case comment.rating
+        when "approval"
+          '<img src="/images/icons/affected.png" alt="Approval" />'
+        when "rejection"
+          '<img src="/images/icons/unaffected.png" alt="Rejection" />'
+        else
+          '<img src="/images/icons/reference.png" alt="Neutral" />'
+        end -%>
+    <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number %></small>
+  </div>
+  
+  <div style="margin-left: 35px;"><%= comment.text %></div>
+  <div style="font-size: 2px;">&nbsp;</div>
+  
+  <div style=" float: right;"><small>-- <%= comment.user.name %>, <%= comment.created_at %></small></div>
+ 
+  <div style="float: none;">&nbsp;</div>
+</li>
+
+<% @comment_number += 1 -%>

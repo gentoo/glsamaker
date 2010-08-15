@@ -76,4 +76,10 @@ module GlsaHelper
     end
   end
   
+  def add_comment_link(name)
+    link_to_function name, :title => "Add comment" do |page|
+      page.insert_html :bottom, :commentslist, :partial => 'newcomment'
+    end
+  end
+  
 end
