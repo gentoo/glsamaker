@@ -1,0 +1,11 @@
+<tr class="<%= cycle('even', 'odd') %>">
+  <td><input type="checkbox" name="cves" id="cve-<%= h cve.id %>" value="<%= h cve.id %>" /></td>
+  <td><label for="cve-<%= h cve.id %>"><%= h cve.cve_id %></label></td>
+  <td onclick="$('cve-<%= h cve.id %>').checked = !$('cve-<%= h cve.id %>').checked;"><pre><%= word_wrap(h(cve.summary)) %></pre></td>
+  <td><%= h cve.state %></td>
+  <td>
+    <a href="javascript:///" onclick="cveinfo('<%= h cve.cve_id %>');"><strong>info</strong></a>
+    
+    
+  </td>
+</tr>

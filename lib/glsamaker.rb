@@ -12,3 +12,15 @@
 require 'glsamaker/http'
 require 'glsamaker/portage'
 require 'glsamaker/diff'
+
+module Glsamaker
+module_function
+def help
+  Helper.instance
+end
+
+class Helper
+  include Singleton
+  include ActionView::Helpers::TextHelper
+end
+end

@@ -63,6 +63,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.bugzie '/tools/bug/:id/:what', :controller => 'tools', :action => 'bugzie'
   
+  
+  map.cve '/cve/list.:format', :controller => 'cve', :action => 'list'
+  
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end

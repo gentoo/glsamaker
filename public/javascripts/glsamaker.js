@@ -134,6 +134,15 @@ function generateDescription() {
     
   $('description').value = "Multiple vulnerabilities have been discovered in " + name + ". Please view the CVE identifiers referenced below for details.";
 }
+
+function cveinfo(cveid) {
+  Modalbox.show("/cve/info/" + cveid, {title: cveid, width: 800});
+}
+
+function cvepopup(cveid) {
+  window.open("/cve/info/" + cveid, "cvepopup-" + cveid, "width=500, height=400,status=no,menubar=no,toolbar=no,resizable=no");
+}
+
 //document.observe('dom:loaded', function() {
                         
 //});

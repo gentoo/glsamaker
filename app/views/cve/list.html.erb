@@ -1,0 +1,155 @@
+<h1>CVE List</h1>
+
+<script language="JavaScript" type="text/javascript">
+// formatter for highlighted strings
+var hlt = '';
+function formatHlted (t) {
+    return t;
+    return hlt ? (t || '').replace(hlt, '<strong>' + hlt + '</strong>') : t;
+}
+
+function toolbar() {
+  return [
+    { view: 'Image', rect: '0 0 220 57', anchors: 'left top', src: '/images/cvetool-logo.png' },
+    { view: 'TextField', rect: '5 60 189 22', anchors: 'left top right', placeholder: 'search', id: 'quicksearch' },
+    // assign
+    { view: 'Image', rect: '5 135 16 16', anchors: 'left top', src: '/images/icons/bug_add.png' },
+    { view: 'Label', rect: '25 132 188 24', anchors: 'left top right', text: 'Assign selected CVEs to bug' },
+    { view: 'TextField', rect: '5 160 135 22', anchors: 'left top right', placeholder: 'bug' },
+    { view: 'Button', rect: '145 159 50 24', anchors: 'top right', text: 'Assign', id: 'cve-assign' },
+    // file-new-bug
+    { view: 'Image', rect: '5 200 16 16', anchors: 'left top', src: '/images/icons/bug_new.png' },
+    { view: 'Label', rect: '25 198 188 24', anchors: 'left top right', text: 'New bug from selected CVEs' },
+    { view: 'Button', rect: '5 225 188 24', anchors: 'left top right', text: 'File a new bug', id: 'cve-file' },    
+    // mark-as
+    { view: 'Image', rect: '5 265 16 16', anchors: 'left top', src: '/images/icons/stamp.png' },
+    { view: 'Label', rect: '25 262 188 24', anchors: 'left top right', text: 'Mark selected CVEs as…' },
+    { view: 'Button', rect: '5 290 60 24', anchors: 'left top' , text: 'NFU', id: 'cve-mark-nfu' },
+    { view: 'Button', rect: '70 290 60 24', anchors: 'left top', text: 'LATER', id: 'cve-mark-later' },
+    { view: 'Button', rect: '135 290 60 24', anchors: 'left top', text: 'INVALID', id: 'cve-mark-invalid' },    
+    // add-a-note
+    { view: 'Image', rect: '5 330 16 16', anchors: 'left top', src: '/images/icons/note.png' },
+    { view: 'Label', rect: '25 327 188 24', anchors: 'left top right', text: 'Add a note to selected CVEs' },
+    { view: 'MultilineTextField', rect: '5 350 189 50', anchors: 'left top right', placeholder: 'Note', id: 'cve-note-text' },    
+    { view: 'Button', rect: '135 405 60 24', anchors: 'right top', text: 'Add note', id: 'cve-add-note' },
+    // mark-as
+    { view: 'Image', rect: '5 445 16 16', anchors: 'left top', src: '/images/icons/info.png' },
+    { view: 'Label', rect: '25 442 188 24', anchors: 'left top right', text: 'Info about selected CVEs' },
+    { view: 'Button', rect: '5 470 60 24', anchors: 'left top' , text: 'Details', id: 'cve-details' },
+    { view: 'Button', rect: '70 470 60 24', anchors: 'left top', text: 'Ebuilds', id: 'cve-ebuilds' },
+    { view: 'Button', rect: '135 470 60 24', anchors: 'left top', text: 'Refrncs', id: 'cve-references' },
+    
+    // bottom stuff
+    { view: 'Button', rect: '5 940 188 24', anchors: 'left bottom right', text: 'Reload table', id: 'reload-table' },
+    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Close' }
+  ];
+}
+
+uki(
+  { view: 'HSplitPane', rect: '1000 1000', anchors: 'left top right bottom', handleWidth: 1, handlePosition: 199, leftMin: 150, rightMin: 400,
+      leftPane: { background: '#D3CFE5', childViews: toolbar() },
+      rightChildViews: [
+        { view: 'Table', rect: '0 0 800 1000', minSize: '0 200', anchors: 'left top right bottom', columns: [
+          { view: 'table.NumberColumn', label: 'ID', width: 40, sort: 'ASC' },
+          { view: 'table.CustomColumn', label: 'CVE ID', width: 100, formatter: formatHlted },
+          { view: 'table.CustomColumn', label: 'Summary', resizable: true, minWidth: 300, width: 500, formatter: formatHlted },
+          { view: 'table.CustomColumn', label: 'State', width: 70, formatter: formatHlted },           
+        ], multiselect: true, style: {fontSize: '12px', lineHeight: '12px'} },
+        { view: 'Label', rect: '200 200 400 20', anchors: 'top', textAlign: 'center', text: 'Loading...', id: 'loading' }
+        ]
+  }
+).attachTo( window, '1000 1000' );
+
+uki("#reload-table").click(
+  function() { reloadTable(); }
+);
+
+uki("#cve-details").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+    
+    if (sel.length > 1) {
+      alert("Please select exactly one CVE");
+      return false;
+    }
+    
+    cvepopup(sel[0][1]);
+  }
+);
+
+// searchable model
+window.DummyModel = uki.newClass(Searchable, new function() {
+    this.init = function(data) {
+        this.items = data;
+        uki.each(this.items, function(i, row) {
+            row.searchIndex = row[1].toLowerCase();
+        })
+    };
+    
+    this.matchRow = function(row, iterator) {
+        return row.searchIndex.indexOf(iterator.query) > -1;
+    };
+});
+
+// dinamicly load library json
+initCVETable = function(data) {
+    uki('#loading').visible(false);
+    var model = new DummyModel(data),
+        lastQuery = '',
+        table = uki('Table');
+        
+    model.bind('search.foundInChunk', function(chunk) {
+        table.data(table.data().concat(chunk)).layout();
+    });
+    
+    table.find('Header').bind('columnClick', function(e) {
+        var header = this;
+            
+        if (e.column.sort() == 'ASC') e.column.sort('DESC');
+        else e.column.sort('ASC');
+        
+        header.redrawColumn(e.columnIndex);
+        uki.each(header.columns(), function(i, col) {
+            if (col != e.column && col.sort()) {
+                col.sort('');
+                header.redrawColumn(i);
+            }
+        });
+        model.items = e.column.sortData(model.items);
+        table.data(model.items);
+    })
+        
+    table.data(model.items);
+    
+    uki('#quicksearch').bind('keyup click', function() {
+        if (this.value().toLowerCase() == lastQuery) return;
+        lastQuery = this.value().toLowerCase();
+        if (lastQuery.match(/\S/)) {
+            hlt = lastQuery;
+            table.data([]);
+            model.search(lastQuery);
+        } else {
+            hlt = '';
+            table.data(model.items);
+        }
+    });
+    document.body.className += '';
+};
+
+function reloadTable() {
+  new Ajax.Request('/cve/list.json', {
+    onSuccess: function(response) {
+      initCVETable(response.responseJSON);
+    },
+    onFailure: function(response) {
+      alert("Could not load CVE data.");
+      uki('#loading').text("Loading CVE data failed. Please try again later.");
+    }
+  });
+}
+
+reloadTable();
+
+</script>
+
+<div id="table" style="position: absolute; top: 100px;">x</div>

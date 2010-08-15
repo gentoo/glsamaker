@@ -115,7 +115,8 @@ body#new #menu li a.new,
 body#requests #menu li a.requests,
 body#drafts #menu li a.drafts,
 body#archive #menu li a.archive,
-body#secunia #menu li a.secunia {
+body#secunia #menu li a.secunia,
+body#cve #menu li a.cve {
   background: #fff;
   color: #555; 
   opacity: 1;
@@ -440,6 +441,23 @@ textarea.nice, input.nice {
 
 .diff_out {
   background-color: #7E9557;
+}
+
+/** cve tool **/
+div#cve-sidebar {
+  float: right;
+  width: 20%;
+  padding: .5em;
+}
+
+div#cve-sidebar div.section {
+  font-size: 120%;
+  padding: .5em;
+  border-bottom: 1px solid #8875B0;
+}
+
+table#cvetable {
+  cursor: default;
 }
 
 @import url("/stylesheets/screen.css");
