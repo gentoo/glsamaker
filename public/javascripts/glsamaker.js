@@ -66,6 +66,9 @@ function markEntryAsDeleted(elem, type) {
 function generateResolution() {
   $('resolution').value = "";
   resolution = "";
+  unaffected_atoms = new Array();
+  
+  // First find and list all upgrade paths...
   for (i = 0; i < $('packages_table_unaffected').select('.entry').length; i++) {
     if ($('packages_table_unaffected').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
       continue;
@@ -79,9 +82,26 @@ function generateResolution() {
 <code>\n\
 # emerge --sync\n\
 # emerge --ask --oneshot --verbose \"" + comp + atom + "-" + version + "\"</code>\n\n";
+
+    unaffected_atoms.push(atom);
   }
-  
-  
+	
+  // Check if there are any packages that only have vulnerable entries.
+  // These need to be unmerged.
+  for (i = 0; i < $('packages_table_vulnerable').select('.entry').length; i++) {
+    if ($('packages_table_vulnerable').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0) 
+      continue;
+
+    atom = $('packages_table_vulnerable').down(".entry", i).down("#glsa_package__atom").value;
+    if (unaffected_atoms.indexOf(atom) == -1) {
+      name = atom.split("/")[1];
+  		
+      resolution += "We recommend that users unmerge " + name + ":\n\n\
+<code>\n\
+# emerge --unmerge \"" + atom + "\"</code>";
+    }
+  }
+
   $('resolution').value = resolution;
 }
 
