@@ -118,7 +118,8 @@ class GlsaController < ApplicationController
     revision.synopsis = params[:glsa][:synopsis]
     # TODO: secure
     revision.access = params[:glsa][:access]
-    revision.product = params[:glsa][:keyword]
+    revision.severity = params[:glsa][:severity]
+    revision.product = params[:glsa][:product]
     revision.description = params[:glsa][:description]
     revision.background = params[:glsa][:background]
     revision.impact = params[:glsa][:impact]

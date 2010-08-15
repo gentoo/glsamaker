@@ -4,10 +4,10 @@ class CreateRevisions < ActiveRecord::Migration
       t.integer :glsa_id
       t.integer :revid
       t.string :title
-      t.string :access
+      t.string :access, :default => "remote"
       t.string :product
       t.string :category
-      t.string :severity
+      t.string :severity, :default => "normal"
       t.text :synopsis
       t.text :background
       t.text :description

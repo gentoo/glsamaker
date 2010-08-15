@@ -8,7 +8,7 @@
 <% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
 
 <% form_tag :action => 'update', :id => @glsa do |f| -%>
-<div style="float: right; width: 34%;">
+<div style="float: right; width: 44%;">
   <div class="box">
     <h2 style="margin: 0;"><img src="/images/icons/info.png" alt="info" />
       GLSA <%= @glsa.status %> <%= @glsa.glsa_id %> &mdash; Revision <%= @glsa.last_revision.revid %></h2>
@@ -37,20 +37,17 @@
     <h2><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">
-        <option value="local">local</option>
-        <option value="remote">remote</option>
-        <option value="both">local, remote</option>
+        <%= options_for_select [['local', 'local'], ['remote', 'remote'], ['local, remote', 'both']], @rev.access %>
       </select>
     </p>
     <p><label for="severity"><img src="/images/icons/severity.png" alt="severity" /> Severity:</label>
       <select name="glsa[severity]" id="severity">
-        <option value="low">low</option>
-        <option value="normal">normal</option>
-        <option value="high">high</option>
+        <%= options_for_select %w{ low normal high }, @rev.severity %>
       </select>
     </p>
     <p><label for="keyword"><img src="/images/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
-      <input type="text" name="glsa[keyword]" id="keyword" class="nice" /></p>
+     
+      <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %></p>
     
   </div>
 
@@ -62,8 +59,8 @@
         </a>
       </span>
       <label for="background"><img src="/images/icons/background.png" alt="background" /> Background</label>
-      <p><textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea></p>
-    </h2>
+    </h2>  
+    <p><textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea></p>
   </div>
 
   <div class="box">
