@@ -1,0 +1,54 @@
+<% if @cve == nil %>
+
+<h2 style="margin-top: 0;"><img src="/images/icons/error.png" alt="error" /> Invalid CVE ID</h2>
+<p>There is no such CVE.</p>
+
+<% else %>
+<script language="JavaScript" type="text/javascript">
+
+// page layout
+uki(
+    { view: 'Box', rect: '0 0 500 30', minSize: '500 400', anchors: 'top left right width', childViews: [
+        { view: 'Box', background: 'theme(panel)', rect: '0 0 500 30', anchors: 'top left right width', childViews: [
+          { view: 'Label', rect: '5 5 400 20', html: '<h2 style="margin: 0;"><%= @cve.cve_id %></h2>', anchors: 'top left'},
+          { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' },
+        ] },
+        { view: 'Box',  rect: '0 30 500 370', anchors: 'top left right width', childViews: [
+          { view: 'Label', rect: '5 5 495 50', anchors: 'left top right', text: '<%= h(make_js_safe(@cve.summary)) %>', textSelectable: true, multiline: true}
+
+        ] }
+    ]}
+).attachTo(window, '500 400');
+
+
+uki('#close').click(
+  function() {
+    window.close();
+  }
+);
+</script>
+
+<!--
+<h2 style="margin-top: 0;"><%= h @cve.summary %></h2>
+
+<div style="height: 300px; overfloy-y: scroll;">
+  <h3>References</h3>
+  <ol class="references" style="padding-right: 1em;">
+    <% ref_id = 1 ; @cve.references.each do |ref| %>
+      <li id="ref-<%= ref_id %>"><%= link_to ref.uri, ref.title %></li>
+    <% ref_id +=1 ; end %>
+  </ol>
+
+
+  <h3>Affected CPEs</h3>
+  <ol class="comments" style="padding-right: 1em;">
+    <% cpe_id = 1 ; @cve.cpes.each do |cpe| %>
+    <li id="cpe-<%= cpe_id %>"><%= h(cpe.cpe) %></li>
+    <% cpe_id +=1 ; end %>
+  </ol>
+</div>
+
+<br style="clear: both;" />
+-->
+
+<% end %>
