@@ -34,6 +34,15 @@
   </div>
   
   <div class="box">
+  <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
+  <p><label for="access">This GLSA is</label>:
+    <select name="glsa[restricted]">
+      <%= options_for_select %w{ public confidential }, @glsa.restricted ? "confidential" : "public" %>
+    </select>
+  </p>
+  </div>
+  
+  <div class="box">
     <h2><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">

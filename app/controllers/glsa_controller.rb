@@ -102,6 +102,8 @@ class GlsaController < ApplicationController
 
     @glsa.status = "draft" if @glsa.status == "request"
     
+    @glsa.restricted = (params[:glsa][:restricted] == "confidential")
+    
     # Force update
     @glsa.updated_at = 0
     
