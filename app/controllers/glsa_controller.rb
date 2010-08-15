@@ -173,6 +173,12 @@ class GlsaController < ApplicationController
       revision.references.create(reference)
     end
 
+    # Comments
+    @glsa.comments.each do |comment|
+      comment.read = params["commentread-#{comment.id}"] == "true"
+      comment.save
+    end
+
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     

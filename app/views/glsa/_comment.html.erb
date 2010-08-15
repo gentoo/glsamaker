@@ -1,7 +1,12 @@
 <li>
+  <input type="hidden" name="commentread-<%= comment.id %>" id="commentread-<%= comment.id %>" value="<%= comment.read ? "true" : "false" %>" />
   <span style="float: right;">
-    <%= if comment.read then '<img src="/images/icons/flag-green.png" alt="Done." />'
-        else '<img src="/images/icons/flag.png" alt="Todo" />' end %>
+    <%= link_to_function (comment.read ? '<img src="/images/icons/flag-green.png" alt="Done." />' : '<img src="/images/icons/flag.png" alt="Todo" />'), 
+                              "toggleCommentRead(#{comment.id})",
+                              :title => 'Toggle read status',
+                              :id => "commentflag-#{comment.id}"  %>
+        
+    </a>        
   </span>
    
   <div style="float: left;">

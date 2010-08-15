@@ -41,6 +41,7 @@ function buginfo(bugid) {
 
 /** Marks a bug row as deleted **/
 function markBugAsDeleted(bug) {
+  if ($('bug-' + bug).className == 'delbug') return;
   $('bug-' + bug).className = 'delbug';
   
   var minus = new Image();
@@ -133,6 +134,17 @@ function generateDescription() {
   }
     
   $('description').value = "Multiple vulnerabilities have been discovered in " + name + ". Please view the CVE identifiers referenced below for details.";
+}
+
+function toggleCommentRead(comment) {
+    if ($('commentread-' + comment).value == "true") {
+        $('commentread-' + comment).value = "false";
+        $('commentflag-' + comment).update('<img src="/images/icons/flag.png" alt="Todo" />');
+    }
+    else {
+        $('commentread-' + comment).value = "true";
+        $('commentflag-' + comment).update('<img src="/images/icons/flag-green.png" alt="Done." />');        
+    }    
 }
 
 function cveinfo(cveid) {
