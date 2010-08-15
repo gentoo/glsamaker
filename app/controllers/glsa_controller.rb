@@ -76,7 +76,8 @@ class GlsaController < ApplicationController
     session[:delbugs][@glsa.id] = []
     
     # Packages
-    @rev.packages.build(:vulnerable_version_comp => "<", :arch => "*") if @rev.packages.length == 0
+    @rev.vulnerable_packages.build(:comp => "<", :arch => "*") if @rev.vulnerable_packages.length == 0
+    @rev.unaffected_packages.build(:comp => ">=", :arch => "*") if @rev.unaffected_packages.length == 0
     
     # References
     @rev.references.build if @rev.references.length == 0

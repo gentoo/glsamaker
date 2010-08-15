@@ -103,27 +103,34 @@
   
   <div class="box">
     <h2 style="margin: 0;">
-      <span style="float: right; margin-right: 5px; margin-top: 5px;">
-        <%= add_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>
-      </span>
       <img src="/images/icons/package.png" alt="Packages" />
       Packages
     </h2>
 
-    <table class="padcells swap centercells" id="packages_table">
+    <table class="padcells swap centercells" id="packages_table_vulnerable">
       <tr>
         <th><img src="/images/icons/atom.png" alt="atom" /> Atom</th>
-        <th colspan="2" class="odd"><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable versions</th>
-        <th colspan="2"><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected versions</th>
-        <th class="odd"><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
-        <th><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
-	<th></th>
+        <th class="odd" colspan="2">Version</th>
+        <th><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
+        <th class="odd"><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
+  
       </tr>
       
-      <%= render :partial => 'package', :collection => @rev.packages %>
-
-    </table>
-    
+	  <tr>
+	  	<td><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable
+        (<%= add_vulnerable_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>	
+	  </tr>
+	  <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
+	</table>
+	
+	<table class="padcells swap centercells" id="packages_table_unaffected">
+      <tr>
+      	<td><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected
+		(<%= add_unaffected_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>
+	  </tr>
+	  <%= render :partial => 'package', :collection => @rev.unaffected_packages %>
+	  
+    </table>        
   </div>
   
   <div class="box" id="desc-box">

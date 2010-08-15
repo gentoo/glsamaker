@@ -55,13 +55,12 @@ ActiveRecord::Schema.define(:version => 20100513183324) do
 
   create_table "packages", :force => true do |t|
     t.integer  "revision_id"
+    t.string   "my_type"
     t.string   "atom"
-    t.string   "vulnerable_version"
-    t.string   "vulnerable_version_comp"
-    t.string   "unaffected_version"
-    t.string   "unaffected_version_comp"
+    t.string   "version"
+    t.string   "comp"
     t.string   "arch"
-    t.boolean  "automatic",               :default => true
+    t.boolean  "automatic",   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -66,14 +66,14 @@ function markEntryAsDeleted(elem, type) {
 function generateResolution() {
   $('resolution').value = "";
   resolution = "";
-  for (i = 0; i < $('packages_table').select('.entry').length; i++) {
-    if ($('packages_table').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
+  for (i = 0; i < $('packages_table_unaffected').select('.entry').length; i++) {
+    if ($('packages_table_unaffected').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
       continue;
     
-    atom = $('packages_table').down(".entry", i).down("#glsa_package__atom").value;
+    atom = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__atom").value;
     name = atom.split("/")[1];
-    comp = $('packages_table').down(".entry", i).down("#glsa_package__unaffected_version_comp").value;
-    version = $('packages_table').down(".entry", i).down("#glsa_package__unaffected_version").value;
+    comp = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__comp").value;
+    version = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__version").value;
        
     resolution += "All " + name + " users should upgrade to the latest version:\n\n\
 <code>\n\
@@ -93,15 +93,16 @@ function generateDescription() {
   // act_i is used to keep track of how many packages have been / will be added
   
   name = "";
-  cnt = $('packages_table').select('.entry').length;
-  act_cnt = cnt - $('packages_table').select('.entry input[type=hidden][value=ignore]').length;
+  cnt = $('packages_table_vulnerable').select('.entry').length;
+  act_cnt = cnt - $('packages_table_vulnerable').select('.entry input[type=hidden][value=ignore]').length;
   
   act_i = 0;
   for (i = 0; i < cnt; i++) {
-    if ($('packages_table').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
+    if ($('packages_table_vulnerable').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
       continue;
     
-        atom = $('packages_table').down(".entry", i).down("#glsa_package__atom").value;
+    atom = $('packages_table_vulnerable').down(".entry", i).down("#glsa_package__atom").value;
+		
     if (act_cnt > 1 && act_i == act_cnt - 1) {
       name += ", and ";
     } else if (act_cnt > 1 && act_i != 0) {

@@ -58,12 +58,18 @@ module GlsaHelper
     simple_format_without_paragraph(words.join(" "))
   end
   
-  def add_package_link(name)
+  def add_vulnerable_package_link(name)
     link_to_function name, :title => "Add package" do |page|
-      page.insert_html :bottom, :packages_table, :partial => 'package', :object => Package.new(:vulnerable_version_comp => "<", :arch => "*")
+      page.insert_html :bottom, :packages_table_vulnerable, :partial => 'package', :object => Package.new(:comp => "<", :arch => "*", :my_type => "vulnerable")
     end
   end
 
+  def add_unaffected_package_link(name)
+    link_to_function name, :title => "Add package" do |page|
+      page.insert_html :bottom, :packages_table_unaffected, :partial => 'package', :object => Package.new(:comp => ">=", :arch => "*", :my_type => "unaffected")
+    end
+  end
+  
   def add_reference_link(name)
     link_to_function name, :title => "Add reference" do |page|
       page.insert_html :bottom, :references_table, :partial => 'reference', :object => Reference.new

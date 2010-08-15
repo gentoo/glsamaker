@@ -15,6 +15,8 @@ class Revision < ActiveRecord::Base
   has_many :bugs
   has_many :references
   has_many :packages
+  has_many :vulnerable_packages, :class_name => "Package", :conditions => { :my_type => "vulnerable" }
+  has_many :unaffected_packages, :class_name => "Package", :conditions => { :my_type => "unaffected" }
   belongs_to :user
   
   validates_numericality_of :user_id, :message => "user id needed"
