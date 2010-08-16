@@ -8,6 +8,8 @@
 #
 # For more information, see the LICENSE file.
 
+require 'glsamaker/helpers'
+
 class CVE < ActiveRecord::Base
   has_many :references, :class_name => "CVEReference"
   has_many :comments, :class_name => "CVEComment"

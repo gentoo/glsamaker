@@ -1,6 +1,5 @@
 # ===GLSAMaker v2
-#  Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
-#  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
+#  Copyright (C) 2010 Alex Legler <a3li@gentoo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -9,6 +8,14 @@
 #
 # For more information, see the LICENSE file.
 
-require 'glsamaker/http'
-require 'glsamaker/portage'
-require 'glsamaker/diff'
+module Glsamaker
+  module_function
+  def help
+    Helper.instance
+  end
+
+  class Helper
+    include Singleton
+    include ::ActionView::Helpers::TextHelper
+  end
+end
