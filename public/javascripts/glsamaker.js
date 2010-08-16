@@ -26,6 +26,10 @@ function addBugDialog(glsaid) {
   Modalbox.show("/glsa/"+glsaid+"/addbug", {title: "Add bugs", width: 600});
 }
 
+function addCommentDialog(glsaid) {
+  Modalbox.show("/glsa/"+glsaid+"/addcomment", {title: "Add comments", width: 600});
+}
+
 function backgroundDialog() {
   Modalbox.show("/tools/background/?id=dev-lang/ruby", {title: "Get background", width: 600});
 }

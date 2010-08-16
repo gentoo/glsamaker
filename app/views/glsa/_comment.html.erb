@@ -12,11 +12,11 @@
   <div style="float: left;">
     <%= case comment.rating
         when "approval"
-          '<img src="/images/icons/affected.png" alt="Approval" />'
+          '<img src="/images/icons/unaffected.png" alt="Approval" title="Approval" />'
         when "rejection"
-          '<img src="/images/icons/unaffected.png" alt="Rejection" />'
+          '<img src="/images/icons/affected.png" alt="Rejection" title="Rejection" />'
         else
-          '<img src="/images/icons/reference.png" alt="Neutral" />'
+          '<img src="/images/icons/reference.png" alt="Neutral" title="Neutral" />'
         end -%>
     <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number %></small>
   </div>

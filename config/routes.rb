@@ -48,8 +48,10 @@ ActionController::Routing::Routes.draw do |map|
   map.addbugsave '/glsa/:id/addbug/save', :controller => 'glsa', :action => 'addbugsave'
   
   map.delbug '/glsa/:id/delbug/:bugid', :controller => 'glsa', :action => 'delbug'
-  
-  
+ 
+  # Adding a comment to a GLSA
+  map.addcomment '/glsa/:id/addcomment', :controller => 'glsa', :action => 'addcomment'
+  map.addcommentsave '/glsa/:id/addcomment/save', :controller => 'glsa', :action => 'addcommentsave'
   
   map.requests '/glsa/requests', :controller => 'glsa', :action => 'requests'
   map.drafts   '/glsa/drafts'  , :controller => 'glsa', :action => 'drafts'

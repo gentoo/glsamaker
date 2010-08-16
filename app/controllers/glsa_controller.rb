@@ -178,7 +178,7 @@ class GlsaController < ApplicationController
       comment.read = params["commentread-#{comment.id}"] == "true"
       comment.save
     end
-
+    
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     
@@ -260,6 +260,38 @@ class GlsaController < ApplicationController
   end
 
   def comment
+  end
+
+  def addcomment
+    begin
+      @glsa_id = Integer(params[:id])
+    rescue Exception => e
+      @glsa_id = nil
+    end
+    render :layout => false
+  end
+  
+  def addcommentsave
+    @glsa = Glsa.find(params[:id].to_i)
+
+    unless @glsa.nil?
+      comment = params[:newcomment]
+      
+      if comment['text'].strip != ''
+        comment = @glsa.comments.build(comment)
+        comment.user = current_user
+        comment.save
+      end     
+      
+      begin
+        @comment_number = @glsa.comments.count
+        render :partial => "comment", :object => comment
+      rescue Exception => e
+        render :text => "Error: #{e.message}", :status => 500
+      end
+    else
+      render :text => "fail", :status => 500
+    end
   end
 
 end

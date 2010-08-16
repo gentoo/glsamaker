@@ -1,3 +1,4 @@
+
 <h1>
   <span class="greytext floatright smalltext">
     &larr; Previous revision | <strong>Revision <%= @glsa.last_revision.revid %></strong> | Next revision &rarr;
@@ -89,13 +90,19 @@
   <div class="box">
     <h2 style="margin: 0;">
       <span style="float: right; margin-right: 5px; margin-top: 5px;">
-        <%= add_comment_link '<img src="/images/icons/plus.png" alt="Add comment" />' %>
+        <a href="javascript://" onclick="addCommentDialog(<%= @glsa.id %>);" title="Add comment">
+          <img src="/images/icons/plus.png" alt="Add comment" />
+        </a>
       </span>
       <img src="/images/icons/comment.png" alt="comment" /> Comments
     </h2>
     <ul id="commentslist">
       <%= render :partial => "comment", :collection => @glsa.comments %>
     </ul>
+  </div>
+  
+  <div style="text-align: right;">
+    <input type="submit" class="button" style="font-size: 150%;" value="Save &rarr;" />
   </div>
 </div>
 
@@ -240,7 +247,4 @@
 
 </div>
 
-<div style="text-align: right;">
-  <input type="submit" class="button" style="font-size: 150%;" value="Save &rarr;" />
-</div>
 <%- end -%>
