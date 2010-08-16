@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20100814142647) do
   create_table "cve_comments", :force => true do |t|
     t.integer  "cve_id"
     t.integer  "user_id"
+    t.boolean  "confidential", :default => false
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
