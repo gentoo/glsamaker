@@ -68,14 +68,20 @@ uki("#cve-details").click(
   function() {
     var sel = uki('Table').selectedRows();
     
-    if (sel.length > 1) {
-      alert("Please select exactly one CVE");
+    if (sel.length > 15) {
+      alert("I'm not opening more than 15 windows...");
       return false;
     }
-    
-    cvepopup(sel[0][1]);
+
+    for(var i = 0; i < sel.length; i++) {
+      cvepopup(sel[i][1]);
+    }
   }
 );
+
+uki('Table').bind('dblclick', function() { 
+  cvepopup(uki('Table').selectedRow()[1]);
+});
 
 // searchable model
 window.DummyModel = uki.newClass(Searchable, new function() {
