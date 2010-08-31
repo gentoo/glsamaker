@@ -4,7 +4,7 @@ class CreateCveChanges < ActiveRecord::Migration
       t.integer :cve_id
       t.integer :user_id
       t.string :action
-      t.sring :object
+      t.string :object
       t.timestamps
     end
     
