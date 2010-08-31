@@ -39,6 +39,30 @@ class CveController < ApplicationController
   def store
   end
 
+
+  def nfu
+    @cves = params[:cves].split(',').map{|cve| Integer(cve)}
+    logger.debug { "NFU CVElist: " + @cves.inspect }
+    
+    @cves.each do |cve_id|
+      cve = CVE.find(cve_id)
+      raise unless cve
+      
+      cve.state = "NFU"
+      cve.save!
+      
+      ch = CVEChange.new
+      ch.user = current_user
+      ch.cve = cve
+      ch.action = 'nfu'
+      ch.save!
+    end
+    
+    render :text => "ok"
+  rescue Exception => e
+    render :text => e.message, :status => 500
+  end
+
   def commit
   end
 
