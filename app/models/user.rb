@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   has_many :submitted_glsas, :class_name => "Glsa", :foreign_key => "submitter"
   has_many :requested_glsas, :class_name => "Glsa", :foreign_key => "requester"
   has_many :bugreadymade_glsas, :class_name => "Glsa", :foreign_key => "bugreadymaker"
+  has_many :cve_changes, :class_name => "CVEChange", :foreign_key => "user_id"
   
   has_many :revisions
 

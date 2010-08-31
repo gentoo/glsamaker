@@ -14,6 +14,7 @@ class CVE < ActiveRecord::Base
   has_many :references, :class_name => "CVEReference"
   has_many :comments, :class_name => "CVEComment"
   has_and_belongs_to_many :cpes, :class_name => "CPE"
+  has_many :changes, :class_name => "CVEChange", :foreign_key => "cve_id"
   
   def to_s
     str = "#{self.cve_id} #{"(http://nvd.nist.gov/nvd.cfm?cvename=%s):" % self.cve_id}\n"
