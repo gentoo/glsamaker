@@ -10,12 +10,12 @@ function formatHlted (t) {
 
 function toolbar() {
   return [
-    { view: 'Image', rect: '0 0 220 57', anchors: 'left top', src: '/images/cvetool-logo.png' },
+    { view: 'Image', rect: '0 0 220 57', anchors: 'left top', src: '/images/cvetool-logo.png', id: 'logo' },
     { view: 'TextField', rect: '5 60 189 22', anchors: 'left top right', placeholder: 'search', id: 'quicksearch' },
     // assign
     { view: 'Image', rect: '5 135 16 16', anchors: 'left top', src: '/images/icons/bug_add.png' },
     { view: 'Label', rect: '25 132 188 24', anchors: 'left top right', text: 'Assign selected CVEs to bug' },
-    { view: 'TextField', rect: '5 160 135 22', anchors: 'left top right', placeholder: 'bug' },
+    { view: 'TextField', rect: '5 160 135 22', anchors: 'left top right', placeholder: 'bug', id: 'assign-bug-nr' },
     { view: 'Button', rect: '145 159 50 24', anchors: 'top right', text: 'Assign', id: 'cve-assign' },
     // file-new-bug
     { view: 'Image', rect: '5 200 16 16', anchors: 'left top', src: '/images/icons/bug_new.png' },
@@ -41,7 +41,7 @@ function toolbar() {
     
     // bottom stuff
     { view: 'Button', rect: '5 940 188 24', anchors: 'left bottom right', text: 'Reload table', id: 'reload-table' },
-    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Close' }
+    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Close', id: 'close' }
   ];
 }
 
@@ -54,14 +54,123 @@ uki(
           { view: 'table.CustomColumn', label: 'CVE ID', width: 100, formatter: formatHlted },
           { view: 'table.CustomColumn', label: 'Summary', resizable: true, minWidth: 300, width: 500, formatter: formatHlted },
           { view: 'table.CustomColumn', label: 'State', width: 70, formatter: formatHlted },           
-        ], multiselect: true, style: {fontSize: '12px', lineHeight: '12px'} },
-        { view: 'Label', rect: '200 200 400 20', anchors: 'top', textAlign: 'center', text: 'Loading...', id: 'loading' }
+        ], multiselect: true, style: {fontSize: '12px', lineHeight: '12px'} } //,
+//        { view: 'Label', rect: '200 200 400 20', anchors: 'top', textAlign: 'center', text: 'Loading...', id: 'loading' }
         ]
   }
 ).attachTo( window, '1000 1000' );
 
+uki(
+  { view: 'Popup', rect: '500 300', anchors: 'left', id: 'assign-popup', relativeTo: uki('#cve-assign'), childViews: [
+      { view: 'Label', rect: '10 10 480 20', anchors: 'top', html: '<strong>The following changes will be made to bug XXXXXX</strong>', id: 'cve-assign-title'},
+      { view: 'Button', rect: '345 265 70 24', anchors: 'bottom right', id: 'cve-assign-cancel', text: 'Cancel' },
+      { view: 'Button', rect: '420 265 70 24', anchors: 'bottom right', id: 'cve-assign-go', text: 'Assign' }
+    ]
+  }
+);
+
+uki(
+  { view: 'Popup', rect: '500 300', anchors: 'left', id: 'nfu-popup', relativeTo: uki('#cve-mark-nfu'), childViews: [
+      { view: 'Label', rect: '10 10 480 20', anchors: 'top', html: '<strong>The following CVEs will be marked as NFU:</strong>', id: 'cve-assign-title'},
+      { view: 'ScrollableList', rect: '10 35 480 220', anchors: 'top left right bottom', id: 'cve-nfu-list' },
+      { view: 'Button', rect: '345 265 70 24', anchors: 'bottom right', id: 'cve-nfu-cancel', text: 'Cancel' },
+      { view: 'Button', rect: '420 265 70 24', anchors: 'bottom right', id: 'cve-nfu-go', text: 'Commit' }
+    ]
+  }
+);
+
+uki(
+  { view: 'Popup', rect: '100 20', id: 'loading', anchors: '', relativeTo: uki('#logo'), hideOnClick: false, childViews: [
+      { view: 'Label', rect: '20 2 98 18', anchors: 'top', text: 'LOADING...', textAlign: 'center', id: 'loading-text'},
+    ]
+  }
+).show();
+
 uki("#reload-table").click(
   function() { reloadTable(); }
+);
+
+/** Assigning **/
+
+uki("#cve-assign").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+    
+    if (sel.length < 1) {
+      alert("Please select at least one CVE.");
+      return false;
+    }
+    
+    var popup = uki('#assign-popup');
+    var bugnr = uki('#assign-bug-nr').value();
+    
+    if (!(bugnr == parseInt(bugnr)) || bugnr.length == 0) {
+      alert("Please enter a numeric bug #.");
+      return false;
+    }
+
+    uki('#cve-assign-title').html("<strong>The following changes will be made to bug " + bugnr + ".</strong>");
+    popup.show();
+    uki('#cve-assign-go').focus();
+  }
+);
+
+uki('#cve-assign-cancel').click(
+  function() {
+    uki('#assign-popup').hide();
+  }
+);
+
+/** NFU **/
+
+uki("#cve-mark-nfu").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+
+    if (sel.length < 1) {
+      alert("Please select at least one CVE.");
+      return false;
+    }
+
+    var data = new Array();
+    cve_nfu_data = new Array();
+
+    for (var i = 0; i < sel.length; i++) {
+      data.push("(" + sel[i][1] + ") " + sel[i][2]);
+      cve_nfu_data.push(sel[i][0]);
+    }
+
+    var list = uki('#cve-nfu-list').data(data);
+
+    uki('#nfu-popup').show();
+  }
+);
+
+uki('#cve-nfu-go').click(
+  function() {
+    if (cve_nfu_data < 1) {
+      alert("Error. Internal CVE list empty.");
+      return;
+      uki('#nfu-popup').hide();
+    }
+    
+    new Ajax.Request('/cve/nfu', {
+      parameters: { cves: cve_nfu_data.join(',') },
+      onSuccess: function(response) {
+        uki('#nfu-popup').hide();
+        reloadTable();
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+      }
+    });
+  }
+);
+
+uki('#cve-nfu-cancel').click(
+  function() {
+    uki('#nfu-popup').hide();
+  }
 );
 
 uki("#cve-details").click(
@@ -157,5 +266,3 @@ function reloadTable() {
 reloadTable();
 
 </script>
-
-<div id="table" style="position: absolute; top: 100px;">x</div>
