@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20100814142647) do
     t.integer  "cve_id"
     t.integer  "user_id"
     t.string   "action"
+    t.string   "object"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
