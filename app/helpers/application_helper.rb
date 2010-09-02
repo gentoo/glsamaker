@@ -51,7 +51,7 @@ module ApplicationHelper
     title = ""
     years.keys.sort.each do |year|
       title += "CVE-%s" % year
-      if year.size == 1
+      if years[year].size == 1
         title += "-%s," % years[year].first
       else
         title += "-{%s}," % years[year].sort.join(',')
