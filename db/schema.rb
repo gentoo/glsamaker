@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100814142647) do
+ActiveRecord::Schema.define(:version => 20100902093457) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(:version => 20100814142647) do
 
   add_index "cpes_cves", ["cpe_id"], :name => "cpes_cves_cpe_id"
   add_index "cpes_cves", ["cve_id", "cpe_id"], :name => "index_cpes_cves_on_cve_id_and_cpe_id"
+
+  create_table "cve_assignments", :force => true do |t|
+    t.integer  "cve_id"
+    t.integer  "bug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cve_assignments", ["bug"], :name => "index_cve_assignments_on_bug"
+  add_index "cve_assignments", ["cve_id"], :name => "index_cve_assignments_on_cve_id"
 
   create_table "cve_changes", :force => true do |t|
     t.integer  "cve_id"
