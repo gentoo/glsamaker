@@ -1,5 +1,6 @@
 class CveController < ApplicationController
   before_filter :login_required
+  include ApplicationHelper
   
   def index
     @pageID = 'cve'
@@ -39,6 +40,61 @@ class CveController < ApplicationController
   def store
   end
 
+
+  def assign_preview
+    bug_id = Integer(params[:bug])
+    cves = params[:cves].split(',').map{|cve| Integer(cve)}
+    logger.debug { "Assign Bug: #{bug_id} CVElist: " + cves.inspect }
+    
+    cve_ids = cves.map {|c| CVE.find(c).cve_id }
+    logger.debug { cve_ids.inspect }
+
+    @cve_txt = CVE.concat(cves)
+    @bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
+    @summary = cveify_bug_title(@bug.summary, cve_ids)
+
+    render :layout => false
+  rescue Exception => e
+    render :text => e.message, :status => 500
+    raise e
+  end
+  
+  def assign
+    bug_id = Integer(params[:bug])
+    cves = params[:cves].split(',').map{|cve| Integer(cve)}
+    logger.debug { "Assign Bug: #{bug_id} CVElist: " + cves.inspect }
+
+    cves.each do |cve_id|
+      cve = CVE.find cve_id
+      assi = cve.assignments.new
+      assi.bug = bug_id
+      assi.save!
+      
+      ch = cve.changes.new
+      ch.user = current_user
+      ch.action = 'assign'
+      ch.object = assi.id
+      ch.save!
+      
+      cve.state = "ASSIGNED"
+      cve.save!
+    end
+    
+    if params[:comment] or params[:summary]
+      bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
+      cve_ids = cves.map {|c| CVE.find(c).cve_id }
+      changes = {}
+      
+      changes[:comment] = CVE.concat(cves) if params[:comment]
+      changes[:summary] = cveify_bug_title(bug.summary, cve_ids)
+      Bugzilla.update_bug(bug_id, changes)
+    end
+
+  render :text => "ok"
+
+  rescue Exception => e
+    render :text => e.message, :status => 500
+  end
 
   def nfu
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}

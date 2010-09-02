@@ -15,9 +15,20 @@ class CVE < ActiveRecord::Base
   has_many :comments, :class_name => "CVEComment"
   has_and_belongs_to_many :cpes, :class_name => "CPE"
   has_many :changes, :class_name => "CVEChange", :foreign_key => "cve_id"
+  has_many :assignments, :class_name => "CVEAssignment", :foreign_key => "cve_id"
   
-  def to_s
+  def to_s(line_length = 78)
     str = "#{self.cve_id} #{"(http://nvd.nist.gov/nvd.cfm?cvename=%s):" % self.cve_id}\n"
-    str += "  " + Glsamaker::help.word_wrap(self.summary, 78).gsub(/\n/, "\n  ")
+    str += "  " + Glsamaker::help.word_wrap(self.summary, line_length-2).gsub(/\n/, "\n  ")
+  end
+  
+  # Concatenates the CVE descriptions of many cves, separated by separator
+  def self.concat(cves, separator = "\n\n")
+    txt = ""
+    cves.each do |cve|
+      txt += CVE.find(cve).to_s
+      txt += separator
+    end
+    txt
   end
 end

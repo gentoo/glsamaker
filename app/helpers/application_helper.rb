@@ -61,5 +61,13 @@ module ApplicationHelper
     title[0, title.length - 1]
   end
   
+  # Updates a bug string with the cve_ids
+  def cveify_bug_title(summary, cve_ids)
+    cve_str = bugs_unify_cvenames(get_bug_cves(summary) + cve_ids)
+    summary = summary.gsub(/\(?CVEs?\s?(?:requested)?\)?/, "(#{cve_str})")
+    summary = "#{summary} (#{cve_str})" unless summary.include?('CVE')
+    summary
+  end
+  
 end
 
