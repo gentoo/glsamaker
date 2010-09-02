@@ -95,6 +95,14 @@ uki("#reload-table").click(
 
 /** Assigning **/
 
+uki('#assign-bug-nr').keypress(
+  function(e) {
+    if (e.charCode == 13) {
+      uki('#cve-assign').click();
+    }
+  }
+);
+
 uki("#cve-assign").click(
   function() {
     var sel = uki('Table').selectedRows();
