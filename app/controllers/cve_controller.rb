@@ -98,7 +98,7 @@ class CveController < ApplicationController
 
   def nfu
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
-    logger.debug { "NFU CVElist: " + @cves.inspect }
+    logger.debug { "NFU CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
     
     @cves.each do |cve_id|
       cve = CVE.find(cve_id)
@@ -107,10 +107,10 @@ class CveController < ApplicationController
       cve.state = "NFU"
       cve.save!
       
-      ch = CVEChange.new
+      ch = cve.changes.new
       ch.user = current_user
-      ch.cve = cve
       ch.action = 'nfu'
+      ch.object = params[:reason] if params[:reason] and not params[:reason].empty?
       ch.save!
     end
     

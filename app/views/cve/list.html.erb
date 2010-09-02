@@ -73,10 +73,11 @@ uki(
 );
 
 uki(
-  { view: 'Popup', rect: '500 300', anchors: 'left', id: 'nfu-popup', relativeTo: uki('#cve-mark-nfu'), childViews: [
+  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'nfu-popup', relativeTo: uki('#popup'), childViews: [
       { view: 'Label', rect: '10 10 480 20', anchors: 'top', html: '<strong>The following CVEs will be marked as NFU:</strong>', id: 'cve-nfu-title'},
-      { view: 'ScrollableList', rect: '10 35 480 220', anchors: 'top left right bottom', id: 'cve-nfu-list' },
-      { view: 'Button', rect: '34a5 265 70 24', anchors: 'bottom right', id: 'cve-nfu-cancel', text: 'Cancel' },
+      { view: 'ScrollableList', rect: '10 35 480 190', anchors: 'top left right bottom', id: 'cve-nfu-list' },
+      { view: 'TextField', rect: '10 235 480 22', anchors: 'left top right', placeholder: 'Add a (public) comment', id: 'nfu-comment' },
+      { view: 'Button', rect: '345 265 70 24', anchors: 'bottom right', id: 'cve-nfu-cancel', text: 'Cancel' },
       { view: 'Button', rect: '420 265 70 24', anchors: 'bottom right', id: 'cve-nfu-go', text: 'Commit' }
     ]
   }
@@ -197,6 +198,7 @@ uki("#cve-mark-nfu").click(
 
     var list = uki('#cve-nfu-list').data(data);
 
+    uki('#nfu-comment').value('');
     uki('#nfu-popup').show();
     uki('#cve-nfu-go').focus();    
   }
@@ -211,7 +213,7 @@ uki('#cve-nfu-go').click(
     }
     
     new Ajax.Request('/cve/nfu', {
-      parameters: { cves: cve_nfu_data.join(',') },
+      parameters: { cves: cve_nfu_data.join(','), reason: uki('#nfu-comment').value() },
       onSuccess: function(response) {
         uki('#nfu-popup').hide();
         reloadTable();
