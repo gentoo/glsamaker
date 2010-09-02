@@ -13,9 +13,13 @@ uki(
           { view: 'Label', rect: '5 5 400 20', html: '<h2 style="margin: 0;"><%= @cve.cve_id %></h2>', anchors: 'top left'},
           { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' },
         ] },
-        { view: 'Box',  rect: '0 30 500 370', anchors: 'top left right width', childViews: [
+        { view: 'Box',  rect: '0 30 500 50', anchors: 'top left right width', childViews: [
           { view: 'Label', rect: '5 5 495 50', anchors: 'left top right', text: '<%= h(make_js_safe(@cve.summary)) %>', textSelectable: true, multiline: true}
-
+        ] },
+        { view: 'Toolbar', rect: '0 330 500 20', anchors: 'left bottom right', background: 'theme(panel)', buttons: [
+          { text: 'References' },
+          { text: 'CPE' },
+          { text: 'History' }
         ] }
     ]}
 ).attachTo(window, '500 400');
