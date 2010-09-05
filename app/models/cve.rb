@@ -14,7 +14,7 @@ class CVE < ActiveRecord::Base
   has_many :references, :class_name => "CVEReference"
   has_many :comments, :class_name => "CVEComment"
   has_and_belongs_to_many :cpes, :class_name => "CPE"
-  has_many :changes, :class_name => "CVEChange", :foreign_key => "cve_id"
+  has_many :cve_changes, :class_name => "CVEChange", :foreign_key => "cve_id"
   has_many :assignments, :class_name => "CVEAssignment", :foreign_key => "cve_id"
   
   def to_s(line_length = 78)
