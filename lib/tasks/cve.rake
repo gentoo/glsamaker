@@ -19,21 +19,19 @@ TMPDIR = File.join(File.dirname(__FILE__), '..', '..', 'tmp')
 YEAR = 2004
 BASEURL = "http://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-%s.xml"
 
-VERBOSE = (ENV['VERBOSE'] == "1")
+DEBUG   = ENV.has_key? 'DEBUG'
+VERBOSE = ENV.has_key?('VERBOSE') or DEBUG
+QUIET   = ENV.has_key? 'QUIET'
+
+raise "I can't be quiet and verbose at the same time..." if QUIET and VERBOSE
 
 namespace :cve do
   desc "Full CVE data import"
   task :full_import => :environment do
-
-    unless File.writable?(TMPDIR)
-      puts "!!!".red + " I need write permissions on " + File.expand_path(TMPDIR).bold
-      raise "Temporary directory not writeable"
-    end
-
     start_ts = Time.now
 
     (YEAR..Date.today.year).each do |year|
-      puts "Processing CVEs from ".bold + year.to_s.purple
+      info "Processing CVEs from ".bold + year.to_s.purple
 
       xmldata = status "Downloading" do
         Glsamaker::HTTP.get(BASEURL % year)
@@ -52,10 +50,10 @@ namespace :cve do
       cpe_cache = {}
 
       cves = xml.root.xpath('cve:entry', namespace)
-      puts "#{cves.size.to_s.purple} CVEs (one dot equals 100, purple dot equals 500)"
+      info "#{cves.size.to_s.purple} CVEs (one dot equals 100, purple dot equals 500)"
 
       cves.each do |cve|
-        unless VERBOSE
+        unless VERBOSE or QUIET
 
           if processed_cves % 500 == 0
             print ".".purple
@@ -80,14 +78,14 @@ namespace :cve do
       puts
     end
 
-    puts "done".green
-    puts "(#{Time.now - start_ts} seconds)"
+    info "done".green
+    info "(#{Time.now - start_ts} seconds)"
   end
 
   desc "Incremental CVE data update"
   task :update => :environment do
     start_ts = Time.now
-    puts "Running incremental CVE data update..."
+    info "Running incremental CVE data update..."
 
     xmldata = status "Downloading" do
       Glsamaker::HTTP.get(BASEURL % 'modified')
@@ -98,14 +96,14 @@ namespace :cve do
     end
 
     namespace = {'cve' => 'http://scap.nist.gov/schema/feed/vulnerability/2.0'}
-    processed_cves = 0
+    processed_cves = new_cves = updated_cves = 0
     cpe_cache = {}
 
     cves = xml.root.xpath('cve:entry', namespace)
-    puts "#{cves.size.to_s.purple} CVEs (one dot equals 100, purple dot equals 500)"
+    info "#{cves.size.to_s.purple} CVEs (one dot equals 100, purple dot equals 500)"
 
     cves.each do |cve|
-      unless VERBOSE
+      unless VERBOSE or QUIET
         if processed_cves % 500 == 0
           print ".".purple
         else
@@ -118,11 +116,15 @@ namespace :cve do
       c = CVE.find_by_cve_id cve['id']
 
       if c == nil
+        debug "Creating CVE."
         create_cve(cve)
+        created_cves += 1
       else
-        last_changed_at = DateTime.parse(cve.xpath('vuln:last-modified-datetime').first.content)
-
-        if last_changed_at > c.last_changed_at
+        last_changed_at = Time.parse(cve.xpath('vuln:last-modified-datetime').first.content).utc
+        db_lca = c.last_changed_at
+        
+        if last_changed_at.to_i > c.last_changed_at.to_i          
+          debug "Updating CVE. Timestamp changed."
           summary = cve.xpath('vuln:summary').first.content
           c.attributes = {
             :cve_id => cve['id'],
@@ -133,26 +135,71 @@ namespace :cve do
           }
 
           c.state = 'REJECTED' if summary =~ /^\*\* REJECT \*\*/
+          c.save!
 
+          db_references = []
+          xml_references = []
           cve.xpath('vuln:references').each do |ref|
-            
-            CVEReference.create(
-              :cve => _cve,
-              :source => ref.xpath('vuln:source').first.content,
-              :title => ref.xpath('vuln:reference').first.content,
-              :uri => ref.xpath('vuln:reference').first['href']
+            xml_references << [
+              ref.xpath('vuln:source').first.content,
+              ref.xpath('vuln:reference').first.content,
+              ref.xpath('vuln:reference').first['href']
+            ]
+          end
+          
+          c.references.each do |ref|
+            db_references << [ref.source, ref.title, ref.uri]
+          end
+          
+          rem = db_references - xml_references
+          debug "Removing references: #{rem.inspect}"
+          
+          rem.each do |item|
+            ref = c.references.find(:first, :conditions => ['source = ? AND title = ? AND uri = ?', *item])
+            c.references.delete(ref)
+            ref.destroy
+          end
+          
+          add = xml_references - db_references
+          debug "Ading references:    #{add.inspect}"
+          
+          add.each do |item|
+            c.references.create(
+              :source => item[0],
+              :title =>  item[1],
+              :uri =>    item[2]
             )
           end
 
+          db_cpes = []
+          xml_cpes = []
           cve.xpath('vuln:vulnerable-software-list/vuln:product').each do |prod|
-            cpe_str = prod.content
-
-            cpe = CPE.find(:first, :conditions => ['cpe = ?', cpe_str])
-            cpe ||= CPE.create(:cpe => cpe_str)
-
-            _cve.cpes << cpe
+            xml_cpes << prod.content
           end
+          
+          c.cpes.each do |prod|
+            db_cpes << prod.cpe
+          end
+          
+          rem = db_cpes - xml_cpes
+          debug "Removing CPEs: #{rem.inspect}"
+          
+          rem.each do |item|
+            c.cpes.delete(CPE.find_by_cpe(item))
+          end
+          
+          add = xml_cpes - db_cpes
+          debug "Ading CPEs:    #{add.inspect}"
+          
+          add.each do |item|
+            cpe = CPE.find(:first, :conditions => ['cpe = ?', item])
+            cpe ||= CPE.create(:cpe => item)
 
+            c.cpes << cpe
+          end
+          
+          c.save!
+          updated_cves += 1
         end
       end
 
@@ -160,29 +207,36 @@ namespace :cve do
       STDOUT.flush
     end
 
-    puts
+    info ""
 
-    puts "done".green
-    puts "(#{Time.now - start_ts} seconds)"
+    info "(#{Time.now - start_ts} seconds, #{new_cves} new CVE entries, #{updated_cves} updated CVE entries)"
   end
 
 end
 
 # Misc. functions
 
+# Run something, and display a status info around it
 def status(message)
   unless block_given?
     raise ArugmentError, "I want a block :("
   end
 
-  print "#{message}....."
+  print "#{message}....." unless QUIET
   STDOUT.flush
 
   stuff = yield
-  print "\b" * 5 + " done.".green + "\n"
+  print "\b" * 5 + " done.".green + "\n" unless QUIET
   stuff
 end
 
+def debug(msg)
+  $stderr.puts msg if DEBUG
+end
+
+def info(msg)
+  puts msg unless QUIET
+end
 
 # 7.2/AV:L/AC:L/Au:N/C:C/I:C/A:C
 def cvss_xml2str(data)
