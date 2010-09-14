@@ -2,8 +2,8 @@ class CreateCveReferences < ActiveRecord::Migration
     def self.up
       create_table :cve_references do |t|
         t.string :source
-        t.string :title
-        t.string :uri
+        t.text :title
+        t.text :uri
         t.integer :cve_id
         t.timestamps
       end
