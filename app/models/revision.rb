@@ -9,6 +9,8 @@
 #
 # For more information, see the LICENSE file.
 
+require 'rexml/document'
+
 # Revision model
 class Revision < ActiveRecord::Base
   belongs_to :glsa, :class_name => "Glsa", :foreign_key => "glsa_id"
@@ -21,6 +23,15 @@ class Revision < ActiveRecord::Base
   
   validates_numericality_of :user_id, :message => "user id needed"
   validates_presence_of :title
+
+  validates_each :description, :resolution do |record, attr, value|
+    # XML well-formedness test
+    begin
+      REXML::Document.new("<?xml version='1.0'?><root>#{value}</root>")
+    rescue REXML::ParseException => e
+      record.errors.add attr, "is not well-formed XML"
+    end
+  end
   
   # Returns an Array of Integers of the bugs linked to this revision
   def get_linked_bugs

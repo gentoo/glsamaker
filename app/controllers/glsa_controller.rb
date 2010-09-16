@@ -137,13 +137,18 @@ class GlsaController < ApplicationController
     revision.impact = params[:glsa][:impact]
     revision.workaround = params[:glsa][:workaround]
     revision.resolution = params[:glsa][:resolution]
-    
+
     unless revision.save
-      flash.now[:error] = "Errors occurred while saving the Revision object"
+      flash.now[:error] = "Errors occurred while saving the Revision object: #{revision.errors.full_messages.join ', '}"
       render :action => "edit"
       return
     end
-    
+
+    unless @glsa.save
+      flash[:error] = "Errors occurred while saving the GLSA object"
+      render :action => "edit"
+    end
+
     # Bugs...
     bugs = @rev.get_linked_bugs
     
