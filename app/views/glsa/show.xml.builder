@@ -22,21 +22,15 @@ xml.glsa :id => @glsa.glsa_id do
     xml.comment! "packages go here"
   end
   
-  xml.background do
-    xml << (@glsa.last_revision.background || "")
-  end
+  xml.background(@glsa.last_revision.background || "")
   
   xml.description do
-    xml << (@glsa.last_revision.description || "")
+    xml << (@glsa.last_revision.description + "\n" || "")
   end
   
-  xml.impact :type => @glsa.last_revision.severity do
-    xml << (@glsa.last_revision.impact || "")
-  end
+  xml.impact({:type => @glsa.last_revision.severity}, @glsa.last_revision.impact || "")
   
-  xml.workaround do
-    xml << (@glsa.last_revision.workaround || "")
-  end
+  xml.workaround(@glsa.last_revision.workaround || "")
   
   xml.resolution do
     xml << (@glsa.last_revision.resolution || "")
@@ -44,25 +38,17 @@ xml.glsa :id => @glsa.glsa_id do
   
   xml.references do
     @glsa.last_revision.references.each do |ref|
-      xml.uri :link => ref.url do
-        xml.text! ref.title
-      end
+      xml.uri({:link => ref.url}, ref.title)
     end
   end
   
-  xml.metadata :tag => 'requester', :timestamp => "TODO: Enter timestamp here" do
-    xml.text! @glsa.requester.login
-  end
+  xml.metadata({:tag => 'requester', :timestamp => @glsa.created_at.rfc2822}, @glsa.requester.login)
   
   if @glsa.submitter
-    xml.metadata :tag => 'submitter', :timestamp => "TODO: Enter timestamp here" do
-      xml.text! @glsa.submitter.login 
-    end
+    xml.metadata({:tag => 'submitter', :timestamp => @glsa.last_revision.created_at.rfc2822}, @glsa.submitter.login)
   end
   
   if @glsa.bugreadymaker
-    xml.metadata :tag => 'bugReady', :timestamp => "TODO: Enter timestamp here" do
-      xml.text! @glsa.bugreadymaker.login
-    end
+    xml.metadata({:tag => 'bugReady', :timestamp => Time.now.rfc2822}, @glsa.bugreadymaker.login)
   end
 end
