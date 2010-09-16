@@ -1,28 +1,16 @@
 <h1>Released GLSAs</h1>
 
-<table>
-<ul id="glsas">
+<table class="glsa-list">
 <tr align="left">
   <th>ID</th>
+  <th>State</th>
   <th>Title</th>
-  <th>Release date</th>
+  <th>Last changed at/by</th>
   <th>Bug IDs</th>
+  <% if current_user.is_el_jefe? %><th>Admin</th><% end %>
 </tr>
-<% @glsas.each do |g| %>
-<tr>
 
-<td><%= g.glsa_id %></td>
-<td><%= link_to g.last_revision.title, {:action => 'show', :id => g}-%></td>
-<td><%= g.updated_at %></td>
-
-<td>
-<% if g.last_revision and (@bugs = g.last_revision.bugs) -%>
-<%= @bugs.map {|b| b.bug_id}.join(', ') %>
-
-<% end -%>
-</td>
-
-</tr>
-<% end %>
-</ul>
+<%= render :partial => "glsa_row", :collection => @glsas, :as => :glsa, :locals => { :view => :drafts } %>
 </table>
+
+<%= render :partial => "status_legend" %>
