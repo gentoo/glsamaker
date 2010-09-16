@@ -29,6 +29,10 @@ class GlsaController < ApplicationController
     @pageID = "new"
     @pageTitle = "New GLSA"
     
+    # TODO: Straight-to-draft editing
+    render :action => "new-request"
+    return
+    
     if params[:what] == "request"
       render :action => "new-request"
     elsif params[:what] == "draft"
