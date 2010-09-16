@@ -6,11 +6,14 @@ class CreateBugs < ActiveRecord::Migration
       t.integer :revision_id
       t.timestamps
     end
-    
+
     add_index :bugs, :revision_id
+    add_index :bugs, :bug_id
   end
 
   def self.down
+    remove_index :bugs, :column => :revision_id
+    remove_index :bugs, :column => :bug_id
     drop_table :bugs
   end
 end
