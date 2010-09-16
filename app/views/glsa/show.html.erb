@@ -1,4 +1,11 @@
-<h1><%= @rev.title %> (<tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>)</h1>
+<h1>
+  <%= @rev.title %>
+  (<%= status_icon @glsa.status %> <tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>)
+  <%= bugready_icon false %>
+  <%= approval_icon @glsa.approval_status %>
+  <%= workflow_icon(@glsa.workflow_status(current_user)) %>
+  <%= restricted_icon @glsa.restricted %>
+</h1>
 
 <div class="box buttons">
   <span class="floatright">
