@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :name
       t.string :email
       t.boolean :disabled, :default => false
+      t.boolean :jefe, :default => false      
       t.text :preferences
       t.integer :access
       t.timestamps

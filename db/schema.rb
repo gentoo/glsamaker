@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20100902093457) do
     t.string   "name"
     t.string   "email"
     t.boolean  "disabled",    :default => false
+    t.boolean  "jefe",   :default => false    
     t.text     "preferences"
     t.integer  "access"
     t.datetime "created_at"
