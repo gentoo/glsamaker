@@ -305,6 +305,12 @@ div.box h2 {
   margin: 0;
 }
 
+div.box span.toolbar {
+  float: right;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
 div.box p {
   margin: 0;
 }
