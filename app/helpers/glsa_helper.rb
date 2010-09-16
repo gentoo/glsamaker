@@ -81,7 +81,7 @@ module GlsaHelper
       image_tag "icons/request.png", :title => "This item is a request."
     elsif status == "draft"
       image_tag "icons/draft.png", :title => "This item is a draft."
-    elsif status == "sent"
+    elsif status == "release"
       image_tag "icons/sent.png", :title => "This item is a sent GLSA."
     else
       "?"
