@@ -15,7 +15,10 @@ module Glsamaker
       command = GLSAMAKER_XMLINDENT
       command += " -i#{Integer options[:indent]}" if options.has_key? :indent
       command += " -l#{Integer options[:maxcols]}" if options.has_key? :maxcols
-      
+
+      # \r\n will make problems while converting
+      xml.gsub!("\r", "")
+
       IO.popen(command, 'r+') do |io|
         io.write xml
         io.close_write

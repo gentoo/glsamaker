@@ -12,3 +12,4 @@
 require 'glsamaker/http'
 require 'glsamaker/portage'
 require 'glsamaker/diff'
+require 'glsamaker/xml'
