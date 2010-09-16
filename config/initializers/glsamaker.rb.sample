@@ -15,3 +15,10 @@ GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
 
 # Location of the Portage tree, set to false if you are not running on Gentoo.
 GLSAMAKER_PORTDIR = "/usr/portage/"
+
+# Bugzilla login info
+GLSAMAKER_BUGZIE_USER = nil
+GLSAMAKER_BUGZIE_PW = nil
+
+# Location of xmlindent(1)
+GLSAMAKER_XMLINDENT = "/usr/local/bin/xmlindent"
