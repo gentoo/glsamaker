@@ -212,7 +212,108 @@ namespace :cve do
     info "(#{Time.now - start_ts} seconds, #{new_cves} new CVE entries, #{updated_cves} updated CVE entries)"
   end
 
-end
+  desc "Import CVE resolutions from the old CVE tool"
+  task :oldimport => :environment do
+    FILE = File.join(TMPDIR, "list")
+    
+    unless File.exist? FILE
+      raise "Could not find data file. Put it at #{FILE}."
+    end
+    
+    $saved_cve = {:id => "", :bugs => []}
+    f = File.open(FILE, 'r')
+
+    f.each do |l|
+      # Start a new entry
+      if l[0..2] == "CVE"
+        # Save the old entry before starting a new one
+        unless $saved_cve[:id] == ""
+          debug "CVE: #{$saved_cve[:id]}. Bugs: #{$saved_cve[:bugs].inspect}. State: #{$saved_cve[:state]}. Reason: #{$saved_cve[:reason]}"
+          next if $saved_cve[:skip]
+          c = CVE.find_by_cve_id($saved_cve[:id])
+
+          if c == nil
+            $stderr.puts "#{$saved_cve[:id]} not found in the CVE databse. Skipping."
+            next
+          end
+          
+          state = $saved_cve[:state]
+          state ||= "NEW"
+          
+          next if state == "NEW"
+          
+          $saved_cve[:bugs].each do |bug|
+            c.assignments.create(:bug => bug)
+            c.cve_changes.create({
+              :user_id => 0,
+              :action => 'assign',
+              :object => bug
+            })
+          end
+          
+          unless state == "ASSIGNED"
+            c.cve_changes.create({
+              :user_id => 0,
+              :action => state == "NFU" ? 'nfu' : ''
+            })
+          end
+          
+        else
+          #puts "round 1"
+        end
+
+        l.match /^(CVE-\d{4}-\d{4})/
+        $saved_cve = {:id => $1, :bugs => []}
+        next
+      end
+      
+      # We ignore reserved, as NVD doesn't support it.
+      if l =~ /^\tRESERVED$/
+        $saved_cve[:skip] = true
+        $saved_cve[:state] = "RESERVED"        
+        next
+      end
+      
+      if l =~ /^\tREJECTED$/
+        $saved_cve[:state] = "REJECTED"
+        next
+      end
+      
+      if l =~ /^\tNOT-FOR-US: (.*)$/
+        $saved_cve[:state] = "NFU" unless $saved_cve[:state] == "REJECTED"
+        $saved_cve[:reason] = $1
+        next
+      end
+      
+      if l =~ /^\tBUG: (\d+)$/
+        $saved_cve[:bugs] << Integer($1)
+        $saved_cve[:state] = "ASSIGNED"
+        next
+      end
+      
+      if l =~ /^\tTODO: check$/
+        $saved_cve[:state] = "NEW"
+        next
+      end
+      
+      if l =~ /^\tTODO: (.*)$/
+        $saved_cve[:state] = "NEW"
+        $saved_cve[:reason] = $1
+        next
+      end
+      
+      if l =~ /^\tNOTE: (.*)$/
+        $saved_cve[:reason] = $1
+        next
+      end      
+      
+      puts "XXX: #{l}"
+      break
+    end # each line
+    
+  end # task
+
+end # namespace cve
 
 # Misc. functions
 
