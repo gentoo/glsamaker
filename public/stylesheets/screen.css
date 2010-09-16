@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  font-size: 85%;
+  font-size: .8em;
   color: #333;
 }
 
@@ -13,6 +13,10 @@ html {
   padding: 0;
   background: url(/images/line.png) repeat-y;
   background-repeat: repeat-y;
+}
+
+img {
+  vertical-align: middle;
 }
 
 a img {
@@ -292,11 +296,19 @@ td {
 }
 
 /** boxes **/
-div.box {
+div.box, div.legend {
   padding: .4em; 
   background-color: #D3CFE5;
   border-bottom: 1px solid #8875B0;
   margin-bottom: 0.5em;
+}
+
+div.legend {
+  margin-top: 1em;
+}
+
+div.legend h3 {
+  margin: 0;
 }
 
 div.box h2 {
@@ -457,21 +469,25 @@ textarea.nice, input.nice {
   background-color: #7E9557;
 }
 
-/** cve tool **/
-div#cve-sidebar {
-  float: right;
-  width: 20%;
+
+/** tables **/
+
+table.glsa-list {
+  
+}
+
+table.glsa-list th {
+  border-bottom: 2px solid #4C3E61;
+  border-right: 1px dotted #4C3E61;     
   padding: .5em;
 }
 
-div#cve-sidebar div.section {
-  font-size: 120%;
+table.glsa-list td {
   padding: .5em;
-  border-bottom: 1px solid #8875B0;
+  padding-top: .4em;
+  padding-bottom: .4em;
+  border-right: 1px dotted #4C3E61;   
+  border-bottom: 1px solid #4C3E61;
 }
 
-table#cvetable {
-  cursor: default;
-}
-
-@import url("/stylesheets/screen.css");
+/*@import url("/stylesheets/screen.css");*/

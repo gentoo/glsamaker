@@ -1,0 +1,7 @@
+<div class="legend">
+  <strong>Legend:</strong><br />
+  <strong>Status:</strong> Request: <%= status_icon "request" %>; Draft: <%= status_icon "draft" %>; Sent GLSA: <%= status_icon "sent" %>
+  <strong>Bugs:</strong> ready: <%= bugready_icon true %>; not ready: <%= bugready_icon false %>
+  <strong>Approval:</strong> approved: <%= approval_icon :approved %>; comments pending: <%= approval_icon :comments_pending %>; commented: <%= approval_icon :commented %>; none: <%= approval_icon :none %>
+  <strong>Workflow:</strong> own GLSA: <%= workflow_icon :own %>; TODO: <%= workflow_icon :todo %>; commented: <%= workflow_icon :commented %>; approved: <%= workflow_icon :approved %>
+</div>

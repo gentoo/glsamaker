@@ -75,6 +75,50 @@ module GlsaHelper
       page.insert_html :bottom, :references_table, :partial => 'reference', :object => Reference.new
     end
   end
-    
+  
+  def status_icon(status)
+    if status == "request"
+      image_tag "icons/request.png", :title => "This item is a request."
+    elsif status == "draft"
+      image_tag "icons/draft.png", :title => "This item is a draft."
+    elsif status == "sent"
+      image_tag "icons/sent.png", :title => "This item is a sent GLSA."
+    else
+      "?"
+    end
+  end
+  
+  def bugready_icon(status)
+    if status
+      image_tag "icons/bug.png", :title => "This item is bug ready."
+    else
+      image_tag "icons/bug-grey.png", :title => "This item is a NOT bug ready."
+    end
+  end
+  
+  def approval_icon(status)
+    if status == :approved
+      image_tag "icons/status-green.png", :title => "This item is approved for sending."
+    elsif status == :commented
+      image_tag "icons/status-red.png", :title => "This item has received comments."
+    elsif status == :comments_pending
+      image_tag "icons/status-yellow.png", :title => "This item has received comments."
+    else
+      image_tag "icons/status-grey.png", :title => "This item has no comments."
+    end
+  end
+
+  def workflow_icon(status)
+    if status == :commented
+      image_tag "icons/commented.png", :title => "You have commented on this item."
+    elsif status == :approved
+      image_tag "icons/approved.png", :title => "You have approved this item."
+    elsif status == :own
+      image_tag "icons/user.png", :title => "This is your own draft."
+    elsif status == :todo
+      image_tag "icons/not-approved.png", :title => "Please comment and/or approve."
+    end
+  end
+
 end
 
