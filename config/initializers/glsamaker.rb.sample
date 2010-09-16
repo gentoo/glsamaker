@@ -13,6 +13,9 @@ GLSAMAKER_FORCE_PRODUCTION_AUTH = false
 # Email address of the administrative contact
 GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
 
+# Email address of the administrative contact
+GLSAMAKER_FROM_EMAIL = "glsamaker@gentoo.org"
+
 # Location of the Portage tree, set to false if you are not running on Gentoo.
 GLSAMAKER_PORTDIR = "/usr/portage/"
 
@@ -21,4 +24,4 @@ GLSAMAKER_BUGZIE_USER = nil
 GLSAMAKER_BUGZIE_PW = nil
 
 # Location of xmlindent(1)
-GLSAMAKER_XMLINDENT = "/usr/local/bin/xmlindent"
+GLSAMAKER_XMLINDENT = "/usr/bin/xmlindent"
