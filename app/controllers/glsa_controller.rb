@@ -117,11 +117,6 @@ class GlsaController < ApplicationController
     # Force update
     @glsa.updated_at = 0
     
-    unless @glsa.save
-      flash[:error] = "Errors occurred while saving the GLSA object"
-      render :action => "edit"
-    end
-    
     revision = Revision.new
     revision.revid = @glsa.next_revid
     revision.glsa = @glsa
