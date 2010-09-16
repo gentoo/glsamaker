@@ -20,7 +20,7 @@ class Glsa < ActiveRecord::Base
 
   has_many :revisions
   has_many :comments
-
+  
   # Returns the last revision object, referring to the current state of things
   def last_revision
     @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
@@ -68,13 +68,18 @@ class Glsa < ActiveRecord::Base
     end
       return :none
   end
+
+  # Returns true if user is the owner of this GLSA.
+  def is_owner?(user)
+    luser = (status == "request" ? requester : submitter)
+        
+    luser == user
+  end
   
   # Returns the workflow status of this GLSA for a given user.
   # Return values: :own (own draft), :approved (approval given), :commented (comment or rejection given)
   def workflow_status(user)
-    luser = (status == "request" ? requester : submitter)
-        
-    if luser == user
+    if is_owner?(user)
       return :own
     end
     
@@ -93,7 +98,6 @@ class Glsa < ActiveRecord::Base
   def has_pending_comments?
     comments.find(:all, :conditions => ['`read` = ?', false]).count > 0
   end
-  
   
   # Files a new GLSA request
   def self.new_request(title, bugs, comment, access, user)

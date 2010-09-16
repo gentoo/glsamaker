@@ -20,4 +20,10 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   
   include Authentication
+  
+  protected
+  def deny_access(msg)
+    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip}: #{msg}"
+    redirect_to :controller => 'index', :action => 'error', :type => 'access'
+  end
 end

@@ -35,4 +35,12 @@ class User < ActiveRecord::Base
   def is_el_jefe?
     self.jefe
   end
+  
+  # Checks access to a given GLSA
+  def can_access?(glsa)
+    return false if access == 0 and not glsa.is_owner? self
+    return false if access < 3 and glsa.restricted
+    
+    true
+  end
 end

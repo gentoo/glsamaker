@@ -119,6 +119,13 @@ module GlsaHelper
       image_tag "icons/not-approved.png", :title => "Please comment and/or approve."
     end
   end
-
+  
+  def restricted_icon(status)
+    if status
+      image_tag "icons/confidential.png", :title => "This item is CONFIDENTIAL."
+    else
+      image_tag "icons/public.png", :title => "This item is public."
+    end
+  end
 end
 

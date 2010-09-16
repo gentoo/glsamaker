@@ -1,10 +1,14 @@
-<tr class="<%= cycle 'even', 'odd' %>">
-  <td><strong><tt><%= h glsa.glsa_id %></tt></strong></td>
+<% if current_user.can_access? glsa %>
+<tr class="<%= 'restricted' if glsa.restricted %> <%= cycle 'even', 'odd' %>">
   <td>
     <%= status_icon glsa.status %>
+    <strong><tt><%= h glsa.glsa_id %></tt></strong>
+  </td>
+  <td>
     <%= bugready_icon false %>
     <%= approval_icon glsa.approval_status %>
     <%= workflow_icon(glsa.workflow_status(current_user)) %>
+    <%= restricted_icon glsa.restricted %>
   </td>
   <% if view == :requests %>
     <td><strong><%= link_to(h(glsa.last_revision.title), {:action => 'edit', :id => glsa}, {:title => "Draft this GLSA"}) %></strong></td>
@@ -24,3 +28,4 @@
   </td>
   <% end %>
 </tr>
+<% end %>

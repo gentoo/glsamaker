@@ -482,6 +482,10 @@ table.glsa-list th {
   padding: .5em;
 }
 
+table.glsa-list tr.restricted, table.glsa-list tr.restricted a, .legend .red {
+  color: #a40000 !important;
+}
+
 table.glsa-list td {
   padding: .5em;
   padding-top: .4em;

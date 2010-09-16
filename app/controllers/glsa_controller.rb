@@ -12,6 +12,7 @@
 # GLSA controller
 class GlsaController < ApplicationController
   before_filter :login_required
+  before_filter :check_access_level, :except => [:new, :create]
 
   def requests
     @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
@@ -57,6 +58,7 @@ class GlsaController < ApplicationController
 
   def show
     @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
 
     #flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
@@ -71,6 +73,7 @@ class GlsaController < ApplicationController
 
   def edit
     @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
     @rev = @glsa.last_revision
     
     # Reset added or removed bugs in the meantime
@@ -92,6 +95,7 @@ class GlsaController < ApplicationController
 
   def update
     @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)   
     @rev = @glsa.last_revision
     
     if @glsa.nil?
@@ -297,5 +301,27 @@ class GlsaController < ApplicationController
       render :text => "fail", :status => 500
     end
   end
-
+  
+  protected
+  def check_access_level
+    
+  end
+  
+  def check_object_access(glsa)
+    # Contributor, no foreign drafts
+    if current_user.access == 0
+      unless glsa.is_owner? current_user
+        deny_access "Access to GLSA #{glsa.id} (#{params[:action]})"
+        return false
+      end
+    elsif current_user.access == 1
+      if glsa.restricted
+        deny_access "Access to restricted GLSA #{glsa.id} (#{params[:action]})"
+        return false
+      end
+    end
+    
+    return true
+  end
+  
 end

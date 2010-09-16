@@ -21,6 +21,8 @@ class IndexController < ApplicationController
       render :template => 'index/error-user', :layout => 'notice'
     elsif params[:type] == "disabled"
       render :template => 'index/error-disabled', :layout => 'notice'
+    elsif params[:type] == "access"
+      render :template => 'index/error-access', :layout => 'notice'
     else
       render :template => 'index/error-system', :layout => 'notice'
     end
