@@ -68,7 +68,6 @@ class GlsaController < ApplicationController
       wants.xml { }
       wants.txt { render :text => "text to render..." }
     end
-
   end
 
   def edit
@@ -186,12 +185,21 @@ class GlsaController < ApplicationController
       comment.read = params["commentread-#{comment.id}"] == "true"
       comment.save
     end
-    
+
+    # Sending emails
+    #GlsaMailer.deliver_edit(current_user, @glsa, revision, current_user)
+
     flash[:notice] = "Saving was successful."
     redirect_to :action => 'show', :id => @glsa
     
   end
-  
+
+  def prepare_release
+    @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
+    @rev = @glsa.last_revision
+  end
+
   def diff
     @glsa = Glsa.find(params[:id])
     

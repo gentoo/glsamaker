@@ -1,0 +1,3 @@
+GlsaMailer#sent
+
+Find me in app/views/glsa_mailer/sent.erb
