@@ -377,7 +377,7 @@ div.progress {
 
 /** Buttons **/
 div.buttons {
-  padding: 0.4em;
+  padding: 0.5em;
   background-color: #D3CFE5;
   border-bottom: 1px solid #8875B0;
   margin-bottom: 0.5em;
@@ -388,14 +388,12 @@ a.button, input.button {
   border-left: 1px solid #8875B0;
   border-right: 1px solid #5B4A73;
   border-bottom: 1px solid #5B4A73;
-  padding: .1em;
-  padding-left: .3em;
-  padding-right: .3em;
+  padding: .2em;
   background: #4C3E61 url(/images/menubg.png) repeat-x;
   font-size: 90%;
   color: white;
   text-decoration: none;
-  margin: .3em;
+  margin: .4em;
   margin-right: .5em;
 }
 

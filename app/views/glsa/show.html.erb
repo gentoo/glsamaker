@@ -1,49 +1,77 @@
-<h1><%= h @glsa.glsa_id %>:<%= h @rev.revid %></h1>
+<h1><%= @rev.title %> (<tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>)</h1>
 
+<div class="box buttons">
+  <span class="floatright">
+    Show revision: <% @glsa.revisions.each do |r| %>
+    <%= link_to r.revid, :controller => "glsa", :action => "show", :id => @glsa, :rev_id => r.revid %>
+    <% end %>
+  </span>
+  <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft", {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/xml.png'} View as XML", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
+</div>
 
-Show version: <% @glsa.revisions.each do |r| %>
-<%= link_to r.revid, :controller => "glsa", :action => "show", :id => @glsa, :rev_id => r.revid %>
-<% end %> <br/>
+<p>
+<strong>GLSA revision date:</strong> <%= @rev.created_at %>
+</p>
 
-<b>GLSA revision:</b> <%= @rev.revid %> <br/>
-<b>GLSA revision date:</b> <%= @rev.created_at %> <br/>
-<br/>
-<b>Title:</b> <%= @rev.title %> <br/>
-<b>Access:</b> <%= @rev.access %> <br/>
-<b>Product:</b> <%= @rev.product %> <br/>
-<b>Severity:</b> <%= @rev.severity %> <br/>
-<b>Synopsis:</b> <%= @rev.synopsis %> <br/>
-<br/>
+<p>
+<strong>Access:</strong> <%= h @rev.access %> <br />
+<strong>Product:</strong> <%= h @rev.product %> <br />
+<strong>Severity:</strong> <%= h @rev.severity %> <br />
+<strong>Synopsis:</strong> <%= h @rev.synopsis %> <br />
+</p>
 
-<% @bugs = @rev.bugs %>
-<b>Related bugs:</b>
-<% @bugs.each do |b| %>
-<%= b.bug_id %>
+<p><strong>Related bugs:</strong><br />
+<% @rev.bugs.each do |b| %>
+      <%= link_to_function h(b.bug_id), "buginfo('#{h b.bug_id}')" %>
 <% end %>
-<br/>
+</p>
 
-<b>Unaffected Packages:</b> <%= @rev.product %> <br/>
-<b>Vulnerable Packages:</b> <%= @rev.product %> <br/>
-<br/>
+<p>
+<strong>Unaffected Packages:</strong><br />
+<ul>
+  <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
+    <li><%= h pkg.comp %><strong><%= h pkg.atom %></strong>-<%= h pkg.version %> on <%= h pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+  <% end %>
+</ul>
 
-<b>Background:</b> <%= @rev.background %> <br/>
-<b>Description:</b> <%= @rev.description %> <br/>
-<b>Impact:</b> <%= @rev.impact %> <br/>
-<br/>
+<strong>Vulnerable Packages:</strong><br />
+<ul>
+  <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
+    <li><%= h pkg.comp %><strong><%= h pkg.atom %></strong>-<%= h pkg.version %> on <%= h pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+  <% end %>
+</ul>
+</p>
 
-<b>Workaround:</b> <%= @rev.workaround %> <br/>
-<b>Resolution:</b> <%= @rev.resolution %> <br/>
-<br/>
+<p><strong>Background:</strong> <%= h@rev.background %> </p>
+
+<p>
+  <strong>Description:</strong><br />
+  <%= sanitize(@rev.description, :tags => %w[p ul li code]) %> 
+</p>
+
+<p>
+  <strong>Impact:</strong><br />
+  <%= sanitize(@rev.impact, :tags => %w[p ul li code]) %>
+</p>
+
+<p><strong>Workaround:</strong><br />
+<%= h @rev.workaround %></p>
+<p><strong>Resolution:</strong><br />
+<%= sanitize(@rev.resolution, :tags => %w[p ul li code]) %>
+</p>
 
 <% @refs = @rev.references %>
-<b>References:</b> <br/>
+<p><strong>References:</strong>
+<ul>
 <% @refs.each do |r| %>
-<li><%= link_to r.title, r.url -%></li><br/>
+<li><%= link_to r.title, r.url -%></li>
 <% end %>
+</ul>
+</p>
 
-
-<b>Requested by:</b> <%= @glsa.requester %> <br/>
-<b>Submitter:</b> <%= @glsa.submitter %> <br/>
-<b>Bug ready:</b> <%= @glsa.bugreadymaker %> <br/>
-</br
->
+<p>
+<b>Requested by:</b> <%= @glsa.requester.login %> <br />
+<b>Submitter:</b> <%= @glsa.submitter.login if @glsa.submitter %> <br />
+<b>Bug ready:</b> <%= @glsa.bugreadymaker.login if @glsa.bugreadymaker %>
+</p>
