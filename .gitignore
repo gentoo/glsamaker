@@ -4,6 +4,7 @@ log/*
 tmp/*
 db/*.sqlite*
 config/database.yml
+config/*private*
 config/initializers/glsamaker.rb
 public/stylesheets/all.css
 public/javascripts/all.js
