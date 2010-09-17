@@ -20,8 +20,8 @@
     <div id="loggedas">Logged in as <a href="#"><%= h current_user.login %> (<%= h current_user.name %>)</a></div>
     <ul>
       <li><a href="/" class="home">Home</a></li>
-      <li><a href="/admin" class="administration">Administration</a></li>
-      <li><a href="#" class="help">Help</a></li>
+      <% if current_user.is_el_jefe? %><li><a href="/admin" class="administration">Administration</a></li><% end %>
+      <!--<li><a href="#" class="help">Help</a></li>-->
     </ul>
   </div>
 
@@ -30,7 +30,7 @@
         <map name="m_logo" id="m_logo">
           <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
         </map>
-        <div id="search">
+        <!--<div id="search"> TODO
           <form action="/search/index/glsamaker2" method="get">
             <a href="/search/index/glsamaker2" accesskey="4">Search</a>:
             <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
@@ -48,7 +48,7 @@
               <option value="secunia">&nbsp;&nbsp;Secunia Advisories</option>
             </select>
           </form>
-        </div>
+        </div>-->
         <ul>
           <li><a href="/glsa/new" class="new">New...</a></li>
           <li style="margin-right: 2em;">&nbsp;</li>

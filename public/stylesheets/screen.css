@@ -15,10 +15,6 @@ html {
   background-repeat: repeat-y;
 }
 
-img {
-  vertical-align: middle;
-}
-
 a img {
   border: none !important;
 }
@@ -307,6 +303,10 @@ div.legend {
   margin-top: 1em;
 }
 
+div.legend img {
+  vertical-align: middle;
+}
+
 div.legend h3 {
   margin: 0;
 }
@@ -320,7 +320,7 @@ div.box h2 {
 div.box span.toolbar {
   float: right;
   margin-right: 5px;
-  margin-top: 5px;
+  margin-top: 2px;
 }
 
 div.box p {
