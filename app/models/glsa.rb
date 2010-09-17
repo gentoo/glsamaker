@@ -147,9 +147,11 @@ class Glsa < ActiveRecord::Base
       begin
         bugzie = Bugzilla::Bug.load_from_id(bug)
       rescue Exception => e
-        glsa.delete
-        revision.delete
-        raise Exception, "Error while loading bug id #{bug}: #{e.message}"
+        # If Bugzie is down, just put the bug ID and have it load the description later
+        revision.bugs.create(
+          :bug_id => bug
+        )
+        return glsa
       end
 
       begin

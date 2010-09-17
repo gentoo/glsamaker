@@ -161,14 +161,25 @@ class GlsaController < ApplicationController
     logger.debug { "To remove: " + session[:delbugs][@glsa.id].inspect }
     logger.debug { "After removing: " + bugs.inspect }
     
+    bugzilla_warning = false
+    
     bugs.each do |bug|
-      b = Bugzilla::Bug.load_from_id(bug)
+      begin
+        b = Bugzilla::Bug.load_from_id(bug)
       
-      revision.bugs.create(
-        :bug_id => bug,
-        :title => b.summary
-      )
+        revision.bugs.create(
+          :bug_id => bug,
+          :title => b.summary
+        )
+      rescue Exception => e
+        # In case of bugzilla errors, just keep the bug #
+        revision.bugs.create(
+          :bug_id => bug
+        )
+        bugzilla_warning = true
+      end  
     end
+
     logger.debug params[:glsa][:package].inspect
     
     # Packages...
@@ -192,7 +203,7 @@ class GlsaController < ApplicationController
     # Sending emails
     #GlsaMailer.deliver_edit(current_user, @glsa, revision, current_user)
 
-    flash[:notice] = "Saving was successful."
+    flash[:notice] = "Saving was successful. #{'NOTE: Bugzilla integration is not available, only plain bug numbers.' if bugzilla_warning}"
     redirect_to :action => 'show', :id => @glsa
     
   end
