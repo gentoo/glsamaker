@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
   config.gem 'json'
   config.gem 'mechanize'
   config.gem 'fastercsv'
-  config.gem 'text/format'
+  config.gem 'text-format', :lib => 'text/format'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
