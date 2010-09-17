@@ -1,0 +1,34 @@
+<div class="box w40em">
+  <h2><%= @user.login %></h2>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <td><%= @user.id %></td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td><%= h @user.name %></td>
+    </tr>
+    <tr>
+      <th>Email</th>
+      <td><%= mail_to @user.email %></td>
+    </tr>
+    <tr>
+      <th>Access Level</th>
+      <td><%= access_string @user.access %></td>
+    </tr>
+    <tr>
+      <th>Disabled flag</th>
+      <td><%= @user.disabled %></td>
+    </tr>
+    <tr>
+      <th>Admin flag</th>
+      <td><%= @user.jefe %></td>
+    </tr>    
+</table>
+</div>
+
+<%= link_to 'Edit', edit_admin_user_path(@user) %> |
+<%= link_to 'Destroy', admin_user_path(@user), :confirm => 'Are you sure?', :method => :delete %> |
+<%= link_to 'Back', admin_users_path %>

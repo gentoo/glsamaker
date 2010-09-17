@@ -1,0 +1,19 @@
+<h1>Users</h1>
+
+<table class="glsa-list">
+<tr align="left">
+  <th>ID</th>
+  <th>Login</th>
+  <th>Name</th>
+  <th>Email</th>
+  <th>Access Level</th>
+  <th>Disabled</th>
+  <th>Administrator</th>
+</tr>
+
+<%= render :partial => "user", :collection => @users, :as => :user %>
+</table>
+
+<p>
+  <%= link_to 'New User', new_admin_user_path(@user) %>
+</p>

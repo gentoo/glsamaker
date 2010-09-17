@@ -66,7 +66,10 @@ class GlsaController < ApplicationController
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
-      wants.txt { render :text => "text to render..." }
+      wants.txt { 
+        @tf = Text::Format.new
+        render
+      }
     end
   end
 

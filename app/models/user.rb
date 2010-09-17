@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :login, :message => "User name must be unique"
   validates_presence_of :login, :message => "User name can't be blank"
+  
+  validates_presence_of :name, :message => "Name can't be blank"
 
   validates_presence_of :access, :message => "Access level needed"
   validates_numericality_of :access, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 3, :message => "Access level must be between 0 and 3"
