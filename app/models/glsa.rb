@@ -114,7 +114,7 @@ class Glsa < ActiveRecord::Base
   def self.new_request(title, bugs, comment, access, user)
     glsa = Glsa.new
     glsa.requester = user
-    glsa.glsa_id = Digest::MD5.hexdigest(title + Time.now.to_s)[0...10]
+    glsa.glsa_id = Digest::MD5.hexdigest(title + Time.now.to_s)[0...9]
     glsa.restricted = (access == "confidential")
     glsa.status = "request"
 
