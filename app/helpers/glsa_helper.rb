@@ -127,5 +127,18 @@ module GlsaHelper
       image_tag "icons/public.png", :title => "This item is public."
     end
   end
+  
+  def prefixed_item(prefix, text)
+    tf = Text::Format.new()
+    tf.first_indent = tf.body_indent = prefix.length + 1
+    
+    str = tf.format(text)
+    str[0, prefix.length] = prefix
+    str.chomp
+  end
+  
+  def adv_wrap(text)
+    word_wrap(text, 72)
+  end
 end
 

@@ -1,0 +1,91 @@
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id %>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                                            http://security.gentoo.org/
+-----------------------------------------------------------------------
+<%= prefixed_item "          ", @glsa.last_revision.title %>
+=======================================================================
+
+<%= prefixed_item(" Severity:", @glsa.last_revision.severity.capitalize) %>
+<%= prefixed_item("     Date:", @glsa.last_revision.updated_at.strftime('%B %d, %Y')) %>
+<%= prefixed_item("     Bugs:", @glsa.last_revision.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
+<%= prefixed_item("       ID:", @glsa.glsa_id) %>
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Synopsis
+========
+
+<%= adv_wrap @glsa.last_revision.synopsis %>
+
+Background
+==========
+
+<%= adv_wrap @glsa.last_revision.background %>
+
+Affected packages
+=================
+
+   -------------------------------------------------------------------
+    Package         /    Vulnerable    /                   Unaffected
+   -------------------------------------------------------------------
+ 1  app-admin/sudo      < 1.7.4_p3-r1                  >= 1.7.4_p3-r1
+
+    TODO
+
+   -------------------------------------------------------------------
+    3 affected packages on all of their supported architectures.
+   -------------------------------------------------------------------
+
+Description
+===========
+
+<%= adv_wrap @glsa.last_revision.description %>
+
+Impact
+======
+
+<%= adv_wrap @glsa.last_revision.impact %>
+
+Workaround
+==========
+
+<%= adv_wrap @glsa.last_revision.workaround %>
+
+Resolution
+==========
+
+<%= adv_wrap @glsa.last_revision.resolution %>
+
+References
+==========
+
+TODO
+
+Availability
+============
+
+This GLSA and any updates to it are available for viewing at
+the Gentoo Security Website:
+
+ http://security.gentoo.org/glsa/glsa-<%= @glsa.glsa_id %>.xml
+
+Concerns?
+=========
+
+Security is a primary focus of Gentoo Linux and ensuring the
+confidentiality and security of our users machines is of utmost
+importance to us. Any security concerns should be addressed to
+security@gentoo.org or alternatively, you may file a bug at
+https://bugs.gentoo.org.
+
+License
+=======
+
+Copyright <%= Time.now.year %> Gentoo Foundation, Inc; referenced text
+belongs to its owner(s).
+
+The contents of this document are licensed under the
+Creative Commons - Attribution / Share Alike license.
+
+http://creativecommons.org/licenses/by-sa/2.5
