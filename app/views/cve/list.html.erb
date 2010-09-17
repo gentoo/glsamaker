@@ -42,7 +42,7 @@ function toolbar() {
     
     // bottom stuff
     { view: 'Button', rect: '5 940 188 24', anchors: 'left bottom right', text: 'Reload table', id: 'reload-table' },
-    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Close', id: 'close' }
+    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Back to GLSAMaker', id: 'close' }
   ];
 }
 
@@ -243,6 +243,12 @@ uki("#cve-details").click(
     for(var i = 0; i < sel.length; i++) {
       cvepopup(sel[i][1]);
     }
+  }
+);
+
+uki("#close").click(
+  function() {
+    window.location = "/";
   }
 );
 
