@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100902093457) do
+ActiveRecord::Schema.define(:version => 20100918223549) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20100902093457) do
     t.string   "arches"
   end
 
+  add_index "bugs", ["bug_id"], :name => "index_bugs_on_bug_id"
   add_index "bugs", ["revision_id"], :name => "index_bugs_on_revision_id"
 
   create_table "comments", :force => true do |t|
@@ -90,8 +91,8 @@ ActiveRecord::Schema.define(:version => 20100902093457) do
 
   create_table "cve_references", :force => true do |t|
     t.string   "source"
-    t.string   "title"
-    t.string   "uri"
+    t.text     "title"
+    t.text     "uri"
     t.integer  "cve_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -193,7 +194,7 @@ ActiveRecord::Schema.define(:version => 20100902093457) do
     t.string   "name"
     t.string   "email"
     t.boolean  "disabled",    :default => false
-    t.boolean  "jefe",   :default => false    
+    t.boolean  "jefe",        :default => false
     t.text     "preferences"
     t.integer  "access"
     t.datetime "created_at"
