@@ -21,10 +21,9 @@ module Glsamaker
         # Tries to fetch the description for the package +atom+ from
         # an ebuild's entry (works if running on Gentoo)
         def ebuild(atom)
-          return nil if GLSAMAKER_PORTDIR == false
           raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
 
-          dir = File.join(GLSAMAKER_PORTDIR, atom)
+          dir = File.join(Glsamaker::Portage.portdir, atom)
           
           nil
         end

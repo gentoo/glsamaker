@@ -13,10 +13,16 @@ GLSAMAKER_FORCE_PRODUCTION_AUTH = false
 # Email address of the administrative contact
 GLSAMAKER_ADMIN_EMAIL = "security@gentoo.org"
 
-# Email address of the administrative contact
+# Email address to send email from
 GLSAMAKER_FROM_EMAIL = "glsamaker@gentoo.org"
 
-# Location of the Portage tree, set to false if you are not running on Gentoo.
+# Location of the Portage tree, that can be a full gentoo tree, or what this gets you:
+#
+# rsync -av rsync://rsync1.de.gentoo.org/gentoo-portage --include 'metadata' \
+#  --include 'metadata/**' --include '*/*/metadata.xml' --exclude '*/*/*' \
+#  --exclude scripts --exclude eclass --exclude profiles --exclude 'skel.*' \
+#  --exclude 'header.txt' --exclude 'licenses' /target
+#
 GLSAMAKER_PORTDIR = "/usr/portage/"
 
 # Bugzilla login info
