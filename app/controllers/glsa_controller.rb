@@ -15,14 +15,20 @@ class GlsaController < ApplicationController
   before_filter :check_access_level, :except => [:new, :create]
 
   def requests
+    @pageID = "requests"
+    @pageTitle = "Pooled GLSA requests"
     @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
   end
 
   def drafts
+    @pageID = "drafts"
+    @pageTitle = "Pooled GLSA drafts"    
     @glsas = Glsa.find(:all, :conditions => "status = 'draft'", :order => "updated_at DESC")
   end
 
   def archive
+    @pageID = "archive"
+    @pageTitle = "GLSA archive"    
     @glsas = Glsa.find(:all, :conditions => "status = 'release'", :order => "updated_at DESC")
   end
   
