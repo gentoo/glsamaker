@@ -23,13 +23,12 @@
   <p><label for="title">Either take the suggested title or enter a new custom one:</label></p>
   <div id="suggesteddescr"></div>
   <p><textarea name="title" id="title" class="largetext nice" rows="2"><%= h params[:title] %></textarea></p>
-  
 </div>
 <br />
 <div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comment <small>(optional)</small></h2>
   <p><label for="comment">If you want to add a comment, enter it here:</label></p>
-  <p><textarea name="comment" id="comment" class="nice" rows="2"><%= h params[:comment] %></textarea></p>
+  <p><textarea name="comment" id="comment" class="nice" rows="4"><%= h params[:comment] %></textarea></p>
 </div>
 <br />
 <%- if current_user.access >= 1 -%>
