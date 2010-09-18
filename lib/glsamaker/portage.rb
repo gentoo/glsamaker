@@ -77,5 +77,43 @@ module Glsamaker
       Description.google(atom) ||
       "[could not get a description]"
     end
+    
+    # Returns package atoms that match +re+
+    def find_packages(re)
+      results = []
+      
+      Dir.chdir(portdir) do
+        Dir.glob('*-*') do |cat|
+          Dir.glob("#{cat}/*") do |pkg|
+            pkg =~ re and results << "#{pkg}"
+          end
+        end
+      end
+      
+      results
+    end
+    
+    # Returns an array of maintainer email addresses for the package +atom+
+    def get_maintainers(atom)
+      raise(ArgumentError, "Invalid package atom") unless valid_atom?(atom)
+      raise(ArgumentError, "Cannot find metadata") unless File.exist? File.join(portdir, atom, 'metadata.xml')
+      
+      x = Nokogiri::XML(File.read(File.join(portdir, atom, 'metadata.xml')))
+      
+      herds = []
+      maintainers = []
+      
+      x.xpath('/pkgmetadata/herd').each {|h| herds << h.content }
+      x.xpath('/pkgmetadata/maintainer/email').each {|m| maintainers << m.content }
+      
+      unless herds.first == "no-herd"
+        herds_xml = Nokogiri::XML(File.read(File.join(portdir, 'metadata', 'herds.xml')))
+        herds_email = herds.map {|h| herds_xml.xpath("/herds/herd/name[text()='#{h}']").first.parent.xpath("./email").first.content }
+        
+        maintainers + herds_email
+      else
+        maintainers
+      end
+    end
   end
 end
