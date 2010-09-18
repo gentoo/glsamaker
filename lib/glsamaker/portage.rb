@@ -22,7 +22,7 @@ module Glsamaker
         # an ebuild's entry (works if running on Gentoo)
         def ebuild(atom)
           return nil if GLSAMAKER_PORTDIR == false
-          raise(ArgumentError, "Invalid package atom") unless validAtom?(atom)
+          raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
 
           dir = File.join(GLSAMAKER_PORTDIR, atom)
           
@@ -35,7 +35,7 @@ module Glsamaker
 
         # Loads a description for +atom+ from packages.gentoo.org
         def pgo(atom)
-          raise(ArgumentError, "Invalid package atom") unless validAtom?(atom)
+          raise(ArgumentError, "Invalid package atom") unless valid_atom?(atom)
 
           n = Nokogiri::XML(Glsamaker::HTTP.get("http://packages.gentoo.org/package/#{atom}"))
 
@@ -51,17 +51,26 @@ module Glsamaker
         def google(atom)
           nil
         end
-        
-        # Validates the atom +atom+
-        def validAtom?(atom)
-          atom =~ /[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/
-        end
       end
     end
     
-    # Gets a description
     module_function
-    def getDescription(atom)
+    # Returns the location of the portage dir, or raises an exception if it cannot be found
+    def portdir
+      unless File.directory? GLSAMAKER_PORTDIR
+        raise "GLSAMAKER_PORTDIR is not a directory"
+      end
+      
+      GLSAMAKER_PORTDIR
+    end
+    
+    # Validates the atom +atom+
+    def valid_atom?(atom)
+      atom =~ /[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/
+    end    
+    
+    # Gets a description
+    def get_description(atom)
       Description.eix(atom) ||
       Description.ebuild(atom) ||
       Description.pgo(atom) ||
