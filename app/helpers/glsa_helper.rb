@@ -133,12 +133,12 @@ module GlsaHelper
     tf.first_indent = tf.body_indent = prefix.length + 1
     
     str = tf.format(text)
-    str[0, prefix.length] = prefix
+    str[0, prefix.length] = prefix  
     str.chomp
   end
   
   def adv_wrap(text)
     word_wrap(text, 72)
-  end
+  end  
 end
 

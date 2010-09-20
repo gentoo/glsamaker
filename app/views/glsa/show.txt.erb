@@ -3,7 +3,7 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                             http://security.gentoo.org/
 -----------------------------------------------------------------------
-<%= prefixed_item "          ", @glsa.last_revision.title %>
+<%= adv_wrap @glsa.last_revision.title %>
 =======================================================================
 
 <%= prefixed_item(" Severity:", @glsa.last_revision.severity.capitalize) %>
@@ -26,16 +26,27 @@ Background
 Affected packages
 =================
 
-   -------------------------------------------------------------------
-    Package         /    Vulnerable    /                   Unaffected
-   -------------------------------------------------------------------
- 1  app-admin/sudo      < 1.7.4_p3-r1                  >= 1.7.4_p3-r1
-
-    TODO
-
-   -------------------------------------------------------------------
-    3 affected packages on all of their supported architectures.
-   -------------------------------------------------------------------
+    -------------------------------------------------------------------
+     Package              /     Vulnerable     /            Unaffected
+    -------------------------------------------------------------------
+<%= render :partial => "show_package_row", :as => :package, :collection => @packages -%>
+<% if @print_vulnerable -%>
+    -------------------------------------------------------------------
+     NOTE: Certain packages are still vulnerable. Users should migrate
+           to another package if one is available or wait for the
+           existing packages to be marked stable by their
+           architecture maintainers.
+<% end -%>
+<% if @print_noauto -%>
+    -------------------------------------------------------------------
+     NOTE: Packages marked with asterisks require manual intervention!
+<% end -%>
+<% if @packages_count > 1 -%>
+    -------------------------------------------------------------------
+     <%= @packages_count %> affected packages
+<% # on all of their supported architectures. REMOVE? -%>
+    -------------------------------------------------------------------
+<% end -%>
 
 Description
 ===========
@@ -60,7 +71,11 @@ Resolution
 References
 ==========
 
-TODO
+<% @reference_number = 0
+   @max_digits_of_references = @glsa.last_revision.references.size.to_s.size
+
+ -%>
+<%= render :partial => "show_reference", :as => :reference, :collection => @glsa.last_revision.references -%>
 
 Availability
 ============
@@ -74,7 +89,7 @@ Concerns?
 =========
 
 Security is a primary focus of Gentoo Linux and ensuring the
-confidentiality and security of our users machines is of utmost
+confidentiality and security of our users' machines is of utmost
 importance to us. Any security concerns should be addressed to
 security@gentoo.org or alternatively, you may file a bug at
 https://bugs.gentoo.org.

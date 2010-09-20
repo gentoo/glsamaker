@@ -1,0 +1,34 @@
+<%= (@packages_count += 1).to_s.rjust(3) +  "  " -%>
+<%= if package[0].length <= 23
+      package[0].ljust(23)
+    else
+      package[0] + "\n" + ' ' * 28
+    end -%>
+<%=
+
+vulnerable_versions = (package[1]['vulnerable'].sort_by { |p| p.version.to_i } if package[1].has_key? 'vulnerable') || []
+unaffected_versions = (package[1]['unaffected'].sort_by { |p| p.version.to_i } if package[1].has_key? 'unaffected') || []
+
+versions = []
+
+print_vulnerable = (unaffected_versions.size == 0 ? true : false)
+@print_vulnerable = true if print_vulnerable
+
+while vulnerable_versions.size > 0 or unaffected_versions.size > 0
+  v = (vulnerable_versions.shift if vulnerable_versions.size > 0) || nil
+  line = (v ? "#{v.comp} #{v.version}" : "").center(20)
+  
+  if print_vulnerable
+    line += "Vulnerable!".rjust(22)
+    print_vulnerable = false
+  else
+    v = (unaffected_versions.shift if unaffected_versions.size > 0) || nil
+    line += (v ? "#{v.comp} #{v.version} #{v.automatic ? "" : (@print_noauto = true && "*")}" : "").rjust(22)
+  end
+  versions << line
+end  
+
+versions.join("\n" + ' ' * 28)
+
+-%>
+

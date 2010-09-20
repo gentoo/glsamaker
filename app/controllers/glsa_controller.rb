@@ -73,6 +73,11 @@ class GlsaController < ApplicationController
       wants.html { render }
       wants.xml { }
       wants.txt { 
+        @packages = regroup_packages @glsa.last_revision.packages
+        logger.debug @packages.inspect
+        
+        @packages_count = 0
+      
         @tf = Text::Format.new
         render
       }
@@ -350,6 +355,17 @@ class GlsaController < ApplicationController
     end
     
     return true
+  end
+  
+  def regroup_packages(packages)
+    packages_list = {}
+    packages.each do |p|
+      packages_list[p[:atom]] ||= {}
+      (packages_list[p[:atom]][p[:my_type]] ||= []) << p
+    end
+    
+    packages_list
+
   end
   
 end

@@ -1,0 +1,2 @@
+<%= prefixed_item("[ " + (@reference_number += 1).to_s.rjust(@max_digits_of_references) + " ]", reference.title) %>
+<%= prefixed_item(" " * (@max_digits_of_references + 4), reference.url) %>
