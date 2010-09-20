@@ -11,10 +11,10 @@
     <%= restricted_icon glsa.restricted %>
   </td>
   <% if view == :requests %>
-    <td><strong><%= link_to(h(glsa.last_revision.title), {:action => 'edit', :id => glsa}, {:title => "Draft this GLSA"}) %></strong></td>
+    <td><strong><%= link_to(h(glsa.last_revision.title), {:controller => 'glsa', :action => 'edit', :id => glsa}, {:title => "Draft this GLSA"}) %></strong></td>
     <td><%= glsa.created_at %>, <%= h glsa.requester.name %> (<em><%= h glsa.requester.login %></em>)</td>
   <% else %>
-    <td><strong><%= link_to(h(glsa.last_revision.title), {:action => 'show', :id => glsa}, {:title => "Show this GLSA"}) %></strong></td>
+    <td><strong><%= link_to(h(glsa.last_revision.title), {:controller => 'glsa', :action => 'show', :id => glsa}, {:title => "Show this GLSA"}) %></strong></td>
     <td><%= glsa.created_at %>, <%= h glsa.submitter.name %> (<em><%= h glsa.submitter.login %></em>)</td>  
   <% end %>
   <td>

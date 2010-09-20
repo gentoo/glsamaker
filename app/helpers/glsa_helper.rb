@@ -92,7 +92,7 @@ module GlsaHelper
     if status
       image_tag "icons/bug.png", :title => "This item is bug ready."
     else
-      image_tag "icons/bug-grey.png", :title => "This item is a NOT bug ready."
+      image_tag "icons/bug-grey.png", :title => "This item is NOT bug ready."
     end
   end
   
