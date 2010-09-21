@@ -1,0 +1,8 @@
+#!/bin/sh
+# This populates the cache for GLSAMaker to fetch data about packages, and is only meant for running on production.
+DESTDIR=/var/cache/glsamaker-portage/
+SYNC='rsync://rsync.gentoo.org/gentoo-portage'
+RSYNC='/usr/bin/rsync'
+OPTIONS="-aq --include 'metadata' --include 'metadata/**' --include '*/*/metadata.xml' --exclude '*/*/*'   --exclude scripts --exclude eclass --exclude profiles --exclude 'skel.*'   --exclude 'header.txt' --exclude 'licenses'"
+
+"${RSYNC}" ${OPTIONS} "${SYNC}" "${DESTDIR}"
