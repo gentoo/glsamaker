@@ -21,6 +21,7 @@ module Authentication
       
         # Autentication system most likely broken
         if env_user_name.nil?
+          logger.warn "Neither REMOTE_USER nor HTTP_AUTHORIZATION set in environment."
           redirect_to :controller => 'index', :action => 'error', :type => 'system'
           return
         end
@@ -67,7 +68,14 @@ module Authentication
   private
     # Tries to find out the user name used for HTTP auth from two sources
     def user_name
-      request.env['REMOTE_USER'] || (auth = http_authorization_data) == nil ? nil : auth[0]
+      if request.env.include?('REMOTE_USER') then
+        u = request.env['REMOTE_USER']
+        return u unless u.nil?
+      else
+        auth = http_authorization_data
+        return auth[0] unless auth.nil?
+      end
+      return nil
     end
     
     def check_auth(username, password)
@@ -80,6 +88,7 @@ module Authentication
     end
   
     def http_authorization_data
+      return nil unless request.env.include?('HTTP_AUTHORIZATION')
       return nil if request.env['HTTP_AUTHORIZATION'].nil?
       
       auth_info = request.env['HTTP_AUTHORIZATION'].split
