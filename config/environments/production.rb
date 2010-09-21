@@ -14,6 +14,8 @@ config.action_view.cache_template_loading            = true
 
 # Use a different logger for distributed setups
 # config.logger = SyslogLogger.new
+# FIXME: This doesn't work quite yet
+#config.logger = SyslogLogger.new('glsamaker2')
 
 # Use a different cache store in production
 # config.cache_store = :mem_cache_store
@@ -24,5 +26,10 @@ config.action_view.cache_template_loading            = true
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
 
+# We care about email errors
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.delivery_method = :sendmail
+config.action_mailer.sendmail_settings = { :location => '/usr/sbin/sendmail', :arguments => '-i -t -f glsamaker@gentoo.org' }
+
 # Enable threaded mode
-# config.threadsafe!
+config.threadsafe!
