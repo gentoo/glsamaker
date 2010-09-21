@@ -14,4 +14,4 @@ require 'glsamaker/portage'
 require 'glsamaker/diff'
 require 'glsamaker/xml'
 require 'glsamaker/bugs'
-require 'glsamaker/helpers'
+# require 'glsamaker/helpers' DO NOT REQUIRE or else the rake tasks will blow up

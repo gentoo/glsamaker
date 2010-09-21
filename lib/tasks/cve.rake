@@ -13,9 +13,9 @@ libs << File.join(File.dirname(__FILE__), '..', 'bugzilla')
 libs << File.join(File.dirname(__FILE__), '..', 'glsamaker')
 libs << File.join(File.dirname(__FILE__), 'utils')
 
-print "About to load libraries\n"
+#print "About to load libraries\n"
 libs.each { |lib| 
-	print "Loading #{lib}\n"
+#	print "Loading #{lib}\n"
 	require lib 
 }
 
