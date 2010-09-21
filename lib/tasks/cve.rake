@@ -12,6 +12,7 @@ libs = %w[ nokogiri ]
 libs << File.join(File.dirname(__FILE__), '..', 'glsamaker')
 libs << File.join(File.dirname(__FILE__), 'utils')
 
+print "About to load libraries"
 libs.each { |lib| 
 	print "Loading #{lib}"
 	require lib 
