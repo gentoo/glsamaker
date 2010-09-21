@@ -32,7 +32,7 @@ raise "I can't be quiet and verbose at the same time..." if QUIET and VERBOSE
 
 namespace :cve do
   desc "Full CVE data import"
-  task :full_import => :environment do
+  task :full_import => [:environment, "db:load_config"] do
     start_ts = Time.now
 
     (YEAR..Date.today.year).each do |year|
