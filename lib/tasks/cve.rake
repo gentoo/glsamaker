@@ -9,6 +9,7 @@
 # For more information, see the LICENSE file.
 
 libs = %w[ nokogiri ]
+libs << File.join(File.dirname(__FILE__), '..', 'bugzilla')
 libs << File.join(File.dirname(__FILE__), '..', 'glsamaker')
 libs << File.join(File.dirname(__FILE__), 'utils')
 
