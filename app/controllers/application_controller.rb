@@ -26,4 +26,10 @@ class ApplicationController < ActionController::Base
     logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip}: #{msg}"
     redirect_to :controller => '/index', :action => 'error', :type => 'access'
   end
+  
+  def log_error(error)
+    caller[0] =~ /`([^']*)'/ and where = $1
+    logger.error "[#{where}] #{error.class}: #{error.to_s}"
+    logger.info error.backtrace.join("\n")
+  end
 end

@@ -55,6 +55,7 @@ class CveController < ApplicationController
 
     render :layout => false
   rescue Exception => e
+    log_error e
     render :text => e.message, :status => 500
   end
 
@@ -92,6 +93,7 @@ class CveController < ApplicationController
     render :text => "ok"
 
   rescue Exception => e
+    log_error e
     render :text => e.message, :status => 500
   end
 
@@ -115,6 +117,7 @@ class CveController < ApplicationController
 
     render :text => "ok"
   rescue Exception => e
+    log_error e
     render :text => e.message, :status => 500
   end
 
