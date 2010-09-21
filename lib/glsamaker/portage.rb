@@ -34,7 +34,7 @@ module Glsamaker
 
         # Loads a description for +atom+ from packages.gentoo.org
         def pgo(atom)
-          raise(ArgumentError, "Invalid package atom") unless valid_atom?(atom)
+          raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
 
           n = Nokogiri::XML(Glsamaker::HTTP.get("http://packages.gentoo.org/package/#{atom}"))
 
@@ -94,7 +94,7 @@ module Glsamaker
     
     # Returns an array of maintainer email addresses for the package +atom+
     def get_maintainers(atom)
-      raise(ArgumentError, "Invalid package atom") unless valid_atom?(atom)
+      raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
       raise(ArgumentError, "Cannot find metadata") unless File.exist? File.join(portdir, atom, 'metadata.xml')
       
       x = Nokogiri::XML(File.read(File.join(portdir, atom, 'metadata.xml')))
