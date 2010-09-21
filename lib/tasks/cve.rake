@@ -12,7 +12,10 @@ libs = %w[ nokogiri ]
 libs << File.join(File.dirname(__FILE__), '..', 'glsamaker')
 libs << File.join(File.dirname(__FILE__), 'utils')
 
-libs.each { |lib| require lib }
+libs.each { |lib| 
+	print "Loading #{lib}"
+	require lib 
+}
 
 TMPDIR = File.join(File.dirname(__FILE__), '..', '..', 'tmp')
 # What year are the first CVEs from?
