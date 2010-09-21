@@ -121,6 +121,8 @@ module Bugzilla
         FileUtils.touch(cookie_file)
         File.chmod(0600, cookie_file)
         a.cookie_jar.save_as(cookie_file)
+      else
+        Rails.logger.warn "Failure logging in."
       end
     end
 
