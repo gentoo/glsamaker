@@ -70,8 +70,9 @@ function markEntryAsDeleted(elem, type) {
 
 function generateResolution() {
   $('resolution').value = "";
-  resolution = "";
-  unaffected_atoms = new Array();
+  var resolution = "";
+  var unaffected_atoms = new Array();
+  var name, atom, comp, version;
   
   // First find and list all upgrade paths...
   for (i = 0; i < $('packages_table_unaffected').select('.entry').length; i++) {
@@ -80,6 +81,8 @@ function generateResolution() {
     
     atom = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__atom").value;
     name = atom.split("/")[1];
+    if (name == undefined)
+      name = "UNDEFINED";
     comp = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__comp").value;
     version = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__version").value;
        
@@ -100,7 +103,9 @@ function generateResolution() {
     atom = $('packages_table_vulnerable').down(".entry", i).down("#glsa_package__atom").value;
     if (unaffected_atoms.indexOf(atom) == -1) {
       name = atom.split("/")[1];
-  		
+      if (name == undefined)
+        name = "UNDEFINED";
+      
       resolution += "We recommend that users unmerge " + name + ":\n\n\
 <code>\n\
 # emerge --unmerge \"" + atom + "\"</code>";
@@ -117,16 +122,16 @@ function generateDescription() {
   // i is used to walk down into the i'th entry element
   // act_i is used to keep track of how many packages have been / will be added
   
-  name = "";
-  cnt = $('packages_table_vulnerable').select('.entry').length;
-  act_cnt = cnt - $('packages_table_vulnerable').select('.entry input[type=hidden][value=ignore]').length;
+  var name = "";
+  var cnt = $('packages_table_vulnerable').select('.entry').length;
+  var act_cnt = cnt - $('packages_table_vulnerable').select('.entry input[type=hidden][value=ignore]').length;
   
-  act_i = 0;
-  for (i = 0; i < cnt; i++) {
+  var act_i = 0;
+  for (var i = 0; i < cnt; i++) {
     if ($('packages_table_vulnerable').down(".entry", i).select('input[type=hidden][value=ignore]').length > 0)
       continue;
     
-    atom = $('packages_table_vulnerable').down(".entry", i).down("#glsa_package__atom").value;
+    var atom = $('packages_table_vulnerable').down(".entry", i).down("#glsa_package__atom").value;
 		
     if (act_cnt > 1 && act_i == act_cnt - 1) {
       name += ", and ";
@@ -136,6 +141,9 @@ function generateDescription() {
     act_i++;
     name += atom.split("/")[1];
   }
+  
+  if (name == "undefined")
+    name = "UNDEFINED";
     
   $('description').value = "Multiple vulnerabilities have been discovered in " + name + ". Please view the CVE identifiers referenced below for details.";
 }
