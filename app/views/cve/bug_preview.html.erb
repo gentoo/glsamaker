@@ -1,0 +1,73 @@
+<label for="bug_title"><strong>Bug title:</strong></label><br />
+<input type="text" id="bug_title" value="<%= h @package %>: Unspecified vulnerability (<%= bugs_unify_cvenames(@cve_ids) %>)" style="width: 100%; font-size: 115%;" />
+<br /><br />
+<strong>File in:</strong>
+<input type="radio" name="bug_type" id="type_1" value="vuln" checked="checked" />
+<label for="type_1">Vulnerabilities</label>&nbsp;&nbsp;&nbsp;
+<input type="radio" name="bug_type" id="type_2" value="kernel" />
+<label for="type_2">Kernel</label>
+<br /><br />
+
+<input type="checkbox" id="cc_maint" value="1" checked="checked" />
+<label for="cc_maint"><strong>CC the maintainers:</strong></label> <%= h @maintainers.join ', ' %>
+<br /><br />
+<label for="custom_cc"><strong>Add other people to CC:</strong> (comma separated)</label><br />
+<input type="text" id="custom_cc" style="width: 100%" />
+<br /><br />
+
+<strong>Whiteboard:</strong><br />
+<select id="wb_1">
+  <option>A1</option>
+  <option>A2</option>
+  <option>A3</option>
+  <option>A4</option>
+  <option>A?</option>
+  <option>B1</option>
+  <option>B2</option>
+  <option>B3</option>
+  <option>B4</option>
+  <option>B?</option>  
+  <option>C1</option>
+  <option>C2</option>
+  <option>C3</option>
+  <option>C4</option>
+  <option>C?</option>  
+  <option>~1</option>
+  <option>~2</option>
+  <option>~3</option>
+  <option>~4</option>
+  <option>~?</option>
+  <option>?1</option>
+  <option>?2</option>
+  <option>?3</option>
+  <option>?4</option>  
+  <option>??</option>
+</select>
+
+<select id="wb_2">
+  <option>[ebuild]</option>
+  <option>[upstream]</option>
+  <option>[upstream/ebuild]</option>
+  <option>[stable]</option>
+  <option>[stable?]</option>
+  <option>[cleanup]</option>
+  <option>[?]</option>    
+</select>
+
+<input type="text" id="wb_ext" />
+
+<br /><br />
+<input type="checkbox" id="add_comment" value="1" />
+<label for="add_comment"><strong>Add a comment:</strong> (appears after the CVE descriptions)</label>
+
+<textarea id="comment" rows="5" style="width: 100%;"></textarea>
+
+<br /><br/ >
+<strong>
+  <input type="checkbox" id="add_cves" value="1" checked="checked" />
+  <label for="add_cves">Add CVE descriptions:</label>
+</strong>
+
+<p><pre><%= h @cve_txt %></pre></p>
+
+<input type="hidden" name="package" id="package" value="<%= h @package %>" />
