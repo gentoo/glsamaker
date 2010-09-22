@@ -111,7 +111,7 @@ module Glsamaker
         herds_xml = Nokogiri::XML(File.read(File.join(portdir, 'metadata', 'herds.xml')))
         herds_email = herds.map {|h| herds_xml.xpath("/herds/herd/name[text()='#{h}']").first.parent.xpath("./email").first.content }
         
-        maintainers + herds_email
+        (maintainers + herds_email).uniq
       else
         maintainers
       end
