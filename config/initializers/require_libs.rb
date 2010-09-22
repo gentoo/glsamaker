@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 unless Rails.env == 'development'
   require 'lib/authentication'
   require 'lib/diff'
