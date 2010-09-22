@@ -3,14 +3,14 @@ class ConvertToInnodb < ActiveRecord::Migration
   def self.up
     TABLES.each { |table|
         ActiveRecord::Migration::say "Converting table #{table} to InnoDB engine"
-        execute("ALTER TABLE #{table.to_s} TYPE = InnoDB")
+        execute("ALTER TABLE `#{table.to_s}` TYPE = InnoDB")
     }
   end
 
   def self.down
     TABLES.each { |table|
         ActiveRecord::Migration::say "Converting table #{table} to MyISAM engine"
-        execute("ALTER TABLE #{table.to_s} TYPE = MyISAM")
+        execute("ALTER TABLE `#{table.to_s}` TYPE = MyISAM")
     }
   end
 end
