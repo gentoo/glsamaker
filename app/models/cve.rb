@@ -56,7 +56,7 @@ class CVE < ActiveRecord::Base
     if summary =~ / in (?:the )?(?:a )?(\D+) \d+/
       match = $1
       if match.end_with? 'before'
-        package_hints << search(match[0, $1.length - 7])
+        package_hints << search(match[0, match.length - 7])
       else
         package_hints << search(match)
       end
