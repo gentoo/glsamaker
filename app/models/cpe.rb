@@ -10,4 +10,20 @@
 
 class CPE < ActiveRecord::Base
   has_and_belongs_to_many :cves, :class_name => "CVE"
+  
+  def split
+    self.cpe.split(':')
+  end
+  
+  def vendor
+    split[2]
+  end
+  
+  def product
+    split[3]
+  end
+  
+  def version
+    split[4]
+  end
 end
