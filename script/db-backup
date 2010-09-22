@@ -22,6 +22,8 @@ else
 end
 opts << '--databases' << dbc['database']
 
-exec (DUMP_CMD, opts, ARGV).join(' ')
+cmd = ([DUMP_CMD]+opts+ARGV).join(' ')
+#print "#{cmd}\n"
+exec cmd
 
 # vim: ts=2 sw=2 et ft=ruby sts=2 tw=72 nospell:
