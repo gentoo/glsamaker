@@ -100,6 +100,47 @@ module Bugzilla
 
       raise unless post_result.body.include? "Changes submitted for bug"
     end
+  end
+  
+  # Files a bug, and returns the id of the filed bug
+  def file_bug(data)
+    Rails.logger.debug "Called Bugzilla.file_bug"
+    cookie_file = File.join(RAILS_ROOT, 'tmp', 'bugzie-cookies.yaml')
+
+    a = Mechanize.new { |agent|
+      agent.user_agent = "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"
+    }
+
+    log_in unless File.exist? cookie_file
+    a.cookie_jar.load(cookie_file)
+
+    Rails.logger.debug "URL: https://bugs.gentoo.org/enter_bug.cgi?product=%s" % data[:product]
+    a.get("https://bugs.gentoo.org/enter_bug.cgi?product=%s" % data[:product]) do |page|
+      unless page.body.include? '*+*GLSAMAKER-LOGGEDIN*+*'
+        Rails.logger.debug "Not logged in, doing that now."
+        log_in()
+        a.cookie_jar.load(cookie_file)
+      end
+
+      post_result = page.form_with(:name => 'Create') do |form|
+        form.component = data[:component] if data.has_key?(:component)
+        form.assigned_to = data[:assignee] if data.has_key?(:assignee)
+        form.cc = data[:cc] if data.has_key?(:cc)
+        form.alias = data[:alias] if data.has_key?(:alias)
+        form.bug_file_loc = data[:url] if data.has_key?(:url)
+        form.short_desc = data[:summary] if data.has_key?(:summary)
+        form.comment = data[:comment] if data.has_key?(:comment)
+        form.keywords = data[:keywords] if data.has_key?(:keywords)
+        form.dependson = data[:depends] if data.has_key?(:depends)
+        form.blocked = data[:blocks] if data.has_key?(:blocks)
+        form.bug_severity = data[:severity] if data.has_key?(:severity)
+      end.submit
+
+      raise unless post_result.body.include? "has been added to the database"
+      
+      post_result.body =~ /(\d+) has been added to the database/
+      return $1.to_i
+    end
   end  
 
   def log_in
