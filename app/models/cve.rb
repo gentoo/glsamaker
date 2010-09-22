@@ -31,4 +31,49 @@ class CVE < ActiveRecord::Base
     end
     txt
   end
+  
+  # Looks for Gentoo packages that might be affected by this CVE
+  def package_hints
+    def search(s)
+      Glsamaker::Portage.find_packages(
+        Regexp.compile(Regexp.escape(s).gsub(/[^a-zA-Z0-9]/, '.*?'), Regexp::IGNORECASE)
+      )
+    end
+    
+    package_hints = []
+    package_hints << cpes.map {|c| search c.product }.flatten
+    
+    # stolen from the old cvetools.py
+    if summary =~ / in (\S+\.\S+) in (?:the )?(?:a )?(\D+) \d+/
+      match = $2
+      if match.end_with? 'before'
+        package_hints << search(match[0, match.length - 7])
+      else
+        package_hints << search(match)
+      end
+    end
+    
+    if summary =~ / in (?:the )?(?:a )?(\D+) \d+/
+      match = $1
+      if match.end_with? 'before'
+        package_hints << search(match[0, $1.length - 7])
+      else
+        package_hints << search(match)
+      end
+    end
+    
+    if summary =~ / in (\S+\.\S+) in (?:the )?(?:a )?(\S+) /
+      package_hints << search($1)
+    end
+    
+    if summary =~ / in (?:the )?(?:a )?(\S+) /
+      package_hints << search($1)
+    end
+    
+    if summary =~ /(?:The )?(\S+) /
+      package_hints << search($1)
+    end
+    
+    package_hints.flatten.uniq
+  end
 end
