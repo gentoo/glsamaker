@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+# Log to STDOUT if in Rails
+if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER') && ENV.include?('RAILS_LOG_SQL')
+  require 'logger'
+  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
+end
+
+require(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+dbc = CVE.configurations[RAILS_ENV]
+opts = []
+opts << sprintf("-u%s -p%s", dbc['username'], dbc['password'])
+if dbc.include?('socket') then
+  opts << sprintf('-S %s', dbc['socket'])
+else
+  opts << sprintf('-h %s ', dbc['host'])
+  opts << sprintf('--port %s', dbc['port']) if dbc.include?('port')
+end
+opts << sprintf('--databases %s', dbc['database'])
+
+exec 'mk-parallel-dump', ' ', (opts + ARGV).join(' ')
+
+# vim: ts=2 sw=2 et ft=ruby sts=2 tw=72 nospell:
