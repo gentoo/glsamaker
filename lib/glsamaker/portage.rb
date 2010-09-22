@@ -83,8 +83,10 @@ module Glsamaker
       
       Dir.chdir(portdir) do
         Dir.glob('*-*') do |cat|
-          Dir.glob("#{cat}/*") do |pkg|
-            pkg =~ re and results << "#{pkg}"
+          Dir.chdir(cat) do
+            Dir.glob("*") do |pkg|
+              pkg =~ re and results << "#{cat}/#{pkg}"
+            end
           end
         end
       end
