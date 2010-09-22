@@ -10,15 +10,16 @@ require(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
 dbc = CVE.configurations[RAILS_ENV]
 opts = []
-opts << sprintf("-u%s -p%s", dbc['username'], dbc['password'])
+opts << '-u' << dbc['username']
+opts << '-p' << dbc['password']
 if dbc.include?('socket') then
-  opts << sprintf('-S %s', dbc['socket'])
+  opts << '-S' << dbc['socket']
 else
-  opts << sprintf('-h %s ', dbc['host'])
-  opts << sprintf('--port %s', dbc['port']) if dbc.include?('port')
+  opts << '-h' << dbc['host']
+  opts << '--port' <<  dbc['port'] if dbc.include?('port')
 end
-opts << sprintf('--databases %s', dbc['database'])
+opts << '--databases' << dbc['database']
 
-exec 'mk-parallel-dump', ' ', (opts + ARGV).join(' ')
+exec 'mk-parallel-dump', ' ', opts, ARGV
 
 # vim: ts=2 sw=2 et ft=ruby sts=2 tw=72 nospell:
