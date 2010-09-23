@@ -101,7 +101,7 @@ namespace :cve do
     end
 
     namespace = {'cve' => 'http://scap.nist.gov/schema/feed/vulnerability/2.0'}
-    processed_cves = new_cves = updated_cves = 0
+    processed_cves = created_cves = updated_cves = 0
     cpe_cache = {}
 
     cves = xml.root.xpath('cve:entry', namespace)
@@ -214,7 +214,7 @@ namespace :cve do
 
     info ""
 
-    info "(#{Time.now - start_ts} seconds, #{new_cves} new CVE entries, #{updated_cves} updated CVE entries)"
+    info "(#{Time.now - start_ts} seconds, #{created_cves} new CVE entries, #{updated_cves} updated CVE entries)"
   end
 
   desc "Import CVE resolutions from the old CVE tool"
