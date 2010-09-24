@@ -142,6 +142,7 @@ uki("#cve-file").click(
       parameters: { cves: cve_file_data.join(',')},
       onSuccess: function(response) {
         uki('#cve-file-1-list').data(response.responseJSON['package_hints']);
+        uki('#cve-file-1-atom').value('');
         popup.show();
       },
       onFailure: function(response) {
@@ -192,6 +193,7 @@ uki('#cve-file-1-go').click(
       
         uki('#file-1-popup').hide();
         uki('#file-2-popup').show();
+        $('bug_title').focus();
       },
       onFailure: function(response) {
         alert("Could not process your request:\n\n" + response.responseText);
@@ -213,7 +215,19 @@ uki('#cve-file-2-go').click(
       alert("Error. Internal CVE list empty.");
       uki('#file-2-popup').hide();
       return;
-    }    
+    }
+    
+    if ($('wb_1').value == '--') {
+      alert('Please select a whiteboard setting. If unsure use "??" instead.');
+      $('wb_1').focus();
+      return;
+    }
+    
+    if (!($('add_comment').checked || $('add_cves').checked)) {
+      alert("Adding the CVE description is strongly suggested!\n\nIf you do not want to add it, then you need at least to add a comment.");
+      $('comment').focus();
+      return;
+    }
 
     uki('#cve-file-2-go').disabled(true);
 

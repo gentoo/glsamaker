@@ -82,7 +82,7 @@ class CveController < ApplicationController
       :product => 'Gentoo Security',
       :component => params[:bug_type] == 'true' ? 'Vulnerabilities' : 'Kernel',
       :summary => params[:bug_title],
-      :assignee => 'security@gentoo.org',
+      :assignee => 'security@gentoo.org'
     }
     
     cc = []
@@ -99,13 +99,15 @@ class CveController < ApplicationController
     end
     
     if params[:add_comment] == 'true'
-      comment += "\n"
+      comment += "\n" if params[:add_cves]
       comment += params[:comment]
     end
     data[:comment] = comment
     
     whiteboard = "%s %s" % [params[:wb_1], params[:wb_2]]
     whiteboard += " %s" % params[:wb_ext] unless params[:wb_ext] == ""
+    
+    data[:severity] = whiteboard_to_severity(whiteboard)
     
     bugnr = -1
     begin
