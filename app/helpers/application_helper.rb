@@ -69,5 +69,29 @@ module ApplicationHelper
     "#{summary} (#{cve_str})"
   end
   
+  # Returns the appropriate severity setting for a given whiteboard string
+  def whiteboard_to_severity(wb)
+    return 'normal' if wb.length < 2
+
+    ev = wb[0..2]
+    case ev
+    when 'A0', 'B0'
+      'blocker'
+    when 'A1', 'C0'
+      'critical'
+    when 'A2', 'B2', 'C1'
+      'major'
+    when 'A3', 'B3', 'C2'
+      'normal'
+    when 'A4', 'B4', 'C3'
+      'minor'
+    when 'C4', '~0', '~1', '~2', '~3', '~4'
+      'trivial'
+    else
+      'normal'
+    end
+  end
+    
+  
 end
 
