@@ -73,9 +73,6 @@ class CveController < ApplicationController
   end
   
   def bug
-    # {"add_cves"=>"1", "comment"=>"", "wb_1"=>"A1", "cves"=>"200", "wb_2"=>"[ebuild]", "action"=>"bug", "wb_ext"=>"", 
-    # "bug_title"=>"dev-perl/HTTP-Server-Simple: Unspecified vulnerability (CVE-2004-0113)", "bug_type"=>"true", 
-    # "controller"=>"cve", "_"=>"", "cc_custom"=>"", "add_comment"=>"1", "cc_maint"=>"true"}
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug (final); CVElist: " + cve_nums.inspect }
 
