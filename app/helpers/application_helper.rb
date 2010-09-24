@@ -73,7 +73,7 @@ module ApplicationHelper
   def whiteboard_to_severity(wb)
     return 'normal' if wb.length < 2
 
-    ev = wb[0..2]
+    ev = wb[0..1]
     case ev
     when 'A0', 'B0'
       'blocker'
@@ -91,7 +91,4 @@ module ApplicationHelper
       'normal'
     end
   end
-    
-  
 end
-
