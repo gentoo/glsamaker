@@ -61,7 +61,7 @@ uki(
 ).attachTo(window, '1000 1000');
 
 uki(
-  { view: 'Popup', rect: '650 400', anchors: 'left top', id: 'assign-popup', relativeTo: uki('#popup'), childViews: [
+  { view: 'Popup', rect: '650 400', anchors: 'left top', id: 'assign-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
       { view: 'Label', rect: '10 10 630 20', anchors: 'top', text: '', id: 'cve-assign-title' },
       { view: 'ScrollPane', rect: '10 30 635 320', anchors: 'top left right bottom', id: 'cve-assign-scroll', scrollableV: true, scrollableH: false, childViews: [
         { view: 'Label', rect: '10 20 600 200', anchors: 'top', text: '', id: 'cve-assign-text', textSelectable: true, multiline: true},
@@ -73,7 +73,7 @@ uki(
 );
 
 uki(
-  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'file-1-popup', relativeTo: uki('#popup'), childViews: [
+  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'file-1-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
       { view: 'Label', rect: '10 10 480 20', anchors: 'top', text: 'Select a package to file this bug against:', id: 'cve-file-1-title' },
       { view: 'ScrollableList', rect: '10 35 480 170', anchors: 'top left right bottom', id: 'cve-file-1-list' },
       { view: 'Label', rect: '10 210 480 20', anchors: 'top', text: 'Or manually enter a package atom:', id: 'cve-file-1-title2' },
@@ -85,7 +85,7 @@ uki(
 );
 
 uki(
-  { view: 'Popup', rect: '650 400', anchors: 'left top', id: 'file-2-popup', relativeTo: uki('#popup'), childViews: [
+  { view: 'Popup', rect: '650 400', anchors: 'left top', id: 'file-2-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
       { view: 'Label', rect: '10 10 630 20', anchors: 'top', text: 'Enter the information for filing the bug:', id: 'cve-file-2-title' },
       { view: 'ScrollPane', rect: '10 30 635 320', anchors: 'top left right bottom', id: 'cve-file-2-scroll', scrollableV: true, scrollableH: false, childViews: [
         { view: 'Label', rect: '10 10 600 400', anchors: 'top', text: '', id: 'cve-file-2-text', textSelectable: true, multiline: true},
@@ -97,7 +97,7 @@ uki(
 );
 
 uki(
-  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'nfu-popup', relativeTo: uki('#popup'), childViews: [
+  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'nfu-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
       { view: 'Label', rect: '10 10 480 20', anchors: 'top', html: '<strong>The following CVEs will be marked as NFU:</strong>', id: 'cve-nfu-title'},
       { view: 'ScrollableList', rect: '10 35 480 190', anchors: 'top left right bottom', id: 'cve-nfu-list' },
       { view: 'TextField', rect: '10 235 480 22', anchors: 'left top right', placeholder: 'Add a (public) comment', id: 'nfu-comment' },
@@ -116,6 +116,71 @@ uki(
 
 uki("#reload-table").click(
   function() { reloadTable(); }
+);
+
+document.onkeyup = function(e){ 
+  var keycode;
+  
+  if (e == null) { // ie 
+    keycode = event.keyCode; 
+  } else { // mozilla 
+    keycode = e.which; 
+  } 
+
+  if (keycode == 27) {
+    if (uki('#nfu-popup').visible())
+      uki('#nfu-popup').hide();
+    if (uki('#assign-popup').visible())
+      uki('#assign-popup').hide();
+    if (uki('#file-1-popup').visible())
+      uki('#file-1-popup').hide();
+    if (uki('#file-2-popup').visible())
+      uki('#file-2-popup').hide();
+    
+    enableMainView();
+    uki('Table').focus();
+  } else if (keycode == 13 && e.ctrlKey) {
+    if (uki('#nfu-popup').visible())
+      uki('#cve-nfu-go').click();
+    if (uki('#assign-popup').visible())
+      uki('#cve-assign-go').click();
+    if (uki('#file-1-popup').visible())
+      uki('#cve-file-1-go').click();
+    if (uki('#file-2-popup').visible())
+      uki('#cve-file-2-go').click();
+  }
+};
+
+uki('Table').keyup(
+  function(e) {
+    var c = e.keyCode;
+    //alert(c);
+    
+    if (c == 110 || c == 78) { // n;N
+      uki('#cve-mark-nfu').click();
+      return;
+    }
+    
+    if (c == 108 || c == 76) { // l;L
+      uki('#cve-mark-later').click();
+      return;      
+    }
+    
+    if (c == 105 || c == 73) { // i;I
+      uki('#cve-mark-invalid').click();
+      return;      
+    }
+
+    if (c == 97 || c == 65 || c == 51) { // a;A;#
+      uki('#assign-bug-nr').focus();
+      return;      
+    }
+    
+    if (c == 102 || c == 70 || c == 98 || c == 66) { // f;F;b;B
+      uki('#cve-file').click();
+      return;      
+    }    
+  }
 );
 
 /** Filing **/
@@ -143,6 +208,8 @@ uki("#cve-file").click(
       onSuccess: function(response) {
         uki('#cve-file-1-list').data(response.responseJSON['package_hints']);
         uki('#cve-file-1-atom').value('');
+        uki('#cve-file-1-atom').focus();
+        disableMainView();
         popup.show();
       },
       onFailure: function(response) {
@@ -156,6 +223,7 @@ uki("#cve-file").click(
 uki('#cve-file-1-cancel').click(
   function() {
     uki('#file-1-popup').hide();
+    enableMainView();
   }
 );
 
@@ -363,11 +431,12 @@ uki("#cve-mark-nfu").click(
       cve_nfu_data.push(sel[i][0]);
     }
 
-    var list = uki('#cve-nfu-list').data(data);
+    uki('#cve-nfu-list').data(data);
 
     uki('#nfu-comment').value('');
     uki('#nfu-popup').show();
-    uki('#cve-nfu-go').focus();    
+
+    uki('#cve-nfu-go').focus();
   }
 );
 
@@ -492,6 +561,12 @@ function reloadTable() {
       uki('#loading').text("Loading CVE data failed. Please try again later.");
     }
   });
+}
+
+function disableMainView() {
+}
+
+function enableMainView() {
 }
 
 reloadTable();
