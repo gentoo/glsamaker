@@ -32,6 +32,31 @@ class CVE < ActiveRecord::Base
     txt
   end
   
+  # Assigns the CVE to a certain bug, creating a history entry
+  def assign(bugnr, user, action = 'assign')
+    bugnr = Integer(bugnr)
+    
+    case action
+    when 'assign', :assign
+      act = 'assign'
+    when 'file', :file
+      act = 'file'
+    else
+      raise ArgumentError, "Invalid action specified"
+    end
+    
+    a = self.assignments.create!(:bug => bugnr)
+    
+    ch = self.cve_changes.create!(
+      :user => user,
+      :action => act,
+      :object => a.id
+    )
+    
+    self.state = 'ASSIGNED'
+    save!
+  end
+  
   # Looks for Gentoo packages that might be affected by this CVE
   def package_hints
     def search(s)

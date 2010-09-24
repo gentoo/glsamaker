@@ -120,20 +120,7 @@ class CveController < ApplicationController
     
     logger.info "Filed bug #{bugnr} on behalf of user #{current_user.login}."
     
-    cves.each do |cve|
-      a = cve.assignments.new
-      a.bug = bugnr
-      a.save!
-      
-      ch = cve.cve_changes.new
-      ch.user = current_user
-      ch.action = 'file'
-      ch.object = a.id
-      ch.save!
-      
-      cve.state = 'ASSIGNED'
-      cve.save!
-    end
+    cves.each {|cve| cve.assign(bugnr, current_user, :file) }
     
     render :text => 'ok'
   rescue Exception => e
@@ -164,21 +151,7 @@ class CveController < ApplicationController
     cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "Assign Bug: #{bug_id} CVElist: " + cves.inspect }
 
-    cves.each do |cve_id|
-      cve = CVE.find cve_id
-      assi = cve.assignments.new
-      assi.bug = bug_id
-      assi.save!
-
-      ch = cve.cve_changes.new
-      ch.user = current_user
-      ch.action = 'assign'
-      ch.object = assi.id
-      ch.save!
-
-      cve.state = "ASSIGNED"
-      cve.save!
-    end
+    cves.each {|cve_id| CVE.find(cve_id).assign(bug_id, current_user, :assign) }
 
     if params[:comment] or params[:summary]
       bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
