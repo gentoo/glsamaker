@@ -1,3 +1,4 @@
+<form>
 <label for="bug_title"><strong>Bug title:</strong></label><br />
 <input type="text" id="bug_title" value="<%= h @package %>: Unspecified vulnerability (<%= bugs_unify_cvenames(@cve_ids) %>)" style="width: 100%; font-size: 115%;" />
 <br /><br />
@@ -71,3 +72,4 @@
 <p><pre><%= h @cve_txt %></pre></p>
 
 <input type="hidden" name="package" id="package" value="<%= h @package %>" />
+</form>
