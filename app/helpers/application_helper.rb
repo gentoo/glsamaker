@@ -42,7 +42,7 @@ module ApplicationHelper
     cve_r = /CVE-(\d{4})-(\d+)/
 
     years = {}
-    cves.each do |cve|
+    cves.uniq.each do |cve|
       cve_r =~ cve
       years[$1] ||= []
       years[$1] << $2

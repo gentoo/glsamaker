@@ -160,8 +160,8 @@ class CveController < ApplicationController
       cve_ids = cves.map {|c| CVE.find(c).cve_id }
       changes = {}
 
-      changes[:comment] = CVE.concat(cves) if params[:comment]
-      changes[:summary] = cveify_bug_title(bug.summary, cve_ids)
+      changes[:comment] = CVE.concat(cves) if params[:comment] == 'true'
+      changes[:summary] = cveify_bug_title(bug.summary, cve_ids) if params[:summary] == 'true'
       Bugzilla.update_bug(bug_id, changes)
     end
 
