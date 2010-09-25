@@ -164,7 +164,11 @@ function cveinfo(cveid) {
 }
 
 function cvepopup(cveid) {
-  window.open("/cve/info/" + cveid, "cvepopup-" + cveid, "width=500, height=400,status=no,menubar=no,toolbar=no,resizable=no");
+  window.open("/cve/info/" + escapeHTML(cveid), "cvepopup-" + cveid, "width=500, height=400,status=no,menubar=no,toolbar=no,resizable=no");
+}
+
+function escapeHTML(str) {
+  return str.replace(/(<([^>]+)>)/ig,""); 
 }
 
 //document.observe('dom:loaded', function() {

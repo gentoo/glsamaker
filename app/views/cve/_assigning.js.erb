@@ -1,0 +1,93 @@
+/** Assigning **/
+uki(
+  { view: 'Popup', rect: '650 400', anchors: 'left top', id: 'assign-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
+      { view: 'Label', rect: '10 10 630 20', anchors: 'top', text: '', id: 'cve-assign-title' },
+      { view: 'ScrollPane', rect: '10 30 635 320', anchors: 'top left right bottom', id: 'cve-assign-scroll', scrollableV: true, scrollableH: false, childViews: [
+        { view: 'Label', rect: '10 20 600 200', anchors: 'top', text: '', id: 'cve-assign-text', textSelectable: true, multiline: true},
+      ] },
+      { view: 'Button', rect: '495 365 70 24', anchors: 'bottom right', id: 'cve-assign-cancel', text: 'Cancel' },
+      { view: 'Button', rect: '570 365 70 24', anchors: 'bottom right', id: 'cve-assign-go', text: 'Assign' }
+    ]
+  }
+);
+
+uki('#assign-bug-nr').keypress(
+  function(e) {
+    if (e.charCode == 13) {
+      uki('#cve-assign').click();
+    }
+  }
+);
+
+uki("#cve-assign").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+    
+    if (sel.length < 1) {
+      alert("Please select at least one CVE.");
+      return false;
+    }
+    
+    var popup = uki('#assign-popup');
+    var bugnr = uki('#assign-bug-nr').value();
+    
+    if (!(bugnr == parseInt(bugnr)) || bugnr.length == 0) {
+      alert("Please enter a numeric bug #.");
+      return false;
+    }
+    
+    cve_assign_data = new Array();
+    for (var i = 0; i < sel.length; i++) {
+      cve_assign_data.push(sel[i][0]);
+    }
+    
+    new Ajax.Request('/cve/assign_preview', {
+      parameters: { cves: cve_assign_data.join(','), bug: bugnr },
+      onSuccess: function(response) {
+        uki('#cve-assign-text').html(response.responseText);
+        uki('#cve-assign-text').resizeToContents('height');
+        
+        uki('#cve-assign-title').html("<strong>The following changes will be made to bug " + bugnr + ":</strong>");
+        popup.show();
+        uki('#cve-assign-go').disabled(false);
+        uki('#cve-assign-go').focus();
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });    
+  }
+);
+
+uki('#cve-assign-cancel').click(
+  function() {
+    uki('#assign-popup').hide();
+  }
+);
+
+uki('#cve-assign-go').click(
+  function() {
+    uki('#cve-assign-go').disabled(true);    
+    var bugnr = uki('#assign-bug-nr').value();
+    
+    if (cve_assign_data < 1) {
+      alert("Error. Internal CVE list empty.");
+      uki('#assign-popup').hide();
+      return;
+    }
+    
+    new Ajax.Request('/cve/assign', {
+      parameters: { cves: cve_assign_data.join(','), bug: bugnr, comment: $('add_comment').checked, summary: $('change_summary').checked },
+      onSuccess: function(response) {
+        uki('#assign-popup').hide();
+        reloadTable();
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        uki('#cve-assign-go').disabled(false);
+      }
+    });
+  }
+);
+/** Assigning end **/

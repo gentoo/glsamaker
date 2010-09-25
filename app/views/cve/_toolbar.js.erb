@@ -1,0 +1,58 @@
+/** Toolbar begin **/
+function toolbar() {
+  var years = [{ value: 0, text: 'ALL' }, { value: 2010, text: '2010' }, { value: 2009, text: '2009' }, { value: 2009, text: '2009' },
+               { value: 2008, text: '2008' }, { value: 2007, text: '2007' }, { value: 2006, text: '2006' },  { value: 2005, text: '2005' },
+               { value: 2004, text: '2004' }];
+
+  return [
+    { view: 'Image', rect: '0 0 220 57', anchors: 'left top', src: '/images/cvetool-logo.png', id: 'logo' },
+    // view settings
+    { view: 'Image', rect: '5 57 16 16', anchors: 'left top', src: '/images/icons/switch.png' },
+    { view: 'Label', rect: '25 54 100 24', anchors: 'left top right', text: 'View settings' },
+    { view: 'uki.more.view.ToggleButton', rect: '5 80 36 22', anchors: 'top', text: 'NEW', id: 'toggle-new', checked: true },
+    { view: 'uki.more.view.ToggleButton', rect: '43 80 36 22', anchors: 'top', text: 'ASS', id: 'toggle-assigned' },
+    { view: 'uki.more.view.ToggleButton', rect: '82 80 36 22', anchors: 'top', text: 'LAT', id: 'toggle-later' },
+    { view: 'uki.more.view.ToggleButton', rect: '121 80 36 22', anchors: 'top', text: 'NFU', id: 'toggle-nfu' },
+    { view: 'uki.more.view.ToggleButton', rect: '159 80 36 22', anchors: 'top', text: 'INV', id: 'toggle-invalid' },
+    
+    // searching and filtering
+    { view: 'TextField', rect: '5 105 135 22', anchors: 'left top right', placeholder: 'quicksearch', id: 'quicksearch' },
+    { view: 'Button', rect: '145 105 50 22', anchors: 'top right', text: 'Filter…', id: 'filter', disabled: true },
+    
+    { view: 'Label', rect: '100 85 10 10', anchors: 'left top right', text: '', id: 'popup'},
+    // assign
+    { view: 'Image', rect: '5 140 16 16', anchors: 'left top', src: '/images/icons/bug_add.png' },
+    { view: 'Label', rect: '25 137 188 24', anchors: 'left top right', text: 'Assign selected CVEs to bug' },
+    { view: 'TextField', rect: '5 165 135 22', anchors: 'left top right', placeholder: 'bug', id: 'assign-bug-nr' },
+    { view: 'Button', rect: '145 164 50 24', anchors: 'top right', text: 'Assign', id: 'cve-assign' },
+    // file-new-bug
+    { view: 'Image', rect: '5 200 16 16', anchors: 'left top', src: '/images/icons/bug_new.png' },
+    { view: 'Label', rect: '25 198 188 24', anchors: 'left top right', text: 'New bug from selected CVEs' },
+    { view: 'Button', rect: '5 225 188 24', anchors: 'left top right', text: 'File a new bug', id: 'cve-file' },    
+    // mark-as
+    { view: 'Image', rect: '5 265 16 16', anchors: 'left top', src: '/images/icons/stamp.png' },
+    { view: 'Label', rect: '25 262 188 24', anchors: 'left top right', text: 'Mark selected CVEs as…' },
+    { view: 'Button', rect: '5 290 60 24', anchors: 'left top' , text: 'NFU', id: 'cve-mark-nfu' },
+    { view: 'Button', rect: '70 290 60 24', anchors: 'left top', text: 'LATER', id: 'cve-mark-later' },
+    { view: 'Button', rect: '135 290 60 24', anchors: 'left top', text: 'INVALID', id: 'cve-mark-invalid' },    
+    // add-a-note
+    { view: 'Image', rect: '5 330 16 16', anchors: 'left top', src: '/images/icons/note.png' },
+    { view: 'Label', rect: '25 327 188 24', anchors: 'left top right', text: 'Add a note to selected CVEs' },
+    { view: 'MultilineTextField', rect: '5 350 189 50', anchors: 'left top right', placeholder: 'Note', id: 'cve-note-text' },    
+    { view: 'Button', rect: '135 405 60 24', anchors: 'right top', text: 'Add note', id: 'cve-add-note' },
+    // mark-as
+    { view: 'Image', rect: '5 445 16 16', anchors: 'left top', src: '/images/icons/info.png' },
+    { view: 'Label', rect: '25 442 188 24', anchors: 'left top right', text: 'Info about selected CVEs' },
+    { view: 'Button', rect: '5 470 60 24', anchors: 'left top' , text: 'Details', id: 'cve-details' },
+    { view: 'Button', rect: '70 470 60 24', anchors: 'left top', text: 'Ebuilds', id: 'cve-ebuilds' },
+    { view: 'Button', rect: '135 470 60 24', anchors: 'left top', text: 'Refrncs', id: 'cve-references' },
+    
+    // search
+  
+    
+    // bottom stuff
+    { view: 'Button', rect: '5 940 188 24', anchors: 'left bottom right', text: 'Reload table', id: 'reload-table' },
+    { view: 'Button', rect: '5 970 188 24', anchors: 'left bottom right', text: 'Back to GLSAMaker', id: 'close' }
+  ];
+}
+/** Toolbar end **/

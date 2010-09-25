@@ -1,0 +1,91 @@
+/** UI misc **/
+uki("#reload-table").click(
+  function() { reloadTable(); }
+);
+
+uki("#cve-details").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+    
+    if (sel.length > 15) {
+      alert("I'm not opening more than 15 windows...");
+      return false;
+    }
+
+    for(var i = 0; i < sel.length; i++) {
+      cvepopup(sel[i][1]);
+    }
+  }
+);
+
+uki("#close").click(
+  function() {
+    window.location = "/";
+  }
+);
+
+uki('Table').bind('dblclick', function() { 
+  cvepopup(uki('Table').selectedRow()[1]);
+});
+
+// View settings
+uki("#toggle-new").click(
+  function() {
+    if (this.checked())
+      view |= 1;
+    else
+      view ^= 1;
+
+    reloadTable();
+  }
+);
+
+uki("#toggle-assigned").click(
+  function() {
+    if (this.checked())
+      view |= 2;
+    else
+      view ^= 2;
+
+    reloadTable();
+  }
+);
+
+uki("#toggle-later").click(
+  function() {
+    if (this.checked())
+      view |= 4;
+    else
+      view ^= 4;
+
+    reloadTable();
+  }
+);
+
+uki("#toggle-nfu").click(
+  function() {
+    if (this.checked())
+      view |= 8;
+    else
+      view ^= 8;
+
+    reloadTable();
+  }
+);
+
+uki("#toggle-invalid").click(
+  function() {
+    if (this.checked())
+      view |= 16;
+    else
+      view ^= 16;
+
+    reloadTable();
+  }
+);
+
+uki('#year-select').bind('change', function() {
+    reloadTable();
+  }
+);
+/** UI misc end **/

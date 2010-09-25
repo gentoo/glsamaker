@@ -1,0 +1,66 @@
+/** Keyboard events **/
+document.onkeyup = function(e){ 
+  var keycode;
+  
+  if (e == null) { // ie 
+    keycode = event.keyCode; 
+  } else { // mozilla 
+    keycode = e.which; 
+  } 
+
+  if (keycode == 27) {
+    if (uki('#nfu-popup').visible())
+      uki('#nfu-popup').hide();
+    if (uki('#assign-popup').visible())
+      uki('#assign-popup').hide();
+    if (uki('#file-1-popup').visible())
+      uki('#file-1-popup').hide();
+    if (uki('#file-2-popup').visible())
+      uki('#file-2-popup').hide();
+    
+    enableMainView();
+    uki('Table').focus();
+  } else if (keycode == 13 && e.ctrlKey) {
+    if (uki('#nfu-popup').visible())
+      uki('#cve-nfu-go').click();
+    if (uki('#assign-popup').visible())
+      uki('#cve-assign-go').click();
+    if (uki('#file-1-popup').visible())
+      uki('#cve-file-1-go').click();
+    if (uki('#file-2-popup').visible())
+      uki('#cve-file-2-go').click();
+  }
+};
+
+uki('Table').keyup(
+  function(e) {
+    var c = e.keyCode;
+    //alert(c);
+    
+    if (c == 110 || c == 78) { // n;N
+      uki('#cve-mark-nfu').click();
+      return;
+    }
+    
+    if (c == 108 || c == 76) { // l;L
+      uki('#cve-mark-later').click();
+      return;      
+    }
+    
+    if (c == 105 || c == 73) { // i;I
+      uki('#cve-mark-invalid').click();
+      return;      
+    }
+
+    if (c == 97 || c == 65 || c == 51) { // a;A;#
+      uki('#assign-bug-nr').focus();
+      return;      
+    }
+    
+    if (c == 102 || c == 70 || c == 98 || c == 66) { // f;F;b;B
+      uki('#cve-file').click();
+      return;      
+    }    
+  }
+);
+/** Keyboard events end **/

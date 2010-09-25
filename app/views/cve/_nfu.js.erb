@@ -1,0 +1,65 @@
+/** NFU **/
+uki(
+  { view: 'Popup', rect: '500 300', anchors: 'left top', id: 'nfu-popup', hideOnClick: false, relativeTo: uki('#popup'), childViews: [
+      { view: 'Label', rect: '10 10 480 20', anchors: 'top', html: '<strong>The following CVEs will be marked as NFU:</strong>', id: 'cve-nfu-title'},
+      { view: 'ScrollableList', rect: '10 35 480 190', anchors: 'top left right bottom', id: 'cve-nfu-list' },
+      { view: 'TextField', rect: '10 235 480 22', anchors: 'left top right', placeholder: 'Add a (public) comment', id: 'nfu-comment' },
+      { view: 'Button', rect: '345 265 70 24', anchors: 'bottom right', id: 'cve-nfu-cancel', text: 'Cancel' },
+      { view: 'Button', rect: '420 265 70 24', anchors: 'bottom right', id: 'cve-nfu-go', text: 'Commit' }
+    ]
+  }
+);
+
+uki("#cve-mark-nfu").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+
+    if (sel.length < 1) {
+      alert("Please select at least one CVE.");
+      return false;
+    }
+
+    var data = new Array();
+    cve_nfu_data = new Array();
+
+    for (var i = 0; i < sel.length; i++) {
+      data.push("(" + sel[i][1] + ") " + sel[i][2]);
+      cve_nfu_data.push(sel[i][0]);
+    }
+
+    uki('#cve-nfu-list').data(data);
+
+    uki('#nfu-comment').value('');
+    uki('#nfu-popup').show();
+
+    uki('#cve-nfu-go').focus();
+  }
+);
+
+uki('#cve-nfu-go').click(
+  function() {
+    if (cve_nfu_data < 1) {
+      alert("Error. Internal CVE list empty.");
+      return;
+      uki('#nfu-popup').hide();
+    }
+    
+    new Ajax.Request('/cve/nfu', {
+      parameters: { cves: cve_nfu_data.join(','), reason: uki('#nfu-comment').value() },
+      onSuccess: function(response) {
+        uki('#nfu-popup').hide();
+        reloadTable();
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+      }
+    });
+  }
+);
+
+uki('#cve-nfu-cancel').click(
+  function() {
+    uki('#nfu-popup').hide();
+  }
+);
+/** NFU end **/

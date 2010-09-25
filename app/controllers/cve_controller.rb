@@ -1,6 +1,7 @@
 class CveController < ApplicationController
   before_filter :login_required
   include ApplicationHelper
+  include CveHelper
 
   def index
     @pageID = 'cve'
@@ -8,12 +9,14 @@ class CveController < ApplicationController
 
   def list
     @pageID = 'cve'
-    @cves = CVE.find(:all, :conditions => ['state = ?', 'NEW'], :limit => 1000)
-
+    
+    condition = view_mask_to_condition(params[:view_map].to_i)
+    @cves = CVE.find(:all, :conditions => [condition], :limit => 1000, :order => 'cve_id DESC')
+    
     respond_to do |format|
       format.html
       format.json {
-        x = @cves.map {|cve| [cve.id, cve.cve_id, CGI.escapeHTML(cve.summary), cve.state]}
+        x = @cves.map {|cve| [cve.id, cve.colorize(:cve_id), CGI.escapeHTML(cve.summary), cve.state]}
         render :text => x.to_json }
     end
   end
