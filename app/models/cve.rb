@@ -57,6 +57,30 @@ class CVE < ActiveRecord::Base
     save!
   end
   
+  # Mark the CVE as Not-For-Us, creating a history entry
+  def nfu(user, reason = nil)
+    self.cve_changes.create!(
+      :user => user,
+      :action => 'nfu',
+      :object => reason
+    )
+    
+    self.state = 'NFU'
+    save!
+  end
+  
+  # Mark the CVE as INVALID, creating a history entry
+  def invalidate(user, reason = nil)
+    self.cve_changes.create!(
+      :user => user,
+      :action => 'invalid',
+      :object => reason
+    )
+    
+    self.state = 'INVALID'
+    save!
+  end
+  
   # Looks for Gentoo packages that might be affected by this CVE
   def package_hints
     def search(s)
