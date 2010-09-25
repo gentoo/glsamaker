@@ -219,103 +219,111 @@ namespace :cve do
 
   desc "Import CVE resolutions from the old CVE tool"
   task :oldimport => :environment do
-    FILE = File.join(TMPDIR, "list")
-    
-    unless File.exist? FILE
-      raise "Could not find data file. Put it at #{FILE}."
-    end
-    
-    $saved_cve = {:id => "", :bugs => []}
-    f = File.open(FILE, 'r')
 
-    f.each do |l|
+    file = status "Downloading" do
+      Glsamaker::HTTP.get("http://overlays.gentoo.org/svn/proj/security/data/CVE/list")
+    end
+
+    $saved_cve = {:id => "", :bugs => []}
+    sys_usr = User.find(0)
+
+    file.each_line do |l|
       # Start a new entry
       if l[0..2] == "CVE"
         # Save the old entry before starting a new one
         unless $saved_cve[:id] == ""
+          #
+          # Public Service Announcement:
+          # IN THE FOLLOWING CODE BLOCK: DO *NEVER* ADD ANY `next' STATEMENTS!
+          #                                                           -a3li
           debug "CVE: #{$saved_cve[:id]}. Bugs: #{$saved_cve[:bugs].inspect}. State: #{$saved_cve[:state]}. Reason: #{$saved_cve[:reason]}"
-          next if $saved_cve[:skip]
           c = CVE.find_by_cve_id($saved_cve[:id])
+          c = nil if $saved_cve[:skip]
 
           if c == nil
-            $stderr.puts "#{$saved_cve[:id]} not found in the CVE databse. Skipping."
-            next
+            $stderr.puts "#{$saved_cve[:id]} not found in the CVE databse OR forced skip. Skipping."
+          else
+
+            state = $saved_cve[:state]
+            state ||= "NEW"
+
+            if $saved_cve.has_key? :note
+              c.comments.create(
+                :user_id => 0,
+                :comment => $saved_cve[:note]
+             )
+            end
+
+            unless state == "NEW"
+              $saved_cve[:bugs].each do |bug|
+                c.assign(bug, sys_usr)
+              end
+
+              if state == "NFU"
+                c.nfu(sys_usr, $saved_cve[:reason])
+              end
+
+              if state == "REJECTED"
+                c.invalidate(sys_usr, "REJECTED")
+              end
+            end
           end
-          
-          state = $saved_cve[:state]
-          state ||= "NEW"
-          
-          next if state == "NEW"
-          
-          $saved_cve[:bugs].each do |bug|
-            c.assignments.create(:bug => bug)
-            c.cve_changes.create({
-              :user_id => 0,
-              :action => 'assign',
-              :object => bug
-            })
-          end
-          
-          unless state == "ASSIGNED"
-            c.cve_changes.create({
-              :user_id => 0,
-              :action => state == "NFU" ? 'nfu' : ''
-            })
-          end
-          
-        else
-          #puts "round 1"
         end
 
         l.match /^(CVE-\d{4}-\d{4})/
         $saved_cve = {:id => $1, :bugs => []}
         next
       end
-      
+
       # We ignore reserved, as NVD doesn't support it.
       if l =~ /^\tRESERVED$/
         $saved_cve[:skip] = true
-        $saved_cve[:state] = "RESERVED"        
+        $saved_cve[:state] = "RESERVED"
         next
       end
-      
+
       if l =~ /^\tREJECTED$/
         $saved_cve[:state] = "REJECTED"
         next
       end
-      
+
       if l =~ /^\tNOT-FOR-US: (.*)$/
         $saved_cve[:state] = "NFU" unless $saved_cve[:state] == "REJECTED"
         $saved_cve[:reason] = $1
         next
       end
-      
+
       if l =~ /^\tBUG: (\d+)$/
         $saved_cve[:bugs] << Integer($1)
         $saved_cve[:state] = "ASSIGNED"
         next
       end
-      
+
       if l =~ /^\tTODO: check$/
         $saved_cve[:state] = "NEW"
         next
       end
-      
+
       if l =~ /^\tTODO: (.*)$/
-        $saved_cve[:state] = "NEW"
-        $saved_cve[:reason] = $1
+        if $1 == 'check-old'
+          $saved_cve[:state] = "NFU"
+          $saved_cve[:reason] = $1
+        else
+          $saved_cve[:state] = "NEW"
+          $saved_cve[:note] = $1
+        end
         next
       end
-      
+
       if l =~ /^\tNOTE: (.*)$/
-        $saved_cve[:reason] = $1
+        $saved_cve[:note] = $1
         next
-      end      
-      
+      end
+
       puts "XXX: #{l}"
       break
     end # each line
-    
+
   end # task
 
 end # namespace cve
