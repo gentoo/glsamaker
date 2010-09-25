@@ -8,12 +8,12 @@ class CveController < ApplicationController
 
   def list
     @pageID = 'cve'
-    @cves = CVE.find(:all, :conditions => ['state = ?', 'NEW'], :limit => 100)
+    @cves = CVE.find(:all, :conditions => ['state = ?', 'NEW'], :limit => 1000)
 
     respond_to do |format|
       format.html
       format.json {
-        x = @cves.map {|cve| [cve.id, cve.cve_id, cve.summary, cve.state]}
+        x = @cves.map {|cve| [cve.id, cve.cve_id, CGI.escapeHTML(cve.summary), cve.state]}
         render :text => x.to_json }
     end
   end
@@ -173,17 +173,7 @@ class CveController < ApplicationController
     logger.debug { "NFU CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
 
     @cves.each do |cve_id|
-      cve = CVE.find(cve_id)
-      raise unless cve
-
-      cve.state = "NFU"
-      cve.save!
-
-      ch = cve.cve_changes.new
-      ch.user = current_user
-      ch.action = 'nfu'
-      ch.object = params[:reason] if params[:reason] and not params[:reason].empty?
-      ch.save!
+      CVE.find(cve_id).nfu(current_user, params[:reason])
     end
 
     render :text => "ok"
