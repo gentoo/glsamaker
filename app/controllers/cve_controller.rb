@@ -25,24 +25,6 @@ class CveController < ApplicationController
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:id]])
   end
 
-  def new
-  end
-
-  def create
-  end
-
-  def edit
-  end
-
-  def update
-  end
-
-  def show
-  end
-
-  def store
-  end
-
   def bug_package
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug; CVElist: " + cve_nums.inspect }
