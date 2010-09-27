@@ -81,6 +81,25 @@ class CVE < ActiveRecord::Base
     save!
   end
   
+  def later(user, reason = nil)
+    self.cve_changes.create!(
+      :user => user,
+      :action => 'later',
+      :object => reason
+    )
+    
+    self.state = 'LATER'
+    save!
+  end
+  
+  def add_comment(user, comment, confidential = false)
+    self.comments << CVEComment.create!(
+      :user => user,
+      :confidential => confidential,
+      :comment => comment
+    )
+  end
+  
   # Decorates the output of field with a color, depending on the status
   def colorize(field = :cve_id)
     "<span class='cvename cve-%s'>%s</span>" % [state.downcase, self[field]]
