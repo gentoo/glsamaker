@@ -87,6 +87,8 @@ initCVETable = function(data) {
         
     table.data(model.items);
     
+    uki('#quicksearch').unbind('keyup click');
+    
     uki('#quicksearch').bind('keyup click', function() {
         if (this.value().toLowerCase() == lastQuery) return;
         lastQuery = this.value().toLowerCase();
