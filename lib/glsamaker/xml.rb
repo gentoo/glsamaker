@@ -13,7 +13,7 @@ module Glsamaker
     module_function
     def indent(xml, options = {:indent => 2})
       command = GLSAMAKER_XMLINDENT
-      raise "xmlindent either does not exist or is not executable." unless File.executable? command
+      raise "xmlindent either does not exist or is not executable." unless File.executable? command.split(' ', 2)[0]
       
       command += " -i#{Integer options[:indent]}" if options.has_key? :indent
       command += " -l#{Integer options[:maxcols]}" if options.has_key? :maxcols
