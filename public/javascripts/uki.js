@@ -59,7 +59,7 @@ root.uki = root.uki || function(val, context) {
  * @type string
  * @field
  */
-uki.version = '0.3.5';
+uki.version = '0.3.8';
 uki.guid = 1;
 
 /**
@@ -2271,7 +2271,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     
     /**
      * @param {String} name Event name
-     * @param {function()}
+     * @param {function()} callback
      */
     bind: function(name, callback) {
         callback.huid = callback.huid || uki.guid++;
@@ -2296,6 +2296,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
                 return observer != callback && observer.huid != callback.huid;
             });
             if (this._observers[name].length == 0) {
+                this._observers[name] = undefined;
                 this._unbindFromDom(name);
             }
         }, this);
@@ -2692,7 +2693,7 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#focusable */
     /** @function
     @name uki.Collection#style */
-    uki.Collection.addAttrs('dom html text background value rect checked anchors childViews typeName id name visible disabled focusable style draggable textSelectable width height minX maxX minY maxY left top x y'.split(' '));
+    uki.Collection.addAttrs('dom html text background value rect checked anchors childViews typeName id name visible disabled focusable style draggable textSelectable width height minX maxX minY maxY left top x y contentsSize'.split(' '));
     
     
     /** @function
@@ -3101,7 +3102,6 @@ uki.image = function(url, dataUrl, alphaUrl) {
     result.src = uki.imageSrc(url, dataUrl, alphaUrl);
     return result;
 };
-
 /**
  * Selects image src depending on browser
  *
@@ -3136,31 +3136,6 @@ uki.imageHTML = function(url, dataUrl, alphaUrl, html) {
     return '<img' + (html || '') + ' src="' + url + '" />';
 };
 
-/**
- * Loads given images, callbacks after all of them loads
- *
- * @param {Array.<Element>} images Images to load
- * @param {function()} callback
- */
-// uki.image.load = function(images, callback) {
-//     
-//     var imagesToLoad = images.length;
-//     for(var img, i=0, l = images.length; i < l; i++) {
-//      
-//         if ( !(img = images[i]) || img.width ) {
-//             if (!--imagesToLoad) callback();
-//             return;
-//         }
-// 
-//         var handler = function() {
-//                 img.onload = img.onerror = img.onabort = null; // prevent memory leaks
-//                 if (!--imagesToLoad) callback();
-//             };
-//      img.onload  = handler;
-//      img.onerror = handler;
-//      img.onabort = handler;
-//     };
-// };
 
 /**
  * @type boolean
@@ -3171,7 +3146,7 @@ uki.image.dataUrlSupported = doc.createElement('canvas').toDataURL || (/MSIE (8)
  * @type boolean
  */
 uki.image.needAlphaFix = /MSIE 6/.test(ua);
-if(uki.image.needAlphaFix) doc.execCommand("BackgroundImageCache", false, true);
+if(uki.image.needAlphaFix) try { doc.execCommand("BackgroundImageCache", false, true); } catch(e){}
 
 
 
@@ -4846,6 +4821,8 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         return Base._style.call(this, name, value);
     };
     
+    this.adaptToContents = uki.newProp('_adaptToContents');
+    
     this.textSelectable = function(state) {
         if (state !== undefined && !this._textSelectProp) {
             this._label.unselectable = state ? '' : 'on';
@@ -4862,7 +4839,6 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         uki.dom.probe(clone, function() {
             size = new Size(clone.offsetWidth + inset.width(), clone.offsetHeight + inset.height());
         });
-        
         return size;
     };
     
@@ -4944,15 +4920,10 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
     };
     
     this._layoutDom = function() {
-        Base._layoutDom.apply(this, arguments);
-        
-        var inset = this._inset;
-        if (!this.multiline()) {
-            var fz = parseInt(this.style('fontSize'), 10) || 12;
-            this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
-            // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
-        }
-        var l;
+        var inset = this._inset,
+            l,
+            a = this._anchors,
+            watchField = '', watchValue;
         
         if (uki.supportNativeLayout) {
             l = {
@@ -4969,7 +4940,38 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
                 height: this._rect.height - inset.height()
             };
         }
+        
+        if (!(a & ANCHOR_BOTTOM)) {
+            l.height = l.bottom = undefined;
+            watchField = 'offsetHeight';
+        } else if (!(a & ANCHOR_TOP)) {
+            l.height = l.bottom = undefined;
+            watchField = 'offsetHeight';
+        } else if (!(a & ANCHOR_RIGHT)) {
+            l.right = l.width = undefined;
+            watchField = 'offsetWidth';
+        } else if (!(a & ANCHOR_LEFT)) {
+            l.left = l.width = undefined;
+            watchField = 'offsetWidth';
+        }
+        
+        Base._layoutDom.apply(this, arguments);
+        
+        if (!this.multiline()) {
+            var fz = parseInt(this.style('fontSize'), 10) || 12;
+            this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+            // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
+        }
         this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);
+        
+        if (this.adaptToContents() && watchField) {
+            watchValue = this._label[watchField];
+            if (watchValue != this._lastWatchValue && this.parent()) {
+                this.resizeToContents(watchField == 'offsetWidth' ? 'width' : 'height');
+                this.parent().childResized(this);
+            }
+            this._lastWatchValue = watchValue;
+        }
     };
     
 });
@@ -5514,17 +5516,13 @@ uki.Collection.addAttrs(['placeholder']);
     * @extends uki.view.Container
     */
     uki.view.declare('uki.view.ScrollPane', uki.view.Container, function(Base) {
-        this.typeName = function() {
-            return 'uki.view.ScrollPane';
-        };
-    
         uki.extend(this, {
-            _scrollableV: true,
-            _scrollableH: false,
-            _scrollV: false,
-            _scrollH: false,
-            _sbV: false,
-            _sbH: false
+            _scrollableY: true,
+            _scrollableX: false,
+            _scrollY: false,
+            _scrollX: false,
+            _sbY: false,
+            _sbX: false
         });
         
         this._setup = function() {
@@ -5536,21 +5534,26 @@ uki.Collection.addAttrs(['placeholder']);
     
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollableV
+        * @name uki.view.ScrollPane#scrollableY
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollableH
+        * @name uki.view.ScrollPane#scrollableX
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollH
+        * @name uki.view.ScrollPane#scrollX
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollV
+        * @name uki.view.ScrollPane#scrollY
         */
-        uki.addProps(this, ['scrollableV', 'scrollableH', 'scrollH', 'scrollV']);
+        uki.addProps(this, ['scrollableY', 'scrollableX', 'scrollX', 'scrollY']);
+        this.scrollV = this.scrollY;
+        this.scrollH = this.scrollX;
+        
+        this.scrollableV = this.scrollableY;
+        this.scrollableH = this.scrollableX;
     
         this.rectForChild = function() { return this._rectForChild; };
         this.clientRect = function() { return this._clientRect; };
@@ -5618,15 +5621,15 @@ uki.Collection.addAttrs(['placeholder']);
 
             var cw = this.contentsWidth(),
                 ch = this.contentsHeight(),
-                sh = this._scrollableH ? cw > this._rect.width : false,
-                sv = this._scrollableV ? ch > this._rect.height : false;
+                sx = this._scrollableX ? cw > this._rect.width : false,
+                sy = this._scrollableY ? ch > this._rect.height : false;
             
-            this._sbH = sh || this._scrollH;
-            this._sbV = sv || this._scrollV;
-            this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
-                                         this._rect.height + (sh ? -1 : 0) * scrollWidth );
-            this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
-                                           this._rect.height + ((sh && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
+            this._sbX = sx || this._scrollX;
+            this._sbY = sy || this._scrollY;
+            this._clientRect = new Rect( this._rect.width +  (sy ? -1 : 0) * scrollWidth,
+                                         this._rect.height + (sx ? -1 : 0) * scrollWidth );
+            this._rectForChild = new Rect( this._rect.width +  ((sy && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
+                                           this._rect.height + ((sx && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
         };
     
         this._updateClientRects = function() {
@@ -5655,14 +5658,14 @@ uki.Collection.addAttrs(['placeholder']);
         this._layoutDom = function(rect) {
             this._updateClientRects();
         
-            if (this._layoutScrollH !== this._sbH) {
-                this._dom.style.overflowX = this._sbH ? 'scroll' : 'hidden';
-                this._layoutScrollH = this._sbH;
+            if (this._layoutScrollX !== this._sbX) {
+                this._dom.style.overflowX = this._sbX ? 'scroll' : 'hidden';
+                this._layoutScrollX = this._sbX;
             }
 
-            if (this._layoutScrollV !== this._sbV) {
-                this._dom.style.overflowY = this._sbV ? 'scroll' : 'hidden';
-                this._layoutScrollV = this._sbV;
+            if (this._layoutScrollY !== this._sbY) {
+                this._dom.style.overflowY = this._sbY ? 'scroll' : 'hidden';
+                this._layoutScrollY = this._sbY;
             }
         
             Base._layoutDom.call(this, rect);
@@ -7606,7 +7609,7 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
         reflex     = '<div style="position:absolute;z-index:1;left:1px;bottom:0px;right:1px;height:1px;overflow:hidden;background:rgba(255,255,255,0.4)"></div>';
 
     uki.theme.airport = uki.extend({}, uki.theme.Base, {
-        imagePath: 'http://static.ukijs.org/pkg/0.3.5/uki-theme/airport/i/',
+        imagePath: 'http://static.ukijs.org/pkg/0.3.8/uki-theme/airport/i/',
         
         backgrounds: {
             // basic button
