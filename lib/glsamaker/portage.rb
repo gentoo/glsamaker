@@ -22,9 +22,6 @@ module Glsamaker
         # an ebuild's entry (works if running on Gentoo)
         def ebuild(atom)
           raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
-
-          dir = File.join(Glsamaker::Portage.portdir, atom)
-          
           nil
         end
 
@@ -116,5 +113,40 @@ module Glsamaker
         maintainers
       end
     end
+    
+    # Returns information from the portage metadata cache
+    # Values: :depend, :rdepend, :slot, :src_uri, :restrict, :homepage,
+    # :license, :description, :keywords, :inherited, :iuse, :required_use,
+    # :pdepend, :provide, :eapi, :properties, :defined_phases
+    # as per portage/pym/portage/cache/metadata.py (database.auxdbkey_order)
+    def get_metadata(atom, version = :latest, what = [])
+      raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
+      raise(ArgumentError, "Invalid version string") if version.to_s.include? '..'
+      return {} if what == []
+      
+      lines = [nil, :depend, :rdepend, :slot, :src_uri, :restrict, :homepage,
+               :license, :description, :keywords, :inherited, :iuse, :required_use,
+               :pdepend, :provide, :eapi, :properties, :defined_phases]
+      cat, pkg = atom.split('/', 2)
+      result = {}
+      
+      Dir.chdir(File.join(Glsamaker::Portage.portdir, 'metadata', 'cache', cat)) do
+        if version == :latest
+          f = File.open(Dir.glob("#{pkg}-[0-9]*").last, 'r')
+        else
+          f = File.open(File.join("#{pkg}-#{version}"), 'r')
+        end
+        
+        while f.gets
+          if what.include?(lines[$.])
+            result[lines[$.]] = $_.chomp
+          end
+        end
+        
+        f.close
+      end
+      result
+    end
   end
+  
 end
