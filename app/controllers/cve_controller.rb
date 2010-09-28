@@ -21,10 +21,6 @@ class CveController < ApplicationController
     end
   end
 
-  def info
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:id]])
-  end
-
   def bug_package
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug; CVElist: " + cve_nums.inspect }
@@ -175,6 +171,82 @@ class CveController < ApplicationController
       CVE.find(cve_id).later(current_user, params[:reason])
     end
 
+    render :text => "ok"
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500
+  end
+
+  # Popup methods
+  def info
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:id]])
+  end
+  
+  def general_info
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500
+  end
+  
+  def references
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    raise "Cannot find CVE" if @cve == nil
+    
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500    
+  end
+  
+  def packages
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    raise "Cannot find CVE" if @cve == nil
+    
+    @package_hints = @cve.package_hints
+    
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500    
+  end
+
+  def comments
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    raise "Cannot find CVE" if @cve == nil
+    
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500    
+  end
+  
+  def changes
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    raise "Cannot find CVE" if @cve == nil
+    
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500    
+  end
+  
+  def actions
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    raise "Cannot find CVE" if @cve == nil
+    
+    render :layout => false
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500    
+  end
+  
+  def mark_new
+    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+
+    @cve.mark_new(current_user)
     render :text => "ok"
   rescue Exception => e
     log_error e

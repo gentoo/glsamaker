@@ -1,0 +1,11 @@
+<h2 style="margin-top: 0;">Info</h2>
+
+<h3>Assigned bugs</h3>
+
+<ul>
+<% @cve.assignments.each do |ass| %>
+  <li>
+    <a href="https://bugs.gentoo.org/<%= h ass.bug %>" target="_blank"><%= h ass.bug %></a>
+  </li>
+<% end %>
+</ul>

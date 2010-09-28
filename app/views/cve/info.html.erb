@@ -5,55 +5,136 @@
 
 <% else %>
 <script language="JavaScript" type="text/javascript">
+cve_id = "<%= h @cve.cve_id %>";
 
 // page layout
-uki(
-    { view: 'Box', rect: '0 0 500 30', minSize: '500 400', anchors: 'top left right width', childViews: [
-        { view: 'Box', background: 'theme(panel)', rect: '0 0 500 30', anchors: 'top left right width', childViews: [
-          { view: 'Label', rect: '5 5 400 20', html: '<h2 style="margin: 0;"><%= @cve.cve_id %></h2>', anchors: 'top left'},
-          { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' },
+uki({ view: 'VSplitPane', rect: '500 600', anchors: 'left top right bottom', topMin: 120, handlePosition: 120,
+    topChildViews: [
+        { view: 'Box', rect: '0 0 500 30', anchors: 'top right left', background: 'cssBox(background:#D3CFE5;border-bottom:1px solid #999)', childViews: [
+          { view: 'Label', rect: '5 5 400 20', html: "<h2 style='margin: 0;'><%= @cve.colorize %> <small>(<%= @cve.state %>)</small></h2>", anchors: 'top left'},
+          { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' }
         ] },
-        { view: 'Box',  rect: '0 30 500 50', anchors: 'top left right width', childViews: [
-        // TODO: FIX make_js_safe, does not escape single quotes
-          { view: 'Label', rect: '5 5 495 50', anchors: 'left top right', html: '<%= simple_format_without_paragraph(make_js_safe(h @cve.to_s)).gsub(/\n/, '') %>', textSelectable: true, multiline: true}
-        ] },
-        { view: 'Toolbar', rect: '0 330 500 20', anchors: 'left bottom right', background: 'theme(panel)', buttons: [
-          { text: 'References' },
-          { text: 'CPE' },
-          { text: 'History' }
+        { view: 'Label', rect: '5 35 490 50', anchors: 'left top right', html: '<%= simple_format_without_paragraph(make_js_safe(h @cve.summary)).gsub(/\n/, '') %>', textSelectable: true, multiline: true}
+    ],
+    bottomPane: { background: '#FFF', childViews: [
+        { view: 'ScrollPane', rect: '0 0 500 445', anchors: 'top left right bottom', id: 'info-scroll', scrollableV: true, scrollableH: false, childViews: [
+          { view: 'Label', rect: '5 5 495 445', anchors: 'top left right bottom', html: '', id: 'content', textSelectable: true, multiline: true}, 
+        ] },    
+        
+        { view: 'Box', rect: '0 445 500 28', anchors: 'left bottom right', background: 'cssBox(background:#CCC;border-top:1px solid #999;padding:1px;)', childViews: [
+          { view: 'Button', rect: '5 4 40 20', text: 'Info', anchors: 'bottom left', id: 'info' },
+          { view: 'Button', rect: '50 4 80 20', text: 'References', anchors: 'bottom left', id: 'references' },
+          { view: 'Button', rect: '135 4 70 20', text: 'Packages', anchors: 'bottom left', id: 'packages' },
+          { view: 'Button', rect: '210 4 80 20', text: 'Comments', anchors: 'bottom left', id: 'comments' },  
+          { view: 'Button', rect: '295 4 60 20', text: 'Changes', anchors: 'bottom left', id: 'changes' },
+          { view: 'Button', rect: '430 4 60 20', text: 'Actions', anchors: 'bottom right', id: 'actions' },          
         ] }
     ]}
-).attachTo(window, '500 400');
-
+}).attachTo(window, '500 600');
 
 uki('#close').click(
   function() {
     window.close();
   }
 );
+
+uki('#info').click(
+  function() {
+    new Ajax.Request('/cve/general_info', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
+
+uki('#info').click();
+
+uki('#references').click(
+  function() {
+    new Ajax.Request('/cve/references', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
+
+uki('#packages').click(
+  function() {
+    new Ajax.Request('/cve/packages', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
+
+uki('#comments').click(
+  function() {
+    new Ajax.Request('/cve/comments', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
+
+uki('#changes').click(
+  function() {
+    new Ajax.Request('/cve/changes', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
+
+uki('#actions').click(
+  function() {
+    new Ajax.Request('/cve/actions', {
+      parameters: { cve_id: cve_id },
+      onSuccess: function(response) {
+        uki('#content').html(response.responseText);
+        uki('#content').resizeToContents('height');
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+        return false;
+      }
+    });
+  }
+);
 </script>
-
-<!--
-<h2 style="margin-top: 0;"><%= h @cve.summary %></h2>
-
-<div style="height: 300px; overfloy-y: scroll;">
-  <h3>References</h3>
-  <ol class="references" style="padding-right: 1em;">
-    <% ref_id = 1 ; @cve.references.each do |ref| %>
-      <li id="ref-<%= ref_id %>"><%= link_to ref.uri, ref.title %></li>
-    <% ref_id +=1 ; end %>
-  </ol>
-
-
-  <h3>Affected CPEs</h3>
-  <ol class="comments" style="padding-right: 1em;">
-    <% cpe_id = 1 ; @cve.cpes.each do |cpe| %>
-    <li id="cpe-<%= cpe_id %>"><%= h(cpe.cpe) %></li>
-    <% cpe_id +=1 ; end %>
-  </ol>
-</div>
-
-<br style="clear: both;" />
--->
 
 <% end %>

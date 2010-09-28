@@ -1,0 +1,10 @@
+<h2 style="margin-top: 0;">Changes</h2>
+
+<ul>
+<% @cve.cve_changes.each do |change| %>
+  <li>
+    <strong><%= h change.action %>:</strong> <%= h change.object %><br />
+    <em>&mdash;<%= change.user.login %></em> @ <%= change.created_at.rfc2822 %>
+  </li>
+<% end %>
+</ul>
