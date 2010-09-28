@@ -138,7 +138,25 @@ module GlsaHelper
   end
   
   def adv_wrap(text)
-    word_wrap(text, 72)
+    text.gsub!(/\r?\n/, "\n")
+
+    text.gsub!(/<\/?(b|i)>/, '')
+
+    text.gsub!(/(?:<ul>\s*(.*?)<\/ul>(?:\s*\n)?)/m) do |s|
+      $1.gsub!(/<li>(.*?)<\/li>\s*/) do |t|
+        ('* ' + word_wrap($1, 70)).gsub("\n", "\n  ") + "\n\n"      
+      end
+    end
+    
+    text.gsub!(/(?:<ol>\s*(.*?)<\/ol>(?:\s*\n)?)/m) do |s|
+      nom = 0
+      $1.gsub!(/<li>(.*?)<\/li>\s*/) do |t|
+        ("#{nom += 1}. " + word_wrap($1, 69)).gsub("\n", "\n   ") + "\n\n"      
+      end
+    end
+    
+    word_wrap(text.chomp, 72)
+       
   end  
 end
 
