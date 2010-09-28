@@ -163,6 +163,20 @@ class CveController < ApplicationController
     render :text => e.message, :status => 500
   end
 
+  def invalid
+    @cves = params[:cves].split(',').map{|cve| Integer(cve)}
+    logger.debug { "Invalid CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
+
+    @cves.each do |cve_id|
+      CVE.find(cve_id).invalidate(current_user, params[:reason])
+    end
+
+    render :text => "ok"
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500
+  end
+
   def later
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "LATER CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
