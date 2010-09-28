@@ -92,6 +92,17 @@ class CVE < ActiveRecord::Base
     save!
   end
   
+  def mark_new(user, reason = nil)
+    self.cve_changes.create!(
+      :user => user,
+      :action => 'new',
+      :object => reason
+    )
+    
+    self.state = 'NEW'
+    save!
+  end
+  
   def add_comment(user, comment, confidential = false)
     self.comments << CVEComment.create!(
       :user => user,
