@@ -114,7 +114,8 @@ class CVE < ActiveRecord::Base
     end
     
     package_hints = []
-    package_hints << cpes.map {|c| search c.product }.flatten
+    my_cpes = cpes.map {|c| c.product }.uniq
+    package_hints << my_cpes.map {|c| search c }.flatten
     
     # stolen from the old cvetools.py
     if summary =~ / in (\S+\.\S+) in (?:the )?(?:a )?(\D+) \d+/
