@@ -18,7 +18,7 @@
         else
           '<img src="/images/icons/reference.png" alt="Neutral" title="Neutral" />'
         end -%>
-    <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number %></small>
+    <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number ||= 1 %></small>
   </div>
   
   <div style="margin-left: 35px;"><%= comment.text %></div>

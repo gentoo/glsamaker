@@ -101,9 +101,6 @@ class GlsaController < ApplicationController
     
     # References
     @rev.references.build if @rev.references.length == 0
-    
-    # Initialize for later use
-    @comment_number = 1
   end
 
   def update
