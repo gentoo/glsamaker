@@ -131,8 +131,6 @@ class CveController < ApplicationController
     cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "Assign Bug: #{bug_id} CVElist: " + cves.inspect }
 
-    cves.each {|cve_id| CVE.find(cve_id).assign(bug_id, current_user, :assign) }
-
     if params[:comment] or params[:summary]
       bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
       cve_ids = cves.map {|c| CVE.find(c).cve_id }
@@ -142,6 +140,8 @@ class CveController < ApplicationController
       changes[:summary] = cveify_bug_title(bug.summary, cve_ids) if params[:summary] == 'true'
       Bugzilla.update_bug(bug_id, changes)
     end
+
+    cves.each {|cve_id| CVE.find(cve_id).assign(bug_id, current_user, :assign) }
 
     render :text => "ok"
   rescue Exception => e
