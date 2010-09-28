@@ -84,8 +84,32 @@ uki("#toggle-invalid").click(
   }
 );
 
-uki('#year-select').bind('change', function() {
-    reloadTable();
+uki("#cve-add-note").click(
+  function() {
+    var sel = uki('Table').selectedRows();
+
+    if (sel.length < 1) {
+      alert("Please select at least one CVE.");
+      return false;
+    }
+
+    var data = new Array();
+
+    for (var i = 0; i < sel.length; i++) {
+      data.push(sel[i][0]);
+    }
+    
+    new Ajax.Request('/cve/note', {
+      parameters: { cves: data.join(','), note: uki('#cve-note-text').value() },
+      onSuccess: function(response) {
+        uki('#cve-note-text').value('');
+        reloadTable();
+      },
+      onFailure: function(response) {
+        alert("Could not process your request:\n\n" + response.responseText);
+      }
+    });
   }
 );
+
 /** UI misc end **/

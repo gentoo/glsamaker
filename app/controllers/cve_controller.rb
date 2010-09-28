@@ -162,6 +162,20 @@ class CveController < ApplicationController
     log_error e
     render :text => e.message, :status => 500
   end
+  
+  def note
+    @cves = params[:cves].split(',').map{|cve| Integer(cve)}
+    logger.debug { "Note CVElist: " + @cves.inspect + " Note: " + params[:note] }
+
+    @cves.each do |cve_id|
+      CVE.find(cve_id).add_comment(current_user, params[:note])
+    end
+
+    render :text => "ok"
+  rescue Exception => e
+    log_error e
+    render :text => e.message, :status => 500
+  end  
 
   def invalid
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
