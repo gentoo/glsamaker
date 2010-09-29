@@ -4,40 +4,40 @@ xml.instruct! :'xml-stylesheet', :href => '/xsl/guide.xsl', :type => 'text/xsl'
 xml.declare! :DOCTYPE, :glsa, :SYSTEM, "http://www.gentoo.org/dtd/glsa-2.dtd"
 
 xml.glsa :id => glsa.glsa_id do
-  xml.title glsa.last_revision.title
-  xml.synopsis glsa.last_revision.synopsis
+  xml.title rev.title
+  xml.synopsis rev.synopsis
   xml.product :type => "ebuild" do
     xml.comment! "packages go here"
   end
   xml.announced "today"
   xml.revised "never"
   
-  glsa.last_revision.bugs.each do |bug|
+  rev.bugs.each do |bug|
     xml.bug bug.bug_id
   end
   
-  xml.access glsa.last_revision.access
+  xml.access rev.access
   
   xml.affected do
     xml.comment! "packages go here"
   end
   
-  xml.background(glsa.last_revision.background || "")
+  xml.background(rev.background || "")
   
   xml.description do
-    xml << (glsa.last_revision.description + "\n" || "")
+    xml << (rev.description + "\n" || "")
   end
   
-  xml.impact({:type => glsa.last_revision.severity}, glsa.last_revision.impact || "")
+  xml.impact({:type => rev.severity}, rev.impact || "")
   
-  xml.workaround(glsa.last_revision.workaround || "")
+  xml.workaround(rev.workaround || "")
   
   xml.resolution do
-    xml << (glsa.last_revision.resolution || "")
+    xml << (rev.resolution || "")
   end
   
   xml.references do
-    glsa.last_revision.references.each do |ref|
+    rev.references.each do |ref|
       xml.uri({:link => ref.url}, ref.title)
     end
   end
@@ -45,7 +45,7 @@ xml.glsa :id => glsa.glsa_id do
   xml.metadata({:tag => 'requester', :timestamp => glsa.created_at.rfc2822}, glsa.requester.login)
   
   if glsa.submitter
-    xml.metadata({:tag => 'submitter', :timestamp => glsa.last_revision.created_at.rfc2822}, glsa.submitter.login)
+    xml.metadata({:tag => 'submitter', :timestamp => rev.created_at.rfc2822}, glsa.submitter.login)
   end
   
   if glsa.bugreadymaker

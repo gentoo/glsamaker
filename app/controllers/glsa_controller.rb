@@ -1,5 +1,5 @@
 # ===GLSAMaker v2
-#  Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2010 Alex Legler <a3li@gentoo.org>
 #  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -66,6 +66,12 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
+    
+    if @rev == nil
+      flash[:error] = "Invalid revision ID"
+      redirect_to :action => "show"
+      return
+    end
 
     #flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
 
@@ -73,7 +79,7 @@ class GlsaController < ApplicationController
       wants.html { render }
       wants.xml { }
       wants.txt { 
-        @packages = regroup_packages @glsa.last_revision.packages
+        @packages = regroup_packages @rev.packages
         logger.debug @packages.inspect
         
         @packages_count = 0

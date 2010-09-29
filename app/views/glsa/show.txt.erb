@@ -3,12 +3,12 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                             http://security.gentoo.org/
 -----------------------------------------------------------------------
-<%= adv_wrap @glsa.last_revision.title %>
+<%= adv_wrap @rev.title %>
 =======================================================================
 
-<%= prefixed_item(" Severity:", @glsa.last_revision.severity.capitalize) %>
-<%= prefixed_item("     Date:", @glsa.last_revision.updated_at.strftime('%B %d, %Y')) %>
-<%= prefixed_item("     Bugs:", @glsa.last_revision.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
+<%= prefixed_item(" Severity:", @rev.severity.capitalize) %>
+<%= prefixed_item("     Date:", @rev.updated_at.strftime('%B %d, %Y')) %>
+<%= prefixed_item("     Bugs:", @rev.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
 <%= prefixed_item("       ID:", @glsa.glsa_id) %>
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -16,12 +16,12 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
 Synopsis
 ========
 
-<%= adv_wrap @glsa.last_revision.synopsis %>
+<%= adv_wrap @rev.synopsis %>
 
 Background
 ==========
 
-<%= adv_wrap @glsa.last_revision.background %>
+<%= adv_wrap @rev.background %>
 
 Affected packages
 =================
@@ -51,31 +51,31 @@ Affected packages
 Description
 ===========
 
-<%= adv_wrap @glsa.last_revision.description %>
+<%= adv_wrap @rev.description %>
 
 Impact
 ======
 
-<%= adv_wrap @glsa.last_revision.impact %>
+<%= adv_wrap @rev.impact %>
 
 Workaround
 ==========
 
-<%= adv_wrap @glsa.last_revision.workaround %>
+<%= adv_wrap @rev.workaround %>
 
 Resolution
 ==========
 
-<%= adv_wrap @glsa.last_revision.resolution %>
+<%= adv_wrap @rev.resolution %>
 
 References
 ==========
 
 <% @reference_number = 0
-   @max_digits_of_references = @glsa.last_revision.references.size.to_s.size
+   @max_digits_of_references = @rev.references.size.to_s.size
 
  -%>
-<%= render :partial => "show_reference", :as => :reference, :collection => @glsa.last_revision.references -%>
+<%= render :partial => "show_reference", :as => :reference, :collection => @rev.references -%>
 
 Availability
 ============
