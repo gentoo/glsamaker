@@ -62,6 +62,19 @@ class GlsaController < ApplicationController
     end
   end
 
+  def prepare_show_view(what)
+    if what == :txt
+      @packages = regroup_packages @rev.packages
+      logger.debug @packages.inspect
+      
+      @packages_count = 0
+    
+      @tf = Text::Format.new
+    end
+  end
+  
+  private :prepare_show_view
+
   def show
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
@@ -79,12 +92,7 @@ class GlsaController < ApplicationController
       wants.html { render }
       wants.xml { }
       wants.txt { 
-        @packages = regroup_packages @rev.packages
-        logger.debug @packages.inspect
-        
-        @packages_count = 0
-      
-        @tf = Text::Format.new
+        prepare_show_view :txt
         render
       }
     end
