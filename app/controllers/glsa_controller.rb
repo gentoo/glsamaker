@@ -53,6 +53,9 @@ class GlsaController < ApplicationController
     if params[:what] == "request"
       begin
         glsa = Glsa.new_request(params[:title], params[:bugs], params[:comment], params[:access], current_user)
+        
+        Glsamaker::Mail.request_notification(glsa, current_user)
+        
         flash[:notice] = "Successfully created GLSA #{glsa.glsa_id}"
         redirect_to :action => "requests"
       rescue Exception => e

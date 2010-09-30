@@ -12,12 +12,20 @@ module Glsamaker
   module Mail
     module_function
     def edit_notification(glsa, diff, user)
-      User.find(:all, :conditions => 'id > 0').each do |user|
+      User.find(:all, :conditions => 'id > 0').each do |rcpt|
         unless (user.preferences || {})[:mail_edit] == false
-          GlsaMailer.deliver_edit(user, glsa, diff, user)
+          GlsaMailer.deliver_edit(rcpt, glsa, diff, user)
         end
       end
     end
+    
+    def request_notification(glsa, user)
+      User.find(:all, :conditions => 'id > 0').each do |rcpt|
+        unless (user.preferences || {})[:mail_request] == false
+          GlsaMailer.deliver_request(rcpt, glsa, user)
+        end
+      end
+    end    
     
   end
 end

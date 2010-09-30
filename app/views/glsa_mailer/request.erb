@@ -1,3 +1,11 @@
-GlsaMailer#request
+A new request was filed by <%= @user.login %> @ <%= @glsa.last_revision.created_at.rfc2822 %>:
 
-Find me in app/views/glsa_mailer/request.erb
+<%= @glsa.last_revision.title %>
+<%= "-" * @glsa.last_revision.title.length %>
+
+Bugs:
+<% @glsa.last_revision.bugs.each do |bug| %>
+ * <%= bug.bug_id %><%= " (#{bug.title})" if bug.title %>
+<% end %>
+--
+This email notification is brought to you by GLSAMaker 2.

@@ -1,12 +1,12 @@
 class GlsaMailer < ActionMailer::Base
 
-  def request(sent_at = Time.now)
-    subject    'GlsaMailer#request'
-    recipients ''
-    from       ''
-    sent_on    sent_at
+  def request(user, glsa, edit_user)
+    subject    "[GLSAMaker] New request: '#{glsa.last_revision.title}'"    
+    recipients user.email
+    from       GLSAMAKER_FROM_EMAIL
+    sent_on    Time.now
     
-    body       :greeting => 'Hi,'
+    body       :glsa => glsa, :user => edit_user
   end
 
   def edit(user, glsa, diff, edit_user)
