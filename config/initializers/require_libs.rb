@@ -1,6 +1,5 @@
 unless Rails.env == 'development'
   require 'lib/authentication'
-  require 'lib/diff'
   require 'lib/glsamaker'
   #require 'lib/glsamaker/diff'
   #require 'lib/glsamaker/portage'

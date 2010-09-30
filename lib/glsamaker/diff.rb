@@ -10,25 +10,43 @@
 #
 # For more information, see the LICENSE file.
 
-require 'diff'
+require 'diff/lcs/hunk'
 
 module Glsamaker
   # Module providing diff support
   module Diff
-    
-    # DiffContainer represents a set of diffs
-    class DiffContainer
-      attr_reader :diff, :words, :content_to, :content_from
+    module_function
 
-      def initialize(content_to, content_from)
-        @content_to = content_to || ""
-        @content_from = content_from || ""
-        @words = @content_to.split(/(\s+)/)
-        @words = @words.select {|word| word != ' '}
-        words_from = @content_from.split(/(\s+)/)
-        words_from = words_from.select {|word| word != ' '}    
-        @diff = words_from.diff @words
+    # Returns a unified diff for two strings
+    # Adapted from the O'Reilly Ruby Cookbook
+    def diff(str_old, str_new, format = :unified, context_lines = 3)
+      str_old = str_old.split(/\r?\n/).map! { |l| l.chomp }
+      str_new = str_new.split(/\r?\n/).map! { |l| l.chomp }
+
+      output = ""
+      diffs = ::Diff::LCS.diff(str_old, str_new)
+      return output if diffs.empty?
+
+      oldhunk = hunk = nil
+      file_length_difference = 0
+      diffs.each do |piece|
+        begin
+          hunk = ::Diff::LCS::Hunk.new(str_old, str_new, piece, context_lines, file_length_difference)
+          next unless oldhunk
+
+          if (context_lines > 0) and hunk.overlaps?(oldhunk)
+            hunk.unshift(oldhunk)
+          else
+            output << oldhunk.diff(format)
+          end
+        ensure
+          oldhunk = hunk
+          output << "\n"
+        end
       end
+
+      output << oldhunk.diff(format) << "\n"
     end
+
   end
 end

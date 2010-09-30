@@ -229,25 +229,12 @@ class GlsaController < ApplicationController
   end
 
   def diff
-    @glsa = Glsa.find(params[:id])
+    glsa = Glsa.find(params[:id])
     
-    if @glsa.nil?
-      flash[:error] = "GLSA not found."
-      redirect_to :action => "index"
-      return
-    end
+    rev_old = glsa.revisions.find_by_revid(params[:old])
+    rev_new = glsa.revisions.find_by_revid(params[:new])
     
-    @rev_from = @glsa.revisions.find_by_revid(params[:from])
-    @rev_to = @glsa.revisions.find_by_revid(params[:to])
-    
-    if @rev_from.nil? || @rev_to.nil? 
-      flash[:error] = "Invalid revision given"
-      redirect_to :action => "index"
-      return
-    end
-    
-    @diffs = {}
-    @diff = Glsamaker::Diff::DiffContainer.new(@rev_from.description, @rev_to.description)
+    @diff = rev_diff(glsa, rev_old, rev_new)
   end
 
   def addbug
@@ -368,7 +355,31 @@ class GlsaController < ApplicationController
     end
     
     packages_list
-
+  end
+  
+  def rev_diff(glsa, rev_old, rev_new, format = :unified, context_lines = 3)
+    @glsa = glsa
+    @rev = rev_old
+    old_text = Glsamaker::XML.indent(
+      render_to_string(
+        :template => 'glsa/_glsa.xml.builder',
+        :locals => {:glsa => @glsa, :rev => @rev},
+        :layout => 'none'
+      ),
+      {:indent => 2, :maxcols => 80}
+    )    
+    
+    @rev = rev_new
+    new_text = Glsamaker::XML.indent(
+      render_to_string(
+        :template => 'glsa/_glsa.xml.builder',
+        :locals => {:glsa => @glsa, :rev => @rev},
+        :layout => 'none'
+      ),
+      {:indent => 2, :maxcols => 80}
+    )
+    
+    Glsamaker::Diff.diff(new_text, old_text, format, context_lines)
   end
   
 end
