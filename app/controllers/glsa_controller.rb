@@ -223,6 +223,7 @@ class GlsaController < ApplicationController
     end
 
     # Sending emails
+    Glsamaker::Mail.edit_notification(@glsa, rev_diff(@glsa, @glsa.revisions[-2], revision), current_user)
     #GlsaMailer.deliver_edit(current_user, @glsa, revision, current_user)
 
     flash[:notice] = "Saving was successful. #{'NOTE: Bugzilla integration is not available, only plain bug numbers.' if bugzilla_warning}"

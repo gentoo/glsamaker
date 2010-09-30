@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   
   has_many :revisions
 
+  serialize :preferences
+
   validates_uniqueness_of :login, :message => "User name must be unique"
   validates_presence_of :login, :message => "User name can't be blank"
   

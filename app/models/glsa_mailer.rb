@@ -9,13 +9,13 @@ class GlsaMailer < ActionMailer::Base
     body       :greeting => 'Hi,'
   end
 
-  def edit(user, glsa, revision, edit_user)
-    subject    "[GLSAMaker] Draft edit: '#{revision.title}'"
+  def edit(user, glsa, diff, edit_user)
+    subject    "[GLSAMaker] Draft edit: '#{glsa.last_revision.title}'"
     recipients user.email
     from       GLSAMAKER_FROM_EMAIL
     sent_on    Time.now
 
-    body       :glsa => glsa, :revision => revision, :user => edit_user
+    body       :glsa => glsa, :diff => diff, :user => edit_user
   end
 
   def comment(sent_at = Time.now)
