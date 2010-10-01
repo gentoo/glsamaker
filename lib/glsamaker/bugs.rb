@@ -14,22 +14,23 @@ require 'bugzilla'
 module Glsamaker
   module Bugs
   
-    class Bug < Bugzilla::Bug    
+    module StatusMixin
       def status
-        return @status unless @status == nil
-        
-        if @status_whiteboard =~ /([A-C~][0-4]\??)\s+\[(.*?)\]\s*?(.*?)$/
-          
+        if whiteboard =~ /([A-C~][0-4]\??)\s+\[(.*?)\]\s*?(.*?)$/
           st = []
           
           $2.split("/").each do |status|
             st << Status.new(status)
           end
+          
+          return st
         else
           raise ArgumentError, "Malformed whiteboard"
         end
       end
-      
+    end
+    
+    module ArchesMixin
       # Returns an array of all arch teams in CC
       def arch_cc
         @arch_cc ||= _arch_cc
@@ -37,26 +38,46 @@ module Glsamaker
       
       private
       def _arch_cc
-        arches = []
+        ccd_arches = []
         our_arches = %w[ alpha@gentoo.org amd64@gentoo.org arm@gentoo.org bsd@gentoo.org hppa@gentoo.org 
           ia64@gentoo.org m68k@gentoo.org mips@gentoo.org ppc64@gentoo.org ppc@gentoo.org release@gentoo.org 
           s390@gentoo.org sh@gentoo.org sparc@gentoo.org x86@gentoo.org ]
         
-        @cc.each do |cc|
-          if our_arches.include? cc
-            arches << cc
+        if cc.is_a? String
+          _cc = cc.split(/,\s*/)
+        else
+          _cc = cc
+        end
+        
+        _cc.each do |cc_member|
+          if our_arches.include? cc_member
+            ccd_arches << cc_member
           end
         end
         
-        arches
+        ccd_arches
       end
+    end
+  
+    # Extends Bugzilla::Bug with the Status and Arches functionality
+    class Bug < Bugzilla::Bug
+      def whiteboard
+        @status_whiteboard
+      end
+      
+      def cc
+        @cc
+      end
+      
+      include StatusMixin
+      include ArchesMixin
     end
     
     # This baby is a bug status, one of the things you see in squared brackets in whiteboards.
     class Status
-      include Comparable  
+      include Comparable
       
-      attr_reader :status  
+      attr_reader :status
       
       # Creates a new Status object by parsing +str+ as a single status string
       def initialize(str)

@@ -13,6 +13,13 @@
 class Bug < ActiveRecord::Base
   belongs_to :revision
   
+  def cc
+    self.arches
+  end
+  
+  include Glsamaker::Bugs::StatusMixin
+  include Glsamaker::Bugs::ArchesMixin
+  
   # Returns the Gentoo Bugzilla URI for the bug.
   # Set +secure+ to false to get a HTTP instead of a HTTPS URI
   def bug_url(secure = true)
