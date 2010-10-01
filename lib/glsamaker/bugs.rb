@@ -9,6 +9,8 @@
 #
 # For more information, see the LICENSE file.
 
+require 'bugzilla'
+
 module Glsamaker
   module Bugs
   
