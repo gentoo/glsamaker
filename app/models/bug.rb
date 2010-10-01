@@ -19,6 +19,7 @@ class Bug < ActiveRecord::Base
   
   include Glsamaker::Bugs::StatusMixin
   include Glsamaker::Bugs::ArchesMixin
+  include Glsamaker::Bugs::BugReadyMixin
   
   # Returns the Gentoo Bugzilla URI for the bug.
   # Set +secure+ to false to get a HTTP instead of a HTTPS URI

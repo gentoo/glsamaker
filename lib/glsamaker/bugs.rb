@@ -58,6 +58,18 @@ module Glsamaker
         ccd_arches
       end
     end
+    
+    module BugReadyMixin
+      # Indicates whether this bug has been handled and is in the correct
+      # state for sending a GLSA assigned to it.
+      def bug_ready?
+        status.each do |s|
+          return false unless s.status == :glsa and not s.pending?
+        end
+
+        return arch_cc == []
+      end
+    end
   
     # Extends Bugzilla::Bug with the Status and Arches functionality
     class Bug < Bugzilla::Bug
@@ -71,6 +83,7 @@ module Glsamaker
       
       include StatusMixin
       include ArchesMixin
+      include BugReadyMixin
     end
     
     # This baby is a bug status, one of the things you see in squared brackets in whiteboards.
