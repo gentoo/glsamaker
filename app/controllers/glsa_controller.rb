@@ -190,13 +190,17 @@ class GlsaController < ApplicationController
     
     bugs.each do |bug|
       begin
-        b = Bugzilla::Bug.load_from_id(bug)
+        b = Glsamaker::Bugs::Bug.load_from_id(bug)
       
         revision.bugs.create(
           :bug_id => bug,
-          :title => b.summary
+          :title => b.summary,
+          :whiteboard => b.status_whiteboard,
+          :arches => b.arch_cc.join(', ')
         )
       rescue Exception => e
+        log_error e
+        logger.info { e.inspect }
         # In case of bugzilla errors, just keep the bug #
         revision.bugs.create(
           :bug_id => bug

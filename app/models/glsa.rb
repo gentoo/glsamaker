@@ -141,29 +141,21 @@ class Glsa < ActiveRecord::Base
       raise Exception, "Error while saving Revision object: #{e.message}"
     end
 
-    bug_ids = Bugzilla::Bug.str2bugIDs(bugs)
+    bugs = Bugzilla::Bug.str2bugIDs(bugs)
 
-    bug_ids.each do |bug|
+    bugs.each do |bug|
       begin
-        bugzie = Bugzilla::Bug.load_from_id(bug)
-      rescue Exception => e
-        # If Bugzie is down, just put the bug ID and have it load the description later
+        b = Glsamaker::Bugs::Bug.load_from_id(bug)
+      
         revision.bugs.create(
-          :bug_id => bug
+          :bug_id => bug,
+          :title => b.summary,
+          :whiteboard => b.status_whiteboard,
+          :arches => b.arch_cc.join(', ')
         )
-        return glsa
-      end
-
-      begin
-        b = Bug.new
-        b.revision = revision
-        b.bug_id = bugzie.bug_id.to_i
-        b.title = bugzie.summary
-        b.save!
       rescue Exception => e
-        glsa.delete
-        revision.delete
-        raise Exception, "Error while saving Bug object: #{e.message}"
+        # In case of bugzilla errors, just keep the bug #
+        revision.bugs.create(:bug_id => bug)
       end
     end
 
