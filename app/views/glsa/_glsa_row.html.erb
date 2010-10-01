@@ -5,7 +5,7 @@
     <strong><tt><%= h glsa.glsa_id %></tt></strong>
   </td>
   <td>
-    <%= bugready_icon false %>
+    <%= bugready_icon glsa.last_revision.bug_ready? %>
     <%= approval_icon glsa.approval_status %>
     <%= workflow_icon(glsa.workflow_status(current_user)) %>
     <%= restricted_icon glsa.restricted %>
@@ -17,11 +17,11 @@
     <td><strong><%= link_to(h(glsa.last_revision.title), {:controller => 'glsa', :action => 'show', :id => glsa}, {:title => "Show this GLSA"}) %></strong></td>
     <td><%= glsa.created_at %>, <%= h glsa.submitter.name %> (<em><%= h glsa.submitter.login %></em>)</td>  
   <% end %>
-  <td>
+  <!--<td>
     <% if glsa.last_revision; glsa.last_revision.bugs.each do |b| %>
       <%= link_to_function h(b.bug_id), "buginfo('#{h b.bug_id}')" %>
     <% end ; end %>
-  </td>
+  </td>-->
   <% if current_user.is_el_jefe? %>
   <td>
     <%= image_tag 'icons/delete.png' %>
