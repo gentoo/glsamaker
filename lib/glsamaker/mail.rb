@@ -12,16 +12,30 @@ module Glsamaker
   module Mail
     module_function
     def edit_notification(glsa, diff, user)
+      if GLSAMAKER_NO_EMAIL
+        Rails.logger.info "Not sending email."
+        return false
+      end
+      
       User.find(:all, :conditions => 'id > 0').each do |rcpt|
-        unless (user.preferences || {})[:mail_edit] == false
+        next unless rcpt.can_access? glsa
+        
+        unless user.get_pref_category(:mail)[:edit] == false
           GlsaMailer.deliver_edit(rcpt, glsa, diff, user)
         end
       end
     end
     
     def request_notification(glsa, user)
+      if GLSAMAKER_NO_EMAIL
+        Rails.logger.info "Not sending email."
+        return false
+      end
+      
       User.find(:all, :conditions => 'id > 0').each do |rcpt|
-        unless (user.preferences || {})[:mail_request] == false
+        next unless rcpt.can_access? glsa        
+        
+        unless user.get_pref_category(:mail)[:request] == false
           GlsaMailer.deliver_request(rcpt, glsa, user)
         end
       end

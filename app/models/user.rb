@@ -47,4 +47,12 @@ class User < ActiveRecord::Base
     
     true
   end
+  
+  # Returns a certain category form the user's preferences
+  # or an empty hash if that category does not exist
+  def get_pref_category(category)
+    return {} if self.preferences == nil or self.preferences[category] == nil
+    
+    self.preferences[category]
+  end
 end

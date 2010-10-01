@@ -1,0 +1,34 @@
+<h1>My Profile</h1>
+
+<% form_tag :action => 'update' do |f| -%>
+<h2>Email preferences</h2>
+
+<table>
+  <tr>
+    <th></th>
+    <th style="text-align: left;">Send me an Email when...</th>
+  </th>
+  <tr class="odd">
+    <td><input type="checkbox" value="1" name="preferences[new_req]" id="new_req" <%= 'checked="checked"' if @prefs[:mail] and @prefs[:mail][:new_req] %>/></td>
+    <td><label for="new_req"> when a <strong>new request</strong> is filed</label></td>
+  </tr>
+  <tr class="even">
+    <td><input type="checkbox" value="1" name="preferences[edit]" id="edit" <%= 'checked="checked"' if @prefs[:mail] and @prefs[:mail][:edit] %>/></td>
+    <td><label for="edit"> when a draft was <strong>edited</strong></label></td>
+  </tr>
+  <tr class="odd">
+    <td><input type="checkbox" value="1" name="preferences[own_comment]" id="own_comment" <%= 'checked="checked"' if @prefs[:mail] and @prefs[:mail][:own_comment] %>/></td>
+    <td><label for="own_comment"> when a <strong>draft I have submitted</strong> has recieved a <strong>comment</strong></label></td>
+  </tr>
+  <tr class="even">
+    <td><input type="checkbox" value="1" name="preferences[own_ready]" id="own_ready" <%= 'checked="checked"' if @prefs[:mail] and @prefs[:mail][:own_ready] %>/></td>
+    <td><label for="own_ready"> when a draft <strong>I have submitted</strong> is <strong>ready for sending</strong></label></td>
+  </tr>
+  <tr class="odd">
+    <td><input type="checkbox" value="1" name="preferences[not_me]" id="not_me" <%= 'checked="checked"' if @prefs[:mail] and @prefs[:mail][:not_me] %>/></td>
+    <td><label for="not_me"> <strong>BUT NOT</strong> If I have done it (overrides all of the above)</label></td>
+  </tr>
+</table>
+
+<p><input type="submit" value="Save" /></p>
+<% end %>

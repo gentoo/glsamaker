@@ -33,6 +33,31 @@ class IndexController < ApplicationController
   end
   
   def profile
+    @user = current_user
+    @prefs = @user.preferences
+  end
+  
+  def update
+    @user = current_user
+    @prefs = @user.preferences
+
+    preferences = {:own_ready => false, :own_comment => false, :edit => false, :new_req => false, :not_me => false}
+
+    unless params[:preferences] == nil
+      %w[own_ready own_comment edit new_req not_me].each do |notification|
+        preferences[notification.to_sym] = params[:preferences][notification] == '1'
+      end
+    end
+    
+    @user.preferences[:mail] ||= {}
+    @user.preferences[:mail] = preferences
+    if @user.save
+      flash[:notice] = "Successfully updated your profile"
+      redirect_to :action => "index"
+    else
+      flash[:error] = "Could not update your profile"
+      render :action => "profile"
+    end
   end
   
 end
