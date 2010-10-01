@@ -25,7 +25,7 @@ xml.glsa :id => glsa.glsa_id do
   xml.background(rev.background || "")
   
   xml.description do
-    xml << (rev.description + "\n" || "")
+    xml << (rev.description || "") + "\n"
   end
   
   xml.impact({:type => rev.severity}, rev.impact || "")
