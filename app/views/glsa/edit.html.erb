@@ -10,30 +10,6 @@
 <% form_tag :action => 'update', :id => @glsa do |f| -%>
 <div style="float: right; width: 44%;">
   <div class="box">
-    <h2><img src="/images/icons/info.png" alt="info" />
-      GLSA <%= @glsa.status %> <%= @glsa.glsa_id %> &mdash; Revision <%= @glsa.last_revision.revid %></h2>
-    <% if false %>
-      <p><img src="/images/icons/ok.png" alt="ok" /> This draft is marked <strong>bug ready.</strong></p>
-    <% else %>
-      <p><img src="/images/icons/pending.png" alt="pending" /> There are some bugs <strong>pending.</strong></p>
-    <% end %>
-    <p>
-      <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
-      Requester: <strong><%= h @glsa.requester.name %></strong>
-    </p>
-    <% if @glsa.submitter %>
-    <p>
-      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
-      Submitter: <strong><%= h @glsa.submitter.name %></strong>
-    </p>
-    <% end %>
-    <p>
-      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
-      Editor: <strong><%= h @glsa.last_revision.user.name %></strong>
-    </p>
-  </div>
-  
-  <div class="box">
     <h2><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
     <p><label for="access">This GLSA is</label>:
       <select name="glsa[restricted]">
