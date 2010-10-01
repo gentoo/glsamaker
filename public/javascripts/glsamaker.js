@@ -52,7 +52,8 @@ function markBugAsDeleted(bug) {
   minus.src = '/images/icons/minus-small.png';
   minus.alt = 'This bug will be removed when saving';
   
-  $('bug-' + bug).getElementsByTagName('td')[0].appendChild(minus);
+  $('bug-' + bug).getElementsByTagName('td')[1].appendChild(document.createTextNode(" "));
+  $('bug-' + bug).getElementsByTagName('td')[1].appendChild(minus);
 }
 
 function markEntryAsDeleted(elem, type) {

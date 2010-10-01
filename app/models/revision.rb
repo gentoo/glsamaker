@@ -40,5 +40,19 @@ class Revision < ActiveRecord::Base
     end
   end
   
+  # Checks all assigned bugs for bug ready status
+  def bug_ready?
+    self.bugs.each do |b|
+      return false unless b.bug_ready?
+    end
+    
+    return true
+  end
   
+  # Updates the cached metadata of all assigned bugs
+  def update_cached_bug_metadata
+    self.bugs.each do |b|
+      b.update_cached_metadata
+    end
+  end
 end

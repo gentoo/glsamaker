@@ -1,5 +1,7 @@
   <tr id="bug-<%= h bug.bug_id %>">
-    <td><a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);"><strong><%= h bug.bug_id %></strong></a></td>
+    <td><%= bugready_icon(bug.bug_ready?) %></td>
+    <td>
+      <a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);"><strong><%= h bug.bug_id %></strong></a></td>
     <td><%= truncate(h(bug.title), :length => 60) %></td>
     <td><%= link_to_remote(
               image_tag('icons/minus.png', :alt => 'Mark as deleted'), 

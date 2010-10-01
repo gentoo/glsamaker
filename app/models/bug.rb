@@ -30,4 +30,17 @@ class Bug < ActiveRecord::Base
       "http://bugs.gentoo.org/show_bug.cgi?id=#{self.bug_id}"
     end
   end
+  
+  # Updates the cached bug metadata
+  def update_cached_metadata
+    b = Glsamaker::Bugs::Bug.load_from_id(bug_id)
+  
+    update_attributes!(
+      :title => b.summary,
+      :whiteboard => b.status_whiteboard,
+      :arches => b.arch_cc.join(', ')
+    )
+  rescue Exception => e
+    raise "Could not update cached metadata: " + e.message
+  end
 end

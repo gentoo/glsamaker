@@ -270,7 +270,7 @@ class GlsaController < ApplicationController
       @addedBugs = []
       Bugzilla::Bug.str2bugIDs(params[:addbugs]).map do |bugid|
         begin
-          @addedBugs << Bugzilla::Bug.load_from_id(bugid)
+          @addedBugs << Glsamaker::Bugs::Bug.load_from_id(bugid)
           session[:addbugs][@glsa.id] << bugid.to_i
         rescue Exception => e
           # Silently ignore invalid bugs
@@ -301,6 +301,21 @@ class GlsaController < ApplicationController
     session[:delbugs][glsa] << bug    
     
     render :text => ""
+  end
+  
+  def update_cache
+    @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
+    @rev = @glsa.last_revision
+    
+    @rev.update_cached_bug_metadata
+    
+    flash[:notice] = "Successfully updated all caches."
+    redirect_to :action => 'show', :id => @glsa    
+  rescue Exception => e
+    log_error e
+    flash[:notice] = "Could not update caches: #{e.message}"
+    redirect_to :action => 'show', :id => @glsa
   end
 
   def destroy

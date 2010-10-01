@@ -291,6 +291,15 @@ td {
   padding: .2em;
 }
 
+table#bugtable {
+  font-size: 80%;
+}
+
+table#bugtable td{
+  border-bottom: 1px solid #8875B0;
+  background-color: #DEDBEF;
+}
+
 /** boxes **/
 div.box, div.legend {
   padding: .4em; 
@@ -326,6 +335,11 @@ div.box span.toolbar {
 div.box p {
   margin: 0;
 }
+
+.pmargin p {
+  margin-bottom: .5em !important;
+}
+
 .w40em {
   width: 40em;
 }

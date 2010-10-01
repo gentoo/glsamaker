@@ -92,7 +92,7 @@ class Glsa < ActiveRecord::Base
 
     return :todo
   end
-
+  
   # Returns true if there are any pending comments left
   def has_pending_comments?
     comments.find(:all, :conditions => ['`read` = ?', false]).count > 0

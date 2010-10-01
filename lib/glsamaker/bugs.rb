@@ -15,8 +15,8 @@ module Glsamaker
   module Bugs
   
     module StatusMixin
-      def status
-        if whiteboard =~ /([A-C~][0-4]\??)\s+\[(.*?)\]\s*?(.*?)$/
+      def secbug_status
+        if whiteboard =~ /([A-C~?][0-4?]\??)\s+\[(.*?)\]\s*?(.*?)$/
           st = []
           
           $2.split("/").each do |status|
@@ -25,7 +25,7 @@ module Glsamaker
           
           return st
         else
-          raise ArgumentError, "Malformed whiteboard"
+          [Status.new('?')]
         end
       end
     end
@@ -63,11 +63,13 @@ module Glsamaker
       # Indicates whether this bug has been handled and is in the correct
       # state for sending a GLSA assigned to it.
       def bug_ready?
-        status.each do |s|
+        secbug_status.each do |s|
           return false unless s.status == :glsa and not s.pending?
         end
 
         return arch_cc == []
+      rescue Exception => e
+        return false
       end
     end
   
@@ -94,6 +96,12 @@ module Glsamaker
       
       # Creates a new Status object by parsing +str+ as a single status string
       def initialize(str)
+        if str == '?'
+          @status = '?'.to_sym
+          @blocked = @overdue = @pending = false
+          return
+        end
+        
         cmp = str.strip.split(/\s+/)
         
         if cmp.length == 2
@@ -134,7 +142,7 @@ module Glsamaker
       def <=>(other)
         raise(ArgumentError, "Cannot compare to #{other.class}") unless other.is_a? Status
         
-        s = [:dummy, :upstream, :ebuild, :stable, :glsa, :noglsa]
+        s = ['?'.to_sym, :upstream, :ebuild, :stable, :glsa, :noglsa]
         
         if other.status == @status
           if other.pending? == @pending and other.overdue? == @overdue

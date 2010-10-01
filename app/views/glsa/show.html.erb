@@ -1,10 +1,5 @@
 <h1>
   <%= @rev.title %>
-  (<%= status_icon @glsa.status %> <tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>)
-  <%= bugready_icon false %>
-  <%= approval_icon @glsa.approval_status %>
-  <%= workflow_icon(@glsa.workflow_status(current_user)) %>
-  <%= restricted_icon @glsa.restricted %>
 </h1>
 
 <div class="box buttons">
@@ -16,6 +11,51 @@
   <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft", {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/xml.png'} View as XML", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/txt.png'} View as Text", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'txt'}, {:class => 'button'} %>  
+</div>
+
+<div style="float: right; width: 40%;">
+  <div class="box pmargin">
+    <h2>
+      GLSA <%= status_icon @glsa.status %> <tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>
+      <%= bugready_icon @rev.bug_ready? %>
+      <%= approval_icon @glsa.approval_status %>
+      <%= workflow_icon(@glsa.workflow_status(current_user)) %>
+      <%= restricted_icon @glsa.restricted %>
+    </h2><br />
+    <% if @glsa.workflow_status(current_user) == :approved and @glsa.last_revision.bug_ready? %>
+      <p><img src="/images/icons/ok.png" alt="ok" /> This draft is <strong>ready for sending</strong>.</p>
+    <% else %>
+      <p><img src="/images/icons/pending.png" alt="pending" /> This draft is <strong>not ready for sending.</strong></p>
+    <% end %>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
+      Requester: <strong><%= h @glsa.requester.name %></strong>
+    </p>
+    <% if @glsa.submitter %>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
+      Submitter: <strong><%= h @glsa.submitter.name %></strong>
+    </p>
+    <% end %>
+    <p>
+      <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
+      Editor: <strong><%= h @glsa.last_revision.user.name %></strong>
+    </p>
+  </div>
+  
+  <div class="box">
+    <h2>
+      <span class="toolbar">
+        <a href="/glsa/update_cache/<%= @glsa.id %>" title="Update all cached metadata">
+          <img src="/images/icons/refresh.png" alt="Update all cached metadata" />
+        </a>
+      </span>      
+      <img src="/images/icons/bug.png" alt="bug" /> Bugs
+    </h2>
+    <table id="bugtable">
+      <%= render :partial => "show_bug_row", :collection => @glsa.last_revision.bugs, :as => :bug %>
+    </table>
+  </div>  
 </div>
 
 <p>
@@ -76,10 +116,4 @@
 <li><%= link_to r.title, r.url -%></li>
 <% end %>
 </ul>
-</p>
-
-<p>
-<b>Requested by:</b> <%= @glsa.requester.login %> <br />
-<b>Submitter:</b> <%= @glsa.submitter.login if @glsa.submitter %> <br />
-<b>Bug ready:</b> <%= @glsa.bugreadymaker.login if @glsa.bugreadymaker %>
 </p>

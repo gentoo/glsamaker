@@ -1,0 +1,6 @@
+<tr id="bug-<%= h bug.bug_id %>">
+  <td><%= bugready_icon(bug.bug_ready?) %></td>
+  <td>
+    <a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);"><strong><%= h bug.bug_id %></strong></a></td>
+  <td><%= truncate(h(bug.title), :length => 60) %></td>
+</tr>

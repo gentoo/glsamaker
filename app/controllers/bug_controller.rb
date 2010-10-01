@@ -14,8 +14,10 @@ class BugController < ApplicationController
     begin
       @bug = Glsamaker::Bugs::Bug.load_from_id(params[:id].to_i)
     rescue SocketError => e
+      log_error e
       @bug = "down"
     rescue ArgumentError => e
+      log_error e
       @bug = nil
     end
     
