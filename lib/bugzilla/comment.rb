@@ -9,12 +9,14 @@
 # For more information, see the LICENSE file.
 
 # Encapsulates a comment to a Bug
-class Bugzilla::Comment
-  attr_reader :author, :text, :date
+module Bugzilla
+  class Comment
+    attr_reader :author, :text, :date
   
-  def initialize(by, text, date)
-    @author = by
-    @text = text
-    @date = Time.parse(date)
+    def initialize(by, text, date)
+      @author = by
+      @text = text
+      @date = Time.parse(date)
+    end
   end
 end

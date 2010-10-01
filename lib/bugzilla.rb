@@ -15,7 +15,7 @@ require 'fileutils'
 
 module Bugzilla ; end
 
-%w[ comment bug history ].each {|lib| require File.join(File.dirname(__FILE__), "bugzilla/#{lib}")}
+%w[ comment history bug ].each {|lib| require File.join(File.dirname(__FILE__), "bugzilla/#{lib}")}
 
 # Bugzilla module
 module Bugzilla
