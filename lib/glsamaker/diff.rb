@@ -10,6 +10,7 @@
 #
 # For more information, see the LICENSE file.
 
+require 'diff/lcs'
 require 'diff/lcs/hunk'
 
 module Glsamaker
