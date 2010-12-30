@@ -82,7 +82,7 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
-    
+
     if @rev == nil
       flash[:error] = "Invalid revision ID"
       redirect_to :action => "show"
@@ -122,15 +122,15 @@ class GlsaController < ApplicationController
 
   def update
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)   
-    @rev = @glsa.last_revision
-    
+    return unless check_object_access(@glsa)
+    @prev_latest_rev = @glsa.last_revision
+
     if @glsa.nil?
       flash[:error] = "Unknown GLSA ID"
       redirect_to :action => "index"
       return
     end
-    
+
     # GLSA object
     # The first editor is submitter
     # TODO: Maybe take a better condition (adding bugs would make so. the submitter)
@@ -139,16 +139,16 @@ class GlsaController < ApplicationController
     end
 
     @glsa.status = "draft" if @glsa.status == "request"
-    
+
     @glsa.restricted = (params[:glsa][:restricted] == "confidential")
-    
+
     # Force update
     @glsa.updated_at = 0
-    
+
     revision = Revision.new
     revision.revid = @glsa.next_revid
     revision.glsa = @glsa
-    revision.user = current_user    
+    revision.user = current_user
     revision.title = params[:glsa][:title]
     revision.synopsis = params[:glsa][:synopsis]
     # TODO: secure
@@ -172,26 +172,15 @@ class GlsaController < ApplicationController
       render :action => "edit"
     end
 
-    # Bugs...
-    bugs = @rev.get_linked_bugs
-    
-    logger.debug { "Bugs: " + bugs.inspect }
-    
-    bugs += (session[:addbugs][@glsa.id] || [])
-    
-    logger.debug { "After adding new ones: " + bugs.inspect }
-    
-    bugs -= (session[:delbugs][@glsa.id] || [])
-    
-    logger.debug { "To remove: " + session[:delbugs][@glsa.id].inspect }
-    logger.debug { "After removing: " + bugs.inspect }
-    
+    # Bugs
+    bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
+
     bugzilla_warning = false
-    
+
     bugs.each do |bug|
       begin
         b = Glsamaker::Bugs::Bug.load_from_id(bug)
-      
+
         revision.bugs.create(
           :bug_id => bug,
           :title => b.summary,
@@ -206,11 +195,11 @@ class GlsaController < ApplicationController
           :bug_id => bug
         )
         bugzilla_warning = true
-      end  
+      end
     end
 
     logger.debug params[:glsa][:package].inspect
-    
+
     # Packages...
     params[:glsa][:package].reject {|e| e.has_key? 'ignore'}.each do |package|
       logger.debug package.inspect
