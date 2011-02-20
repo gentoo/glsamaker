@@ -8,7 +8,7 @@
   <td class="odd"><%= pf.select :automatic, [["yes", true], ["no", false]], {}, :index => nil %></td>
   <td><%= link_to_function(
               image_tag('icons/package-remove.png', :alt => 'Remove package'), 
-	      "markEntryAsDeleted($(this), 'package')",
+	      "GLSAMaker.editing.packages.del(this)",
 	      :title => 'Remove package') %>
 			<%= pf.hidden_field :my_type, :index => nil %></td>
 <% end %>

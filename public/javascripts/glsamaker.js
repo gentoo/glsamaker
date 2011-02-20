@@ -43,32 +43,6 @@ function buginfo(bugid) {
   Modalbox.show("/bug/" + bugid, {title: "Bug " + bugid, width: 800});
 }
 
-/** Marks a bug row as deleted **/
-function markBugAsDeleted(bug) {
-  if ($('bug-' + bug).className == 'delbug') return;
-  $('bug-' + bug).className = 'delbug';
-  
-  var minus = new Image();
-  minus.src = '/images/icons/minus-small.png';
-  minus.alt = 'This bug will be removed when saving';
-  
-  $('bug-' + bug).getElementsByTagName('td')[1].appendChild(document.createTextNode(" "));
-  $('bug-' + bug).getElementsByTagName('td')[1].appendChild(minus);
-}
-
-function markEntryAsDeleted(elem, type) {
-  if (elem.up('.entry').hasClassName('delbug')) {
-    elem.up('.entry').select('input[type=hidden][value=ignore]').each(function(s) { s.remove() });
-  } else {
-    var hiddenField = document.createElement("input");
-    hiddenField.name = "glsa[" + type + "][][ignore]";
-    hiddenField.type = "hidden";
-    hiddenField.value = "ignore";
-    elem.up('.entry').appendChild(hiddenField);
-  }
-  elem.up('.entry').toggleClassName("delbug");
-}
-
 function generateResolution() {
   $('resolution').value = "";
   var resolution = "";

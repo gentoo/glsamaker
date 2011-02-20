@@ -200,14 +200,14 @@ class GlsaController < ApplicationController
 
     logger.debug params[:glsa][:package].inspect
 
-    # Packages...
-    params[:glsa][:package].reject {|e| e.has_key? 'ignore'}.each do |package|
+    # Packages
+    params[:glsa][:package].each do |package|
       logger.debug package.inspect
       revision.packages.create(package)
     end
 
     # References
-    params[:glsa][:reference].reject {|e| e.has_key? 'ignore'}.each do |reference|
+    params[:glsa][:reference].each do |reference|
       logger.debug reference.inspect
       revision.references.create(reference)
     end

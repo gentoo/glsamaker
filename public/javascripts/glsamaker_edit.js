@@ -33,3 +33,49 @@ GLSAMaker.editing.bugs = function() {
     }
   };
 }();
+
+GLSAMaker.editing.references = function() {
+  return {
+    /**
+     * Removes a reference from a draft being edited
+     */
+    del : function(ref) {
+      // no such reference, or already removed
+      if (!ref) {
+        return;
+      }
+      
+      var td = ref.up(".entry")
+
+      Effect.Fade(td, {
+        duration: .75,
+        afterFinish: function(e) {
+          td.remove();
+        }
+      });
+    }
+  };
+}();
+
+GLSAMaker.editing.packages = function() {
+  return {
+    /**
+     * Removes a reference from a draft being edited
+     */
+    del : function(ref) {
+      // no such reference, or already removed
+      if (!ref) {
+        return;
+      }
+      
+      var td = ref.up(".entry")
+
+      Effect.Fade(td, {
+        duration: .75,
+        afterFinish: function(e) {
+          td.remove();
+        }
+      });
+    }
+  };
+}();
