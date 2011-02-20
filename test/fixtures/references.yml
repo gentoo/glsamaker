@@ -1,5 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
+reference_one:
+  id: 1
+  revision_id: 2
+  title: Reference 1 Title
+  url: http://reference-1-title.com/ref.html
+
 # one:
 #   column: value
 #

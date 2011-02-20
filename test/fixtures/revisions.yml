@@ -1,7 +1,21 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+revision_one:
+  id: 1
+  glsa_id: 1
+  revid: 0
+  user_id: 1
+  title: GLSA 1
+  access: remote
+  severity: normal
+  description: lol hi
+
+revision_two:
+  id: 2
+  glsa_id: 2
+  revid: 0
+  user_id: 1
+  title: GLSA 2
+  access: remote
+  severity: high
+  description: lol hi
