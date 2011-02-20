@@ -22,7 +22,8 @@ Rails::Initializer.run do |config|
   config.gem 'json'
   config.gem 'mechanize'
   config.gem 'fastercsv'
-  config.gem 'text-format', :lib => 'text/format'
+  # actionmailer vendors this gem. uncommented to avoid lots of warnings
+  #  config.gem 'text-format', :lib => 'text/format'
   config.gem 'diff-lcs', :lib => 'diff/lcs'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
