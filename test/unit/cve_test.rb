@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class CVETest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  test "URL generation" do
+    cve = cves(:cve_one)
+    
+    assert cve.url, 'http://nvd.nist.gov/nvd.cfm?cvename=CVE-2004-1776'
+    assert cve.url(:nvd), 'http://nvd.nist.gov/nvd.cfm?cvename=CVE-2004-1776'
+    assert cve.url(:mitre), 'http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2004-1776'
   end
 end

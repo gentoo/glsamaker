@@ -18,8 +18,19 @@ class CVE < ActiveRecord::Base
   has_many :assignments, :class_name => "CVEAssignment", :foreign_key => "cve_id"
   
   def to_s(line_length = 78)
-    str = "#{self.cve_id} #{"(http://nvd.nist.gov/nvd.cfm?cvename=%s):" % self.cve_id}\n"
+    str = "#{self.cve_id} #{"(%s):" % url}\n"
     str += "  " + Glsamaker::help.word_wrap(self.summary, line_length-2).gsub(/\n/, "\n  ")
+  end
+  
+  # Returns the URL for this CVE at NVD (<tt>:nvd</tt>, default) or MITRE (<tt>:mitre</tt>)
+  def url(site = :nvd)
+    if site == :nvd
+      "http://nvd.nist.gov/nvd.cfm?cvename=%s" % self.cve_id
+    elsif site == :mitre
+      "http://cve.mitre.org/cgi-bin/cvename.cgi?name=" % self.cve_id
+    else
+      raise ArgumentError, 'Invalid site'
+    end
   end
   
   # Concatenates the CVE descriptions of many cves, separated by separator
