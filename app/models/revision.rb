@@ -55,4 +55,19 @@ class Revision < ActiveRecord::Base
       b.update_cached_metadata
     end
   end
+  
+  # Creates a deep copy of a previous revision, copying all bugs, references and packages,
+  # incrementing the revision ID by one.
+  # <b>The caller must take care of deleting this revision again in case any error occurs later.</b>
+  def deep_copy
+    new_rev = clone
+    new_rev.revid = glsa.next_revid
+    
+    references.each {|reference| new_rev.references << reference.clone }
+    packages.each {|package| new_rev.packages << package.clone }
+    bugs.each {|bug| new_rev.bugs << bug.clone }
+    
+    new_rev.save!
+    new_rev
+  end
 end

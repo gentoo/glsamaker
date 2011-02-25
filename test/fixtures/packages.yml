@@ -1,7 +1,17 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
+package_one:
+  my_type: vulnerable
+  atom: dev-lang/ruby
+  version: 1.8.7_p334
+  comp: <
+  arch: *
+  automatic: 1
+  revision_id: 1
+  
+package_two:
+  my_type: unaffected
+  atom: dev-lang/ruby
+  version: 1.8.7_p334
+  comp: >=
+  arch: *
+  automatic: 1
+  revision_id: 1  
