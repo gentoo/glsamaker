@@ -25,6 +25,11 @@ class Glsa < ActiveRecord::Base
   def last_revision
     @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
   end
+  
+  # Invalidates the last revision cache
+  def invalidate_last_revision_cache
+    @last_revision = nil
+  end
 
   # Returns the next revision ID to be given for this GLSA
   def next_revid
