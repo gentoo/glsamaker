@@ -102,6 +102,29 @@ class Glsa < ActiveRecord::Base
   def has_pending_comments?
     comments.find(:all, :conditions => ['`read` = ?', false]).count > 0
   end
+  
+  # Returns all CVEs linked to this GLSA
+  def related_cves
+    last_revision.bugs.map do |bug|
+      CVEAssignment.find_all_by_bug(bug.bug_id).map {|assignment| assignment.cve}.uniq
+    end.flatten
+  end
+  
+  # Bulk addition of references.
+  # Expects an array of hashes <tt>{:title => ..., :url => ...}</tt>
+  def add_references(refs)
+    rev = last_revision.deep_copy
+    
+    puts rev.inspect
+    
+    refs.each do |reference|
+      rev.references.create(reference)
+      puts rev.references.inspect
+    end
+    
+    invalidate_last_revision_cache
+    self
+  end
 
   # Calculates the next GLSA ID for the given month, or the current month
   def self.next_id(month = Time.now)

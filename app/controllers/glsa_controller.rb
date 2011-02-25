@@ -345,6 +345,35 @@ class GlsaController < ApplicationController
     end
   end
   
+  def import_references
+    begin
+      if params[:go].to_s == '1'
+        glsa = Glsa.find(Integer(params[:id]))
+        refs = []
+        
+        params[:import][:cve].each do |cve_id|
+          cve = CVE.find_by_cve_id cve_id
+          refs << {:title => cve.cve_id, :url => cve.url}
+        end
+        
+        glsa.add_references refs
+        
+        flash[:notice] = "Imported #{refs.count} references."
+        redirect_to :action => "show", :id => glsa.id
+        return
+      else
+        @glsa = Glsa.find(Integer(params[:id]))
+        @cves = @glsa.related_cves
+      end      
+    rescue Exception => e
+      render :text => "Error: #{e.message}", :status => 500
+      log_error e
+      return
+    end
+    
+    render :layout => false
+  end
+  
   protected
   def check_access_level
     

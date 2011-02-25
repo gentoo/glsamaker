@@ -53,6 +53,12 @@ GLSAMaker.editing.references = function() {
           td.remove();
         }
       });
+    },
+    /**
+     * Opens a dialog to import references from external data
+     */
+    import_dialog : function(glsa_id) {
+      Modalbox.show("/glsa/import_references/" + glsa_id, {title: "Import references", width: 800});
     }
   };
 }();

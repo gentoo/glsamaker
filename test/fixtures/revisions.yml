@@ -12,10 +12,20 @@ revision_one:
 
 revision_two:
   id: 2
+  glsa_id: 1
+  revid: 0
+  user_id: 1
+  title: GLSA 1
+  access: local
+  severity: low
+  description: test blah
+  
+revision_three:
+  id: 3
   glsa_id: 2
   revid: 0
   user_id: 1
   title: GLSA 2
   access: remote
   severity: high
-  description: lol hi
+  description: blah

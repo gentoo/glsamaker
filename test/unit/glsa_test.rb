@@ -19,4 +19,22 @@ class GLSATest < ActiveSupport::TestCase
     
     assert glsa.save
   end
+  
+  test "adding bulk references" do
+    glsa = glsas(:glsa_two)
+
+    glsa.add_references([
+      {:title => "REF1", :url => "http://ref1/"},
+      {:title => "REF2", :url => "http://ref2/"}
+    ])
+    
+    assert glsa.valid?
+    
+    rev = glsa.last_revision
+    assert rev.valid?
+    assert_equal 'REF1', rev.references[0].title
+    assert_equal 'http://ref1/', rev.references[0].url
+    assert_equal 'REF2', rev.references[1].title
+    assert_equal 'http://ref2/', rev.references[1].url
+  end
 end
