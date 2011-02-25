@@ -41,4 +41,3 @@ class GlsaMailerTest < ActionMailer::TestCase
     assert_equal @expected.encoded, GlsaMailer.create_sent(@expected.date).encoded
   end
 end
-end
