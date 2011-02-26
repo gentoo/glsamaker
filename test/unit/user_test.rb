@@ -1,5 +1,5 @@
 # GLSAMaker v2
-# Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
+# Copyright (C) 2009-2011 Alex Legler <a3li@gentoo.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
