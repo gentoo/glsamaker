@@ -122,6 +122,26 @@ class Glsa < ActiveRecord::Base
     invalidate_last_revision_cache
     self
   end
+  
+  # Performs the steps to release the GLSA, performing santiy checks.
+  def release
+    raise GLSAReleaseError, 'Cannot release the GLSA as it is not approved' if not is_approved?
+    raise GLSAReleaseError, 'Cannot release the GLSA as there are comments pending' if has_pending_comments?
+    # TODO: releasing someone else's draft
+    release!
+  end
+  
+  # Performs the steps to release the GLSA, performing not as many checks. The +release+ method is to be preferred.
+  def release!
+    # This one is not avoidable. Some information is only filled in during the first edit, thus making it required.
+    raise GLSAReleaseError, 'Cannot release the GLSA as it is not in "draft" status' if self.status != 'draft'
+    rev = last_revision.deep_copy
+    rev.is_release = true
+    rev.save!
+    self.glsa_id = Glsa.next_id
+    self.status = 'release'
+    save!
+  end
 
   # Calculates the next GLSA ID for the given month, or the current month
   def self.next_id(month = Time.now)
@@ -197,3 +217,5 @@ class Glsa < ActiveRecord::Base
   end
 
 end
+
+class GLSAReleaseError < StandardError; end
