@@ -5,3 +5,9 @@ cve_one:
   state: NFU
   published_at: 2004-01-01 20:42:00
   
+cve_two:
+  cve_id: CVE-2004-1777
+  summary: "A 'range check error' in Skype for Windows before 0.98.0.28 allows local and remote attackers to cause a denial of service (application crash) via long command line arguments or a long callto:// URL, a different vulnerability than CVE-2004-1114."
+  cvss: 7.5/AV:N/AC:L/Au:N/C:P/I:P/A:P
+  state: NEW
+  published_at: 2004-01-01 20:42:00
