@@ -6,11 +6,9 @@ xml.declare! :DOCTYPE, :glsa, :SYSTEM, "http://www.gentoo.org/dtd/glsa-2.dtd"
 xml.glsa :id => glsa.glsa_id do
   xml.title rev.title
   xml.synopsis rev.synopsis
-  xml.product :type => "ebuild" do
-    xml.comment! "packages go here"
-  end
-  xml.announced "today"
-  xml.revised "never"
+  xml.product({:type => "ebuild"}, rev.product)
+  xml.announced rev.created_at.strftime '%B %d, %Y'
+  xml.revised rev.created_at.strftime('%B %d, %Y') + ": #{rev.release_revision || 'draft'}"
   
   rev.bugs.each do |bug|
     xml.bug bug.bug_id
@@ -19,7 +17,16 @@ xml.glsa :id => glsa.glsa_id do
   xml.access rev.access
   
   xml.affected do
-    xml.comment! "packages go here"
+    rev.packages_by_atom.each_pair do |package, atoms|
+      xml.package({:name => package, :auto => atoms['unaffected'].first.automatic ? 'yes' : 'no', :arch => atoms['vulnerable'].first.arch}) do
+        atoms['unaffected'].each do |a|
+          xml.unaffected({:range => a.xml_comp}, a.version)
+        end
+        atoms['vulnerable'].each do |a|
+          xml.vulnerable({:range => a.xml_comp}, a.version)
+        end
+      end
+    end
   end
   
   xml.background(rev.background || "")
