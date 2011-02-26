@@ -20,6 +20,22 @@ class GLSATest < ActiveSupport::TestCase
     assert glsa.save
   end
   
+  test "new request" do
+    glsa = Glsa.new_request(
+      "Some title", 
+      "236060, 260006",
+      "some comment", 
+      "public", 
+      false,
+      users(:test_user)
+    )
+    
+    assert_equal(glsa.last_revision.title, "Some title")
+    assert_equal(glsa.last_revision.bugs.map{|bug| bug.bug_id}.sort, [236060, 260006])
+    assert_equal(glsa.comments.first.text, "some comment")
+    assert !glsa.restricted
+  end
+  
   test "adding bulk references" do
     glsa = glsas(:glsa_two)
 
