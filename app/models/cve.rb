@@ -27,7 +27,7 @@ class CVE < ActiveRecord::Base
     if site == :nvd
       "http://nvd.nist.gov/nvd.cfm?cvename=%s" % self.cve_id
     elsif site == :mitre
-      "http://cve.mitre.org/cgi-bin/cvename.cgi?name=" % self.cve_id
+      "http://cve.mitre.org/cgi-bin/cvename.cgi?name=%s" % self.cve_id
     else
       raise ArgumentError, 'Invalid site'
     end
