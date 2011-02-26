@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100918223549) do
+ActiveRecord::Schema.define(:version => 20110226204724) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -159,10 +159,10 @@ ActiveRecord::Schema.define(:version => 20100918223549) do
     t.integer  "glsa_id"
     t.integer  "revid"
     t.string   "title"
-    t.string   "access",      :default => "remote"
+    t.string   "access",           :default => "remote"
     t.string   "product"
     t.string   "category"
-    t.string   "severity",    :default => "normal"
+    t.string   "severity",         :default => "normal"
     t.text     "synopsis"
     t.text     "background"
     t.text     "description"
@@ -172,6 +172,8 @@ ActiveRecord::Schema.define(:version => 20100918223549) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.boolean  "is_release",       :default => false
+    t.integer  "release_revision"
   end
 
   add_index "revisions", ["glsa_id"], :name => "index_revisions_on_glsa_id"
