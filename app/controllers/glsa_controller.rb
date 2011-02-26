@@ -67,7 +67,7 @@ class GlsaController < ApplicationController
 
   def prepare_show_view(what)
     if what == :txt
-      @packages = regroup_packages @rev.packages
+      @packages = @rev.packages_by_atom
       logger.debug @packages.inspect
       
       @packages_count = 0
@@ -396,16 +396,6 @@ class GlsaController < ApplicationController
     end
     
     return true
-  end
-  
-  def regroup_packages(packages)
-    packages_list = {}
-    packages.each do |p|
-      packages_list[p[:atom]] ||= {}
-      (packages_list[p[:atom]][p[:my_type]] ||= []) << p
-    end
-    
-    packages_list
   end
   
   def rev_diff(glsa, rev_old, rev_new, format = :unified, context_lines = 3)

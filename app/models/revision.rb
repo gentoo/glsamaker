@@ -70,4 +70,15 @@ class Revision < ActiveRecord::Base
     new_rev.save!
     new_rev
   end
+  
+  # Returns the packages linked to this revision grouped by atoms
+  def packages_by_atom
+    packages_list = {}
+    self.packages.each do |p|
+      packages_list[p[:atom]] ||= {}
+      (packages_list[p[:atom]][p[:my_type]] ||= []) << p
+    end
+    
+    packages_list
+  end
 end
