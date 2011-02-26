@@ -13,4 +13,20 @@
 class Package < ActiveRecord::Base
   belongs_to :revision
   
+  # Returns the comparator in the format needed for the XML
+  def xml_comp
+    comps = {
+      '>=' => 'ge',
+      '>'  => 'gt',
+      '='  => 'eq',
+      '<=' => 'le',
+      '<'  => 'lt',
+      '*<' => 'rlt',
+      '*<=' => 'rle',
+      '*>' => 'rgt',
+      '*>=' => 'rge'
+    }
+
+    comps[self.comp]
+  end
 end
