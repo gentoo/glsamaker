@@ -136,7 +136,7 @@ class Glsa < ActiveRecord::Base
   end
 
   # Files a new GLSA request
-  def self.new_request(title, bugs, comment, access, user)
+  def self.new_request(title, bugs, comment, access, import_references, user)
     glsa = Glsa.new
     glsa.requester = user
     glsa.glsa_id = Digest::MD5.hexdigest(title + Time.now.to_s)[0...9]
@@ -182,6 +182,15 @@ class Glsa < ActiveRecord::Base
         # In case of bugzilla errors, just keep the bug #
         revision.bugs.create(:bug_id => bug)
       end
+    end
+
+    if import_references
+      logger.debug { "importing references" }
+      refs = []
+      glsa.related_cves.each do |cve|
+        refs << {:title => cve.cve_id, :url => cve.url}
+      end
+      glsa.add_references refs
     end
 
     glsa

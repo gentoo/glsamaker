@@ -31,6 +31,14 @@
   <p><textarea name="comment" id="comment" class="nice" rows="4"><%= h params[:comment] %></textarea></p>
 </div>
 <br />
+<div class="box w40em">
+  <h2 style="margin-top: 0;"><img src="/images/icons/reference.png" alt="reference" /> References</h2>
+  <p>
+    <input type="checkbox" name="import_references" id="import_references" value="1" checked="checked" />
+    <label for="import_references">Import all references from linked bugs</label>
+  </p>
+</div>
+<br />
 <%- if current_user.access >= 1 -%>
 <div class="box w40em">
   <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>

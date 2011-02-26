@@ -52,7 +52,7 @@ class GlsaController < ApplicationController
   def create
     if params[:what] == "request"
       begin
-        glsa = Glsa.new_request(params[:title], params[:bugs], params[:comment], params[:access], current_user)
+        glsa = Glsa.new_request(params[:title], params[:bugs], params[:comment], params[:access], (params[:import_references].to_i == 1), current_user)
         
         Glsamaker::Mail.request_notification(glsa, current_user)
         
