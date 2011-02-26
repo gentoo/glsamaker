@@ -173,28 +173,30 @@ class GlsaController < ApplicationController
     end
 
     # Bugs
-    bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
+    if params[:glsa][:bugs]
+      bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
 
-    bugzilla_warning = false
+      bugzilla_warning = false
 
-    bugs.each do |bug|
-      begin
-        b = Glsamaker::Bugs::Bug.load_from_id(bug)
+      bugs.each do |bug|
+        begin
+          b = Glsamaker::Bugs::Bug.load_from_id(bug)
 
-        revision.bugs.create(
-          :bug_id => bug,
-          :title => b.summary,
-          :whiteboard => b.status_whiteboard,
-          :arches => b.arch_cc.join(', ')
-        )
-      rescue Exception => e
-        log_error e
-        logger.info { e.inspect }
-        # In case of bugzilla errors, just keep the bug #
-        revision.bugs.create(
-          :bug_id => bug
-        )
-        bugzilla_warning = true
+          revision.bugs.create(
+            :bug_id => bug,
+            :title => b.summary,
+            :whiteboard => b.status_whiteboard,
+            :arches => b.arch_cc.join(', ')
+          )
+        rescue Exception => e
+          log_error e
+          logger.info { e.inspect }
+          # In case of bugzilla errors, just keep the bug #
+          revision.bugs.create(
+            :bug_id => bug
+          )
+          bugzilla_warning = true
+        end
       end
     end
 
