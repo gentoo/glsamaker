@@ -115,11 +115,8 @@ class Glsa < ActiveRecord::Base
   def add_references(refs)
     rev = last_revision.deep_copy
     
-    puts rev.inspect
-    
     refs.each do |reference|
       rev.references.create(reference)
-      puts rev.references.inspect
     end
     
     invalidate_last_revision_cache

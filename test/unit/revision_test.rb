@@ -27,4 +27,8 @@ class RevisionTest < ActiveSupport::TestCase
       new_revision.packages.map{|pkg| "#{pkg.comp}#{pkg.atom}-#{pkg.version}"}.sort
     )
   end
+  
+  test "linked bugs" do
+    assert_equal([236060, 260006], revisions(:revision_one).get_linked_bugs.sort)
+  end
 end
