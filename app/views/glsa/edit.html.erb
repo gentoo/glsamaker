@@ -11,8 +11,8 @@
 <div style="float: right; width: 44%;">
   <div class="box">
     <h2><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
-    <p><label for="access">This GLSA is</label>:
-      <select name="glsa[restricted]">
+    <p><label for="permissions">This GLSA is</label>:
+      <select name="glsa[restricted]" id="permissions">
         <%= options_for_select %w{ public confidential }, @glsa.restricted ? "confidential" : "public" %>
       </select>
     </p>
