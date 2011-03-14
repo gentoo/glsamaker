@@ -291,11 +291,11 @@ td {
   padding: .2em;
 }
 
-table#bugtable {
+table#bugtable, table.list {
   font-size: 80%;
 }
 
-table#bugtable td{
+table#bugtable td, table.list td {
   border-bottom: 1px solid #8875B0;
   background-color: #DEDBEF;
 }
@@ -306,6 +306,26 @@ div.box, div.legend {
   background-color: #D3CFE5;
   border-bottom: 1px solid #8875B0;
   margin-bottom: 0.5em;
+}
+
+div.error {
+  border: 1px solid #A40000;
+  padding: .5em;
+  margin: .5em;
+  color: #A40000;
+  background-color: white;
+}
+
+div.error .actions {
+  border-top: 1px solid #A40000;
+  padding: .25em;
+  margin-top: .5em;
+  text-align: right;
+  padding-bottom: 0;
+}
+
+div.error .actions form.button-to div {
+  display: inline;
 }
 
 div.legend {
@@ -334,6 +354,13 @@ div.box span.toolbar {
 
 div.box p {
   margin: 0;
+}
+
+div.box .box-actions {
+  margin-top: 1em;
+  padding: .25em;
+  border-top: 1px solid #8875B0;
+  text-align: right;
 }
 
 .pmargin p {

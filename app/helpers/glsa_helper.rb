@@ -89,6 +89,22 @@ module GlsaHelper
       image_tag "icons/public.png", :title => "This item is public."
     end
   end
+
+  def check_icon(status)
+    if status
+      image_tag "icons/ok.png", :title => "All checks passed"
+    else
+      image_tag "icons/error.png", :title => "Error. Cannot continue."
+    end
+  end
+
+  def is_approval_icon(status)
+    if status
+      image_tag 'icons/approved.png', :title => 'This item is an approval'
+    else
+      image_tag 'icons/not-approved.png', :title => 'This item is a rejection'
+    end
+  end
   
   def prefixed_item(prefix, text)
     tf = Text::Format.new()

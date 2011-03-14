@@ -1,0 +1,105 @@
+<h1>Prepare release</h1>
+
+<div class="box w40em">
+  <h2>Draft information</h2>
+
+  <table>
+    <tr>
+      <td>Current ID</td>
+      <td><strong>GLSA <%= h @glsa.glsa_id %></strong></td>
+    </tr>
+    <tr>
+      <td>Final ID</td>
+      <td><strong>GLSA <%= h Glsa.next_id %> (preliminary)</strong></td>
+    </tr>
+    <tr>
+      <td>Draft title</td>
+      <td><strong><%= h @rev.title %></strong></td>
+    </tr>
+  </table>
+</div>
+
+<div class="box w40em">
+  <h2>
+    <span class="toolbar">
+      <%= check_icon(@rev.bug_ready?) %>
+    </span>
+    <img src="/images/icons/bug.png" alt="bug" /> Bug Status
+  </h2>
+  <table class="list">
+    <%= render :partial => "show_bug_row", :collection => @rev.bugs, :as => :bug %>
+  </table>
+
+  <% if not @rev.bug_ready? %>
+    <div class="error">
+      <p>
+        <strong>You cannot release this draft unless all bugs are in a bug ready state.</strong><br />
+        Visit Bugzilla and check the status of each bug marked with a <%= bugready_icon(false) %>, and set it to <tt>[glsa]</tt> if every arch is done.
+        Then, refresh the bug caches.
+      </p>
+      <div class="actions">
+        <%= button_to "Refresh bug caches and retry", :action => 'update_cache', :id => @glsa.id, :redirect => request.request_uri %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="box w40em">
+  <h2>
+    <span class="toolbar">
+      <%= check_icon((@glsa.is_approved? or @comments_override)) %>
+    </span>
+    <img src="/images/icons/comment.png" alt="bug" /> Review Status
+    (<%= @glsa.approvals.length %> <%= image_tag 'icons/approved.png' %>, <%= @glsa.rejections.length %> <%= image_tag 'icons/not-approved.png' %>)
+  </h2>
+  <table class="list">
+    <%= render :partial => "approval_row", :collection => @glsa.approvals, :as => :comment %>
+    <%= render :partial => "approval_row", :collection => @glsa.rejections, :as => :comment %>
+  </table>
+ 
+  <% if not (@glsa.is_approved? or @comments_override) %>
+    <div class="error">
+      <p>
+        <strong>You cannot release this draft unless it has at least two approvals.</strong><br />
+        Ask other Security members to review your draft. (Team leads can override this check.)
+        Then, refresh this page.
+      </p>
+      <% if current_user.is_el_jefe? %>
+        <div class="actions">
+          <%= button_to "Override this check (team leads only)", :action => 'prepare_release', :id => @glsa.id, :override_approvals => 1 %>
+        </div>
+      <% end %>
+    </div>
+  <% elsif @comments_override %>
+    <p>
+      <strong>Approval override used.</strong>
+    </p>
+  <% end %>
+</div>
+
+<div class="box w40em">
+  <h2>
+    <%= image_tag 'icons/sent.png', :alt => 'release' %> Release
+  </h2>
+  <% if @rev.bug_ready? and (@glsa.is_approved? or @comments_override) %>
+  <p>
+    All checks passed. You can release this draft now.
+  </p>
+  <table>
+    <tr>
+      <td><%= check_box_tag 'email'  %></td>
+      <td><label for='email'>Send me the final version via email.</label></td>
+    </tr>
+  </table>
+  <div class='box-actions'>
+    <% form_tag(:action => "release", :id => @glsa.id) do %>
+      <%= submit_tag 'Release >', :class => 'largetext' %>
+    <% end %>
+  </div>
+  <% else %>
+  <p>
+    At least one check failed. Please see the red boxes above.<br />
+    You cannot release this draft at the moment.
+  </p>
+  <% end %>
+</div>

@@ -232,7 +232,17 @@ class GlsaController < ApplicationController
   def prepare_release
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
+
+    if @glsa.status == 'request'
+      flash[:error] = 'You cannot release a request. Draft the advisory first.'
+      redirect_to :action => "show", :id => @glsa
+      return
+    end
+
     @rev = @glsa.last_revision
+
+    @comments_override = (current_user.is_el_jefe? and params[:override_approvals].to_i == 1) || false
+    logger.debug @comments_override.inspect
   end
 
   def diff
@@ -302,11 +312,19 @@ class GlsaController < ApplicationController
     @rev.update_cached_bug_metadata
     
     flash[:notice] = "Successfully updated all caches."
-    redirect_to :action => 'show', :id => @glsa    
+    if params[:redirect]
+      redirect_to params[:redirect]
+    else
+      redirect_to :action => 'show', :id => @glsa unless params[:no_redirect]
+    end
   rescue Exception => e
     log_error e
     flash[:notice] = "Could not update caches: #{e.message}"
-    redirect_to :action => 'show', :id => @glsa
+    if params[:redirect]
+      redirect_to params[:redirect]
+    else
+      redirect_to :action => 'show', :id => @glsa unless params[:no_redirect]
+    end
   end
 
   def destroy
