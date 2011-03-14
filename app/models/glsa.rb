@@ -25,6 +25,11 @@ class Glsa < ActiveRecord::Base
   def last_revision
     @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
   end
+
+  # Returns the last revision object that was a release
+  def last_release_revision
+    self.revisions.find(:first, :conditions => ['is_release = ', true], :order => 'release_revision DESC')
+  end
   
   # Invalidates the last revision cache
   def invalidate_last_revision_cache
@@ -37,6 +42,15 @@ class Glsa < ActiveRecord::Base
       rev.revid + 1
     else
       0
+    end
+  end
+
+  # Returns the next release revision ID to be given for this GLSA
+  def next_releaseid
+    if (rev = last_release_revision)
+      rev.release_revision + 1
+    else
+      1
     end
   end
 
@@ -137,6 +151,7 @@ class Glsa < ActiveRecord::Base
     raise GLSAReleaseError, 'Cannot release the GLSA as it is not in "draft" status' if self.status != 'draft'
     rev = last_revision.deep_copy
     rev.is_release = true
+    rev.release_revision = next_releaseid
     rev.save!
     self.glsa_id = Glsa.next_id
     self.status = 'release'
