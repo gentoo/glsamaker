@@ -26,7 +26,7 @@
       <%= workflow_icon(@glsa.workflow_status(current_user)) %>
       <%= restricted_icon @glsa.restricted %>
     </h2><br />
-    <% if @glsa.workflow_status(current_user) == :approved and @glsa.last_revision.bug_ready? %>
+    <% if @glsa.is_approved? and @glsa.last_revision.bug_ready? %>
       <p><img src="/images/icons/ok.png" alt="ok" /> This draft is <strong>ready for sending</strong>.</p>
     <% else %>
       <p><img src="/images/icons/pending.png" alt="pending" /> This draft is <strong>not ready for sending.</strong></p>
