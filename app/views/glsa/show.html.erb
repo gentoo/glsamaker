@@ -7,7 +7,7 @@
   <span class="floatright">
     Show revision:
     <%= select_tag :revid,
-                   options_from_collection_for_select(@glsa.revisions, :revid, :revid),
+                   options_from_collection_for_select(@glsa.revisions, :revid, :revid, @rev.revid),
                    :onchange => "document.location = '#{url_for :controller=> :glsa, :action => :show, :id => @glsa}?rev_id=' + this.value" %>
   </span>
   <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft", {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
