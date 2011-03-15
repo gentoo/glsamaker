@@ -222,6 +222,10 @@ h2 {
   font-size: 13pt;
 }
 
+.red {
+  color: #A40000;
+}
+
 /* Floating */
 img.left, div.left, span.left {
   float: left;

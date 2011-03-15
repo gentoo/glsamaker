@@ -1,5 +1,6 @@
 <h1>
   <%= @rev.title %>
+  <% if @glsa.restricted? %><span class="red">(CONFIDENTIAL)</span><% end %>
 </h1>
 
 <div class="box buttons">
