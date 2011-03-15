@@ -170,7 +170,7 @@ div#infobar span {
 }
 
 /* Flash notice stuff */
-div#flash.notice{
+div#flash.notice {
   padding: 0.2em;
   font-size: 95%;
   padding-left: 1.5em;
@@ -179,13 +179,15 @@ div#flash.notice{
   color: #1F3F7E;
 }
 
-div#flash.error{
+div#flash.error {
   padding: 0.2em;
   font-size: 95%;
   padding-left: 1.5em;
-  background-color: #AA7A82;
-  border-bottom: 1px solid #A21B24;
-  color: #A21B24;
+  margin: 0;
+  background-color: #A40000;
+  border: none;
+  border-bottom: 1px solid #A40000;
+  color: white;
 }
 
 /* Sidebar */
