@@ -15,14 +15,15 @@ xml.glsa :id => glsa.glsa_id do
   end
   
   xml.access rev.access
-  
+  logger.debug rev.packages_by_atom.inspect
   xml.affected do
     rev.packages_by_atom.each_pair do |package, atoms|
-      xml.package({:name => package, :auto => atoms['unaffected'].first.automatic ? 'yes' : 'no', :arch => atoms['vulnerable'].first.arch}) do
-        atoms['unaffected'].each do |a|
+      xml.package({:name => package, :auto => (atoms['unaffected'] || []).select {|a| !a.automatic}.length == 0 ? 'yes' : 'no',
+              :arch => atoms['vulnerable'].first.arch}) do
+        (atoms['unaffected'] || []).each do |a|
           xml.unaffected({:range => a.xml_comp}, a.version)
         end
-        atoms['vulnerable'].each do |a|
+        (atoms['vulnerable'] || []).each do |a|
           xml.vulnerable({:range => a.xml_comp}, a.version)
         end
       end
