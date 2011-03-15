@@ -42,12 +42,6 @@ ActionController::Routing::Routes.draw do |map|
   map.bug '/bug/:id', :controller => 'bug', :action => 'bug'
   map.bughistory '/bug/:id/history', :controller => 'bug', :action => 'history'
 
-  # Adding a bug to a GLSA and removing a bug from a GLSA
-  map.addbug '/glsa/:id/addbug', :controller => 'glsa', :action => 'addbug'
-  map.addbugsave '/glsa/:id/addbug/save', :controller => 'glsa', :action => 'addbugsave'
-  
-  map.delbug '/glsa/:id/delbug/:bugid', :controller => 'glsa', :action => 'delbug'
- 
   # Adding a comment to a GLSA
   map.addcomment '/glsa/:id/addcomment', :controller => 'glsa', :action => 'addcomment'
   map.addcommentsave '/glsa/:id/addcomment/save', :controller => 'glsa', :action => 'addcommentsave'

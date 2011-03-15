@@ -106,12 +106,6 @@ class GlsaController < ApplicationController
     return unless check_object_access(@glsa)
     @rev = @glsa.last_revision
     
-    # Reset added or removed bugs in the meantime
-    session[:addbugs] ||= []
-    session[:delbugs] ||= []
-    session[:addbugs][@glsa.id] = []
-    session[:delbugs][@glsa.id] = []
-    
     # Packages
     @rev.vulnerable_packages.build(:comp => "<", :arch => "*") if @rev.vulnerable_packages.length == 0
     @rev.unaffected_packages.build(:comp => ">=", :arch => "*") if @rev.unaffected_packages.length == 0
@@ -292,20 +286,7 @@ class GlsaController < ApplicationController
       render :text => "fail", :status => 500
     end
   end
-  
-  def delbug
-    glsa = params[:id].to_i
-    bug  = params[:bugid].to_i
 
-    session[:addbugs][glsa] ||= []    
-    session[:addbugs][glsa].delete(bug)
-
-    session[:delbugs][glsa] ||= []
-    session[:delbugs][glsa] << bug    
-    
-    render :text => ""
-  end
-  
   def update_cache
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
