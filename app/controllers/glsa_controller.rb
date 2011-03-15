@@ -247,6 +247,7 @@ class GlsaController < ApplicationController
 
   def diff
     glsa = Glsa.find(params[:id])
+    return unless check_object_access(glsa)
     
     rev_old = glsa.revisions.find_by_revid(params[:old])
     rev_new = glsa.revisions.find_by_revid(params[:new])
@@ -265,6 +266,7 @@ class GlsaController < ApplicationController
   
   def addbugsave
     @glsa = Glsa.find(params[:id].to_i)
+    return unless check_object_access(glsa)
 
     unless @glsa.nil?
       session[:addbugs][@glsa.id] ||= []
@@ -369,6 +371,7 @@ class GlsaController < ApplicationController
     begin
       if params[:go].to_s == '1'
         glsa = Glsa.find(Integer(params[:id]))
+        return unless check_object_access(glsa)
         refs = []
         
         params[:import][:cve].each do |cve_id|
@@ -383,6 +386,7 @@ class GlsaController < ApplicationController
         return
       else
         @glsa = Glsa.find(Integer(params[:id]))
+        return unless check_object_access(@glsa)
         @cves = @glsa.related_cves
       end      
     rescue Exception => e
