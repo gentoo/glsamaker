@@ -246,13 +246,13 @@ class GlsaController < ApplicationController
   end
 
   def diff
-    glsa = Glsa.find(params[:id])
-    return unless check_object_access(glsa)
+    @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
     
-    rev_old = glsa.revisions.find_by_revid(params[:old])
-    rev_new = glsa.revisions.find_by_revid(params[:new])
+    rev_old = @glsa.revisions.find_by_revid(params[:old])
+    rev_new = @glsa.revisions.find_by_revid(params[:new])
     
-    @diff = rev_diff(glsa, rev_old, rev_new)
+    @diff = rev_diff(@glsa, rev_old, rev_new)
   end
 
   def addbug

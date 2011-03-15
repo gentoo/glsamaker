@@ -14,6 +14,7 @@
   <%= link_to "#{image_tag 'icons/xml.png'} View as XML", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/txt.png'} View as Text", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'txt'}, {:class => 'button'} %>
   <%= link_to_function "#{image_tag 'icons/reference.png'} Import references", "GLSAMaker.editing.references.import_dialog(#{h @glsa.id})", {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions", {:controller => 'glsa', :action => 'diff', :id => @glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid}, {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/sent.png'} Release advisory", {:controller => 'glsa', :action => 'prepare_release', :id => @glsa}, {:class => 'button'} %>
 </div>
 
