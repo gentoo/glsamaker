@@ -233,6 +233,12 @@ class GlsaController < ApplicationController
       return
     end
 
+    if @glsa.restricted
+      flash[:error] = 'You cannot release a confidential draft. Make it public first.'
+      redirect_to :action => "show", :id => @glsa
+      return
+    end
+
     @rev = @glsa.last_revision
 
     @comments_override = (current_user.is_el_jefe? and params[:override_approvals].to_i == 1) || false
