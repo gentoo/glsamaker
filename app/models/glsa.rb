@@ -28,7 +28,7 @@ class Glsa < ActiveRecord::Base
 
   # Returns the last revision object that was a release
   def last_release_revision
-    self.revisions.find(:first, :conditions => ['is_release = ', true], :order => 'release_revision DESC')
+    self.revisions.find(:first, :conditions => ['is_release = ?', true], :order => 'release_revision DESC')
   end
   
   # Invalidates the last revision cache
