@@ -1,3 +1,23 @@
-GlsaMailer#approval
+Your draft is now approved.
 
-Find me in app/views/glsa_mailer/approval.erb
+Approval overview
+-----------------
+<% @glsa.approvals.each do |approval| -%>
+<%= approval.created_at.rfc2822 %> by <%= approval.user.login %>
+<% end -%>
+
+<% if @glsa.rejections.count > 0 -%>
+Rejection overview
+------------------
+<% @glsa.rejections.each do |rejection| -%>
+<%= rejection.created_at.rfc2822 %> by <%= rejection.user.login %>
+<% end -%>
+<% end -%>
+
+You should check whether all bugs linked in the draft are in a bug ready state.
+Then, you can release the advisory.
+
+Thanks for your work!
+
+--
+This email notification is brought to you by GLSAMaker 2.
