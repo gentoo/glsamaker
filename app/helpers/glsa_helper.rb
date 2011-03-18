@@ -115,26 +115,50 @@ module GlsaHelper
     str.chomp
   end
   
-  def adv_wrap(text)
+  def adv_wrap(text, shorten_args = false)
     text.gsub!(/\r?\n/, "\n")
-
+    
     text.gsub!(/<\/?(b|i)>/, '')
 
     text.gsub!(/(?:<ul>\s*(.*?)<\/ul>(?:\s*\n)?)/m) do |s|
-      $1.gsub!(/<li>(.*?)<\/li>\s*/) do |t|
-        ('* ' + word_wrap($1, 70)).gsub("\n", "\n  ") + "\n\n"      
+      $1.gsub(/<li>(.*?)<\/li>\s*/) do |t|
+        ('* ' + word_wrap($1, 69)).gsub("\n", "\n  ") + "\n\n"
       end
     end
     
     text.gsub!(/(?:<ol>\s*(.*?)<\/ol>(?:\s*\n)?)/m) do |s|
       nom = 0
-      $1.gsub!(/<li>(.*?)<\/li>\s*/) do |t|
-        ("#{nom += 1}. " + word_wrap($1, 69)).gsub("\n", "\n   ") + "\n\n"      
+      $1.gsub(/<li>(.*?)<\/li>\s*/) do |t|
+        ("#{nom += 1}. " + word_wrap($1, 68)).gsub("\n", "\n   ") + "\n\n"
       end
     end
+
+    text.gsub!(/(?:<code>\s*(.*?)<\/code>(?:\s*\n)?)/m) do |s|      
+      ('  ' + word_wrap(shorten_args ? shorten_args($1) : $1, 69)).gsub("\n", "\n  ") + "\n\n"
+    end
     
-    word_wrap(text.chomp, 72)
-       
-  end  
+    word_wrap(text.chomp, 71)
+  end
+
+private
+
+  def shorten_args(text)
+    text.gsub!(/# (.*)/) do |s|
+      r = $1
+      r_fallback = r.dup
+
+      logger.debug r.inspect
+      logger.debug r.length
+      
+      r.gsub!(/ --verbose /m, " -v ")     if r.length > 67
+      r.gsub!(/ --ask /m, " -a ")         if r.length > 67
+      r.gsub!(/ --oneshot /m, " -1 ")     if r.length > 67
+      r.gsub!(/ -a -1 -v /m, " -1av ")    if r.length > 67
+      
+      r = r_fallback.gsub(/ --verbose /, " --verbose \\\n  ") if r.length > 67
+      
+      "# " + r
+    end
+  end
 end
 

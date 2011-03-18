@@ -204,14 +204,14 @@ class GlsaController < ApplicationController
     # Packages
     params[:glsa][:package].each do |package|
       logger.debug package.inspect
-      next if package[:atom].chomp == ''
+      next if package[:atom].strip == ''
       revision.packages.create(package)
     end
 
     # References
     params[:glsa][:reference].each do |reference|
       logger.debug reference.inspect
-      next if reference[:title].chomp == ''      
+      next if reference[:title].strip == ''
       revision.references.create(reference)
     end
 
