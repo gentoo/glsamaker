@@ -81,4 +81,13 @@ class Revision < ActiveRecord::Base
     
     packages_list
   end
+
+  def to_s
+    s = "r#{self.revid}"
+    if self.is_release?
+      s << " (release #{self.release_revision})"
+    end
+
+    s
+  end
 end
