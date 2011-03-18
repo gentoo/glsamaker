@@ -5,11 +5,10 @@
 Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id %>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                             http://security.gentoo.org/
------------------------------------------------------------------------
-<%= adv_wrap @rev.title %>
-=======================================================================
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 <%= prefixed_item(" Severity:", @rev.severity.capitalize) %>
+<%= prefixed_item("    Title:", @rev.title) %>
 <%= prefixed_item("     Date:", @rev.updated_at.strftime('%B %d, %Y')) %>
 <%= prefixed_item("     Bugs:", @rev.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
 <%= prefixed_item("       ID:", @glsa.glsa_id) %>
