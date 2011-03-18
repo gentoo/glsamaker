@@ -148,12 +148,17 @@ class Glsa < ActiveRecord::Base
   # Performs the steps to release the GLSA, performing not as many checks. The +release+ method is to be preferred.
   def release!
     # This one is not avoidable. Some information is only filled in during the first edit, thus making it required.
-    raise GLSAReleaseError, 'Cannot release the GLSA as it is not in "draft" status' if self.status != 'draft'
+    raise GLSAReleaseError, 'Cannot release the GLSA as it is not in "draft" or "release" status' if not (self.status == 'draft' or self.status == 'release')
+
     rev = last_revision.deep_copy
     rev.is_release = true
     rev.release_revision = next_releaseid
     rev.save!
-    self.glsa_id = Glsa.next_id
+
+    unless self.status == 'release'
+      self.glsa_id = Glsa.next_id
+    end
+
     self.status = 'release'
     save!
   end

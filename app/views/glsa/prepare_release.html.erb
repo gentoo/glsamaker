@@ -1,9 +1,10 @@
 <h1>Prepare release</h1>
 
 <div class="box w40em">
-  <h2>Draft information</h2>
+  <h2>Advisory information</h2>
 
   <table>
+    <% if @glsa.status == 'draft' %>
     <tr>
       <td>Current ID</td>
       <td><strong>GLSA <%= h @glsa.glsa_id %></strong></td>
@@ -12,8 +13,14 @@
       <td>Final ID</td>
       <td><strong>GLSA <%= h Glsa.next_id %> (preliminary)</strong></td>
     </tr>
+    <% elsif @glsa.status == 'release' %>
+      <tr>
+        <td>Release ID</td>
+        <td><strong>GLSA <%= h @glsa.glsa_id %></strong> (this will be a re-release)</td>
+      </tr>
+    <% end %>
     <tr>
-      <td>Draft title</td>
+      <td>Advisory title</td>
       <td><strong><%= h @rev.title %></strong></td>
     </tr>
   </table>
@@ -83,7 +90,7 @@
   </h2>
   <% if @rev.bug_ready? and (@glsa.is_approved? or @comments_override) %>
   <p>
-    All checks passed. You can release this draft now.
+    All checks passed. You can release this advisory now.
   </p>
   <% form_tag(:action => "release", :id => @glsa.id) do %>
   <table>

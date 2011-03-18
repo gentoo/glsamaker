@@ -291,6 +291,7 @@ class GlsaController < ApplicationController
     rescue GLSAReleaseError => e
       flash[:error] = "Internal error: #{e.message}. Cannot release advisory."
       redirect_to :action => "show", :id => @glsa
+      return
     end
 
     # ugly hack, but necessary to switch back to html
