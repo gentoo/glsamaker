@@ -65,19 +65,6 @@ class GlsaController < ApplicationController
     end
   end
 
-  def prepare_show_view(what)
-    if what == :txt
-      @packages = @rev.packages_by_atom
-      logger.debug @packages.inspect
-      
-      @packages_count = 0
-    
-      @tf = Text::Format.new
-    end
-  end
-  
-  private :prepare_show_view
-
   def show
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
@@ -94,11 +81,29 @@ class GlsaController < ApplicationController
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
-      wants.txt { 
-        prepare_show_view :txt
-        render
-      }
+      wants.txt { render }
     end
+  end
+
+  def download
+    @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
+    @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
+
+    if @rev == nil
+      flash[:error] = "Invalid revision ID"
+      redirect_to :action => "show"
+      return
+    end
+
+    text = nil
+    respond_to do |wants|
+      wants.xml { text = render_to_string(:action => :show, :format => 'xml')}
+      wants.txt { text = render_to_string(:action => :show, :format => 'txt')}
+      wants.html { render :text => "Cannot download HTML format. Pick .xml or .txt"; return }
+    end
+    
+    send_data(text, :filename => "glsa-#{@glsa.glsa_id}.#{params[:format]}")
   end
 
   def edit
@@ -244,7 +249,53 @@ class GlsaController < ApplicationController
     @rev = @glsa.last_revision
 
     @comments_override = (current_user.is_el_jefe? and params[:override_approvals].to_i == 1) || false
-    logger.debug @comments_override.inspect
+  end
+
+  def release
+    @glsa = Glsa.find(params[:id])
+    return unless check_object_access(@glsa)
+
+    if @glsa.status == 'request'
+      flash[:error] = 'You cannot release a request. Draft the advisory first.'
+      redirect_to :action => "show", :id => @glsa
+      return
+    end
+
+    if @glsa.restricted
+      flash[:error] = 'You cannot release a confidential draft. Make it public first.'
+      redirect_to :action => "show", :id => @glsa
+      return
+    end
+
+    @rev = @glsa.last_revision
+    begin
+      if current_user.is_el_jefe?
+        @glsa.release!
+      else
+        @glsa.release
+      end
+      
+      @glsa.invalidate_last_revision_cache
+
+      if params[:email] == '1'
+        of = @template_format
+        @template_format = 'txt'
+        Glsamaker::Mail.send_text(
+            render_to_string({:template => 'glsa/show.txt.erb', :format => :txt, :layout => false}),
+            "[ GLSA #{@glsa.glsa_id} ] #{@rev.title}",
+            current_user,
+            false
+        )
+        @template_format = of
+      end
+    rescue GLSAReleaseError => e
+      flash[:error] = "Internal error: #{e.message}. Cannot release advisory."
+      redirect_to :action => "show", :id => @glsa
+    end
+
+    # ugly hack, but necessary to switch back to html
+    @real_format = 'html'
+    render(:format => :html, :layout => 'application')
   end
 
   def diff
@@ -337,14 +388,21 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id].to_i)
 
     unless @glsa.nil?
-      comment = params[:newcomment]
+      comment_data = params[:newcomment]
+      comment = nil
       
-      if comment['text'].strip != ''
-        comment = @glsa.comments.build(comment)
+      if comment_data['text'].strip != ''
+        comment = @glsa.comments.build(comment_data)
         comment.user = current_user
-        comment.save
-      end     
-      
+        if comment.save
+          Glsamaker::Mail.comment_notification(@glsa, comment, current_user)
+
+          if @glsa.is_approved? and @glsa.approvals.count ==  @glsa.rejections.count + 2
+            Glsamaker::Mail.approval_notification(@glsa)
+          end
+        end
+      end
+
       begin
         @comment_number = @glsa.comments.count
         render :partial => "comment", :object => comment
@@ -431,7 +489,7 @@ class GlsaController < ApplicationController
       {:indent => 2, :maxcols => 80}
     )
     
-    Glsamaker::Diff.diff(new_text, old_text, format, context_lines)
+    Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
   end
   
 end

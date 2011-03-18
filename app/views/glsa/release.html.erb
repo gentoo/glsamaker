@@ -1,0 +1,30 @@
+<h1>GLSA released</h1>
+
+<div class="box w40em">
+  <h2>Release information</h2>
+
+  <table>
+    <tr>
+      <td>Official ID</td>
+      <td><strong>GLSA <%= @glsa.glsa_id %></strong></td>
+    </tr>
+    <tr>
+      <td>Title</td>
+      <td><strong><%= h @rev.title %></strong></td>
+    </tr>
+  </table>
+</div>
+
+<div class="box w40em">
+  <h2>Next steps</h2>
+
+  <p>
+    Now, download the advisory XML and publish it in CVS.<br />
+    Then you can send the advisory email.
+  </p>
+
+  <div class='box-actions'>
+    <button onclick="document.location = '<%= url_for :action => :download, :format => 'xml', :id => @glsa %>'">Download XML</button>
+    <button onclick="document.location = '<%= url_for :action => :show, :format => 'txt', :id => @glsa %>'">Show Text</button>
+  </div>  
+</div>

@@ -85,6 +85,7 @@
   <p>
     All checks passed. You can release this draft now.
   </p>
+  <% form_tag(:action => "release", :id => @glsa.id) do %>
   <table>
     <tr>
       <td><%= check_box_tag 'email'  %></td>
@@ -92,10 +93,9 @@
     </tr>
   </table>
   <div class='box-actions'>
-    <% form_tag(:action => "release", :id => @glsa.id) do %>
-      <%= submit_tag 'Release >', :class => 'largetext' %>
-    <% end %>
+    <%= submit_tag 'Release >', :class => 'largetext' %>
   </div>
+  <% end %>
   <% else %>
   <p>
     At least one check failed. Please see the red boxes above.<br />

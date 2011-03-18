@@ -1,3 +1,6 @@
+<%- @packages = @rev.packages_by_atom
+    @packages_count = 0
+    @tf = Text::Format.new -%>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id %>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
