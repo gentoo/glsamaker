@@ -271,6 +271,7 @@ span.hspacer {
 
 ul#commentslist  {
   list-style-type: none;
+  padding-left: 1em;
 }
 
 ul#commentslist li {
@@ -514,6 +515,14 @@ textarea.nice, input.nice {
   background-color: #7E9557;
 }
 
+.docked-right {
+  position: fixed;
+  top: 40px;
+  right: 1em;
+  bottom: 40px;
+  width: inherit;
+  margin-left: 1em;
+}
 
 /** tables **/
 

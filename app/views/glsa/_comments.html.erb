@@ -1,0 +1,16 @@
+  <div class="box" id="comments">
+    <h2>
+      <span class="toolbar">
+        <a href="javascript://" onclick="addCommentDialog(<%= @glsa.id %>);" title="Add comment">
+          <img src="/images/icons/plus.png" alt="Add comment" />
+        </a>
+        <a href="javascript://" onclick="GLSAMaker.misc.ui.dock($('comments'));" title="Dock right">
+          <img src="/images/icons/dock-right.png" alt="Dock right" />
+        </a>
+      </span>
+      <img src="/images/icons/comment.png" alt="comment" /> Comments
+    </h2>
+    <ul id="commentslist">
+      <%= render :partial => "comment", :collection => @glsa.comments %>
+    </ul>
+  </div>

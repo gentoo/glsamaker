@@ -60,20 +60,8 @@
       <%= render :partial => "edit_bug_row", :collection => @rev.bugs, :as => :bug %>
     </table>
   </div>
-  
-  <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="javascript://" onclick="addCommentDialog(<%= @glsa.id %>);" title="Add comment">
-          <img src="/images/icons/plus.png" alt="Add comment" />
-        </a>
-      </span>
-      <img src="/images/icons/comment.png" alt="comment" /> Comments
-    </h2>
-    <ul id="commentslist">
-      <%= render :partial => "comment", :collection => @glsa.comments %>
-    </ul>
-  </div>
+
+  <%= render :partial => "comments" %>
   
   <div style="text-align: right;">
     <input type="submit" class="button" style="font-size: 150%;" value="Save &rarr;" />
@@ -160,7 +148,7 @@
         </a>
       </span>
       <img src="/images/icons/impact.png" alt="Impact" />
-      <label for="Impact">Impact</label>
+      <label for="impact">Impact</label>
     </h2>
     <p><textarea name="glsa[impact]" id="impact" class="nice" rows="5"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
   </div>

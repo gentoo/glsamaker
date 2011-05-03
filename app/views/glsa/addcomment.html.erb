@@ -13,7 +13,9 @@
   Please enter your comment:</label></p>
 
   <% fields_for :newcomment do |f| %>
-    <%= f.text_area :text, :class => "hugetext nice", :rows => 2 %>
+    <p>
+      <%= f.text_area :text, :class => "nice", :rows => 2 %>
+    </p>
     
     <div align="right">
       Rating:

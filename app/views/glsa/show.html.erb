@@ -60,7 +60,9 @@
     <table id="bugtable">
       <%= render :partial => "show_bug_row", :collection => @glsa.last_revision.bugs, :as => :bug %>
     </table>
-  </div>  
+  </div>
+
+  <%= render :partial => "comments" %>
 </div>
 
 <p>
