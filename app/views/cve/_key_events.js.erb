@@ -60,7 +60,12 @@ uki('Table').keyup(
     if (c == 102 || c == 70 || c == 98 || c == 66) { // f;F;b;B
       uki('#cve-file').click();
       return;      
-    }    
+    }
+
+    if (c == 13) { // enter key
+      uki('#cve-details').click();
+      return;
+    }
   }
 );
 /** Keyboard events end **/
