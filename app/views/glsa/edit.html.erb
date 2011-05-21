@@ -1,7 +1,4 @@
 <h1>
-<!--  <span class="greytext floatright smalltext">
-    &larr; Previous revision | <strong>Revision <%= @glsa.last_revision.revid %></strong> | Next revision &rarr;
-  </span>-->
   Edit GLSA <code><%= h @glsa.glsa_id %></code>
 </h1>
 
@@ -17,7 +14,7 @@
       </select>
     </p>
   </div>
-  
+
   <div class="box">
     <h2><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
     <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
@@ -31,8 +28,8 @@
       </select>
     </p>
     <p><label for="keyword"><img src="/images/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
-     
-      <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %></p>
+      <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %>
+    </p>
   </div>
 
   <div class="box">
@@ -43,8 +40,10 @@
         </a>
       </span>
       <label for="background"><img src="/images/icons/background.png" alt="background" /> Background</label>
-    </h2>  
-    <p><textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea></p>
+    </h2>
+    <p>
+      <textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea>
+    </p>
   </div>
 
   <div class="box">
@@ -62,7 +61,7 @@
   </div>
 
   <%= render :partial => "comments" %>
-  
+
   <div style="text-align: right;">
     <input type="submit" class="button" style="font-size: 150%;" value="Save &rarr;" />
   </div>
@@ -73,12 +72,12 @@
     <h2><img src="/images/icons/title.png" alt="title" /> <label for="title">Title</label></h2>
     <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= h lastrev_content(@glsa, 'title') %></textarea></p>
   </div>
-  
+
   <div class="box">
     <h2><img src="/images/icons/synopsis.png" alt="synopsis" /> <label for="synopsis">Synopsis</label></h2>
     <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
   </div>
-  
+
   <div class="box">
     <h2>
       <img src="/images/icons/package.png" alt="Packages" />
@@ -92,24 +91,24 @@
         <th><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
         <th class="odd"><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
       </tr>
-      
-	  <tr>
-	  	<td><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable
-        (<%= add_vulnerable_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>	
-	  </tr>
-	  <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
-	</table>
-	
-	<table class="padcells swap centercells" id="packages_table_unaffected">
+
       <tr>
-      	<td><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected
-		(<%= add_unaffected_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>
-	  </tr>
-	  <%= render :partial => 'package', :collection => @rev.unaffected_packages %>
-	  
-    </table>        
+        <td><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable
+        (<%= add_vulnerable_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>	
+      </tr>
+      <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
+    </table>
+
+    <table class="padcells swap centercells" id="packages_table_unaffected">
+      <tr>
+        <td><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected
+            (<%= add_unaffected_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>
+      </tr>
+      <%= render :partial => 'package', :collection => @rev.unaffected_packages %>
+
+    </table>
   </div>
-  
+
   <div class="box" id="desc-box">
     <h2>
       <span class="toolbar">
