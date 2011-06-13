@@ -71,7 +71,9 @@ module Bugzilla
       bug.children.each do |node|
         # Ignore whitespace
         next if node.type == Nokogiri::XML::Node::TEXT_NODE
-      
+        # Ignore empty nodes
+        next if node.children.size == 0
+
         case node.name
         when "bug_id" then
           @bug_id = content_in node
