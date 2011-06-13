@@ -22,31 +22,31 @@ uki('#assign-bug-nr').keypress(
 uki("#cve-assign").click(
   function() {
     var sel = uki('Table').selectedRows();
-    
+
     if (sel.length < 1) {
       alert("Please select at least one CVE.");
       return false;
     }
-    
+
     var popup = uki('#assign-popup');
     var bugnr = uki('#assign-bug-nr').value();
-    
+
     if (!(bugnr == parseInt(bugnr)) || bugnr.length == 0) {
       alert("Please enter a numeric bug #.");
       return false;
     }
-    
+
     cve_assign_data = new Array();
     for (var i = 0; i < sel.length; i++) {
       cve_assign_data.push(sel[i][0]);
     }
-    
+
     new Ajax.Request('/cve/assign_preview', {
       parameters: { cves: cve_assign_data.join(','), bug: bugnr },
       onSuccess: function(response) {
         uki('#cve-assign-text').html(response.responseText);
         uki('#cve-assign-text').resizeToContents('height');
-        
+
         uki('#cve-assign-title').html("<strong>The following changes will be made to bug " + bugnr + ":</strong>");
         popup.show();
         uki('#cve-assign-go').disabled(false);
@@ -56,7 +56,7 @@ uki("#cve-assign").click(
         alert("Could not process your request:\n\n" + response.responseText);
         return false;
       }
-    });    
+    });
   }
 );
 
@@ -68,19 +68,20 @@ uki('#cve-assign-cancel').click(
 
 uki('#cve-assign-go').click(
   function() {
-    uki('#cve-assign-go').disabled(true);    
+    uki('#cve-assign-go').disabled(true);
     var bugnr = uki('#assign-bug-nr').value();
-    
+
     if (cve_assign_data < 1) {
       alert("Error. Internal CVE list empty.");
       uki('#assign-popup').hide();
       return;
     }
-    
+
     new Ajax.Request('/cve/assign', {
       parameters: { cves: cve_assign_data.join(','), bug: bugnr, comment: $('add_comment').checked, summary: $('change_summary').checked },
       onSuccess: function(response) {
         uki('#assign-popup').hide();
+        uki('#assign-bug-nr').value('');
         reloadTable();
       },
       onFailure: function(response) {
