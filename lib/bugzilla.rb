@@ -20,6 +20,7 @@ module Bugzilla ; end
 
 # Bugzilla module
 module Bugzilla
+  module_function
   # Adds a comment to a bug. Returns the comment id on success, raises an exception on failure.
   def add_comment(bug, comment)
     Rails.logger.debug 'Called Bugzilla.add_comment'
