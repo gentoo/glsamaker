@@ -68,11 +68,11 @@ class CveController < ApplicationController
     
     cc = []
     if params[:cc_maint] == 'true'
-      cc << Glsamaker::Portage.get_maintainers(params[:package])
+      cc += Glsamaker::Portage.get_maintainers(params[:package])
     end
     
-    cc << params[:cc_custom].split(',')
-    data[:cc] = cc.join(',')
+    cc += params[:cc_custom].split(',')
+    data[:cc] = cc.compact.delete_if {|i| i == ''}.join(',')
     
     comment = ""
     if params[:add_cves] == 'true'
@@ -95,6 +95,7 @@ class CveController < ApplicationController
       bugnr = Bugzilla.file_bug(data)
       Bugzilla.update_bug(bugnr, {:whiteboard => whiteboard})
     rescue Exception => e
+      log_error e
       raise "Filing the bug failed. Check if the accounts in CC actually exist."
     end
     
