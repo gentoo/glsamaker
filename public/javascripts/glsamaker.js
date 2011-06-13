@@ -23,7 +23,7 @@ function toggleWide(id) {
 }
 
 function addBugDialog(glsaid) {
-  Modalbox.show("/glsa/"+glsaid+"/addbug", {title: "Add bugs", width: 600});
+  alert('deprecated. use GLSAMaker.editing.bugs.add_dialog() instead.');
 }
 
 function addCommentDialog(glsaid) {

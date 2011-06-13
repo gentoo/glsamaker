@@ -30,6 +30,12 @@ GLSAMaker.editing.bugs = function() {
           $('bug-' + bug_id).remove();
         }
       });
+    },
+    /**
+     * Opens a dialog to add bugs
+     */
+    add_dialog : function(glsa_id) {
+      Modalbox.show("/glsa/addbug/" + glsa_id, {title: "Add bugs", width: 600});
     }
   };
 }();

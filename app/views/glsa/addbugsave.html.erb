@@ -2,7 +2,7 @@
 <% @addedBugs.each do |bug| -%>
   <tr class="addbug" id="bug-<%= h bug.bug_id %>">
     <input type="hidden" name="glsa[bugs][]" value="<%= h bug.bug_id %>" />
-    <td><%= bugready_icon(bug.bug_ready?) %></td>    
+    <td><%= bugready_icon(bug.bug_ready?) %></td>
     <td>
       <a href="javascript:///" onclick="buginfo(<%= h bug.bug_id %>);">
         <strong><%= h bug.bug_id %></strong></a> <%= image_tag('icons/plus-small.png', :title => 'Click on Save to permanently add this bug') %>
@@ -10,7 +10,7 @@
     <td><%= truncate((h bug.summary), :length => 60) %></td>
     <td>
       <%= link_to_function(
-        image_tag('icons/minus.png', :alt => 'Mark as deleted'), 
+        image_tag('icons/minus.png', :alt => 'Mark as deleted'),
         "GLSAMaker.editing.bugs.del(#{h bug.bug_id});"
       ) %>
     </td>

@@ -317,26 +317,21 @@ class GlsaController < ApplicationController
     end
     render :layout => false
   end
-  
+
   def addbugsave
     @glsa = Glsa.find(params[:id].to_i)
-    return unless check_object_access(glsa)
+    return unless check_object_access(@glsa)
 
     unless @glsa.nil?
-      session[:addbugs][@glsa.id] ||= []
       @addedBugs = []
       Bugzilla::Bug.str2bugIDs(params[:addbugs]).map do |bugid|
         begin
           @addedBugs << Glsamaker::Bugs::Bug.load_from_id(bugid)
-          session[:addbugs][@glsa.id] << bugid.to_i
         rescue Exception => e
           # Silently ignore invalid bugs
         end
-          
       end
-      
-      logger.debug session[:addbugs][@glsa.id].inspect
-      
+
       begin
         render :layout => false
       rescue Exception => e
