@@ -90,6 +90,7 @@ class CveController < ApplicationController
     
     data[:severity] = whiteboard_to_severity(whiteboard)
     data[:version] = 'unspecified'
+    data[:status] = 'IN_PROGRESS'
     
     bugnr = -1
     begin
