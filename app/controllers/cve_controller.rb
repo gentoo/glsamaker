@@ -85,8 +85,13 @@ class CveController < ApplicationController
     end
     data[:comment] = comment
     
-    whiteboard = "%s %s" % [params[:wb_1], params[:wb_2]]
-    whiteboard += " %s" % params[:wb_ext] unless params[:wb_ext] == ""
+    whiteboard = ""
+    if params[:bug_type] == true # If the bug is not a kernel issue
+      whiteboard += "%s %s" % [params[:wb_1], params[:wb_2]]
+      whiteboard += " %s" % params[:wb_ext] unless params[:wb_ext] == ""
+    else
+      whiteboard = params[:wb_ext]
+    end
     
     data[:severity] = whiteboard_to_severity(whiteboard)
     data[:version] = 'unspecified'
