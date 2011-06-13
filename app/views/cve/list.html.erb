@@ -20,7 +20,7 @@ uki(
           { view: 'table.NumberColumn', label: 'ID', width: 50 },
           { view: 'table.CustomColumn', label: 'CVE ID', width: 100, formatter: formatHlted, sort: 'DESC' },
           { view: 'table.CustomColumn', label: 'Summary', resizable: true, minWidth: 300, width: (window.innerWidth - 200 - 50 - 100 - 80 - 15), formatter: formatHlted },
-          { view: 'table.CustomColumn', label: 'State', width: 80, formatter: formatHlted },           
+          { view: 'table.CustomColumn', label: 'State', width: 80, formatter: formatHlted },
         ], multiselect: true, style: {fontSize: '12px', lineHeight: '12px'} }
       ]
   }
@@ -55,7 +55,7 @@ window.DummyModel = uki.newClass(Searchable, new function() {
             row.searchIndex = escapeHTML(row[1].toLowerCase()) + ' ' + row[2].toLowerCase();
         })
     };
-    
+
     this.matchRow = function(row, iterator) {
         return row.searchIndex.indexOf(iterator.query) > -1;
     };
@@ -67,17 +67,17 @@ initCVETable = function(data) {
     var model = new DummyModel(data),
         lastQuery = '',
         table = uki('Table');
-        
+
     model.bind('search.foundInChunk', function(chunk) {
         table.data(table.data().concat(chunk)).layout();
     });
-    
+
     table.find('Header').bind('columnClick', function(e) {
         var header = this;
-            
+
         if (e.column.sort() == 'ASC') e.column.sort('DESC');
         else e.column.sort('ASC');
-        
+
         header.redrawColumn(e.columnIndex);
         uki.each(header.columns(), function(i, col) {
             if (col != e.column && col.sort()) {
@@ -88,11 +88,11 @@ initCVETable = function(data) {
         model.items = e.column.sortData(model.items);
         table.data(model.items);
     });
-        
+
     table.data(model.items);
-    
+
     uki('#quicksearch').unbind('keyup click');
-    
+
     uki('#quicksearch').bind('keyup click', function() {
         if (this.value().toLowerCase() == lastQuery) return;
         lastQuery = this.value().toLowerCase();
