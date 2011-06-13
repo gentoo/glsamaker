@@ -150,7 +150,7 @@ uki('#cve-file-2-go').click(
       comment:   $('comment').value,
       add_cves:  $('add_cves').checked,
       package:   $('package').value,
-      cves:      cve_file_data, 
+      cves:      cve_file_data.join(',')
     };
 
     new Ajax.Request('/cve/bug', {
