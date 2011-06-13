@@ -11,7 +11,7 @@ class CveController < ApplicationController
     @pageID = 'cve'
     
     condition = view_mask_to_condition(params[:view_map].to_i)
-    @cves = CVE.find(:all, :conditions => [condition], :limit => 1000, :order => 'cve_id DESC')
+    @cves = CVE.find(:all, :conditions => [condition], :limit => 500, :order => 'cve_id DESC')
     
     respond_to do |format|
       format.html
