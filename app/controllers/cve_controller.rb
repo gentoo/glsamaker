@@ -89,6 +89,7 @@ class CveController < ApplicationController
     whiteboard += " %s" % params[:wb_ext] unless params[:wb_ext] == ""
     
     data[:severity] = whiteboard_to_severity(whiteboard)
+    data[:version] = 'unspecified'
     
     bugnr = -1
     begin
