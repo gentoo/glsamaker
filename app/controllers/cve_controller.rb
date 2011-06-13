@@ -9,10 +9,10 @@ class CveController < ApplicationController
 
   def list
     @pageID = 'cve'
-    
+
     condition = view_mask_to_condition(params[:view_map].to_i)
     @cves = CVE.find(:all, :conditions => [condition], :limit => 500, :order => 'cve_id DESC')
-    
+
     respond_to do |format|
       format.html
       format.json {
@@ -27,11 +27,11 @@ class CveController < ApplicationController
 
     cves = cve_nums.map {|c| CVE.find(c) }
     cpes = cves.map {|c| c.cpes.map{|cpe| cpe.product } }.flatten.uniq
-    
+
     package_hints = cves.map{|c| c.package_hints }.flatten.uniq.sort
     logger.debug { "CPE Products: " + cpes.inspect }
     logger.debug { "Package hints: " + package_hints.inspect }
-    
+
     logger.debug { {:package_hints => package_hints}.to_json }
     render :json => {:package_hints => package_hints}.to_json
   rescue Exception => e
@@ -52,39 +52,39 @@ class CveController < ApplicationController
     log_error e
     render :text => e.message, :status => 500    
   end
-  
+
   def bug
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug (final); CVElist: " + cve_nums.inspect }
 
     cves = cve_nums.map {|c| CVE.find(c) }
-    
+
     data = {
       :product => 'Gentoo Security',
       :component => params[:bug_type] == 'true' ? 'Vulnerabilities' : 'Kernel',
       :summary => params[:bug_title],
       :assignee => 'security@gentoo.org'
     }
-    
+
     cc = []
     if params[:cc_maint] == 'true'
       cc += Glsamaker::Portage.get_maintainers(params[:package])
     end
-    
+
     cc += params[:cc_custom].split(',')
     data[:cc] = cc.compact.delete_if {|i| i == ''}.join(',')
-    
+
     comment = ""
     if params[:add_cves] == 'true'
       comment += CVE.concat(cve_nums)
     end
-    
+
     if params[:add_comment] == 'true'
       comment += "\n" if params[:add_cves]
       comment += params[:comment]
     end
     data[:comment] = comment
-    
+
     whiteboard = ""
     if params[:bug_type] == true # If the bug is not a kernel issue
       whiteboard += "%s %s" % [params[:wb_1], params[:wb_2]]
@@ -92,11 +92,11 @@ class CveController < ApplicationController
     else
       whiteboard = params[:wb_ext]
     end
-    
+
     data[:severity] = whiteboard_to_severity(whiteboard)
     data[:version] = 'unspecified'
     data[:status] = 'IN_PROGRESS'
-    
+
     bugnr = -1
     begin
       bugnr = Bugzilla.file_bug(data)
@@ -105,15 +105,15 @@ class CveController < ApplicationController
       log_error e
       raise "Filing the bug failed. Check if the accounts in CC actually exist."
     end
-    
+
     logger.info "Filed bug #{bugnr} on behalf of user #{current_user.login}."
-    
+
     cves.each {|cve| cve.assign(bugnr, current_user, :file) }
-    
+
     render :text => 'ok'
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
 
   def assign_preview
@@ -170,7 +170,7 @@ class CveController < ApplicationController
     log_error e
     render :text => e.message, :status => 500
   end
-  
+
   def note
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "Note CVElist: " + @cves.inspect + " Note: " + params[:note] }
@@ -183,7 +183,7 @@ class CveController < ApplicationController
   rescue Exception => e
     log_error e
     render :text => e.message, :status => 500
-  end  
+  end
 
   def invalid
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
@@ -217,7 +217,7 @@ class CveController < ApplicationController
   def info
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:id]])
   end
-  
+
   def general_info
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
 
@@ -226,59 +226,59 @@ class CveController < ApplicationController
     log_error e
     render :text => e.message, :status => 500
   end
-  
+
   def references
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
     raise "Cannot find CVE" if @cve == nil
-    
+
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
-  
+
   def packages
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
     raise "Cannot find CVE" if @cve == nil
-    
+
     @package_hints = @cve.package_hints
-    
+
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
 
   def comments
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
     raise "Cannot find CVE" if @cve == nil
-    
+
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
-  
+
   def changes
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
     raise "Cannot find CVE" if @cve == nil
-    
+
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
-  
+
   def actions
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
     raise "Cannot find CVE" if @cve == nil
-    
+
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
-  
+
   def mark_new
     @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
 
