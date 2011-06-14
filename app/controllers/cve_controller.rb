@@ -86,7 +86,7 @@ class CveController < ApplicationController
     data[:comment] = comment
 
     whiteboard = ""
-    if params[:bug_type] == true # If the bug is not a kernel issue
+    if params[:bug_type] == 'true' # If the bug is not a kernel issue
       whiteboard += "%s %s" % [params[:wb_1], params[:wb_2]]
       whiteboard += " %s" % params[:wb_ext] unless params[:wb_ext] == ""
     else
