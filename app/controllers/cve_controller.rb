@@ -72,7 +72,7 @@ class CveController < ApplicationController
     end
 
     cc += params[:cc_custom].split(',')
-    data[:cc] = cc.compact.delete_if {|i| i == ''}.join(',')
+    data[:cc] = cc.compact.delete_if {|i| i == ''}
 
     comment = ""
     if params[:add_cves] == 'true'
