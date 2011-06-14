@@ -14,7 +14,7 @@ uki({ view: 'VSplitPane', rect: '500 600', anchors: 'left top right bottom', top
           { view: 'Label', rect: '5 5 400 20', html: "<h2 style='margin: 0;'><%= @cve.colorize %> <small>(<%= @cve.state %>)</small></h2>", anchors: 'top left'},
           { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' }
         ] },
-        { view: 'Label', rect: '5 35 490 50', anchors: 'left top right', html: '<%= simple_format_without_paragraph(make_js_safe(h @cve.summary)).gsub(/\n/, '') %>', textSelectable: true, multiline: true}
+        { view: 'Label', rect: '5 35 490 50', anchors: 'left top right', html: '<%= escape_javascript(simple_format_without_paragraph(h @cve.summary)).gsub(/\n/, '') %>', textSelectable: true, multiline: true}
     ],
     bottomPane: { background: '#FFF', childViews: [
         { view: 'ScrollPane', rect: '0 0 500 445', anchors: 'top left right bottom', id: 'info-scroll', scrollableV: true, scrollableH: false, childViews: [
