@@ -155,7 +155,7 @@ module Bugzilla
       FileUtils.touch(cookie_file)
       File.chmod(0600, cookie_file)
       File.open(cookie_file, 'w') {|f| f.write client.cookie }
-      
+
       return true
     rescue XMLRPC::FaultException => e
       Rails.logger.warn "Failure logging in: #{e.message}"
@@ -164,7 +164,7 @@ module Bugzilla
   end
 
   def xmlrpc_client
-    client = XMLRPC::Client.new('bugs.gentoo.org', '/xmlrpc.cgi', 443, nil, nil, nil, nil, true)
+    client = XMLRPC::Client.new(GLSAMAKER_BUGZIE_HOST, '/xmlrpc.cgi', 443, nil, nil, nil, nil, true)
     client.http_header_extra = {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"}
 
     cookie_file = File.join(RAILS_ROOT, 'tmp', 'bugzie-cookies.txt')

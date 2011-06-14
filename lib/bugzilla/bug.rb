@@ -26,7 +26,7 @@ module Bugzilla
       end
     
       begin
-        xml = Nokogiri::XML(Glsamaker::HTTP.get("http://bugs.gentoo.org/show_bug.cgi?ctype=xml&id=#{id}"))
+        xml = Nokogiri::XML(Glsamaker::HTTP.get("http://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?ctype=xml&id=#{id}"))
       rescue SocketError => e
         raise SocketError, "Bugzilla is unreachable: #{e.message}"
       rescue Exception => e
@@ -39,9 +39,9 @@ module Bugzilla
     # Returns the URL for the bug, set +secure+ to false to get a http:-URL
     def url(secure = true)
       if secure
-        "https://bugs.gentoo.org/show_bug.cgi?id=#{@bug_id}"
+        "https://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?id=#{@bug_id}"
       else
-        "http://bugs.gentoo.org/show_bug.cgi?id=#{@bug_id}"
+        "http://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?id=#{@bug_id}"
       end
     end
   

@@ -29,6 +29,7 @@ GLSAMAKER_NO_EMAIL = false
 GLSAMAKER_PORTDIR = "/usr/portage/"
 
 # Bugzilla login info
+GLSAMAKER_BUGZIE_HOST = 'bugs.gentoo.org'
 GLSAMAKER_BUGZIE_USER = nil
 GLSAMAKER_BUGZIE_PW = nil
 
