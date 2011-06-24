@@ -14,25 +14,25 @@ module Bugzilla
     attr_reader :summary, :created_at, :reporter, :alias, :assigned_to, :cc, :status_whiteboard,
                 :product, :component, :status, :resolution, :url, :comments, :bug_id, :restricted,
                 :severity, :priority, :depends, :blocks
-  
+
     # Creates a new +Bug+ object from the Gentoo bug referenced as #+bugid+
     def self.load_from_id(bugid)
       begin
         id = Integer(bugid)
-      
+
         raise ArgumentError if id == 0
       rescue ArgumentError => e
         raise ArgumentError, "Invalid Bug ID"
       end
-    
+
       begin
-        xml = Nokogiri::XML(Glsamaker::HTTP.get("http://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?ctype=xml&id=#{id}"))
+        xml = Nokogiri::XML(Glsamaker::HTTP.get("https://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?ctype=xml&id=#{id}"))
       rescue SocketError => e
         raise SocketError, "Bugzilla is unreachable: #{e.message}"
       rescue Exception => e
         raise ArgumentError, "Couldn't load bug: #{e.message}"
       end
-    
+
       self.new(xml.root.xpath("bug").first, bugid)
     end
 
@@ -44,16 +44,16 @@ module Bugzilla
         "http://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?id=#{@bug_id}"
       end
     end
-  
+
     def history()
       @history ||= History.new(self)
     end
-  
+
     def initialize(bug, id)
       unless bug.is_a? Nokogiri::XML::Element
         raise ArgumentError, "Nokogiri failure"
       end
-    
+
       if bug["error"] == "NotFound"
         raise ArgumentError, "Bug not found"
       elsif bug["error"] == "NotPermitted"
@@ -61,13 +61,13 @@ module Bugzilla
         @restricted = true
         return
       end
-    
+
       @restricted = false
       @cc = []
       @depends = []
       @blocks = []
       @comments = []
-    
+
       bug.children.each do |node|
         # Ignore whitespace
         next if node.type == Nokogiri::XML::Node::TEXT_NODE
@@ -118,12 +118,12 @@ module Bugzilla
         end
       end
     end
-  
+
     # Returns the initial bug description
     def description
       @comments.first.text
     end
-  
+
     # Splits a String +str+ into an array of valid bug IDs
     def self.str2bugIDs(str)
       bug_ids = str.split(/,\s*/)
@@ -132,9 +132,9 @@ module Bugzilla
         bug.gsub(/\D/, '')
       end
     end
-  
+
     private
-    def content_in(node) 
+    def content_in(node)
       node.children.first.content.strip
     end
   end
