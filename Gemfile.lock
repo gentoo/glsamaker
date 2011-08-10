@@ -1,0 +1,61 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    actionmailer (2.3.12)
+      actionpack (= 2.3.12)
+    actionpack (2.3.12)
+      activesupport (= 2.3.12)
+      rack (~> 1.1.0)
+    activerecord (2.3.12)
+      activesupport (= 2.3.12)
+    activeresource (2.3.12)
+      activesupport (= 2.3.12)
+    activesupport (2.3.12)
+    builder (3.0.0)
+    ci_reporter (1.6.5)
+      builder (>= 2.1.2)
+    diff-lcs (1.1.2)
+    fastercsv (1.5.4)
+    json (1.5.3)
+    mechanize (2.0.1)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (~> 1.8)
+      nokogiri (~> 1.4)
+      webrobots (~> 0.0, >= 0.0.9)
+    net-http-digest_auth (1.1.1)
+    net-http-persistent (1.8.1)
+    nokogiri (1.5.0)
+    rack (1.1.2)
+    rails (2.3.12)
+      actionmailer (= 2.3.12)
+      actionpack (= 2.3.12)
+      activerecord (= 2.3.12)
+      activeresource (= 2.3.12)
+      activesupport (= 2.3.12)
+      rake (>= 0.8.3)
+    rake (0.9.2)
+    rdoc (3.9.1)
+    rspec (2.6.0)
+      rspec-core (~> 2.6.0)
+      rspec-expectations (~> 2.6.0)
+      rspec-mocks (~> 2.6.0)
+    rspec-core (2.6.4)
+    rspec-expectations (2.6.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.6.0)
+    webrobots (0.0.10)
+      nokogiri (>= 1.4.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ci_reporter
+  diff-lcs
+  fastercsv
+  json
+  mechanize
+  nokogiri
+  rails (= 2.3.12)
+  rdoc
+  rspec
