@@ -11,15 +11,59 @@
 
 # Tools controller
 class ToolsController < ApplicationController
-  def buginfo
-#    bug = Bugzilla::Bug.load_from_id(params[:id])
-    
-    str = "<dev-ruby/rails-2.2.2: XSS (CVE 2009-5607)"
-    
-    respond_to do |format|
-      format.html { }
-      format.ajax { render :text => "text to render...", :status => 1 }
+  layout false
+  
+  # Provides information for the 'file new request' page
+  def file_req_ajax_info
+    if params[:bugs] == nil
+      render :text => "No bug given", :status => 500
+      return
     end
+    
+    bug_ids = Bugzilla::Bug.str2bugIDs(params[:bugs])
+    
+    @bugs = []
+    bug_ids.each do |bug_id|
+      begin
+        @bugs << Bugzilla::Bug.load_from_id(bug_id.to_i)
+      rescue Exception => e
+        @bugs << "Ignoring #{bug_id} #{e.message}"
+      end
+    end
+    
+    buginfo = render_to_string :template => 'tools/ajaxbugs', :layout => false
+    
+    # Generating a description
+    @bugs.delete_if {|i| i.is_a? String}
+    suggestion = nil
+    
+    if @bugs.length == 1
+      @text = @bugs[0].summary
+      suggestion = render_to_string :template => 'tools/ajaxdescr', :layout => false
+    else
+      @atoms = []
+      @bugs.each do |bug|
+        matchdata = /([\w-]+)\/([\w-]+)(-([\w.]+))?/.match(bug.summary)
+        
+        unless matchdata.nil?
+          category = matchdata[1]
+          package = matchdata[2].gsub(/-+?$/, '')
+        
+          @atoms << "#{category}/#{package}"
+        end
+      end
+      
+      @atoms.uniq!
+      
+      if @atoms.length > 0
+        @text = @atoms.join(', ') + ": Multiple vulnerabilities"
+        suggestion = render_to_string :template => 'tools/ajaxdescr', :layout => false
+      end
+    end
+    
+    suggestion ||= "(no suggestion available)"
+    
+    render :json => {"buginfo" => buginfo, "title" => suggestion}
   end
   
   def ajaxbugs

@@ -1,10 +1,10 @@
 <ul class="ajaxbugs">
   <% @bugs.each do |bug| %>
   <% if bug.is_a?(String) %>
-  <li class="ajaxbugs-error"><%= h bug %></li>
+  <li class="ajaxbugs-error"><%= bug %></li>
   <% else %>
-  <li><%= link_to_function h(bug.bug_id), "buginfo('#{h bug.bug_id}')" %>:
-    <%= truncate(h(bug.summary), :length => 50) %></li>
+  <li><%= link_to_function bug.bug_id, "buginfo('#{h bug.bug_id}')" %>:
+    <%= truncate(bug.summary, :length => 50) %></li>
   <% end %>
   <% end %>
 </ul>

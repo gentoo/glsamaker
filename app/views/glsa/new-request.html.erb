@@ -1,20 +1,20 @@
 <h1>New GLSA request</h1>
 
-<% form_tag(:action => "create") do %>
+<%= form_tag(:action => "create") do %>
 <div class="box w40em">
   <input type="hidden" name="what" value="request" />
   <h2 style="margin-top: 0;"><img src="/images/icons/bug.png" alt="bug" /> Bugs</h2>
   <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one bug with a comma:</label></p>
 
   <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= h params[:bugs] %>"/></p>
-  <%= observe_field :bugs, :url => { :controller => 'tools', :action => 'ajaxbugs' },
-                  :frequency => 2,
-                  :update => :ajaxbugs,
-                  :with => 'bugs' %>
-  <%= observe_field :bugs, :url => { :controller => 'tools', :action => 'ajaxdescr' },
-                  :frequency => 2,
-                  :update => :suggesteddescr,
-                  :with => 'bugs' %>
+  <script language="javascript">
+    $("#bugs").change(function() {
+      $.post("<%= url_for :controller => 'tools', :action => 'file_req_ajax_info' %>", { bugs: $("#bugs").val() }, function (data) {
+        $('#ajaxbugs').html(data.buginfo);
+        $('#suggesteddescr').html(data.title);
+      }, 'json');
+    });
+  </script>              
   <div id="ajaxbugs"></div>
 </div>
 <br />

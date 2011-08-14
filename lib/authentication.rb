@@ -15,7 +15,7 @@ module Authentication
     # Login filter to be applied to *all* pages on GLSAMaker
     def login_required
       # Production authentication via REMOTE_USER
-      if RAILS_ENV == "production" or GLSAMAKER_FORCE_PRODUCTION_AUTH
+      if Rails.env.production? or GLSAMAKER_FORCE_PRODUCTION_AUTH
         # REMOTE_USER should be there in FCGI or Passenger
         env_user_name = user_name
       

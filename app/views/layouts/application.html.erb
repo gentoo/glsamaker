@@ -5,10 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
-	<%= stylesheet_link_tag "screen", :cache => false %>
+<!--	<%= stylesheet_link_tag "screen", :cache => false %>
 	<%= stylesheet_link_tag "admin", :cache => false %>
 	<%= stylesheet_link_tag "modalbox", :cache => false %>
-  <%= javascript_include_tag :all, :cache => false %>
+  <%= javascript_include_tag :all, :cache => false %>-->
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
 </head>
 <body id="<%= h @pageID if @pageID %>">
   <div id="top-menu">

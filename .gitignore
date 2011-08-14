@@ -12,3 +12,5 @@ public/javascripts/all.js
 /MYTODO
 coverage
 .idea
+.rvmrc
+*.tmproj
