@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
+	<title><% if @pageTitle%><%= @pageTitle %> &mdash; <% end %>GLSAMaker 2</title>
 <!--	<%= stylesheet_link_tag "screen", :cache => false %>
 	<%= stylesheet_link_tag "admin", :cache => false %>
 	<%= stylesheet_link_tag "modalbox", :cache => false %>
@@ -20,7 +20,7 @@
         <li><a href="/my/account" class="my-account">My account</a></li>
       </ul>
     </div>
-    <div id="loggedas">Logged in as <a href="#"><%= h current_user.login %> (<%= h current_user.name %>)</a></div>
+    <div id="loggedas">Logged in as <a href="#"><%= current_user.login %> (<%= current_user.name %>)</a></div>
     <ul>
       <li><a href="/" class="home">Home</a></li>
       <% if current_user.is_el_jefe? %><li><a href="/admin" class="administration">Administration</a></li><% end %>
@@ -29,7 +29,7 @@
   </div>
 
   <div id="menu">
-        <img src="/images/logo.png" alt="Home" class="logo" usemap="#m_logo" />
+        <img src="/assets/logo.png" alt="Home" class="logo" usemap="#m_logo" />
         <map name="m_logo" id="m_logo">
           <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
         </map>
@@ -73,7 +73,7 @@
       <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
         page[:flash].drop_out
       end %>
-      <img src="/images/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
+      <img src="/assets/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
       <%= h flash[:error] ? flash[:error] : flash[:notice] %>
     </div>
     <%- end -%>
@@ -84,7 +84,7 @@
       <span><strong>GLSAMaker <%= h GLSAMAKER_VERSION %></strong></span>
       <span><%= link_to "About&hellip;", :controller => 'index', :action => 'about' %></span>
 
-      <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span></div>
+      <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span>
     </div>
     <br class="clear" />
 </body>
