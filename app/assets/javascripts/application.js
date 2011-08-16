@@ -4,6 +4,11 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery
-//= require jquery_ujs
-//= require_tree .
+//= require prototype
+//= require prototype_ujs
+//= require effects
+//= require glsamaker
+//= require glsamaker_misc
+//= require glsamaker_edit
+//= require modalbox
+//= require_self
