@@ -3,10 +3,10 @@
 <%= form_tag(:action => "create") do %>
 <div class="box w40em">
   <input type="hidden" name="what" value="request" />
-  <h2 style="margin-top: 0;"><img src="/images/icons/bug.png" alt="bug" /> Bugs</h2>
+  <%= box_title('Bugs', :icon => 'icons/bug.png') %>
   <p><label for="bugs">Please enter the relevant bug ID(s), separate more than one bug with a comma:</label></p>
 
-  <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= h params[:bugs] %>"/></p>
+  <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= params[:bugs] %>"/></p>
   <script language="javascript">
     $("#bugs").change(function() {
       $.post("<%= url_for :controller => 'tools', :action => 'file_req_ajax_info' %>", { bugs: $("#bugs").val() }, function (data) {
@@ -19,20 +19,20 @@
 </div>
 <br />
 <div class="box w40em">
-  <h2 style="margin-top: 0;"><img src="/images/icons/edit.png" alt="description" /> Title</h2>
+  <%= box_title('Title', :icon => 'icons/edit.png') %>
   <p><label for="title">Either take the suggested title or enter a new custom one:</label></p>
   <div id="suggesteddescr"></div>
-  <p><textarea name="title" id="title" class="largetext nice" rows="2"><%= h params[:title] %></textarea></p>
+  <p><textarea name="title" id="title" class="largetext nice" rows="2"><%= params[:title] %></textarea></p>
 </div>
 <br />
 <div class="box w40em">
-  <h2 style="margin-top: 0;"><img src="/images/icons/comment.png" alt="comment" /> Comment <small>(optional)</small></h2>
+  <%= box_title('Comment ' << content_tag('small', '(optional)'), :icon => 'icons/comment.png', :escape => false) %>
   <p><label for="comment">If you want to add a comment, enter it here:</label></p>
-  <p><textarea name="comment" id="comment" class="nice" rows="4"><%= h params[:comment] %></textarea></p>
+  <p><textarea name="comment" id="comment" class="nice" rows="4"><%= params[:comment] %></textarea></p>
 </div>
 <br />
 <div class="box w40em">
-  <h2 style="margin-top: 0;"><img src="/images/icons/reference.png" alt="reference" /> References</h2>
+  <%= box_title('References', :icon => 'icons/reference.png') %>
   <p>
     <input type="checkbox" name="import_references" id="import_references" value="1" checked="checked" />
     <label for="import_references">Import all references from linked bugs</label>
@@ -41,7 +41,7 @@
 <br />
 <%- if current_user.access >= 1 -%>
 <div class="box w40em">
-  <h2 style="margin-top: 0;"><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
+  <%= box_title('Permissions', :icon => 'icons/permission.png') %>
   <p><label for="access">Mark this request as</label>:
     <select name="access" id="access">
       <%= options_for_select %w{ public confidential }, params[:access] || "public" %>

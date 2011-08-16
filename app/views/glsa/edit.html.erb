@@ -4,10 +4,10 @@
 
 <% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
 
-<% form_tag :action => 'update', :id => @glsa do |f| -%>
+<%= form_tag :action => 'update', :id => @glsa do |f| -%>
 <div style="float: right; width: 44%;">
   <div class="box">
-    <h2><img src="/images/icons/permission.png" alt="permission" /> Permissions</h2>
+    <%= box_title('Permissions', :icon => 'icons/permission.png') %>
     <p><label for="permissions">This GLSA is</label>:
       <select name="glsa[restricted]" id="permissions">
         <%= options_for_select %w{ public confidential }, @glsa.restricted ? "confidential" : "public" %>
@@ -16,45 +16,33 @@
   </div>
 
   <div class="box">
-    <h2><img src="/images/icons/metadata.png" alt="metadata" /> <label for="title">Metadata</label></h2>
-    <p style="float: left; width: 50%;"><label for="access"><img src="/images/icons/access.png" alt="access" /> Access:</label>
+    <%= box_title('Metadata', :icon => 'icons/metadata.png ') %>
+    <p style="float: left; width: 50%;"><label for="access"><img src="/assets/icons/access.png" alt="access" /> Access:</label>
       <select name="glsa[access]" id="access">
         <%= options_for_select [['local', 'local'], ['remote', 'remote'], ['local, remote', 'both']], @rev.access %>
       </select>
     </p>
-    <p><label for="severity"><img src="/images/icons/severity.png" alt="severity" /> Severity:</label>
+    <p><label for="severity"><img src="/assets/icons/severity.png" alt="severity" /> Severity:</label>
       <select name="glsa[severity]" id="severity">
         <%= options_for_select %w{ low normal high }, @rev.severity %>
       </select>
     </p>
-    <p><label for="keyword"><img src="/images/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
+    <p><label for="keyword"><img src="/assets/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
       <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %>
     </p>
   </div>
 
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="javascript://" onclick="backgroundDialog();" title="Get background">
-          <img src="/images/icons/background-go.png" alt="Get background" />
-        </a>
-      </span>
-      <label for="background"><img src="/images/icons/background.png" alt="background" /> Background</label>
-    </h2>
+    <%= box_title('Background', :icon => 'icons/background.png', :label => 'background',
+                  :toolbar => [{:uri => 'javascript:backgroundDialog();', :title => 'Get background', :icon => 'icons/background-go.png'}]) %>
     <p>
       <textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea>
     </p>
   </div>
 
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="javascript://" onclick="GLSAMaker.editing.bugs.add_dialog(<%= @glsa.id %>);" title="Add bug">
-          <img src="/images/icons/plus.png" alt="Add bug" />
-        </a>
-      </span>
-      <img src="/images/icons/bug.png" alt="bug" /> Bugs
-    </h2>
+    <%= box_title('Bugs', :icon => 'icons/bug.png',
+                  :toolbar => [{:uri => "javascript:GLSAMaker.editing.bugs.add_dialog(#{@glsa.id})", :title => 'Add bug', :icon => 'icons/plus.png'}]) %>
     <table id="bugtable">
       <%= render :partial => "edit_bug_row", :collection => @rev.bugs, :as => :bug %>
     </table>
@@ -69,40 +57,37 @@
 
 <div id="left">
   <div class="box">
-    <h2><img src="/images/icons/title.png" alt="title" /> <label for="title">Title</label></h2>
+    <%= box_title('Title', :icon => 'icons/title.png', :label => 'title') %>
     <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= h lastrev_content(@glsa, 'title') %></textarea></p>
   </div>
 
   <div class="box">
-    <h2><img src="/images/icons/synopsis.png" alt="synopsis" /> <label for="synopsis">Synopsis</label></h2>
+    <%= box_title('Synopsis', :icon => 'icons/synopsis.png', :label => 'synopsis') %>
     <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
   </div>
 
   <div class="box">
-    <h2>
-      <img src="/images/icons/package.png" alt="Packages" />
-      Packages
-    </h2>
+    <%= box_title('Packages', :icon => 'icons/package.png') %>
 
     <table class="padcells swap centercells" id="packages_table_vulnerable">
       <tr>
-        <th><img src="/images/icons/atom.png" alt="atom" /> Atom</th>
+        <th><img src="/assets/icons/atom.png" alt="atom" /> Atom</th>
         <th class="odd" colspan="2">Version</th>
-        <th><img src="/images/icons/arch.png" alt="arch" /> Arch</th>
-        <th class="odd"><img src="/images/icons/auto.png" alt="auto" /> Auto</th>
+        <th><img src="/assets/icons/arch.png" alt="arch" /> Arch</th>
+        <th class="odd"><img src="/assets/icons/auto.png" alt="auto" /> Auto</th>
       </tr>
 
       <tr>
-        <td><img src="/images/icons/affected.png" alt="vulnerable" /> Vulnerable
-        (<%= add_vulnerable_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>	
+        <td><img src="/assets/icons/affected.png" alt="vulnerable" /> Vulnerable
+        (<%= add_vulnerable_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
       <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
     </table>
 
     <table class="padcells swap centercells" id="packages_table_unaffected">
       <tr>
-        <td><img src="/images/icons/unaffected.png" alt="unaffected" /> Unaffected
-            (<%= add_unaffected_package_link '<img src="/images/icons/package-add.png" alt="Add package" />' %>)</td>
+        <td><img src="/assets/icons/unaffected.png" alt="unaffected" /> Unaffected
+            (<%= add_unaffected_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
       <%= render :partial => 'package', :collection => @rev.unaffected_packages %>
 
@@ -110,94 +95,62 @@
   </div>
 
   <div class="box" id="desc-box">
-    <h2>
-      <span class="toolbar">
-        <%= link_to_function image_tag('icons/document-go.png',
-                                        :alt => 'Set default description'), 
-                              "generateDescription()",
-                              :title => 'Set Quick GLSA default description' %>
-        <img src="/images/separator.png" />
-        <a href="javascript:///" onclick="lines('description', -5);" title="Fewer lines">
-          <img src="/images/icons/zoom_out.png" alt="Fewer lines" />
-        </a>
-        <a href="javascript:///" onclick="$('description').rows = 15;" title="Reset lines">
-          <img src="/images/icons/zoom_100.png" alt="Reset lines" />
-        </a>
-        <a href="javascript:///" onclick="lines('description', 5);" title="More lines">
-          <img src="/images/icons/zoom_in.png" alt="More lines" />
-        </a>
-      </span>
-      <img src="/images/icons/document.png" alt="description" />
-      <label for="description">Description</label>
-    </h2>
+    <%= box_title('Description', :icon => 'icons/document.png', :label => 'description',
+                  :toolbar => [
+                          {:title => 'Set default description', :uri => "javascript:generateDescription()", :icon => 'icons/document-go.png'},
+                          :sep,
+                          {:title => 'Fewer lines', :uri => "javascript:lines('description', -5)", :icon => 'icons/zoom_out.png'},
+                          {:title => 'Reset lines', :uri => "javascript:$('description').rows = 15", :icon => 'icons/zoom_100.png'},
+                          {:title => 'More lines', :uri => "javascript:lines('description', 5)", :icon => 'icons/zoom_in.png'}
+                  ]
+        ) %>
     <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= h lastrev_content(@glsa, 'description') %></textarea></p>
   </div>
 
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="javascript:///" onclick="lines('impact', -2);" title="Fewer lines">
-          <img src="/images/icons/zoom_out.png" alt="Fewer lines" />
-        </a>
-        <a href="javascript:///" onclick="$('impact').rows = 5;" title="Reset lines">
-          <img src="/images/icons/zoom_100.png" alt="Reset lines" />
-        </a>
-        <a href="javascript:///" onclick="lines('impact', 2);" title="More lines">
-          <img src="/images/icons/zoom_in.png" alt="More lines" />
-        </a>
-      </span>
-      <img src="/images/icons/impact.png" alt="Impact" />
-      <label for="impact">Impact</label>
-    </h2>
+    <%= box_title('Impact', :icon => 'icons/impact.png', :label => 'impact',
+                  :toolbar => [
+                          {:title => 'Fewer lines', :uri => "javascript:lines('impact', -5)", :icon => 'icons/zoom_out.png'},
+                          {:title => 'Reset lines', :uri => "javascript:$('impact').rows = 15", :icon => 'icons/zoom_100.png'},
+                          {:title => 'More lines', :uri => "javascript:lines('impact', 5)", :icon => 'icons/zoom_in.png'}
+                  ]
+        ) %>
     <p><textarea name="glsa[impact]" id="impact" class="nice" rows="5"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
   </div>
   
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="javascript:///" onclick="$('workaround').value = 'There is no known workaround at this time.'" title="No known workaround">
-          <img src="/images/icons/workaround-no.png" alt="No known workaround" />
-        </a>
-      </span>
-      <img src="/images/icons/workaround.png" alt="Workaround" />
-      <label for="workaround">Workaround</label>
-    </h2>
+    <%= box_title('Workaround', :icon => 'icons/workaround.png', :label => 'workaround',
+                  :toolbar => [
+                          {:title => 'No known workaround', :uri => "javascript:$('workaround').value = 'There is no known workaround at this time.'", :icon => 'icons/workaround-no.png'}
+                  ]
+        ) %>
     <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="2"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
   </div>
   
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <%= link_to_function( image_tag('icons/resolution-go.png',
-                                        :alt => 'Set default resolution'), 
-                              "generateResolution()",
-                              :title => 'Set default resolution') %>
-      </span>
-      <img src="/images/icons/resolution.png" alt="Resolution" />
-      <label for="resolution">Resolution</label>
-    </h2>
+    <%= box_title('Resolution', :icon => 'icons/resolution.png', :label => 'resolution',
+                  :toolbar => [
+                          {:title => 'Set default resolution', :uri => "javascript:generateResolution()", :icon => 'icons/resolution-go.png'}
+                  ]
+        ) %>
     <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="5"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
   </div>
 
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <%= add_reference_link '<img src="/images/icons/reference-add.png" alt="Add reference" />' %>
-      </span>
-      <img src="/images/icons/reference.png" alt="Packages" />
-      References
+    <%= box_title('References', :icon => 'icons/reference.png',
+                  :toolbar => [
+                          {:title => 'Add reference', :uri => "javascript:Element.insert('references_table', { bottom: '#{escape_javascript(render(:partial => 'reference', :object => Reference.new))}' })", :icon => 'icons/reference-add.png'}
+                  ]
+        ) %>
+    <table class="padcells swap centercells" id="references_table">
+    <tr>
+      <th><%= image_tag 'icons/atom.png' %> Title</th>
+      <th><%= image_tag 'icons/reference.png' %> URL</th>
+      <th></th>
+    </tr>
 
-      <table class="padcells swap centercells" id="references_table">
-      <tr>
-        <th><img src="/images/icons/atom.png" alt="title" /> Title</th>
-        <th><img src="/images/icons/reference.png" alt="URL" /> URL</th>
-        <th></th>
-      </tr>
-
-      <%= render :partial => 'reference', :collection => @rev.references %>
-
-      </table>
-    </h2>
+    <%= render :partial => 'reference', :collection => @rev.references %>
+    </table>
   </div>
 
 </div>

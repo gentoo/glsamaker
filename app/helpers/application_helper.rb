@@ -91,4 +91,48 @@ module ApplicationHelper
       'normal'
     end
   end
+
+  # Renders a title bar for our boxes
+  def box_title(title, options = {})
+    content = "".html_safe
+
+    if options.has_key? :toolbar
+      span_content = "".html_safe
+
+      options[:toolbar].each do |toolbar_item|
+        if toolbar_item == :sep
+          span_content << image_tag('separator.png')
+        else
+          if toolbar_item[:uri].start_with? 'javascript:'
+            span_content << link_to_function(
+                image_tag(toolbar_item[:icon]),
+                toolbar_item[:uri].gsub(/^javascript:/, ''),
+                :title => toolbar_item[:title]
+            ) << ' '
+          else
+            span_content << link_to(image_tag(toolbar_item[:icon]), toolbar_item[:uri]) << ' '
+          end
+        end
+      end
+
+      content << content_tag("span", span_content, :class => 'toolbar')
+    end
+
+    if options.has_key? :icon
+      content << image_tag(options[:icon]) << " "
+    end
+
+    title2 = title
+    if options.has_key? :escape and options[:escape] == false
+      title2 = title2.html_safe
+    end
+
+    if options.has_key? :label
+      content << content_tag('label', title2, :for => options[:label])
+    else
+      content << title2
+    end
+
+    content_tag("h2", content, :class => "boxtitle")
+  end
 end

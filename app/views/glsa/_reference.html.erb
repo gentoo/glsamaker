@@ -1,5 +1,5 @@
 <tr class="entry">
-<% fields_for "glsa[reference][]", reference do |rf| %>
+<%= fields_for "glsa[reference][]", reference do |rf| %>
   <td><%= rf.text_field :title, :class => :nice, :size => 18, :index => nil %></td>
   <td><%= rf.text_field :url, :class => :nice, :index => nil %></td>
   <td><%= link_to_function(

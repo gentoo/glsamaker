@@ -1,6 +1,6 @@
 <% comps = %w{ >= > *>= *> <= < *<= *< == } -%>
 <tr class="entry">
-<% fields_for "glsa[package][]", package do |pf| %>
+<%= fields_for "glsa[package][]", package do |pf| %>
   <td><%= pf.text_field :atom, :class => :nice, :index => nil %></td>
   <td class="odd"><%= pf.select :comp, comps, {}, :index => nil %></td>
   <td class="odd"><%= pf.text_field :version, :class => :nice, :size => 10, :index => nil %></td>
