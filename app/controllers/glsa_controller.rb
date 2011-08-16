@@ -59,6 +59,7 @@ class GlsaController < ApplicationController
         flash[:notice] = "Successfully created GLSA #{glsa.glsa_id}"
         redirect_to :action => "requests"
       rescue Exception => e
+        log_error e
         flash.now[:error] = e.message
         render :action => "new-request"
       end
