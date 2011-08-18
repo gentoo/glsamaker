@@ -60,12 +60,12 @@ class Revision < ActiveRecord::Base
   # incrementing the revision ID by one.
   # <b>The caller must take care of deleting this revision again in case any error occurs later.</b>
   def deep_copy
-    new_rev = clone
+    new_rev = dup
     new_rev.revid = glsa.next_revid
     
-    references.each {|reference| new_rev.references << reference.clone }
-    packages.each {|package| new_rev.packages << package.clone }
-    bugs.each {|bug| new_rev.bugs << bug.clone }
+    references.each {|reference| new_rev.references << reference.dup }
+    packages.each {|package| new_rev.packages << package.dup }
+    bugs.each {|bug| new_rev.bugs << bug.dup }
     
     new_rev.save!
     new_rev
