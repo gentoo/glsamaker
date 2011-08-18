@@ -8,13 +8,17 @@
 
   <p><input type="text" name="bugs" id="bugs" class="hugetext nice" value="<%= params[:bugs] %>"/></p>
   <script language="javascript">
-    $("#bugs").change(function() {
-      $.post("<%= url_for :controller => 'tools', :action => 'file_req_ajax_info' %>", { bugs: $("#bugs").val() }, function (data) {
-        $('#ajaxbugs').html(data.buginfo);
-        $('#suggesteddescr').html(data.title);
-      }, 'json');
+    $("bugs").observe('change', function(event) {
+      new Ajax.Request("<%= url_for :controller => 'tools', :action => 'file_req_ajax_info' %>", {
+         method: 'get',
+         parameters: { bugs: $('bugs').getValue() },
+         onSuccess : function(transport) {
+           $('ajaxbugs').update(transport.responseJSON.buginfo);
+           $('suggesteddescr').update(transport.responseJSON.title);
+         }
+      });
     });
-  </script>              
+  </script>
   <div id="ajaxbugs"></div>
 </div>
 <br />
