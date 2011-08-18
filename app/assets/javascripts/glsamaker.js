@@ -27,7 +27,7 @@ function addBugDialog(glsaid) {
 }
 
 function addCommentDialog(glsaid) {
-  Modalbox.show("/glsa/"+glsaid+"/addcomment", {title: "Add comments", width: 600});
+  Modalbox.show("/glsas/"+glsaid+"/comments/new", {title: "Add comment", width: 600});
 }
 
 function backgroundDialog() {

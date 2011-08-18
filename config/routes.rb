@@ -1,12 +1,12 @@
 Glsamaker::Application.routes.draw do
-  
+
   match 'bug/:id'                     => 'bug#bug',             :as => :bug
   match 'bug/:id/history'             => 'bug#history',         :as => :bughistory
   match 'tools/bug/:id/:what'         => 'tools#bugzie',        :as => :bugzie
-  
-  match 'glsa/:id/addcomment'         => 'glsa#addcomment',     :as => :addcomment
+
   match 'glsa/:id/addcomment/save'    => 'glsa#addcommentsave', :as => :addcommentsave
-  
+  match 'glsa/:id/addcomment'         => 'glsa#addcomment',     :as => :addcomment
+
   match 'glsa/requests'               => 'glsa#requests',       :as => :requests
   match 'glsa/drafts'                 => 'glsa#drafts',         :as => :drafts
   match 'glsa/archive'                => 'glsa#archive',        :as => :sent
@@ -18,7 +18,15 @@ Glsamaker::Application.routes.draw do
   
   match 'cve/list.:format'            => 'cve#list',            :as => :cve
   
-  match 'admin'                       => 'admin#index'  
+  match 'admin'                       => 'admin#index'
+
+  resources :glsas, :controller => 'glsa' do
+    resources :comments
+
+    get 'requests', :on => :collection
+    get 'drafts'  , :on => :collection
+    get 'archive' , :on => :collection
+  end
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

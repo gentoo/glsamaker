@@ -1,22 +1,20 @@
 <li>
   <input type="hidden" name="commentread-<%= comment.id %>" id="commentread-<%= comment.id %>" value="<%= comment.read ? "true" : "false" %>" />
   <span style="float: right;">
-    <%= link_to_function (comment.read ? '<img src="/images/icons/flag-green.png" alt="Done." />' : '<img src="/images/icons/flag.png" alt="Todo" />'), 
+    <%= link_to_function(comment.read ? image_tag("icons/flag-green.png", :title => 'done') : image_tag("icons/flag.png", :title => 'todo'),
                               "toggleCommentRead(#{comment.id})",
                               :title => 'Toggle read status',
-                              :id => "commentflag-#{comment.id}"  %>
-        
-    </a>        
+                              :id => "commentflag-#{comment.id}") %>
   </span>
    
   <div style="float: left;">
     <%= case comment.rating
         when "approval"
-          '<img src="/images/icons/unaffected.png" alt="Approval" title="Approval" />'
+          image_tag('icons/unaffected.png', :title => 'Approval')
         when "rejection"
-          '<img src="/images/icons/affected.png" alt="Rejection" title="Rejection" />'
+          image_tag('icons/affected.png', :title => 'Rejection')
         else
-          '<img src="/images/icons/reference.png" alt="Neutral" title="Neutral" />'
+          image_tag('icons/reference.png', :title => 'Neutral')
         end -%>
     <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number ||= 1 %></small>
   </div>

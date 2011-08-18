@@ -1,0 +1,23 @@
+<% if @glsa.nil? %>
+<p>No or invalid GLSA ID specified.</p>
+<% else %>
+<%= form_tag(glsa_comments_path(@glsa, @comment), :remote => true) do -%>
+<p><label for="addcomment"><img src="/assets/icons/comment.png" alt="bug" />
+  Please enter your comment:</label></p>
+
+  <%= fields_for :newcomment do |f| %>
+    <p>
+      <%= f.text_area :text, :class => "nice", :rows => 2 %>
+    </p>
+    
+    <div align="right">
+      Rating:
+      <%= f.radio_button :rating, "approval" %><label for="newcomment_rating_approval"><img src="/assets/icons/unaffected.png" alt="Approval" title="Approval" /></label>&nbsp;
+      <%= f.radio_button :rating, "rejection" %><label for="newcomment_rating_rejection"><img src="/assets/icons/affected.png" alt="Rejection" title="Rejection" /></label>&nbsp;
+      <%= f.radio_button :rating, "neutral", :checked => true %><label for="newcomment_rating_neutral"><img src="/assets/icons/reference.png" alt="Neutral" title="Neutral" /></label>
+    </div>
+  <% end %>
+
+    <p style="text-align: right;"><input type="submit" class="button" value="Add comment" id="addcommentsubmit" /></p>
+<% end -%>
+<% end %>

@@ -372,45 +372,6 @@ class GlsaController < ApplicationController
   def comment
   end
 
-  def addcomment
-    begin
-      @glsa_id = Integer(params[:id])
-    rescue Exception => e
-      @glsa_id = nil
-    end
-    render :layout => false
-  end
-  
-  def addcommentsave
-    @glsa = Glsa.find(params[:id].to_i)
-
-    unless @glsa.nil?
-      comment_data = params[:newcomment]
-      comment = nil
-      
-      if comment_data['text'].strip != ''
-        comment = @glsa.comments.build(comment_data)
-        comment.user = current_user
-        if comment.save
-          Glsamaker::Mail.comment_notification(@glsa, comment, current_user)
-
-          if @glsa.is_approved? and @glsa.approvals.count ==  @glsa.rejections.count + 2
-            Glsamaker::Mail.approval_notification(@glsa)
-          end
-        end
-      end
-
-      begin
-        @comment_number = @glsa.comments.count
-        render :partial => "comment", :object => comment
-      rescue Exception => e
-        render :text => "Error: #{e.message}", :status => 500
-      end
-    else
-      render :text => "fail", :status => 500
-    end
-  end
-  
   def import_references
     begin
       if params[:go].to_s == '1'
