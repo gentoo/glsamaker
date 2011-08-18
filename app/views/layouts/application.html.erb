@@ -82,7 +82,7 @@
     </div>
     <div id="footer">
       <span><strong>GLSAMaker <%= h GLSAMAKER_VERSION %></strong></span>
-      <span><%= link_to "About&hellip;", :controller => 'index', :action => 'about' %></span>
+      <span><%= link_to "About&hellip;".html_safe, :controller => 'index', :action => 'about' %></span>
 
       <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span>
     </div>
