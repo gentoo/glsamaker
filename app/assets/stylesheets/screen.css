@@ -349,8 +349,12 @@ div.legend h3 {
 
 div.box h2 {
   color: #3E3550;
-  font-size: 11pt;
+  font-size: 120%;
   margin: 0;
+}
+
+div.box h2.boxtitle img {
+    vertical-align: middle;
 }
 
 div.box span.toolbar {
