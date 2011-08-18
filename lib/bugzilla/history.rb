@@ -10,7 +10,7 @@ module Bugzilla
       end
     
       begin
-        html = Nokogiri::HTML(Glsamaker::HTTP.get("http://bugs.gentoo.org/show_activity.cgi?id=#{bug.bug_id}"))
+        html = Nokogiri::HTML(Glsamaker::HTTP.get("https://bugs.gentoo.org/show_activity.cgi?id=#{bug.bug_id}"))
       rescue Exception => e
         raise ArgumentError, "Couldn't load the bug history: #{e.message}"
       end
