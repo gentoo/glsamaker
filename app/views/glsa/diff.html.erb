@@ -2,9 +2,9 @@
 
 <div class="box buttons">
   <span class="floatright">
-    <%= link_to "#{image_tag 'icons/draft.png'} Back", {:controller => 'glsa', :action => 'show', :id => @glsa}, {:class => 'button'} %>
+    <%= link_to "#{image_tag 'icons/draft.png'} Back".html_safe, {:controller => 'glsa', :action => 'show', :id => @glsa}, {:class => 'button'} %>
   </span>
-  <% form_tag(:action => :diff, :id => @glsa.id) do %>
+  <%= form_tag(:action => :diff, :id => @glsa.id) do %>
   <%= submit_tag 'Compare' %> revisions
   <%= select_tag :old,
                  options_from_collection_for_select(@glsa.revisions, :revid, :revid) %> (old)
@@ -15,5 +15,5 @@
 </div>
 
 <pre>
-<%= h @diff %>
+<%= @diff %>
 </pre>

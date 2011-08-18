@@ -1,5 +1,5 @@
 # ===GLSAMaker v2
-#  Copyright (C) 2010 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2010-11 Alex Legler <a3li@gentoo.org>
 #  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,19 @@ class GlsaController < ApplicationController
   def requests
     @pageID = "requests"
     @pageTitle = "Pooled GLSA requests"
-    @glsas = Glsa.find(:all, :conditions => "status = 'request'", :order => "updated_at DESC")
+    @glsas = Glsa.where(:status => 'request').order('updated_at DESC')
   end
 
   def drafts
     @pageID = "drafts"
-    @pageTitle = "Pooled GLSA drafts"    
-    @glsas = Glsa.find(:all, :conditions => "status = 'draft'", :order => "updated_at DESC")
+    @pageTitle = "Pooled GLSA drafts"
+    @glsas = Glsa.where(:status => 'draft').order('updated_at DESC')
   end
 
   def archive
     @pageID = "archive"
     @pageTitle = "GLSA archive"    
-    @glsas = Glsa.find(:all, :conditions => "status = 'release'", :order => "updated_at DESC")
+    @glsas = Glsa.where(:status => 'release').order('updated_at DESC')
   end
   
   def new
@@ -307,7 +307,7 @@ class GlsaController < ApplicationController
     rev_old = @glsa.revisions.find_by_revid(params[:old])
     rev_new = @glsa.revisions.find_by_revid(params[:new])
     
-    @diff = rev_diff(@glsa, rev_old, rev_new)
+    @diff = with_format(:xml) { rev_diff(@glsa, rev_old, rev_new) }
   end
 
   def addbug
@@ -461,7 +461,7 @@ class GlsaController < ApplicationController
       end
     end
     
-    return true
+    true
   end
   
   def rev_diff(glsa, rev_old, rev_new, format = :unified, context_lines = 3)
@@ -485,7 +485,7 @@ class GlsaController < ApplicationController
       ),
       {:indent => 2, :maxcols => 80}
     )
-    
+
     Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
   end
   
