@@ -10,12 +10,12 @@
                    options_from_collection_for_select(@glsa.revisions, :revid, :to_s, @rev.revid),
                    :onchange => "document.location = '#{url_for :controller=> :glsa, :action => :show, :id => @glsa}?rev_id=' + this.value" %>
   </span>
-  <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft", {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/xml.png'} View as XML", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/txt.png'} View as Text", {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'txt'}, {:class => 'button'} %>
-  <%= link_to_function "#{image_tag 'icons/reference.png'} Import references", "GLSAMaker.editing.references.import_dialog(#{h @glsa.id})", {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions", {:controller => 'glsa', :action => 'diff', :id => @glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory", {:controller => 'glsa', :action => 'prepare_release', :id => @glsa}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft".html_safe, {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/xml.png'} View as XML".html_safe, {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/txt.png'} View as Text".html_safe, {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'txt'}, {:class => 'button'} %>
+  <%= link_to_function "#{image_tag 'icons/reference.png'} Import references".html_safe, "GLSAMaker.editing.references.import_dialog(#{h @glsa.id})", {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, {:controller => 'glsa', :action => 'diff', :id => @glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, {:controller => 'glsa', :action => 'prepare_release', :id => @glsa}, {:class => 'button'} %>
 </div>
 
 <div style="float: right; width: 40%;">
@@ -28,35 +28,30 @@
       <%= restricted_icon @glsa.restricted %>
     </h2><br />
     <% if @glsa.is_approved? and @glsa.last_revision.bug_ready? %>
-      <p><img src="/images/icons/ok.png" alt="ok" /> This draft is <strong>ready for sending</strong>.</p>
+      <p><img src="/assets/icons/ok.png" alt="ok" /> This draft is <strong>ready for sending</strong>.</p>
     <% else %>
-      <p><img src="/images/icons/pending.png" alt="pending" /> This draft is <strong>not ready for sending.</strong></p>
+      <p><img src="/assets/icons/pending.png" alt="pending" /> This draft is <strong>not ready for sending.</strong></p>
     <% end %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
-      Requester: <strong><%= h @glsa.requester.name %></strong>
+      Requester: <strong><%= @glsa.requester.name %></strong>
     </p>
     <% if @glsa.submitter %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
-      Submitter: <strong><%= h @glsa.submitter.name %></strong>
+      Submitter: <strong><%= @glsa.submitter.name %></strong>
     </p>
     <% end %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
-      Editor: <strong><%= h @glsa.last_revision.user.name %></strong>
+      Editor: <strong><%= @glsa.last_revision.user.name %></strong>
     </p>
   </div>
   
   <div class="box">
-    <h2>
-      <span class="toolbar">
-        <a href="/glsa/update_cache/<%= @glsa.id %>" title="Update all cached metadata">
-          <img src="/images/icons/refresh.png" alt="Update all cached metadata" />
-        </a>
-      </span>      
-      <img src="/images/icons/bug.png" alt="bug" /> Bugs
-    </h2>
+    <%= box_title('Bugs', :icon => 'icons/bug.png',
+        :toolbar => [{:title => 'Update all cached metadata', :icon => 'icons/refresh.png', :uri => "/glsa/update_cache/#{@glsa.id}"}])
+    %>
     <table id="bugtable">
       <%= render :partial => "show_bug_row", :collection => @glsa.last_revision.bugs, :as => :bug %>
     </table>
@@ -70,15 +65,15 @@
 </p>
 
 <p>
-<strong>Access:</strong> <%= h @rev.access %> <br />
-<strong>Product:</strong> <%= h @rev.product %> <br />
-<strong>Severity:</strong> <%= h @rev.severity %> <br />
-<strong>Synopsis:</strong> <%= h @rev.synopsis %> <br />
+<strong>Access:</strong> <%= @rev.access %> <br />
+<strong>Product:</strong> <%= @rev.product %> <br />
+<strong>Severity:</strong> <%= @rev.severity %> <br />
+<strong>Synopsis:</strong> <%= @rev.synopsis %> <br />
 </p>
 
 <p><strong>Related bugs:</strong><br />
 <% @rev.bugs.each do |b| %>
-      <%= link_to_function h(b.bug_id), "buginfo('#{h b.bug_id}')" %>
+      <%= link_to_function h(b.bug_id), "buginfo('#{b.bug_id}')" %>
 <% end %>
 </p>
 
@@ -86,14 +81,14 @@
 <strong>Unaffected Packages:</strong><br />
 <ul>
   <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
-    <li><%= h pkg.comp %><strong><%= h pkg.atom %></strong>-<%= h pkg.version %> on <%= h pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+    <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
   <% end %>
 </ul>
 
 <strong>Vulnerable Packages:</strong><br />
 <ul>
   <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
-    <li><%= h pkg.comp %><strong><%= h pkg.atom %></strong>-<%= h pkg.version %> on <%= h pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+    <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
   <% end %>
 </ul>
 </p>
@@ -111,7 +106,7 @@
 </p>
 
 <p><strong>Workaround:</strong><br />
-<%= h @rev.workaround %></p>
+<%= @rev.workaround %></p>
 <p><strong>Resolution:</strong><br />
 <%= sanitize(@rev.resolution, :tags => %w[p ul li code]) %>
 </p>
