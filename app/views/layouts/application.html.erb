@@ -4,11 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title><% if @pageTitle%><%= @pageTitle %> &mdash; <% end %>GLSAMaker 2</title>
-<!--	<%= stylesheet_link_tag "screen", :cache => false %>
-	<%= stylesheet_link_tag "admin", :cache => false %>
-	<%= stylesheet_link_tag "modalbox", :cache => false %>
-  <%= javascript_include_tag :all, :cache => false %>-->
+  <title><% if @pageTitle%><%= @pageTitle %> &mdash; <% end %>GLSAMaker 2</title>
   <%= stylesheet_link_tag    "application" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -29,63 +25,63 @@
   </div>
 
   <div id="menu">
-        <img src="/assets/logo.png" alt="Home" class="logo" usemap="#m_logo" />
-        <map name="m_logo" id="m_logo">
-          <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
-        </map>
-        <!--<div id="search"> TODO
-          <form action="/search/index/glsamaker2" method="get">
-            <a href="/search/index/glsamaker2" accesskey="4">Search</a>:
-            <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+    <img src="/assets/logo.png" alt="Home" class="logo" usemap="#m_logo" />
+    <map name="m_logo" id="m_logo">
+      <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
+    </map>
+    <!--<div id="search"> TODO
+      <form action="/search/index/glsamaker2" method="get">
+        <a href="/search/index/glsamaker2" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
 
-            <select name="at">
-              <option selected="selected">Everywhere</option>
-              <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
-              <option value="glsa">GLSAs</option>
-              <option value="glsa-request">&nbsp;&nbsp;Requests</option>
-              <option value="glsa-draft">&nbsp;&nbsp;Drafts</option>
-              <option value="glsa-sent">&nbsp;&nbsp;Archive</option>
-              <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
-              <option disabled="disabled">Vulnerability intelligence</option>
-              <option value="cve">&nbsp;&nbsp;CVEs</option>
-              <option value="secunia">&nbsp;&nbsp;Secunia Advisories</option>
-            </select>
-          </form>
-        </div>-->
-        <ul>
-          <li><a href="/glsa/new" class="new">New...</a></li>
-          <li style="margin-right: 2em;">&nbsp;</li>
-          <li><a href="/glsa/requests" class="requests">Requests</a></li>
-          <li><a href="/glsa/drafts" class="drafts">Drafts</a></li>
-          <li><a href="/glsa/archive" class="archive">Archive</a></li>
-          
-          <li style="margin-right: 2em;">&nbsp;</li>
-          <li><a href="/cve/list" class="cve">CVETool</a></li>
-          <% if Module.constants.include? "Secunia" %>
-          <li style="margin-right: 2em;">&nbsp;</li>
-          <li><a href="/" class="secunia">Secunia Advisories</a></li>
-          <% end %>
-        </ul>
-      </div>
+        <select name="at">
+          <option selected="selected">Everywhere</option>
+          <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
+          <option value="glsa">GLSAs</option>
+          <option value="glsa-request">&nbsp;&nbsp;Requests</option>
+          <option value="glsa-draft">&nbsp;&nbsp;Drafts</option>
+          <option value="glsa-sent">&nbsp;&nbsp;Archive</option>
+          <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
+          <option disabled="disabled">Vulnerability intelligence</option>
+          <option value="cve">&nbsp;&nbsp;CVEs</option>
+          <option value="secunia">&nbsp;&nbsp;Secunia Advisories</option>
+        </select>
+      </form>
+    </div>-->
+    <ul>
+      <li><%= link_to "New…", new_glsa_path, :class => 'new' %></li>
+      <li style="margin-right: 2em;">&nbsp;</li>
+      <li><%= link_to "Requests", requests_glsas_path, :class => 'requests' %></li>
+      <li><%= link_to "Drafts", drafts_glsas_path, :class => 'drafts' %></li>
+      <li><%= link_to "Archive", archive_glsas_path, :class => 'archive' %></li>
 
-    <%- if flash[:notice] or flash[:error] -%>
-    <div id="flash" class="<%= flash[:error] ? "error" : "notice" %>">
-      <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
-        page[:flash].drop_out
-      end %>
-      <img src="/assets/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
-      <%= h flash[:error] ? flash[:error] : flash[:notice] %>
-    </div>
-    <%- end -%>
-    <div id="content">
+      <li style="margin-right: 2em;">&nbsp;</li>
+      <li><a href="/cve/list" class="cve">CVETool</a></li>
+      <% if Module.constants.include? "Secunia" %>
+      <li style="margin-right: 2em;">&nbsp;</li>
+      <li><a href="/" class="secunia">Secunia Advisories</a></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <%- if flash[:notice] or flash[:error] -%>
+  <div id="flash" class="<%= flash[:error] ? "error" : "notice" %>">
+    <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
+      page[:flash].drop_out
+    end %>
+    <img src="/assets/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
+    <%= h flash[:error] ? flash[:error] : flash[:notice] %>
+  </div>
+  <%- end -%>
+  <div id="content">
 <%= yield %>
-    </div>
-    <div id="footer">
-      <span><strong>GLSAMaker <%= h GLSAMAKER_VERSION %></strong></span>
-      <span><%= link_to "About&hellip;".html_safe, :controller => 'index', :action => 'about' %></span>
+  </div>
+  <div id="footer">
+    <span><strong>GLSAMaker <%= GLSAMAKER_VERSION %></strong></span>
+    <span><%= link_to "About&hellip;".html_safe, :controller => 'index', :action => 'about' %></span>
 
-      <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= h GLSAMAKER_ADMIN_EMAIL%>"><%= h GLSAMAKER_ADMIN_EMAIL%></a></strong></span>
-    </div>
-    <br class="clear" />
+    <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= GLSAMAKER_ADMIN_EMAIL%>"><%= GLSAMAKER_ADMIN_EMAIL%></a></strong></span>
+  </div>
+  <br class="clear" />
 </body>
 </html>
