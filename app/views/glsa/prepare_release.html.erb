@@ -31,7 +31,7 @@
     <span class="toolbar">
       <%= check_icon(@rev.bug_ready?) %>
     </span>
-    <img src="/images/icons/bug.png" alt="bug" /> Bug Status
+    <%= image_tag 'icons/bug.png' %> Bug Status
   </h2>
   <table class="list">
     <%= render :partial => "show_bug_row", :collection => @rev.bugs, :as => :bug %>
@@ -56,7 +56,7 @@
     <span class="toolbar">
       <%= check_icon((@glsa.is_approved? or @comments_override)) %>
     </span>
-    <img src="/images/icons/comment.png" alt="bug" /> Review Status
+    <%= image_tag 'icons/comment.png' %> Review Status
     (<%= @glsa.approvals.length %> <%= image_tag 'icons/approved.png' %>, <%= @glsa.rejections.length %> <%= image_tag 'icons/not-approved.png' %>)
   </h2>
   <table class="list">
@@ -73,7 +73,7 @@
       </p>
       <% if current_user.is_el_jefe? %>
         <div class="actions">
-          <%= button_to "Override this check (team leads only)", :action => 'prepare_release', :id => @glsa.id, :override_approvals => 1 %>
+          <%= button_to "Override this check (team leads only)", prepare_release_glsa_path(@glsa, :override_approvals => 1) %>
         </div>
       <% end %>
     </div>
@@ -92,7 +92,7 @@
   <p>
     All checks passed. You can release this advisory now.
   </p>
-  <% form_tag(:action => "release", :id => @glsa.id) do %>
+  <%= form_tag(release_glsa_path(@glsa)) do %>
   <table>
     <tr>
       <td><%= check_box_tag 'email'  %></td>

@@ -4,7 +4,7 @@
 
 <% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
 
-<%= form_tag :action => 'update', :id => @glsa do |f| -%>
+<%= form_for @glsa do |f| -%>
 <div style="float: right; width: 44%;">
   <div class="box">
     <%= box_title('Permissions', :icon => 'icons/permission.png') %>

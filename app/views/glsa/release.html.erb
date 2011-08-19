@@ -24,7 +24,7 @@
   </p>
 
   <div class='box-actions'>
-    <button onclick="document.location = '<%= url_for :action => :download, :format => 'xml', :id => @glsa %>'">Download XML</button>
-    <button onclick="document.location = '<%= url_for :action => :show, :format => 'txt', :id => @glsa %>'">Show Text</button>
+    <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'xml')) %>'">Download XML</button>
+    <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'">Show Text</button>
   </div>  
 </div>

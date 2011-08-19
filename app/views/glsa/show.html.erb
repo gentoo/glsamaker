@@ -10,12 +10,12 @@
                    options_from_collection_for_select(@glsa.revisions, :revid, :to_s, @rev.revid),
                    :onchange => "document.location = '#{url_for :controller=> :glsa, :action => :show, :id => @glsa}?rev_id=' + this.value" %>
   </span>
-  <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft".html_safe, {:controller => 'glsa', :action => 'edit', :id => @glsa}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/xml.png'} View as XML".html_safe, {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'xml'}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/txt.png'} View as Text".html_safe, {:controller => 'glsa', :action => 'show', :id => @glsa, :format => 'txt'}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft".html_safe, edit_glsa_path(@glsa), {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/xml.png'} View as XML".html_safe, glsa_path(@glsa, :format => 'xml'), {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/txt.png'} View as Text".html_safe, glsa_path(@glsa, :format => 'txt'), {:class => 'button'} %>
   <%= link_to_function "#{image_tag 'icons/reference.png'} Import references".html_safe, "GLSAMaker.editing.references.import_dialog(#{h @glsa.id})", {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, {:controller => 'glsa', :action => 'diff', :id => @glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid}, {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, {:controller => 'glsa', :action => 'prepare_release', :id => @glsa}, {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, diff_glsa_path(@glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid), {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, prepare_release_glsa_path(@glsa), {:class => 'button'} %>
 </div>
 
 <div style="float: right; width: 40%;">
