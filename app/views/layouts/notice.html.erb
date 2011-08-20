@@ -4,9 +4,9 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title><%= @pageTitle + " &mdash; "if @pageTitle%>GLSAMaker 2</title>
-	<%= stylesheet_link_tag "login", :cache => true %>
-	<%= javascript_include_tag :all, :cache => true %>
+  <title><% if @pageTitle%><%= @pageTitle %> &mdash; <% end %>GLSAMaker 2</title>
+  <%= stylesheet_link_tag "login" %>
+  <%= csrf_meta_tags %>
 </head>
 <body>
 <div id="outer">
