@@ -15,6 +15,8 @@ module Bugzilla
                 :product, :component, :status, :resolution, :url, :comments, :bug_id, :restricted,
                 :severity, :priority, :depends, :blocks
 
+    alias :title :summary
+
     # Creates a new +Bug+ object from the Gentoo bug referenced as #+bugid+
     def self.load_from_id(bugid)
       begin
