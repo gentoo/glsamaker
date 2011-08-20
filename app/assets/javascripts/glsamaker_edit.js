@@ -35,7 +35,7 @@ GLSAMaker.editing.bugs = function() {
      * Opens a dialog to add bugs
      */
     add_dialog : function(glsa_id) {
-      Modalbox.show("/glsa/addbug/" + glsa_id, {title: "Add bugs", width: 600});
+      Modalbox.show("/glsas/" + glsa_id + "/bugs/new", {title: "Add bugs", width: 600});
     }
   };
 }();

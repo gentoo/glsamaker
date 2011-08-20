@@ -1,0 +1,34 @@
+<% if @glsa.nil? %>
+<p>No or invalid GLSA ID specified.</p>
+<% else %>
+<%= form_tag(glsa_bugs_path(@glsa, @bug), :remote => true) do -%>
+<%# form_remote_tag(
+        :url => { :controller => :glsa, :action => :addbugsave, :id => @glsa_id.to_s },
+        :update => {:success => 'bugtable'},
+        :position => :bottom,
+        :before => '$("addbugsubmit").value="Loading...";',
+        :after  => '$("addbugsubmit").value="Add bugs";',
+        :success => 'Modalbox.hide();',
+        :failure => 'alert(request.responseText);') do -%>
+<p><label for="addbugs">
+  <%= image_tag 'icons/bug.png' %>
+  Please enter the relevant bug ID(s), separate more than one bug with a comma:</label>
+</p>
+
+<p><input type="text" name="addbugs" id="addbugs" class="hugetext nice"/></p>
+<script language="javascript">
+new Form.Element.Observer('addbugs', 4, function(element, value) {
+  new Ajax.Request("<%= url_for :controller => 'tools', :action => 'file_req_ajax_info' %>", {
+     method: 'get',
+     parameters: { bugs: $('addbugs').getValue() },
+     onComplete : function(transport) {
+       $('ajaxbugs').update(transport.responseJSON.buginfo);
+       Modalbox.resizeToContent();
+     }
+  });
+});
+</script>
+<div id="ajaxbugs"></div>
+<p style="text-align: right;"><input type="submit" class="button" value="Add bugs" id="addbugsubmit" /></p>
+<% end -%>
+<% end %>

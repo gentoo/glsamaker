@@ -1,5 +1,13 @@
 Glsamaker::Application.routes.draw do
 
+  get "bugs/new"
+
+  get "bugs/create"
+
+  get "bugs/destroy"
+
+  get "bugs/show"
+
   match 'bug/:id'                     => 'bug#bug',             :as => :bug
   match 'bug/:id/history'             => 'bug#history',         :as => :bughistory
   match 'tools/bug/:id/:what'         => 'tools#bugzie',        :as => :bugzie
@@ -10,6 +18,7 @@ Glsamaker::Application.routes.draw do
 
   resources :glsas, :controller => 'glsa' do
     resources :comments
+    resources :bugs
 
     get  'requests',          :on => :collection
     get  'drafts'  ,          :on => :collection
