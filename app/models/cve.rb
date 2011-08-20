@@ -173,3 +173,5 @@ class CVE < ActiveRecord::Base
     package_hints.flatten.uniq
   end
 end
+
+class Cve < CVE; end

@@ -5,7 +5,7 @@
 <ul>
 <% @cve.assignments.each do |ass| %>
   <li>
-    <a href="https://<%= GLSAMAKER_BUGZIE_HOST %>/<%= h ass.bug %>" target="_blank"><%= h ass.bug %></a>
+    <a href="https://<%= GLSAMAKER_BUGZIE_HOST %>/<%= ass.bug %>" target="_blank"><%= ass.bug %></a>
   </li>
 <% end %>
 </ul>

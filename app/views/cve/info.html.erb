@@ -5,13 +5,13 @@
 
 <% else %>
 <script language="JavaScript" type="text/javascript">
-cve_id = "<%= h @cve.cve_id %>";
+cve_id = "<%= escape_javascript @cve.cve_id %>";
 
 // page layout
 uki({ view: 'VSplitPane', rect: '500 600', anchors: 'left top right bottom', topMin: 120, handlePosition: 120,
     topChildViews: [
         { view: 'Box', rect: '0 0 500 30', anchors: 'top right left', background: 'cssBox(background:#D3CFE5;border-bottom:1px solid #999)', childViews: [
-          { view: 'Label', rect: '5 5 400 20', html: "<h2 style='margin: 0;'><%= @cve.colorize %> <small>(<%= @cve.state %>)</small></h2>", anchors: 'top left'},
+          { view: 'Label', rect: '5 5 400 20', html: "<h2 style='margin: 0;'><%= @cve.colorize.html_safe %> <small>(<%= @cve.state %>)</small></h2>", anchors: 'top left'},
           { view: 'Button', rect: '440 4 50 20', text: 'Close', anchors: 'top right', id: 'close' }
         ] },
         { view: 'Label', rect: '5 35 490 50', anchors: 'left top right', html: '<%= escape_javascript(simple_format_without_paragraph(h @cve.summary)).gsub(/\n/, '') %>', textSelectable: true, multiline: true}
