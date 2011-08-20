@@ -307,39 +307,6 @@ class GlsaController < ApplicationController
     @diff = with_format(:xml) { rev_diff(@glsa, rev_old, rev_new) }
   end
 
-  def addbug
-    begin
-      @glsa_id = Integer(params[:id])
-    rescue Exception => e
-      @glsa_id = nil
-    end
-    render :layout => false
-  end
-
-  def addbugsave
-    @glsa = Glsa.find(params[:id].to_i)
-    return unless check_object_access(@glsa)
-
-    unless @glsa.nil?
-      @addedBugs = []
-      Bugzilla::Bug.str2bugIDs(params[:addbugs]).map do |bugid|
-        begin
-          @addedBugs << Glsamaker::Bugs::Bug.load_from_id(bugid)
-        rescue Exception => e
-          # Silently ignore invalid bugs
-        end
-      end
-
-      begin
-        render :layout => false
-      rescue Exception => e
-        render :text => "Error: #{e.message}", :status => 500
-      end
-    else
-      render :text => "fail", :status => 500
-    end
-  end
-
   def update_cache
     @glsa = Glsa.find(params[:id])
     return unless check_object_access(@glsa)
