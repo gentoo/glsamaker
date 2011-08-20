@@ -354,7 +354,7 @@ div.box h2 {
 }
 
 div.box h2.boxtitle img {
-    vertical-align: middle;
+    /*vertical-align: middle;*/
 }
 
 div.box span.toolbar {
