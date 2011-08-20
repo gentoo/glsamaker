@@ -1,0 +1,8 @@
+Your draft received a comment (<%= @comment.rating %>) from <%= @commentator.to_s %> @ <%= @comment.created_at.rfc2822 %>:
+
+<%= glsa_url(@glsa) %>
+
+<%= @comment.text %>
+
+--
+This email notification is brought to you by GLSAMaker 2.

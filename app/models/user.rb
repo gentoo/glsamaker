@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     
     true
   end
+
+  def to_s
+    "#{name} (#{login})"
+  end
   
   # Returns a certain category form the user's preferences
   # or an empty hash if that category does not exist

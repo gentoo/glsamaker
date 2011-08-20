@@ -1,5 +1,5 @@
 # ===GLSAMaker v2
-#  Copyright (C) 2010 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2010-11 Alex Legler <a3li@gentoo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,7 @@ module Glsamaker
         next unless rcpt.can_access? glsa
         
         unless rcpt.get_pref_category(:mail)[:edit] == false
-          GlsaMailer.deliver_edit(rcpt, glsa, diff, user)
+          GlsaMailer.edit(rcpt, glsa, diff, user).deliver
         end
       end
     end
@@ -36,7 +36,7 @@ module Glsamaker
         next unless rcpt.can_access? glsa        
         
         unless rcpt.get_pref_category(:mail)[:request] == false
-          GlsaMailer.deliver_request(rcpt, glsa, user)
+          GlsaMailer.new_request(rcpt, glsa, user).deliver
         end
       end
     end
@@ -52,7 +52,7 @@ module Glsamaker
       return if rcpt == user
 
       unless rcpt.get_pref_category(:mail)[:comment] == false
-        GlsaMailer.deliver_comment(rcpt, glsa, comment, user)
+        GlsaMailer.comment(rcpt, glsa, comment, user).deliver
       end
     end
 
@@ -66,7 +66,7 @@ module Glsamaker
       return unless rcpt.can_access? glsa
 
       unless rcpt.get_pref_category(:mail)[:comment] == false
-        GlsaMailer.deliver_approval(rcpt, glsa)
+        GlsaMailer.approval(rcpt, glsa).deliver
       end
     end
 

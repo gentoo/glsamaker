@@ -1,7 +1,9 @@
-A new request was filed by <%= @user.login %> @ <%= @glsa.last_revision.created_at.rfc2822 %>:
+A new request was filed by <%= @requestor.to_s %> @ <%= @glsa.last_revision.created_at.rfc2822 %>:
 
 <%= @glsa.last_revision.title %>
 <%= "-" * @glsa.last_revision.title.length %>
+
+<%= glsa_url(@glsa) %>
 
 Bugs:
 <% @glsa.last_revision.bugs.each do |bug| %>

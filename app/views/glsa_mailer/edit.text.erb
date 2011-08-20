@@ -1,0 +1,8 @@
+The draft was edited by <%= @editor.to_s %> @ <%= @glsa.last_revision.created_at.rfc2822 %>:
+
+<%= glsa_url(@glsa) %>
+
+<%= @diff.html_safe %>
+
+--
+This email notification is brought to you by GLSAMaker 2.

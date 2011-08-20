@@ -19,6 +19,9 @@ GLSAMAKER_FROM_EMAIL = "glsamaker@gentoo.org"
 # Do not send any emails (for development)
 GLSAMAKER_NO_EMAIL = false
 
+# Where does the app live?
+GLSAMAKER_HOST = "localhost:3000"
+
 # Location of the Portage tree, that can be a full gentoo tree, or what this gets you:
 #
 # rsync -av rsync://rsync1.de.gentoo.org/gentoo-portage --include 'metadata' \
