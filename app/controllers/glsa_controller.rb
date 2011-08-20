@@ -11,8 +11,6 @@
 
 # GLSA controller
 class GlsaController < ApplicationController
-  before_filter :login_required
-
   def requests
     @pageID = "requests"
     @pageTitle = "Pooled GLSA requests"

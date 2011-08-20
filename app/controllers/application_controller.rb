@@ -21,7 +21,9 @@ class ApplicationController < ActionController::Base
   
   include Authentication
   include ApplicationHelper
-  
+
+  before_filter :login_required
+
   protected
   # Checks access to a given GLSA
   def check_object_access(glsa)

@@ -11,7 +11,7 @@
 
 # Index controller
 class IndexController < ApplicationController
-  before_filter :login_required, :except => :error
+  skip_before_filter :login_required, :only => [:error]
   
   def index
     @my_drafts = Glsa.find(:all, :conditions => ["status = 'draft' AND submitter = ?", current_user.id], :order => "updated_at DESC", :limit => 10)

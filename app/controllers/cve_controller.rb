@@ -1,5 +1,4 @@
 class CveController < ApplicationController
-  before_filter :login_required
   include ApplicationHelper
   include CveHelper
 
