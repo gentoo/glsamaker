@@ -15,7 +15,7 @@ class UserTest < ActiveSupport::TestCase
   test "invalid user name" do
     user = User.new
     assert !user.valid?
-    assert user.errors.invalid?(:login)
+    assert user.invalid?(:login)
   end
   
   test "unique user name" do
@@ -24,7 +24,7 @@ class UserTest < ActiveSupport::TestCase
                     :email => "foo@gentoo.org")
 
     assert !user.save
-    assert_equal "User name must be unique", user.errors.on(:login)
+    assert_equal ["User name must be unique"], user.errors[:login]
   end
   
   test "invalid email" do
@@ -33,7 +33,7 @@ class UserTest < ActiveSupport::TestCase
                     :email => 'THIScouldNEVERbeAvalidEMAIL@ADDRESS')
 
     assert !user.valid?
-    assert user.errors.invalid?(:email)
+    assert user.invalid?(:email)
   end
   
   test "successful creation" do

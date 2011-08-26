@@ -1,13 +1,13 @@
 require 'test_helper'
 
-class GLSATest < ActiveSupport::TestCase
+class GlsaTest < ActiveSupport::TestCase
   fixtures :glsas, :users
   
   test "uniqueness" do
     glsa = Glsa.new(:glsa_id => glsas(:glsa_one).glsa_id)
     
     assert !glsa.save
-    assert glsa.errors.invalid?(:glsa_id)
+    assert glsa.invalid?(:glsa_id)
   end
   
   test "successful creation" do
