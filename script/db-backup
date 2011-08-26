@@ -10,7 +10,7 @@ DUMP_CMD = '/usr/bin/mk-parallel-dump'
 
 require(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
-dbc = CVE.configurations[RAILS_ENV]
+dbc = Cve.configurations[RAILS_ENV]
 opts = []
 opts << '-u' << dbc['username']
 opts << '-p' << dbc['password']

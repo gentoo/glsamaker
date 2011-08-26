@@ -10,12 +10,12 @@
 
 require 'glsamaker/helpers'
 
-class CVE < ActiveRecord::Base
-  has_many :references, :class_name => "CVEReference"
-  has_many :comments, :class_name => "CVEComment"
-  has_and_belongs_to_many :cpes, :class_name => "CPE"
-  has_many :cve_changes, :class_name => "CVEChange", :foreign_key => "cve_id"
-  has_many :assignments, :class_name => "CVEAssignment", :foreign_key => "cve_id"
+class Cve < ActiveRecord::Base
+  has_many :references, :class_name => "CveReference"
+  has_many :comments, :class_name => "CveComment"
+  has_and_belongs_to_many :cpes, :class_name => "Cpe"
+  has_many :cve_changes, :class_name => "CveChange", :foreign_key => "cve_id"
+  has_many :assignments, :class_name => "CveAssignment", :foreign_key => "cve_id"
   
   def to_s(line_length = 78)
     str = "#{self.cve_id} #{"(%s):" % url}\n"
@@ -37,7 +37,7 @@ class CVE < ActiveRecord::Base
   def self.concat(cves, separator = "\n\n")
     txt = ""
     cves.each do |cve|
-      txt += CVE.find(cve).to_s
+      txt += Cve.find(cve).to_s
       txt += separator
     end
     txt
@@ -115,7 +115,7 @@ class CVE < ActiveRecord::Base
   end
   
   def add_comment(user, comment, confidential = false)
-    self.comments << CVEComment.create!(
+    self.comments << CveComment.create!(
       :user => user,
       :confidential => confidential,
       :comment => comment
@@ -130,6 +130,8 @@ class CVE < ActiveRecord::Base
   # Looks for Gentoo packages that might be affected by this CVE
   def package_hints
     def search(s)
+      return [] if s.nil? or s == ""
+      
       Glsamaker::Portage.find_packages(
         Regexp.compile(Regexp.escape(s).gsub(/[^a-zA-Z0-9]/, '.*?'), Regexp::IGNORECASE)
       )
@@ -173,5 +175,3 @@ class CVE < ActiveRecord::Base
     package_hints.flatten.uniq
   end
 end
-
-class Cve < CVE; end

@@ -8,9 +8,9 @@
 #
 # For more information, see the LICENSE file.
 
-class CPE < ActiveRecord::Base
-  has_and_belongs_to_many :cves, :class_name => "CVE"
-  
+class Cpe < ActiveRecord::Base
+  has_and_belongs_to_many :cves, :class_name => 'Cve'
+
   def split
     self.cpe.split(':')
   end

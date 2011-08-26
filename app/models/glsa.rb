@@ -120,7 +120,7 @@ class Glsa < ActiveRecord::Base
   # Returns all CVEs linked to this GLSA
   def related_cves
     last_revision.bugs.map do |bug|
-      CVEAssignment.find_all_by_bug(bug.bug_id).map {|assignment| assignment.cve}.uniq
+      CveAssignment.find_all_by_bug(bug.bug_id).map {|assignment| assignment.cve}.uniq
     end.flatten
   end
   

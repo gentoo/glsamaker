@@ -10,7 +10,7 @@ class CveController < ApplicationController
     @pageID = 'cve'
 
     condition = view_mask_to_condition(params[:view_map].to_i)
-    @cves = CVE.find(:all, :conditions => [condition], :limit => 500, :order => 'cve_id DESC')
+    @cves = Cve.where(condition).limit(500).order('cve_id DESC')
 
     respond_to do |format|
       format.html
@@ -24,7 +24,7 @@ class CveController < ApplicationController
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug; CVElist: " + cve_nums.inspect }
 
-    cves = cve_nums.map {|c| CVE.find(c) }
+    cves = cve_nums.map {|c| Cve.find(c) }
     cpes = cves.map {|c| c.cpes.map{|cpe| cpe.product } }.flatten.uniq
 
     package_hints = cves.map{|c| c.package_hints }.flatten.uniq.sort
@@ -42,8 +42,8 @@ class CveController < ApplicationController
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug (preview); CVElist: " + cve_nums.inspect }
 
-    @cve_ids = cve_nums.map {|c| CVE.find(c).cve_id }
-    @cve_txt = CVE.concat(cve_nums)
+    @cve_ids = cve_nums.map {|c| Cve.find(c).cve_id }
+    @cve_txt = Cve.concat(cve_nums)
     @package = params[:package]
     @maintainers = Glsamaker::Portage.get_maintainers(params[:package])
     render :layout => false
@@ -56,7 +56,7 @@ class CveController < ApplicationController
     cve_nums = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "File new Bug (final); CVElist: " + cve_nums.inspect }
 
-    cves = cve_nums.map {|c| CVE.find(c) }
+    cves = cve_nums.map {|c| Cve.find(c) }
 
     data = {
       :product => 'Gentoo Security',
@@ -75,7 +75,7 @@ class CveController < ApplicationController
 
     comment = ""
     if params[:add_cves] == 'true'
-      comment += CVE.concat(cve_nums)
+      comment += Cve.concat(cve_nums)
     end
 
     if params[:add_comment] == 'true'
@@ -120,10 +120,10 @@ class CveController < ApplicationController
     cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "Assign Bug: #{bug_id} CVElist: " + cves.inspect }
 
-    cve_ids = cves.map {|c| CVE.find(c).cve_id }
+    cve_ids = cves.map {|c| Cve.find(c).cve_id }
     logger.debug { cve_ids.inspect }
 
-    @cve_txt = CVE.concat(cves)
+    @cve_txt = Cve.concat(cves)
     @bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
     @summary = cveify_bug_title(@bug.summary, cve_ids)
 
@@ -140,15 +140,15 @@ class CveController < ApplicationController
 
     if params[:comment] or params[:summary]
       bug = Glsamaker::Bugs::Bug.load_from_id(bug_id)
-      cve_ids = cves.map {|c| CVE.find(c).cve_id }
+      cve_ids = cves.map {|c| Cve.find(c).cve_id }
       changes = {}
 
-      changes[:comment] = CVE.concat(cves) if params[:comment] == 'true'
+      changes[:comment] = Cve.concat(cves) if params[:comment] == 'true'
       changes[:summary] = cveify_bug_title(bug.summary, cve_ids) if params[:summary] == 'true'
       Bugzilla.update_bug(bug_id, changes)
     end
 
-    cves.each {|cve_id| CVE.find(cve_id).assign(bug_id, current_user, :assign) }
+    cves.each {|cve_id| Cve.find(cve_id).assign(bug_id, current_user, :assign) }
 
     render :text => "ok"
   rescue Exception => e
@@ -161,7 +161,7 @@ class CveController < ApplicationController
     logger.debug { "NFU CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
 
     @cves.each do |cve_id|
-      CVE.find(cve_id).nfu(current_user, params[:reason])
+      Cve.find(cve_id).nfu(current_user, params[:reason])
     end
 
     render :text => "ok"
@@ -175,7 +175,7 @@ class CveController < ApplicationController
     logger.debug { "Note CVElist: " + @cves.inspect + " Note: " + params[:note] }
 
     @cves.each do |cve_id|
-      CVE.find(cve_id).add_comment(current_user, params[:note])
+      Cve.find(cve_id).add_comment(current_user, params[:note])
     end
 
     render :text => "ok"
@@ -189,7 +189,7 @@ class CveController < ApplicationController
     logger.debug { "Invalid CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
 
     @cves.each do |cve_id|
-      CVE.find(cve_id).invalidate(current_user, params[:reason])
+      Cve.find(cve_id).invalidate(current_user, params[:reason])
     end
 
     render :text => "ok"
@@ -203,7 +203,7 @@ class CveController < ApplicationController
     logger.debug { "LATER CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
 
     @cves.each do |cve_id|
-      CVE.find(cve_id).later(current_user, params[:reason])
+      Cve.find(cve_id).later(current_user, params[:reason])
     end
 
     render :text => "ok"
@@ -214,11 +214,11 @@ class CveController < ApplicationController
 
   # Popup methods
   def info
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:id]])
+    @cve = Cve.where(:cve_id => params[:id]).first
   end
 
   def general_info
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
 
     render :layout => false
   rescue Exception => e
@@ -227,7 +227,7 @@ class CveController < ApplicationController
   end
 
   def references
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
     raise "Cannot find CVE" if @cve == nil
 
     render :layout => false
@@ -237,10 +237,12 @@ class CveController < ApplicationController
   end
 
   def packages
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
     raise "Cannot find CVE" if @cve == nil
 
     @package_hints = @cve.package_hints
+
+    logger.debug @package_hints.inspect
 
     render :layout => false
   rescue Exception => e
@@ -249,7 +251,7 @@ class CveController < ApplicationController
   end
 
   def comments
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
     raise "Cannot find CVE" if @cve == nil
 
     render :layout => false
@@ -259,7 +261,7 @@ class CveController < ApplicationController
   end
 
   def changes
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
     raise "Cannot find CVE" if @cve == nil
 
     render :layout => false
@@ -269,7 +271,7 @@ class CveController < ApplicationController
   end
 
   def actions
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
     raise "Cannot find CVE" if @cve == nil
 
     render :layout => false
@@ -279,7 +281,7 @@ class CveController < ApplicationController
   end
 
   def mark_new
-    @cve = CVE.find(:first, :conditions => ['cve_id = ?', params[:cve_id]])
+    @cve = Cve.where(:cve_id => params[:cve_id]).first
 
     @cve.mark_new(current_user)
     render :text => "ok"

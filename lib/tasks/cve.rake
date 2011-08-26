@@ -118,7 +118,7 @@ namespace :cve do
 
       puts cve['id'].to_s.purple if VERBOSE
 
-      c = CVE.find_by_cve_id cve['id']
+      c = Cve.find_by_cve_id cve['id']
 
       if c == nil
         debug "Creating CVE."
@@ -190,15 +190,15 @@ namespace :cve do
           debug "Removing CPEs: #{rem.inspect}"
           
           rem.each do |item|
-            c.cpes.delete(CPE.find_by_cpe(item))
+            c.cpes.delete(Cpe.find_by_cpe(item))
           end
           
           add = xml_cpes - db_cpes
           debug "Ading CPEs:    #{add.inspect}"
           
           add.each do |item|
-            cpe = CPE.find(:first, :conditions => ['cpe = ?', item])
-            cpe ||= CPE.create(:cpe => item)
+            cpe = Cpe.find(:first, :conditions => ['cpe = ?', item])
+            cpe ||= Cpe.create(:cpe => item)
 
             c.cpes << cpe
           end
@@ -237,7 +237,7 @@ namespace :cve do
           # IN THE FOLLOWING CODE BLOCK: DO *NEVER* ADD ANY `next' STATEMENTS!
           #                                                           -a3li
           debug "CVE: #{$saved_cve[:id]}. Bugs: #{$saved_cve[:bugs].inspect}. State: #{$saved_cve[:state]}. Reason: #{$saved_cve[:reason]}"
-          c = CVE.find_by_cve_id($saved_cve[:id])
+          c = Cve.find_by_cve_id($saved_cve[:id])
           c = nil if $saved_cve[:skip]
 
           if c == nil
@@ -333,7 +333,7 @@ end # namespace cve
 # Run something, and display a status info around it
 def status(message)
   unless block_given?
-    raise ArugmentError, "I want a block :("
+    raise ArgumentError, "I want a block :("
   end
 
   print "#{message}....." unless QUIET
@@ -373,7 +373,7 @@ end
 
 def create_cve(cve)
   summary = cve.xpath('vuln:summary').first.content
-  _cve = CVE.create(
+  _cve = Cve.create(
     :cve_id => cve['id'],
     :summary => summary,
     :cvss => cvss_xml2str(cve.xpath('vuln:cvss')),
@@ -383,7 +383,7 @@ def create_cve(cve)
   )
 
   cve.xpath('vuln:references').each do |ref|
-    CVEReference.create(
+    CveReference.create(
       :cve => _cve,
       :source => ref.xpath('vuln:source').first.content,
       :title => ref.xpath('vuln:reference').first.content,
@@ -394,8 +394,8 @@ def create_cve(cve)
   cve.xpath('vuln:vulnerable-software-list/vuln:product').each do |prod|
     cpe_str = prod.content
 
-    cpe = CPE.find(:first, :conditions => ['cpe = ?', cpe_str])
-    cpe ||= CPE.create(:cpe => cpe_str)
+    cpe = Cpe.find(:first, :conditions => ['cpe = ?', cpe_str])
+    cpe ||= Cpe.create(:cpe => cpe_str)
 
     _cve.cpes << cpe
   end

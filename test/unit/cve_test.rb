@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CVETest < ActiveSupport::TestCase
+class CveTest < ActiveSupport::TestCase
   test "URL generation" do
     cve = cves(:cve_one)
     

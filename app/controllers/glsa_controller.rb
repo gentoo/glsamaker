@@ -344,7 +344,7 @@ class GlsaController < ApplicationController
         refs = []
         
         params[:import][:cve].each do |cve_id|
-          cve = CVE.find_by_cve_id cve_id
+          cve = Cve.find_by_cve_id cve_id
           refs << {:title => cve.cve_id, :url => cve.url}
         end
         

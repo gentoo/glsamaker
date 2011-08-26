@@ -1,4 +1,4 @@
-class CVEChange < ActiveRecord::Base
+class CveChange < ActiveRecord::Base
   belongs_to :user, :class_name => "User", :foreign_key => "user_id"
-  belongs_to :cve, :class_name => "CVE", :foreign_key => "cve_id"
+  belongs_to :cve
 end

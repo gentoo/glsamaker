@@ -1,3 +1,3 @@
-class CVEReference < ActiveRecord::Base
-  belongs_to :cve, :class_name => "CVE", :foreign_key => "cve_id"
+class CveReference < ActiveRecord::Base
+  belongs_to :cve
 end
