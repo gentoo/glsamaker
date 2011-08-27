@@ -1,9 +1,17 @@
 <div class="box w40em">
   <h2>New user</h2>
-<!--  <form action="/users/1" class="edit_user" id="edit_user_1" method="post"><div style="margin:0;padding:0;display:inline"><input name="_method" type="hidden" value="put" /><input name="authenticity_token" type="hidden" value="PP49hANhUN/JeBup4VnhNXzfU8yIGW1kLX+H8WitEyU=" /></div> -->
 
-  <% form_for(:user, @user, :url => admin_users_path, :html=>{:method=>:post} ) do |f| %>
-    <%= f.error_messages %>
+  <%= form_for([:admin, @user]) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="errorExplanation" class="errorExplanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this record from being saved:</h2>
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <table>
     <tr>
