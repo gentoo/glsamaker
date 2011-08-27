@@ -2,7 +2,7 @@ class Admin::UsersController < ApplicationController
   before_filter :admin_access_required
 
   def index
-    @users = User.find(:all, :conditions => 'id > 0')
+    @users = User.where('id > 0')
   end
   
   def show  
@@ -68,5 +68,4 @@ class Admin::UsersController < ApplicationController
     flash[:notice] = "User was successfully deleted."
     redirect_to(admin_users_path)
   end
-
 end
