@@ -54,6 +54,14 @@ module Authentication
         end
       end
     end
+
+    # Filter for admin pages
+    def admin_access_required
+      unless current_user.is_el_jefe?
+        deny_access "Admin interface"
+        false
+      end
+    end
     
     # Returns the ActiveRecord object of the currently logged in user
     def current_user

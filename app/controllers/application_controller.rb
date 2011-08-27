@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def deny_access(msg)
-    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip}: #{msg}"
+    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip} to #{request.url}: #{msg}"
     redirect_to :controller => '/index', :action => 'error', :type => 'access'
   end
   

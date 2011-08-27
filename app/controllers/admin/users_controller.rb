@@ -1,4 +1,6 @@
 class Admin::UsersController < ApplicationController
+  before_filter :admin_access_required
+
   def index
     @users = User.find(:all, :conditions => 'id > 0')
   end
