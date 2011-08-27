@@ -529,27 +529,23 @@ textarea.nice, input.nice {
 }
 
 /** tables **/
-
-table.glsa-list {
-  
+table.glsamaker-table {
 }
 
-table.glsa-list th {
+table.glsamaker-table th {
   border-bottom: 2px solid #4C3E61;
   border-right: 1px dotted #4C3E61;     
   padding: .5em;
 }
 
-table.glsa-list tr.restricted, table.glsa-list tr.restricted a, .legend .red {
+table.glsamaker-table tr.restricted, table.glsamaker-table tr.restricted a, .legend .red {
   color: #a40000 !important;
 }
 
-table.glsa-list td {
+table.glsamaker-table td {
   padding: .5em;
   padding-top: .4em;
   padding-bottom: .4em;
   border-right: 1px dotted #4C3E61;   
   border-bottom: 1px solid #4C3E61;
 }
-
-/*@import url("/stylesheets/screen.css");*/
