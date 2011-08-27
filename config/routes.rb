@@ -10,11 +10,10 @@ Glsamaker::Application.routes.draw do
 
   match 'bug/:id'                     => 'bug#bug',             :as => :bug
   match 'bug/:id/history'             => 'bug#history',         :as => :bughistory
-  match 'tools/bug/:id/:what'         => 'tools#bugzie',        :as => :bugzie
 
   match 'cve/list.:format'            => 'cve#list',            :as => :cve
   
-  match 'admin'                       => 'admin#index'
+  match 'admin'                       => 'admin/index#index'
 
   resources :glsas, :controller => 'glsa' do
     resources :comments
