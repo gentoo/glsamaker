@@ -74,8 +74,6 @@ class GlsaController < ApplicationController
       return
     end
 
-    #flash.now[:error] = "[debug] id = %d, rev_id = %d" % [ params[:id], params[:rev_id] || -1 ]
-
     respond_to do |wants|
       wants.html { render }
       wants.xml { }
@@ -148,7 +146,6 @@ class GlsaController < ApplicationController
     revision.user = current_user
     revision.title = params[:glsa][:title]
     revision.synopsis = params[:glsa][:synopsis]
-    # TODO: secure
     revision.access = params[:glsa][:access]
     revision.severity = params[:glsa][:severity]
     revision.product = params[:glsa][:product]
@@ -170,10 +167,10 @@ class GlsaController < ApplicationController
     end
 
     # Bugs
+    bugzilla_warning = false
+
     if params[:glsa][:bugs]
       bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
-
-      bugzilla_warning = false
 
       bugs.each do |bug|
         begin
@@ -221,7 +218,6 @@ class GlsaController < ApplicationController
 
     # Sending emails
     Glsamaker::Mail.edit_notification(@glsa, rev_diff(@glsa, @glsa.revisions[-2], revision), current_user)
-    #GlsaMailer.deliver_edit(current_user, @glsa, revision, current_user)
 
     flash[:notice] = "Saving was successful. #{'NOTE: Bugzilla integration is not available, only plain bug numbers.' if bugzilla_warning}"
     redirect_to :action => 'show', :id => @glsa
