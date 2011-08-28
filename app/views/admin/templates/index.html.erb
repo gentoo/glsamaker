@@ -1,0 +1,23 @@
+<h1>Templates</h1>
+
+<table class="glsamaker-table">
+  <tr>
+    <th>Name</th>
+    <th>Text</th>
+    <th>Field</th>
+    <th>Enabled</th>
+  </tr>
+
+<% @templates.each do |admin_template| %>
+  <tr>
+    <td><%= link_to admin_template.name, admin_template_path(admin_template) %></td>
+    <td><tt><%= admin_template.text %></tt></td>
+    <td><%= admin_template.target %></td>
+    <td><%= admin_template.enabled %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Template', new_admin_template_path %>

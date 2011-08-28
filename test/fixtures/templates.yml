@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  text: MyText
+  field: MyString
+  enabled: false
+
+two:
+  name: MyString
+  text: MyText
+  field: MyString
+  enabled: false

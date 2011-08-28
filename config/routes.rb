@@ -1,13 +1,5 @@
 Glsamaker::Application.routes.draw do
 
-  get "bugs/new"
-
-  get "bugs/create"
-
-  get "bugs/destroy"
-
-  get "bugs/show"
-
   match 'bug/:id'                     => 'bug#bug',             :as => :bug
   match 'bug/:id/history'             => 'bug#history',         :as => :bughistory
 
@@ -81,6 +73,7 @@ Glsamaker::Application.routes.draw do
   
   namespace :admin do
     resources :users
+    resources :templates
   end
 
   # You can have the root of your site routed with "root"

@@ -1,0 +1,26 @@
+<div class="box">
+  <h2><%= @template.name %></h2>
+
+  <table>
+    <tr>
+      <th>Name:</th>
+      <td><%= @template.name %></td>
+    </tr>
+    <tr>
+      <th>Text:</th>
+      <td><pre><%= @template.text %></pre></td>
+    </tr>
+    <tr>
+      <th>Field:</th>
+      <td><%= @template.target.titleize %></td>
+    </tr>
+    <tr>
+      <th>Enabled:</th>
+      <td><%= @template.enabled %></td>
+    </tr>
+  </table>
+</div>
+
+<%= link_to 'Edit', edit_admin_template_path(@template) %> |
+<%= link_to 'Delete', admin_template_path(@template), :confirm => 'Are you sure?', :method => :delete %> |
+<%= link_to 'Back', admin_templates_path %>

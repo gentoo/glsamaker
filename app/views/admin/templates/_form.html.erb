@@ -1,0 +1,35 @@
+<%= form_for([:admin, @template]) do |f| %>
+  <% if @template.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@template.errors.count, "error") %> prohibited this template from being saved:</h2>
+
+      <ul>
+      <% @template.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tr>
+      <th><%= f.label :name %></th>
+      <td><%= f.text_field :name %></td>
+    </tr>
+    <tr>
+      <th><%= f.label :text %></th>
+      <td><%= f.text_area :text, :rows => 10 %></td>
+    </tr>
+    <tr>
+      <th><%= f.label :target, 'Target Field' %></th>
+      <td><%= select('template', 'target', target_list) %></td>
+    </tr>
+    <tr>
+      <th><%= f.label :enabled %></th>
+      <td><%= f.check_box :enabled %></td>
+    </tr>
+  </table>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
