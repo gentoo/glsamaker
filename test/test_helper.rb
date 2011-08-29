@@ -7,13 +7,13 @@ class ActiveSupport::TestCase
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
-  set_fixture_class :cves => 'Cve'
+  set_fixture_class :cves => Cve
 
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
 
   def basic_auth_creds(user, password)
-    "Basic #{ActiveSupport::Base64.encode64("#{username}:#{password}")}"
+    ActionController::HttpAuthentication::Basic.encode_credentials(user, password)
   end
 end
