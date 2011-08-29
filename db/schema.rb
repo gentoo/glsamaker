@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110827143514) do
+ActiveRecord::Schema.define(:version => 20110829174909) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "bug_id"
@@ -120,9 +120,10 @@ ActiveRecord::Schema.define(:version => 20110827143514) do
     t.integer  "submitter"
     t.integer  "bugreadymaker"
     t.string   "status"
-    t.boolean  "restricted",    :default => false
+    t.boolean  "restricted",        :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "first_released_at"
   end
 
   add_index "glsas", ["bugreadymaker"], :name => "glsas_users_bugreadymakers"

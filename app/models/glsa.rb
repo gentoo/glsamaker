@@ -157,6 +157,7 @@ class Glsa < ActiveRecord::Base
 
     unless self.status == 'release'
       self.glsa_id = Glsa.next_id
+      self.first_released_at = Time.now
     end
 
     self.status = 'release'
