@@ -1,6 +1,6 @@
 <% GLSAMAKER_TEMPLATE_TARGETS.each do |target| %>
 <div id="templates-<%= target %>" style="display: none;" class="popup">
-  <%= form_tag({:controller => 'tools', :action => 'template'}, :remote => true) do |f| -%>
+  <%= form_tag({:controller => 'tools', :action => 'template'}, :remote => true) do -%>
   <%= hidden_field('template', 'target', :value => target) %>
   <%= select('template', 'id', templates[target].collect {|template| [template.name, template.id]}) %><%= image_submit_tag 'icons/next.png', :style => 'margin-top: .3em; vertical-align: top;' %>
   <% end -%>
