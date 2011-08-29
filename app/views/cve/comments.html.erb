@@ -3,8 +3,8 @@
 <ul>
 <% @cve.comments.each do |comment| %>
   <li>
-    <%= h simple_format_without_paragraph(comment.comment) %><br />
-    <em>&mdash;<%= comment.user.login %></em> @ <%= comment.created_at.rfc2822 %>    
+    <%= simple_format_without_paragraph(comment.comment) %><br />
+    <em>&mdash;<%= comment.user.login %></em> @ <%= comment.created_at.rfc2822 %>
   </li>
 <% end %>
 </ul>

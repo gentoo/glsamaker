@@ -13,7 +13,7 @@
   <%= link_to "#{image_tag 'icons/edit.png'} Edit this draft".html_safe, edit_glsa_path(@glsa), {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/xml.png'} View as XML".html_safe, glsa_path(@glsa, :format => 'xml'), {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/txt.png'} View as Text".html_safe, glsa_path(@glsa, :format => 'txt'), {:class => 'button'} %>
-  <%= link_to_function "#{image_tag 'icons/reference.png'} Import references".html_safe, "GLSAMaker.editing.references.import_dialog(#{h @glsa.id})", {:class => 'button'} %>
+  <%= link_to_function "#{image_tag 'icons/reference.png'} Import references".html_safe, "GLSAMaker.editing.references.import_dialog(#{@glsa.id})", {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, diff_glsa_path(@glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid), {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, prepare_release_glsa_path(@glsa), {:class => 'button'} %>
 </div>
@@ -21,7 +21,7 @@
 <div style="float: right; width: 40%;">
   <div class="box pmargin">
     <h2>
-      GLSA <%= status_icon @glsa.status %> <tt><%= h @glsa.glsa_id %>:r<%= @rev.revid %></tt>
+      GLSA <%= status_icon @glsa.status %> <tt><%= @glsa.glsa_id %>:r<%= @rev.revid %></tt>
       <%= bugready_icon @rev.bug_ready? %>
       <%= approval_icon @glsa.approval_status %>
       <%= workflow_icon(@glsa.workflow_status(current_user)) %>

@@ -7,21 +7,21 @@
     <% if @glsa.status == 'draft' %>
     <tr>
       <td>Current ID</td>
-      <td><strong>GLSA <%= h @glsa.glsa_id %></strong></td>
+      <td><strong>GLSA <%= @glsa.glsa_id %></strong></td>
     </tr>
     <tr>
       <td>Final ID</td>
-      <td><strong>GLSA <%= h Glsa.next_id %> (preliminary)</strong></td>
+      <td><strong>GLSA <%= Glsa.next_id %> (preliminary)</strong></td>
     </tr>
     <% elsif @glsa.status == 'release' %>
       <tr>
         <td>Release ID</td>
-        <td><strong>GLSA <%= h @glsa.glsa_id %></strong> (this will be a re-release)</td>
+        <td><strong>GLSA <%= @glsa.glsa_id %></strong> (this will be a re-release)</td>
       </tr>
     <% end %>
     <tr>
       <td>Advisory title</td>
-      <td><strong><%= h @rev.title %></strong></td>
+      <td><strong><%= @rev.title %></strong></td>
     </tr>
   </table>
 </div>

@@ -9,7 +9,7 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body id="<%= h @pageID if @pageID %>">
+<body id="<%= @pageID if @pageID %>">
   <div id="top-menu">
     <div class="floatright">
       <ul>
@@ -70,7 +70,7 @@
       page[:flash].drop_out
     end %>
     <img src="/assets/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
-    <%= h flash[:error] ? flash[:error] : flash[:notice] %>
+    <%= flash[:error] ? flash[:error] : flash[:notice] %>
   </div>
   <%- end -%>
   <div id="content">

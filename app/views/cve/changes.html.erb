@@ -3,7 +3,7 @@
 <ul>
 <% @cve.cve_changes.each do |change| %>
   <li>
-    <strong><%= h change.action %>:</strong> <%= h change.object %><br />
+    <strong><%= change.action %>:</strong> <%= change.object %><br />
     <em>&mdash;<%= change.user.login %></em> @ <%= change.created_at.rfc2822 %>
   </li>
 <% end %>

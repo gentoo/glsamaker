@@ -3,8 +3,8 @@
 <ul>
 <% @cve.references.each do |ref| %>
   <li>
-    (<%= h ref.source %>) <strong><%= h ref.title %></strong><br />
-    <a href="<%= h ref.uri %>" target="_blank"><%= ref.uri %></a>
+    (<%= ref.source %>) <strong><%= ref.title %></strong><br />
+    <a href="<%= ref.uri %>" target="_blank"><%= ref.uri %></a>
   </li>
 <% end %>
 </ul>

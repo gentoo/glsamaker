@@ -5,7 +5,7 @@
   <table>
     <% @cves.each do |cve| %>
     <tr>
-      <td><input type="checkbox" value="1" name="import[cve][<%= h cve.cve_id %>]" checked="checked" /></td>
+      <td><input type="checkbox" value="1" name="import[cve][<%= cve.cve_id %>]" checked="checked" /></td>
       <td><%= render :partial => '/tools/cve', :object => cve %></td>
     </tr>
     <% end %>

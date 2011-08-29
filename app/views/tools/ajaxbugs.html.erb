@@ -3,7 +3,7 @@
   <% if bug.is_a?(String) %>
   <li class="ajaxbugs-error"><%= bug %></li>
   <% else %>
-  <li><%= link_to_function bug.bug_id, "buginfo('#{h bug.bug_id}')" %>:
+  <li><%= link_to_function bug.bug_id, "buginfo('#{bug.bug_id}')" %>:
     <%= truncate(bug.summary, :length => 50) %></li>
   <% end %>
   <% end %>

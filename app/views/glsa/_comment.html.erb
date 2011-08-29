@@ -19,10 +19,10 @@
     <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number ||= 1 %></small>
   </div>
   
-  <div style="margin-left: 35px;"><%= h comment.text %></div>
+  <div style="margin-left: 35px;"><%= comment.text %></div>
   <div style="font-size: 2px;">&nbsp;</div>
   
-  <div style=" float: right;"><small>-- <%= h comment.user.name %>, <%= comment.created_at %></small></div>
+  <div style=" float: right;"><small>-- <%= comment.user.name %>, <%= comment.created_at %></small></div>
  
   <div style="float: none;">&nbsp;</div>
 </li>

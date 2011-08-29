@@ -1,5 +1,5 @@
 <h1>
-  Edit GLSA <code><%= h @glsa.glsa_id %></code>
+  Edit GLSA <code><%= @glsa.glsa_id %></code>
 </h1>
 
 <%= form_for @glsa do |f| -%>
@@ -34,7 +34,7 @@
     <%= box_title('Background', :icon => 'icons/background.png', :label => 'background',
                   :toolbar => [{:uri => 'javascript:backgroundDialog();', :title => 'Get background', :icon => 'icons/background-go.png'}]) %>
     <p>
-      <textarea name="glsa[background]" id="background" class="nice" rows="3"><%= h lastrev_content(@glsa, 'background') %></textarea>
+      <textarea name="glsa[background]" id="background" class="nice" rows="3"><%= lastrev_content(@glsa, 'background') %></textarea>
     </p>
   </div>
 
@@ -56,7 +56,7 @@
 <div id="left">
   <div class="box">
     <%= box_title('Title', :icon => 'icons/title.png', :label => 'title') %>
-    <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= h lastrev_content(@glsa, 'title') %></textarea></p>
+    <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= lastrev_content(@glsa, 'title') %></textarea></p>
   </div>
 
   <div class="box">
@@ -65,7 +65,7 @@
                           {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'synopsis');", :icon => 'icons/template.png'}
                   ]
         ) %>
-    <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
+    <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= lastrev_content(@glsa, 'synopsis') %></textarea></p>
   </div>
 
   <div class="box">
@@ -107,7 +107,7 @@
                           {:title => 'More lines', :uri => "javascript:lines('description', 5)", :icon => 'icons/zoom_in.png'}
                   ]
         ) %>
-    <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= h lastrev_content(@glsa, 'description') %></textarea></p>
+    <p><textarea name="glsa[description]" id="description" class="nice" rows="15"><%= lastrev_content(@glsa, 'description') %></textarea></p>
   </div>
 
   <div class="box">
@@ -120,7 +120,7 @@
                           {:title => 'More lines', :uri => "javascript:lines('impact', 5)", :icon => 'icons/zoom_in.png'}
                   ]
         ) %>
-    <p><textarea name="glsa[impact]" id="impact" class="nice" rows="5"><%= h lastrev_content(@glsa, 'impact') %></textarea></p>
+    <p><textarea name="glsa[impact]" id="impact" class="nice" rows="5"><%= lastrev_content(@glsa, 'impact') %></textarea></p>
   </div>
   
   <div class="box">
@@ -130,7 +130,7 @@
                           {:title => 'No known workaround', :uri => "javascript:$('workaround').value = 'There is no known workaround at this time.'", :icon => 'icons/workaround-no.png'}
                   ]
         ) %>
-    <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="2"><%= h lastrev_content(@glsa, 'workaround') %></textarea></p>
+    <p><textarea name="glsa[workaround]" id="workaround" class="nice" rows="2"><%= lastrev_content(@glsa, 'workaround') %></textarea></p>
   </div>
   
   <div class="box">
@@ -140,7 +140,7 @@
                           {:title => 'Set default resolution', :uri => "javascript:generateResolution()", :icon => 'icons/resolution-go.png'}
                   ]
         ) %>
-    <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="5"><%= h lastrev_content(@glsa, 'resolution') %></textarea></p>
+    <p><textarea name="glsa[resolution]" id="resolution" class="nice" rows="5"><%= lastrev_content(@glsa, 'resolution') %></textarea></p>
   </div>
 
   <div class="box">

@@ -13,14 +13,14 @@
 <h2 style="margin-top: 0;"><img src="/images/icons/restricted.png" alt="restricted" /> This bug is restricted</h2>
 
 <p>Currently, GLSAMaker cannot process restricted bugs. :(</p>
-<p>Try to <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
+<p>Try to <a href="<%= @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
 
 <% else %>
 
 
-<h2 style="margin-top: 0;"><%= h @bug.summary %></h2>
+<h2 style="margin-top: 0;"><%= @bug.summary %></h2>
 <div style="margin-top: 1.5em;">
-  <a href="<%= h @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= h @bug.bug_id %> in Bugzilla</strong></a>
+  <a href="<%= @bug.url %>" class="button" target="_blank"><img src="/images/icons/bug.png" alt="bug" /> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a>
   <a href="javascript:///" onclick="Modalbox.show('<%= bug_url(:id => @bug.bug_id) %>');" class="button"><img src="/images/icons/larr.png" alt="Back" /> <strong>Back to overview</strong></a>
 </div>
 
@@ -33,7 +33,7 @@
     </p>
     <p>
       <% change.changes.each do |where, what| %>
-        <strong><%= h where.to_s.capitalize %>:</strong> <code><%= h what[0] %> &rarr; <%= h what[1] %></code><br />
+        <strong><%= where.to_s.capitalize %>:</strong> <code><%= what[0] %> &rarr; <%= what[1] %></code><br />
       <% end %>    
     </p>
   </li>

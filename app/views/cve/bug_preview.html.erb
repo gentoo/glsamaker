@@ -1,6 +1,6 @@
 <form>
 <label for="bug_title"><strong>Bug title:</strong></label><br />
-<input type="text" id="bug_title" value="<%= h @package %>: Unspecified vulnerability (<%= bugs_unify_cvenames(@cve_ids) %>)" style="width: 100%; font-size: 115%;" />
+<input type="text" id="bug_title" value="<%= @package %>: Unspecified vulnerability (<%= bugs_unify_cvenames(@cve_ids) %>)" style="width: 100%; font-size: 115%;" />
 <br /><br />
 <strong>File in:</strong>
 <input type="radio" name="bug_type" id="type_1" value="vuln" checked="checked" />
@@ -10,7 +10,7 @@
 <br /><br />
 
 <input type="checkbox" id="cc_maint" value="1" checked="checked" />
-<label for="cc_maint"><strong>CC the maintainers:</strong></label> <%= h @maintainers.join ', ' %>
+<label for="cc_maint"><strong>CC the maintainers:</strong></label> <%= @maintainers.join ', ' %>
 <br /><br />
 <label for="custom_cc"><strong>Add other people to CC:</strong> (comma separated)</label><br />
 <input type="text" id="custom_cc" style="width: 100%" />
@@ -69,13 +69,13 @@
 
 <textarea id="comment" rows="5" style="width: 100%;" onchange="$('add_comment').checked = true;"></textarea>
 
-<br /><br/ >
+<br /><br />
 <strong>
   <input type="checkbox" id="add_cves" value="1" checked="checked" />
   <label for="add_cves">Add CVE descriptions:</label>
 </strong>
 
-<p><pre><%= h @cve_txt %></pre></p>
+<p><pre><%= @cve_txt %></pre></p>
 
-<input type="hidden" name="package" id="package" value="<%= h @package %>" />
+<input type="hidden" name="package" id="package" value="<%= @package %>" />
 </form>
