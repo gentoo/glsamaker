@@ -39,6 +39,7 @@ gem "text-format", :require => "text/format"
 # gem "rdoc"
 
 group :test do
+  gem "rcov"
   gem "ci_reporter"
   gem "rspec"
 end
