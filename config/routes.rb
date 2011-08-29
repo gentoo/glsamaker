@@ -13,7 +13,8 @@ Glsamaker::Application.routes.draw do
 
     get  'requests',          :on => :collection
     get  'drafts'  ,          :on => :collection
-    get  'archive' ,          :on => :collection
+    get  'archive',           :on => :collection
+    post 'archive',           :on => :collection
 
     get  'diff',              :on => :member
     get  'download',          :on => :member

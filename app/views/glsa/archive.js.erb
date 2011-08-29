@@ -1,0 +1,2 @@
+Element.update('date', 'in <%= escape_javascript(Date::MONTHNAMES[@month] + " " +  @year.to_s) %>');
+Element.update('list', '<%= escape_javascript(@table.html_safe) %>');

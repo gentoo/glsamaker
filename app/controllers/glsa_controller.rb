@@ -26,7 +26,28 @@ class GlsaController < ApplicationController
   def archive
     @pageID = "archive"
     @pageTitle = "GLSA archive"    
-    @glsas = Glsa.where(:status => 'release').order('updated_at DESC')
+
+    respond_to do |format|
+      format.html {
+        @month = (params[:month] || Date.today.month).to_i
+        @year = (params[:year] || Date.today.year).to_i
+
+        month_start = Date.new(@year, @month, 1)
+        month_end = Date.new(@year, @month + 1, 1) - 1
+
+        @glsas = Glsa.where(:status => 'release', :first_released_at => month_start..month_end).order('updated_at DESC')
+      }
+      format.js {
+        @month = params[:view]['month(2i)'].to_i
+        @year = params[:view]['month(1i)'].to_i
+
+        month_start = Date.new(@year, @month, 1)
+        month_end = Date.new(@year, @month + 1, 1) - 1
+
+        @glsas = Glsa.where(:status => 'release', :first_released_at => month_start..month_end).order('updated_at DESC')
+        @table = render_to_string :partial => "glsa_row", :collection => @glsas, :as => :glsa, :locals => { :view => :drafts }
+      }
+    end
   end
   
   def new
