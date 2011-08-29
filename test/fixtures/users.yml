@@ -3,3 +3,10 @@ test_user:
   login: test
   name: foo
   email: foo@bar.org
+
+test_admin:
+  id: 2
+  login: admin
+  name: Admin
+  email: ad@min.invalid
+  jefe: true

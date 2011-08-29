@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  text: MyText
-  field: MyString
+  name: DoS
+  text: A remote attacker could exploit these vulnerabilities to cause a Denial of Service condition.
+  target: impact
   enabled: false
 
 two:
-  name: MyString
-  text: MyText
-  field: MyString
-  enabled: false
+  name: DoS
+  text: Muiltiple vulnerabilities in [Product] allow remote attackers to cause Denial of Service conditions.
+  target: synopsis
+  enabled: true
