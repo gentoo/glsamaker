@@ -386,6 +386,14 @@ div.box .box-actions {
   width: 100%;
 }
 
+
+/** popups **/
+div.popup {
+  background-color: #8875B0;
+  opacity: .9;
+  padding: .2em;
+}
+
 /** leftright **/
 div#right {
   width: 40%;

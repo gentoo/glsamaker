@@ -113,6 +113,11 @@ class GlsaController < ApplicationController
     
     # References
     @rev.references.build if @rev.references.length == 0
+
+    @templates = {}
+    GLSAMAKER_TEMPLATE_TARGETS.each do |target|
+      @templates[target] = Template.where(:target => target).all
+    end
   end
 
   def update

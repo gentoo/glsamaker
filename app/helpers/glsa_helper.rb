@@ -142,8 +142,11 @@ module GlsaHelper
     word_wrap(text.chomp, 71)
   end
 
-private
+  def template_popups
+    render :partial => 'template_popups', :locals => {:templates => @templates}
+  end
 
+private
   def shorten_args(text)
     text.gsub!(/# (.*)/) do |s|
       r = $1

@@ -2,8 +2,6 @@
   Edit GLSA <code><%= h @glsa.glsa_id %></code>
 </h1>
 
-<% @sev_tab = [{"sev" => "low"}, {"sev" => "normal"}, {"sev" => "high"}] %>
-
 <%= form_for @glsa do |f| -%>
 <div style="float: right; width: 44%;">
   <div class="box">
@@ -62,7 +60,11 @@
   </div>
 
   <div class="box">
-    <%= box_title('Synopsis', :icon => 'icons/synopsis.png', :label => 'synopsis') %>
+    <%= box_title('Synopsis', :icon => 'icons/synopsis.png', :label => 'synopsis',
+                  :toolbar => [
+                          {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'synopsis');", :icon => 'icons/template.png'}
+                  ]
+        ) %>
     <p><textarea name="glsa[synopsis]" id="synopsis" class="nice" rows="1"><%= h lastrev_content(@glsa, 'synopsis') %></textarea></p>
   </div>
 
@@ -97,6 +99,7 @@
   <div class="box" id="desc-box">
     <%= box_title('Description', :icon => 'icons/document.png', :label => 'description',
                   :toolbar => [
+                          {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'description');", :icon => 'icons/template.png'},
                           {:title => 'Set default description', :uri => "javascript:generateDescription()", :icon => 'icons/document-go.png'},
                           :sep,
                           {:title => 'Fewer lines', :uri => "javascript:lines('description', -5)", :icon => 'icons/zoom_out.png'},
@@ -110,6 +113,8 @@
   <div class="box">
     <%= box_title('Impact', :icon => 'icons/impact.png', :label => 'impact',
                   :toolbar => [
+                          {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'impact');", :icon => 'icons/template.png'},
+                          :sep,
                           {:title => 'Fewer lines', :uri => "javascript:lines('impact', -5)", :icon => 'icons/zoom_out.png'},
                           {:title => 'Reset lines', :uri => "javascript:$('impact').rows = 15", :icon => 'icons/zoom_100.png'},
                           {:title => 'More lines', :uri => "javascript:lines('impact', 5)", :icon => 'icons/zoom_in.png'}
@@ -121,6 +126,7 @@
   <div class="box">
     <%= box_title('Workaround', :icon => 'icons/workaround.png', :label => 'workaround',
                   :toolbar => [
+                          {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'workaround');", :icon => 'icons/template.png'},
                           {:title => 'No known workaround', :uri => "javascript:$('workaround').value = 'There is no known workaround at this time.'", :icon => 'icons/workaround-no.png'}
                   ]
         ) %>
@@ -130,6 +136,7 @@
   <div class="box">
     <%= box_title('Resolution', :icon => 'icons/resolution.png', :label => 'resolution',
                   :toolbar => [
+                          {:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'resolution');", :icon => 'icons/template.png'},
                           {:title => 'Set default resolution', :uri => "javascript:generateResolution()", :icon => 'icons/resolution-go.png'}
                   ]
         ) %>
@@ -156,3 +163,9 @@
 </div>
 
 <%- end -%>
+
+<%= template_popups %>
+
+<script language="JavaScript" type="text/javascript">
+  GLSAMaker.editing.templates.observeClick($('impact'));
+</script>

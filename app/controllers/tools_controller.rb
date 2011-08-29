@@ -69,4 +69,18 @@ class ToolsController < ApplicationController
   def background
     render :layout => false
   end
+
+  def template
+    @target = params[:template][:target]
+
+    if GLSAMAKER_TEMPLATE_TARGETS.include? @target
+      begin
+        @template = Template.find(params[:template][:id])
+      rescue ActiveRecord::RecordNotFound
+        @error = "Cannot find template"
+      end
+    else
+      @error = "Invalid target"
+    end
+  end
 end
