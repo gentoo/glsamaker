@@ -5,3 +5,8 @@
 require File.expand_path('../config/application', __FILE__)
 
 Glsamaker::Application.load_tasks
+
+begin
+  require 'ci/reporter/rake/test_unit'
+rescue LoadError
+end
