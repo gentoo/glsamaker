@@ -1,6 +1,6 @@
 <% if @error.nil? -%>
 GLSAMaker.editing.templates.close($('templates-<%= @target %>'));
-var target = $(<%= @target %>);
+var target = $('<%= @target %>');
 target.setValue(target.getValue() + "<%= escape_javascript(@template.text) %>");
 <% else -%>
 alert("<%= escape_javascript(@error) %>");
