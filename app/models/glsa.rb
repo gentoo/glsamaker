@@ -23,12 +23,12 @@ class Glsa < ActiveRecord::Base
 
   # Returns the last revision object, referring to the current state of things
   def last_revision
-    @last_revision ||= self.revisions.find(:first, :order => "revid DESC")
+    @last_revision ||= self.revisions.order("revid DESC").first
   end
 
   # Returns the last revision object that was a release
   def last_release_revision
-    self.revisions.find(:first, :conditions => ['is_release = ?', true], :order => 'release_revision DESC')
+    self.revisions.where(:is_release => true).order('release_revision DESC').first
   end
   
   # Invalidates the last revision cache
@@ -56,12 +56,12 @@ class Glsa < ActiveRecord::Base
 
   # Returns all approving comments
   def approvals
-    comments.find(:all, :conditions => ['rating = ?', 'approval'])
+    comments.where(:rating => 'approval')
   end
 
   # Returns all rejecting comments
   def rejections
-    comments.find(:all, :conditions => ['rating = ?', 'rejection'])
+    comments.where(:rating => 'rejection')
   end
 
   # Returns true if the draft is ready for sending
@@ -101,11 +101,11 @@ class Glsa < ActiveRecord::Base
       return :own
     end
 
-    if comments.find(:all, :conditions => ['rating = ? AND user_id = ?', 'approval', user.id]).count > 1
+    if comments.where(:rating => 'approval', :user_id => user.id).all.count > 1
       return :approved
     end
 
-    if comments.find(:all, :conditions => ['user_id = ?', user.id]).count > 1
+    if comments.where(:user_id => user.id).all.count > 1
       return :commented
     end
 
@@ -114,7 +114,7 @@ class Glsa < ActiveRecord::Base
   
   # Returns true if there are any pending comments left
   def has_pending_comments?
-    comments.find(:all, :conditions => ['`read` = ?', false]).count > 0
+    comments.where(:read => false).all.count > 0
   end
   
   # Returns all CVEs linked to this GLSA
@@ -167,7 +167,7 @@ class Glsa < ActiveRecord::Base
   # Calculates the next GLSA ID for the given month, or the current month
   def self.next_id(month = Time.now)
     month_id = month.strftime("%Y%m")
-    items = find(:all, :conditions => ['glsa_id LIKE ? AND status = ?', month_id + '%', 'release'], :order => 'glsa_id DESC')
+    items = Glsa.where("glsa_id LIKE ? AND status = ?", month_id + '%', 'release').order('glsa_id DESC')
 
     return "#{month_id}-01" if items.length == 0
 

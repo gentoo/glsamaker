@@ -160,7 +160,7 @@ namespace :cve do
           debug "Removing references: #{rem.inspect}"
           
           rem.each do |item|
-            ref = c.references.find(:first, :conditions => ['source = ? AND title = ? AND uri = ?', *item])
+            ref = c.references.where(['source = ? AND title = ? AND uri = ?', *item]).first
             c.references.delete(ref)
             ref.destroy
           end
@@ -197,7 +197,7 @@ namespace :cve do
           debug "Ading CPEs:    #{add.inspect}"
           
           add.each do |item|
-            cpe = Cpe.find(:first, :conditions => ['cpe = ?', item])
+            cpe = Cpe.where(:cpe => item).first
             cpe ||= Cpe.create(:cpe => item)
 
             c.cpes << cpe
@@ -394,7 +394,7 @@ def create_cve(cve)
   cve.xpath('vuln:vulnerable-software-list/vuln:product').each do |prod|
     cpe_str = prod.content
 
-    cpe = Cpe.find(:first, :conditions => ['cpe = ?', cpe_str])
+    cpe = Cpe.where(:cpe => cpe_str).first
     cpe ||= Cpe.create(:cpe => cpe_str)
 
     _cve.cpes << cpe
