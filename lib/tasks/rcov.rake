@@ -15,7 +15,7 @@ def run_coverage(files)
   elsif RUBY_PLATFORM =~ /java/
     exclude = '--exclude "rubygems/*,jruby/*,parser*,gemspec*,_DELEGATION*,eval*,recognize_optimized*,yaml,yaml/*,fcntl"'
   else
-    exclude = '--exclude "rubygems/*"'
+    exclude = '--exclude "gems/*"'
   end
   # rake test:units:rcov SHOW_ONLY=models,controllers,lib,helpers
   # rake test:units:rcov SHOW_ONLY=m,c,l,h
