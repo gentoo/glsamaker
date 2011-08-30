@@ -11,7 +11,7 @@ body {
 html {
   margin: 0;
   padding: 0;
-  background: url(/assets/line.png) repeat-y;
+  background: url(<%= asset_path 'line.png' %>) repeat-y;
   background-repeat: repeat-y;
 }
 
@@ -124,7 +124,7 @@ body#cve #menu li a.cve {
 
 div#menu {
   height: 42px;
-  background: #4C3E61 url(/assets/menubg.png) repeat-x;
+  background: #4C3E61 url(<%= asset_path 'menubg.png' %>) repeat-x;
   position: relative;
   bborder-bottom: 3px solid #4C3E61;
 }
@@ -450,7 +450,7 @@ a.button, input.button {
   border-right: 1px solid #5B4A73;
   border-bottom: 1px solid #5B4A73;
   padding: .2em;
-  background: #4C3E61 url(/assets/menubg.png) repeat-x;
+  background: #4C3E61 url(<%= asset_path 'menubg.png' %>) repeat-x;
   font-size: 90%;
   color: white;
   text-decoration: none;
