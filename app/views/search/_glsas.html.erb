@@ -9,6 +9,6 @@
     <th>Last changed at/by</th>
     <% if current_user.is_el_jefe? %><th>Admin</th><% end %>
   </tr>
-  <%= render :partial => "/glsa/glsa_row", :collection => results, :as => :glsa, :locals => { :view => :archive } %>
+  <%= render :partial => "/glsa/glsa_row", :collection => results, :as => :glsa, :locals => { :view => :requests } %>
   </table>
 </div>
