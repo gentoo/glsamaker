@@ -33,6 +33,18 @@ class Revision < ActiveRecord::Base
     end
   end
   
+  define_index do
+    indexes title
+    indexes synopsis
+    indexes description
+    indexes impact
+    indexes workaround
+    indexes resolution
+    indexes is_release
+    
+    has glsa_id, revid, release_revision
+  end
+  
   # Returns an Array of Integers of the bugs linked to this revision
   def get_linked_bugs
     self.bugs.map do |bug|

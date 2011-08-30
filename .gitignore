@@ -14,3 +14,5 @@ coverage
 .idea
 .rvmrc
 *.tmproj
+*.sphinx.conf
+db/sphinx

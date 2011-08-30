@@ -1,0 +1,13 @@
+<h1>Search results for "<%= params[:q] %>"</h1>
+
+<%- if @results.include? 'Glsa' -%>
+<%= render :partial => "glsas", :locals => {:results => @results['Glsa']} %>
+<%- end -%>
+
+<%- if @results.include? 'Cve' -%>
+<%= render :partial => "cves", :locals => {:results => @results['Cve']} %>
+<%- end -%>
+
+<%- if @results.empty? -%>
+<%= image_tag 'icons/error.png' %> No results found. :(
+<%- end -%>

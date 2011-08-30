@@ -1,7 +1,7 @@
 # ===GLSAMaker v2
-#  Copyright (C) 2009-10 Alex Legler <a3li@gentoo.org>
-#  Copyright (C) 2006-2007 Jean-Philippe Lang
-#  Copyright (C) 2008 Robert Buchholz <rbug@gentoo.org> and Tobias Heinlein <keytoaster@gentoo.org>
+#  Copyright (C) 2009-11 Alex Legler <a3li@gentoo.org>
+#  Copyright (C) 2006-07 Jean-Philippe Lang
+#  Copyright (C) 2008 Robert Buchholz <rbu@gentoo.org> and Tobias Heinlein <keytoaster@gentoo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by

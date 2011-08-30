@@ -149,6 +149,7 @@ div#menu #search {
   right: 200px;
   font-size: 80%;
   margin-top: 17px;
+  color: white;
 }
 
 div#menu #search input {
@@ -556,4 +557,14 @@ table.glsamaker-table td {
   padding-bottom: .4em;
   border-right: 1px dotted #4C3E61;   
   border-bottom: 1px solid #4C3E61;
+}
+
+/** search **/
+span.match {
+  color: #4C3E61;
+  font-weight: bold;
+}
+
+.nowrap {
+  white-space: nowrap;
 }

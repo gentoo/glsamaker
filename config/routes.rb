@@ -5,6 +5,8 @@ Glsamaker::Application.routes.draw do
 
   match 'cve/list.:format'            => 'cve#list',            :as => :cve
   
+  match 'search/results'              => 'search#results',      :as => :search
+  
   match 'admin'                       => 'admin/index#index'
 
   resources :glsas, :controller => 'glsa' do

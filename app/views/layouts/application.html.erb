@@ -29,25 +29,27 @@
     <map name="m_logo" id="m_logo">
       <area shape="rect" coords="95,0,252,42" href="#" alt="Home" />
     </map>
-    <!--<div id="search"> TODO
-      <form action="/search/index/glsamaker2" method="get">
-        <a href="/search/index/glsamaker2" accesskey="4">Search</a>:
-        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+    <div id="search">
+      <%= form_tag(search_path, :method => 'get') do -%>
+        <label for="q">Search:</label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" value="<%= params[:q] %>" />
 
         <select name="at">
-          <option selected="selected">Everywhere</option>
-          <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
-          <option value="glsa">GLSAs</option>
-          <option value="glsa-request">&nbsp;&nbsp;Requests</option>
-          <option value="glsa-draft">&nbsp;&nbsp;Drafts</option>
-          <option value="glsa-sent">&nbsp;&nbsp;Archive</option>
-          <option disabled="disabled" style="text-align: center">&mdash;&mdash;&mdash;&mdash;</option>
-          <option disabled="disabled">Vulnerability intelligence</option>
-          <option value="cve">&nbsp;&nbsp;CVEs</option>
-          <option value="secunia">&nbsp;&nbsp;Secunia Advisories</option>
+          <option value="everywhere" selected="selected">Everywhere</option>
+          <!--<optgroup label="Advisories">
+            <option value="glsa">All GLSAs</option>
+            <option value="glsa-requests">Requests</option>
+            <option value="glsa-drafts">Drafts</option>
+            <option value="glsa-archive">Archive</option>
+          </optgroup>
+          <optgroup label="Vulnerability Intelligence">
+            <option value="cve">CVEs</option>
+            <option value="cve-assigned">Assigned CVEs</option>
+            <option value="cve-new">New CVEs</option>
+          </optgroup>-->
         </select>
-      </form>
-    </div>-->
+      <% end -%>
+    </div>
     <ul>
       <li><%= link_to "New…", new_glsa_path, :class => 'new' %></li>
       <li style="margin-right: 2em;">&nbsp;</li>
