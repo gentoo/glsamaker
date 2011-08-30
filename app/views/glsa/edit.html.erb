@@ -14,18 +14,18 @@
   </div>
 
   <div class="box">
-    <%= box_title('Metadata', :icon => 'icons/metadata.png ') %>
-    <p style="float: left; width: 50%;"><label for="access"><img src="/assets/icons/access.png" alt="access" /> Access:</label>
+    <%= box_title('Metadata', :icon => 'icons/metadata.png') %>
+    <p style="float: left; width: 50%;"><label for="access"><%= image_tag 'icons/access.png' %> Access:</label>
       <select name="glsa[access]" id="access">
         <%= options_for_select [['local', 'local'], ['remote', 'remote'], ['local, remote', 'both']], @rev.access %>
       </select>
     </p>
-    <p><label for="severity"><img src="/assets/icons/severity.png" alt="severity" /> Severity:</label>
+    <p><label for="severity"><%= image_tag 'icons/severity.png' %> Severity:</label>
       <select name="glsa[severity]" id="severity">
         <%= options_for_select %w{ low normal high }, @rev.severity %>
       </select>
     </p>
-    <p><label for="keyword"><img src="/assets/icons/keyword.png" alt="keyword" /> GLSA Keyword:</label>
+    <p><label for="keyword"><%= image_tag 'icons/keyword.png' %> GLSA Keyword:</label>
       <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %>
     </p>
   </div>
@@ -73,14 +73,14 @@
 
     <table class="padcells swap centercells" id="packages_table_vulnerable">
       <tr>
-        <th><img src="/assets/icons/atom.png" alt="atom" /> Atom</th>
+        <th><%= image_tag 'icons/atom.png' %> Atom</th>
         <th class="odd" colspan="2">Version</th>
-        <th><img src="/assets/icons/arch.png" alt="arch" /> Arch</th>
+        <th><%= image_tag 'icons/arch.png' %> Arch</th>
         <th class="odd"><img src="/assets/icons/auto.png" alt="auto" /> Auto</th>
       </tr>
 
       <tr>
-        <td><img src="/assets/icons/affected.png" alt="vulnerable" /> Vulnerable
+        <td><%= image_tag 'icons/affected.png' %> Vulnerable
         (<%= add_vulnerable_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
       <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
@@ -88,7 +88,7 @@
 
     <table class="padcells swap centercells" id="packages_table_unaffected">
       <tr>
-        <td><img src="/assets/icons/unaffected.png" alt="unaffected" /> Unaffected
+        <td><%= image_tag 'icons/unaffected.png' %> Unaffected
             (<%= add_unaffected_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
       <%= render :partial => 'package', :collection => @rev.unaffected_packages %>

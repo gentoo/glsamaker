@@ -28,9 +28,9 @@
       <%= restricted_icon @glsa.restricted %>
     </h2><br />
     <% if @glsa.is_approved? and @glsa.last_revision.bug_ready? %>
-      <p><img src="/assets/icons/ok.png" alt="ok" /> This draft is <strong>ready for sending</strong>.</p>
+      <p><%= image_tag 'icons/ok.png' %> This draft is <strong>ready for sending</strong>.</p>
     <% else %>
-      <p><img src="/assets/icons/pending.png" alt="pending" /> This draft is <strong>not ready for sending.</strong></p>
+      <p><%= image_tag 'icons/pending.png' %> This draft is <strong>not ready for sending.</strong></p>
     <% end %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.created_at.to_s %></span>
