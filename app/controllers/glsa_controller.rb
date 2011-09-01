@@ -86,7 +86,7 @@ class GlsaController < ApplicationController
 
   def show
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
 
     if @rev == nil
@@ -104,7 +104,7 @@ class GlsaController < ApplicationController
 
   def download
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
 
     if @rev == nil
@@ -125,7 +125,7 @@ class GlsaController < ApplicationController
 
   def edit
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     @rev = @glsa.last_revision
     
     # Packages
@@ -143,7 +143,7 @@ class GlsaController < ApplicationController
 
   def update
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     @prev_latest_rev = @glsa.last_revision
 
     if @glsa.nil?
@@ -252,7 +252,7 @@ class GlsaController < ApplicationController
 
   def prepare_release
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
 
     if @glsa.status == 'request'
       flash[:error] = 'You cannot release a request. Draft the advisory first.'
@@ -273,7 +273,7 @@ class GlsaController < ApplicationController
 
   def release
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
 
     if @glsa.status == 'request'
       flash[:error] = 'You cannot release a request. Draft the advisory first.'
@@ -321,7 +321,7 @@ class GlsaController < ApplicationController
 
   def diff
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     
     rev_old = @glsa.revisions.find_by_revid(params[:old])
     rev_new = @glsa.revisions.find_by_revid(params[:new])
@@ -331,7 +331,7 @@ class GlsaController < ApplicationController
 
   def update_cache
     @glsa = Glsa.find(params[:id])
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
     @rev = @glsa.last_revision
     
     @rev.update_cached_bug_metadata
@@ -362,7 +362,7 @@ class GlsaController < ApplicationController
     begin
       if params[:go].to_s == '1'
         glsa = Glsa.find(Integer(params[:id]))
-        return unless check_object_access(glsa)
+        return unless check_object_access!(glsa)
         refs = []
         
         params[:import][:cve].each do |cve_id|
@@ -377,7 +377,7 @@ class GlsaController < ApplicationController
         return
       else
         @glsa = Glsa.find(Integer(params[:id]))
-        return unless check_object_access(@glsa)
+        return unless check_object_access!(@glsa)
         @cves = @glsa.related_cves
       end      
     rescue Exception => e

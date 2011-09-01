@@ -20,34 +20,12 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   
   include Authentication
+  include Authorization
   include ApplicationHelper
 
   before_filter :login_required
 
   protected
-  # Checks access to a given GLSA
-  def check_object_access(glsa)
-    # Contributor, no foreign drafts
-    if current_user.access == 0
-      unless glsa.is_owner? current_user
-        deny_access "Access to GLSA #{glsa.id} (#{params[:action]})"
-        return false
-      end
-    elsif current_user.access == 1
-      if glsa.restricted
-        deny_access "Access to restricted GLSA #{glsa.id} (#{params[:action]})"
-        return false
-      end
-    end
-
-    true
-  end
-
-  def deny_access(msg)
-    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip} to #{request.url}: #{msg}"
-    redirect_to :controller => '/index', :action => 'error', :type => 'access'
-  end
-  
   def log_error(error)
     caller[0] =~ /`([^']*)'/ and where = $1
     logger.error "[#{where}] #{error.class}: #{error.to_s}"

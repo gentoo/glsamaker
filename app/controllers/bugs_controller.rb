@@ -23,7 +23,7 @@ class BugsController < ApplicationController
 
   def create
     @glsa = Glsa.find(params[:glsa_id].to_i)
-    return unless check_object_access(@glsa)
+    return unless check_object_access!(@glsa)
 
     unless @glsa.nil?
       @added_bugs = []
