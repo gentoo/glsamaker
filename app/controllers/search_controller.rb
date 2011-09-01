@@ -21,5 +21,14 @@ class SearchController < ApplicationController
       
       @results['Glsa'].uniq!
     end
+
+    # Filter search results
+    if @results.include? 'Glsa'
+      @results['Glsa'].delete_if do |result|
+        not check_object_access(result)
+      end
+    end
+  rescue Riddle::ConnectionError => e
+    @error = true
   end
 end
