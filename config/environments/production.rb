@@ -14,6 +14,12 @@ Glsamaker::Application.configure do
   # Compress JavaScripts and CSS
   config.assets.compress = false
 
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = false
+
+  # Generate digests for assets URLs
+  config.assets.digest = true
+
   # Specifies the header that your server uses for sending files
   # (comment out if your front-end server doesn't support this)
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # Use 'X-Accel-Redirect' for nginx
