@@ -1,27 +1,27 @@
 <% if @bug == nil %>
 
-<h2 style="margin-top: 0;"><img src="/assets/icons/error.png" alt="error" /> Invalid Bug ID</h2>
+<h2 style="margin-top: 0;"><%= error_msg("Invalid Bug ID") %></h2>
 <p>There is no such bug on Gentoo's Bugzilla.</p>
 
 <% elsif (@bug.is_a? String and @bug == "down") %>
 
-<h2 style="margin-top: 0;"><img src="/assets/icons/error.png" alt="error" /> Bugzilla is unreachable</h2>
+<h2 style="margin-top: 0;"><%= error_msg("Bugzilla is unreachable") %></h2>
 <p>Sorry, but the Gentoo Bugzilla is unreachable at the moment.</p>
 
 <% elsif @bug.restricted %>
 
-<h2 style="margin-top: 0;"><img src="/assets/icons/restricted.png" alt="restricted" /> This bug is restricted</h2>
+<h2 style="margin-top: 0;"><%= image_tag('icons/restricted.png') %> This bug is restricted</h2>
 
 <p>Currently, GLSAMaker cannot process restricted bugs. :(</p>
-<p>Try to <a href="<%= @bug.url %>" class="button" target="_blank"><img src="/assets/icons/bug.png" alt="bug" /> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
+<p>Try to <a href="<%= @bug.url %>" class="button" target="_blank"><%= image_tag 'icons/bug.png' %> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a> instead.</p>
 
 <% else %>
 
 <h2 style="margin-top: 0;"><%= @bug.summary %></h2>
 
 <div style="margin-bottom: 1.5em;">
-  <a href="<%= @bug.url %>" class="button" target="_blank"><img src="/assets/icons/bug.png" alt="bug" /> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a>
-  <a href="javascript:///" onclick="Modalbox.show('<%= bughistory_url(:id => @bug.bug_id) %>');" class="button"><img src="/assets/icons/pending.png" alt="history" /> <strong>Show History</strong></a>
+  <a href="<%= @bug.url %>" class="button" target="_blank"><%= image_tag 'icons/bug.png' %> <strong>Open bug <%= @bug.bug_id %> in Bugzilla</strong></a>
+  <a href="javascript:///" onclick="Modalbox.show('<%= bughistory_url(:id => @bug.bug_id) %>');" class="button"><%= image_tag 'icons/pending.png' %>> <strong>Show History</strong></a>
 </div>
 
 <div style="float: right; width: 49%;">

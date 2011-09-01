@@ -2,7 +2,7 @@
 <p>No or invalid GLSA ID specified.</p>
 <% else %>
 <%= form_tag(glsa_comments_path(@glsa, @comment), :remote => true) do -%>
-<p><label for="addcomment"><img src="/assets/icons/comment.png" alt="bug" />
+<p><label for="addcomment"><%= image_tag 'icons/comment.png' %>
   Please enter your comment:</label></p>
 
   <%= fields_for :newcomment do |f| %>
@@ -12,9 +12,9 @@
     
     <div align="right">
       Rating:
-      <%= f.radio_button :rating, "approval" %><label for="newcomment_rating_approval"><img src="/assets/icons/unaffected.png" alt="Approval" title="Approval" /></label>&nbsp;
-      <%= f.radio_button :rating, "rejection" %><label for="newcomment_rating_rejection"><img src="/assets/icons/affected.png" alt="Rejection" title="Rejection" /></label>&nbsp;
-      <%= f.radio_button :rating, "neutral", :checked => true %><label for="newcomment_rating_neutral"><img src="/assets/icons/reference.png" alt="Neutral" title="Neutral" /></label>
+      <%= f.radio_button :rating, "approval" %><label for="newcomment_rating_approval"><%= image_tag 'icons/unaffected.png', :alt => 'Approval', :title => 'Approval' %></label>&nbsp;
+      <%= f.radio_button :rating, "rejection" %><label for="newcomment_rating_rejection"><%= image_tag 'icons/affected.png', :alt => 'Rejection', :title => 'Rejection' %></label>&nbsp;
+      <%= f.radio_button :rating, "neutral", :checked => true %><label for="newcomment_rating_neutral"><%= image_tag 'icons/reference', :alt => 'Neutral', :title => 'Neutral' %></label>
     </div>
   <% end %>
 

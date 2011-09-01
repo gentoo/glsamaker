@@ -1,6 +1,6 @@
 <% if @cve == nil %>
 
-<h2 style="margin-top: 0;"><img src="/images/icons/error.png" alt="error" /> Invalid CVE ID</h2>
+<h2 style="margin-top: 0;"><%= error_msg("Invalid CVE ID") %></h2>
 <p>There is no such CVE.</p>
 
 <% else %>

@@ -92,6 +92,14 @@ module ApplicationHelper
     end
   end
 
+  # Simplistic helper for rendering an error message.
+  # Shows a little icon before the message
+  def error_msg(msg)
+    content = image_tag('icons/error.png')
+    content << " " << msg
+    content
+  end
+
   # Renders a title bar for our boxes
   def box_title(title, options = {})
     content = "".html_safe
