@@ -150,7 +150,7 @@ module Bugzilla
 
       Rails.logger.debug "Successfully logged in. UID: #{result['id']}"
 
-      cookie_file = File.join(RAILS_ROOT, 'tmp', 'bugzie-cookies.txt')
+      cookie_file = File.join(Rails.root, 'tmp', 'bugzie-cookies.txt')
       FileUtils.rm(cookie_file) if File.exist?(cookie_file)
       FileUtils.touch(cookie_file)
       File.chmod(0600, cookie_file)
@@ -167,7 +167,7 @@ module Bugzilla
     client = XMLRPC::Client.new(GLSAMAKER_BUGZIE_HOST, '/xmlrpc.cgi', 443, nil, nil, nil, nil, true)
     client.http_header_extra = {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"}
 
-    cookie_file = File.join(RAILS_ROOT, 'tmp', 'bugzie-cookies.txt')
+    cookie_file = File.join(Rails.root, 'tmp', 'bugzie-cookies.txt')
     if File.readable? cookie_file
       client.cookie = File.read(cookie_file)
     end
