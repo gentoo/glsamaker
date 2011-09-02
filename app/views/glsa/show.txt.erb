@@ -7,8 +7,8 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
                                             http://security.gentoo.org/
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-<%= prefixed_item(" Severity:", @rev.severity.capitalize) %>
-<%= prefixed_item("    Title:", @rev.title) %>
+<%= prefixed_item(" Severity:", @rev.severity.capitalize.html_safe) %>
+<%= prefixed_item("    Title:", @rev.title.html_safe) %>
 <%= prefixed_item("     Date:", @rev.updated_at.strftime('%B %d, %Y')) %>
 <%= prefixed_item("     Bugs:", @rev.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
 <%= prefixed_item("       ID:", @glsa.glsa_id) %>
@@ -18,12 +18,12 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
 Synopsis
 ========
 
-<%= adv_wrap @rev.synopsis %>
+<%= adv_wrap(@rev.synopsis).html_safe %>
 
 Background
 ==========
 
-<%= adv_wrap @rev.background %>
+<%= adv_wrap(@rev.background).html_safe %>
 
 Affected packages
 =================
@@ -53,22 +53,22 @@ Affected packages
 Description
 ===========
 
-<%= adv_wrap @rev.description %>
+<%= adv_wrap(@rev.description).html_safe %>
 
 Impact
 ======
 
-<%= adv_wrap @rev.impact %>
+<%= adv_wrap(@rev.impact).html_safe %>
 
 Workaround
 ==========
 
-<%= adv_wrap @rev.workaround %>
+<%= adv_wrap(@rev.workaround).html_safe %>
 
 Resolution
 ==========
 
-<%= adv_wrap @rev.resolution, true %>
+<%= adv_wrap(@rev.resolution, true).html_safe %>
 
 References
 ==========
@@ -77,7 +77,7 @@ References
    @max_digits_of_references = @rev.references.size.to_s.size
 
  -%>
-<%= render :partial => "show_reference", :as => :reference, :collection => @rev.references -%>
+<%= render :partial => "show_refkerence", :as => :reference, :collection => @rev.references -%>
 
 Availability
 ============
