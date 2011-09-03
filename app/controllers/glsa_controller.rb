@@ -254,6 +254,11 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
 
+    if current_user.access < 2
+      deny_access "Tried to prepare release"
+      return
+    end
+
     if @glsa.status == 'request'
       flash[:error] = 'You cannot release a request. Draft the advisory first.'
       redirect_to :action => "show", :id => @glsa
@@ -274,6 +279,11 @@ class GlsaController < ApplicationController
   def release
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
+
+    if current_user.access < 2
+      deny_access "Tried to prepare release"
+      return
+    end
 
     if @glsa.status == 'request'
       flash[:error] = 'You cannot release a request. Draft the advisory first.'

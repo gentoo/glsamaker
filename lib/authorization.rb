@@ -17,7 +17,7 @@ module Authorization
       unless glsa.is_owner? current_user
         return false
       end
-    elsif current_user.access == 1
+    elsif current_user.access < 3
       if glsa.restricted
         return false
       end

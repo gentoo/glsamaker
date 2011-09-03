@@ -15,7 +15,7 @@
   <%= link_to "#{image_tag 'icons/txt.png'} View as Text".html_safe, glsa_path(@glsa, :format => 'txt'), {:class => 'button'} %>
   <%= link_to_function "#{image_tag 'icons/reference.png'} Import references".html_safe, "GLSAMaker.editing.references.import_dialog(#{@glsa.id})", {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, diff_glsa_path(@glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid), {:class => 'button'} %>
-  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, prepare_release_glsa_path(@glsa), {:class => 'button'} %>
+  <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, prepare_release_glsa_path(@glsa), {:class => 'button'} if current_user.access >= 2%>
 </div>
 
 <div style="float: right; width: 40%;">
