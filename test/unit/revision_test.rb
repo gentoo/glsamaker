@@ -31,4 +31,17 @@ class RevisionTest < ActiveSupport::TestCase
   test "linked bugs" do
     assert_equal([236060, 260006], revisions(:revision_one).get_linked_bugs.sort)
   end
+
+  test "malformed XML" do
+    revision = revisions(:revision_one)
+    revision.description = "<h1>hi"
+
+    revision.save
+    assert revision.errors.any?
+    assert_equal [:description, "is not well-formed XML"], revision.errors.first
+
+    revision.description = "hi"
+    revision.save
+    assert_equal false, revision.errors.any?
+  end
 end
