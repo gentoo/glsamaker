@@ -3,11 +3,11 @@ require 'test_helper'
 class Admin::TemplatesControllerTest < ActionController::TestCase
   setup do
     @template = templates(:one)
-    @request.env['HTTP_AUTHORIZATION'] = basic_auth_creds('admin', GLSAMAKER_DEVEL_PASSWORD)
+    log_in_as :admin
   end
 
   test "should not grant access to regular users" do
-    @request.env['HTTP_AUTHORIZATION'] = basic_auth_creds('test', GLSAMAKER_DEVEL_PASSWORD)
+    log_in_as :user
     get :index
     assert_redirected_to :controller => '/index', :action => 'error', :type => 'access'
   end

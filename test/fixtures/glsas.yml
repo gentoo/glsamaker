@@ -5,3 +5,18 @@ glsa_one:
 glsa_two:
   id: 2
   glsa_id: GLSA-200901-02
+
+restricted_glsa:
+  id: 3
+  glsa_id: GLSA-201101-01
+  restricted: true
+  status: draft
+  requester: 1
+  submitter: 1
+
+contributor_draft:
+  id: 4
+  glsa_id: deadbabe
+  status: draft
+  requester: 4
+  submitter: 4

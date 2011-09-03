@@ -1,12 +1,47 @@
 test_user:
   id: 1
   login: test
-  name: foo
-  email: foo@bar.org
+  name: Tim Est
+  email: user@localhost.invalid
 
 test_admin:
   id: 2
   login: admin
-  name: Admin
-  email: ad@min.invalid
+  name: Alex Dmin
+  email: admin@localhost.invalid
   jefe: true
+
+test_locked:
+  id: 3
+  login: locked
+  name: Leroy Ocked
+  email: locked@localhost.invalid
+  disabled: true
+
+test_contributor:
+  id: 4
+  login: contributor
+  name: Carl Ontributor
+  email: contributor@localhost.invalid
+  access: 0
+
+test_padawan:
+  id: 5
+  login: padawan
+  name: Peter Adawan
+  email: padawan@localhost.invalid
+  access: 1
+
+test_member:
+  id: 6
+  login: member
+  name: Mike Ember
+  email: member@localhost.invalid
+  access: 2
+
+test_confidential_member:
+  id: 7
+  login: confidential_member
+  name: James Bond
+  email: confidential_member@localhost.invalid
+  access: 3
