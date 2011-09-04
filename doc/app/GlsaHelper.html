@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+  <title>Module: GlsaHelper</title>
+
+  <link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+  <script src="./js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="module">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="./app/helpers/glsa_helper_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="app/helpers/glsa_helper.rb">app/helpers/glsa_helper.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-i-add_reference_link">#add_reference_link</a></li>
+          
+          <li><a href="#method-i-add_unaffected_package_link">#add_unaffected_package_link</a></li>
+          
+          <li><a href="#method-i-add_vulnerable_package_link">#add_vulnerable_package_link</a></li>
+          
+          <li><a href="#method-i-adv_wrap">#adv_wrap</a></li>
+          
+          <li><a href="#method-i-approval_icon">#approval_icon</a></li>
+          
+          <li><a href="#method-i-bugready_icon">#bugready_icon</a></li>
+          
+          <li><a href="#method-i-check_icon">#check_icon</a></li>
+          
+          <li><a href="#method-i-glsa_content">#glsa_content</a></li>
+          
+          <li><a href="#method-i-is_approval_icon">#is_approval_icon</a></li>
+          
+          <li><a href="#method-i-lastrev_content">#lastrev_content</a></li>
+          
+          <li><a href="#method-i-prefixed_item">#prefixed_item</a></li>
+          
+          <li><a href="#method-i-restricted_icon">#restricted_icon</a></li>
+          
+          <li><a href="#method-i-status_icon">#status_icon</a></li>
+          
+          <li><a href="#method-i-template_popups">#template_popups</a></li>
+          
+          <li><a href="#method-i-workflow_icon">#workflow_icon</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="./images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="./Glsamaker.html">Glsamaker</a></li>
+        
+          <li><a href="./Glsamaker/Bugs.html">Glsamaker::Bugs</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/ArchesMixin.html">Glsamaker::Bugs::ArchesMixin</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/Bug.html">Glsamaker::Bugs::Bug</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/BugReadyMixin.html">Glsamaker::Bugs::BugReadyMixin</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/Status.html">Glsamaker::Bugs::Status</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/StatusMixin.html">Glsamaker::Bugs::StatusMixin</a></li>
+        
+          <li><a href="./Glsamaker/Diff.html">Glsamaker::Diff</a></li>
+        
+          <li><a href="./Glsamaker/HTTP.html">Glsamaker::HTTP</a></li>
+        
+          <li><a href="./Glsamaker/Helper.html">Glsamaker::Helper</a></li>
+        
+          <li><a href="./Glsamaker/Mail.html">Glsamaker::Mail</a></li>
+        
+          <li><a href="./Glsamaker/Portage.html">Glsamaker::Portage</a></li>
+        
+          <li><a href="./Glsamaker/Portage/Description.html">Glsamaker::Portage::Description</a></li>
+        
+          <li><a href="./Glsamaker/XML.html">Glsamaker::XML</a></li>
+        
+          <li><a href="./Admin.html">Admin</a></li>
+        
+          <li><a href="./Admin/IndexController.html">Admin::IndexController</a></li>
+        
+          <li><a href="./Admin/IndexHelper.html">Admin::IndexHelper</a></li>
+        
+          <li><a href="./Admin/TemplatesController.html">Admin::TemplatesController</a></li>
+        
+          <li><a href="./Admin/TemplatesHelper.html">Admin::TemplatesHelper</a></li>
+        
+          <li><a href="./Admin/UsersController.html">Admin::UsersController</a></li>
+        
+          <li><a href="./Admin/UsersHelper.html">Admin::UsersHelper</a></li>
+        
+          <li><a href="./Bugzilla.html">Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bug.html">Bugzilla::Bug</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla.html">Bugzilla::Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla/Bugzilla.html">Bugzilla::Bugzilla::Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla/Bugzilla/Change.html">Bugzilla::Bugzilla::Bugzilla::Change</a></li>
+        
+          <li><a href="./Bugzilla/Comment.html">Bugzilla::Comment</a></li>
+        
+          <li><a href="./Bugzilla/History.html">Bugzilla::History</a></li>
+        
+          <li><a href="./Comment.html">Comment</a></li>
+        
+          <li><a href="./Comment/CommentValidator.html">Comment::CommentValidator</a></li>
+        
+          <li><a href="./ApplicationController.html">ApplicationController</a></li>
+        
+          <li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+        
+          <li><a href="./Authentication.html">Authentication</a></li>
+        
+          <li><a href="./Authorization.html">Authorization</a></li>
+        
+          <li><a href="./Bug.html">Bug</a></li>
+        
+          <li><a href="./BugController.html">BugController</a></li>
+        
+          <li><a href="./BugHelper.html">BugHelper</a></li>
+        
+          <li><a href="./BugsController.html">BugsController</a></li>
+        
+          <li><a href="./BugsHelper.html">BugsHelper</a></li>
+        
+          <li><a href="./CommentsController.html">CommentsController</a></li>
+        
+          <li><a href="./CommentsHelper.html">CommentsHelper</a></li>
+        
+          <li><a href="./Cpe.html">Cpe</a></li>
+        
+          <li><a href="./Cve.html">Cve</a></li>
+        
+          <li><a href="./CveAssignment.html">CveAssignment</a></li>
+        
+          <li><a href="./CveChange.html">CveChange</a></li>
+        
+          <li><a href="./CveComment.html">CveComment</a></li>
+        
+          <li><a href="./CveController.html">CveController</a></li>
+        
+          <li><a href="./CveHelper.html">CveHelper</a></li>
+        
+          <li><a href="./CveReference.html">CveReference</a></li>
+        
+          <li><a href="./GLSAReleaseError.html">GLSAReleaseError</a></li>
+        
+          <li><a href="./Glsa.html">Glsa</a></li>
+        
+          <li><a href="./GlsaController.html">GlsaController</a></li>
+        
+          <li><a href="./GlsaHelper.html">GlsaHelper</a></li>
+        
+          <li><a href="./GlsaMailer.html">GlsaMailer</a></li>
+        
+          <li><a href="./IndexController.html">IndexController</a></li>
+        
+          <li><a href="./IndexHelper.html">IndexHelper</a></li>
+        
+          <li><a href="./Package.html">Package</a></li>
+        
+          <li><a href="./Reference.html">Reference</a></li>
+        
+          <li><a href="./Revision.html">Revision</a></li>
+        
+          <li><a href="./SearchController.html">SearchController</a></li>
+        
+          <li><a href="./SearchHelper.html">SearchHelper</a></li>
+        
+          <li><a href="./String.html">String</a></li>
+        
+          <li><a href="./Template.html">Template</a></li>
+        
+          <li><a href="./ToolsController.html">ToolsController</a></li>
+        
+          <li><a href="./ToolsHelper.html">ToolsHelper</a></li>
+        
+          <li><a href="./User.html">User</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="module">GlsaHelper</h1>
+
+    <div id="description" class="description">
+      
+<p>GLSA Helper</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+
+      <!-- Methods -->
+      
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="add_reference_link-method" class="method-detail ">
+          <a name="method-i-add_reference_link"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">add_reference_link</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="add_reference_link-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_reference_link</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">link_to_function</span> <span class="ruby-identifier">name</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Add reference&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">page</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">page</span>.<span class="ruby-identifier">insert_html</span> <span class="ruby-value">:bottom</span>, <span class="ruby-value">:references_table</span>, <span class="ruby-value">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'reference'</span>, <span class="ruby-value">:object</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Reference</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- add_reference_link-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- add_reference_link-method -->
+
+      
+        <div id="add_unaffected_package_link-method" class="method-detail ">
+          <a name="method-i-add_unaffected_package_link"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">add_unaffected_package_link</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="add_unaffected_package_link-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_unaffected_package_link</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">link_to_function</span>(
+      <span class="ruby-identifier">name</span>,
+      <span class="ruby-node">&quot;Element.insert('packages_table_unaffected', { bottom: '#{escape_javascript(render(:partial =&gt; '/glsa/package', :object =&gt;  Package.new(:comp =&gt; &quot;&lt;&quot;, :arch =&gt; &quot;*&quot;, :my_type =&gt; &quot;unaffected&quot;)))}' })&quot;</span>,
+      <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Add package'</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- add_unaffected_package_link-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- add_unaffected_package_link-method -->
+
+      
+        <div id="add_vulnerable_package_link-method" class="method-detail ">
+          <a name="method-i-add_vulnerable_package_link"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">add_vulnerable_package_link</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="add_vulnerable_package_link-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_vulnerable_package_link</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">link_to_function</span>(
+      <span class="ruby-identifier">name</span>,
+      <span class="ruby-node">&quot;Element.insert('packages_table_vulnerable', { bottom: '#{escape_javascript(render(:partial =&gt; '/glsa/package', :object =&gt;  Package.new(:comp =&gt; &quot;&lt;&quot;, :arch =&gt; &quot;*&quot;, :my_type =&gt; &quot;vulnerable&quot;)))}' })&quot;</span>,
+      <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Add package'</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- add_vulnerable_package_link-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- add_vulnerable_package_link-method -->
+
+      
+        <div id="adv_wrap-method" class="method-detail ">
+          <a name="method-i-adv_wrap"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">adv_wrap</span><span
+              class="method-args">(text, shorten_args = false)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="adv_wrap-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">adv_wrap</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">shorten_args</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/\r?\n/</span>, <span class="ruby-string">&quot;\n&quot;</span>)
+  
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/&lt;\/?(b|i)&gt;/</span>, <span class="ruby-string">''</span>)
+
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/(?:&lt;ul&gt;\s*(.*?)&lt;\/ul&gt;(?:\s*\n)?)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+    <span class="ruby-node">$1</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/&lt;li&gt;(.*?)&lt;\/li&gt;\s*/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+      (<span class="ruby-string">'* '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">word_wrap</span>(<span class="ruby-node">$1</span>, <span class="ruby-value">69</span>)).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;\n&quot;</span>, <span class="ruby-string">&quot;\n  &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n\n&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/(?:&lt;ol&gt;\s*(.*?)&lt;\/ol&gt;(?:\s*\n)?)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">nom</span> = <span class="ruby-value">0</span>
+    <span class="ruby-node">$1</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/&lt;li&gt;(.*?)&lt;\/li&gt;\s*/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+      (<span class="ruby-node">&quot;#{nom += 1}. &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">word_wrap</span>(<span class="ruby-node">$1</span>, <span class="ruby-value">68</span>)).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;\n&quot;</span>, <span class="ruby-string">&quot;\n   &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n\n&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/(?:&lt;code&gt;\s*(.*?)&lt;\/code&gt;(?:\s*\n)?)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>      
+    (<span class="ruby-string">'  '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">word_wrap</span>(<span class="ruby-identifier">shorten_args</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">shorten_args</span>(<span class="ruby-node">$1</span>) <span class="ruby-operator">:</span> <span class="ruby-node">$1</span>, <span class="ruby-value">69</span>)).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;\n&quot;</span>, <span class="ruby-string">&quot;\n  &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n\n&quot;</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">word_wrap</span>(<span class="ruby-identifier">text</span>.<span class="ruby-identifier">chomp</span>, <span class="ruby-value">71</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- adv_wrap-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- adv_wrap-method -->
+
+      
+        <div id="approval_icon-method" class="method-detail ">
+          <a name="method-i-approval_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">approval_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="approval_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 63</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">approval_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:approved</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/status-green.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is approved for sending.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:commented</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/status-red.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item has received comments.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:comments_pending</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/status-yellow.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item has received comments.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/status-grey.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item has no comments.&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- approval_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- approval_icon-method -->
+
+      
+        <div id="bugready_icon-method" class="method-detail ">
+          <a name="method-i-bugready_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">bugready_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="bugready_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 55</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">bugready_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/bug.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is bug ready.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/bug-grey.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is NOT bug ready.&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- bugready_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- bugready_icon-method -->
+
+      
+        <div id="check_icon-method" class="method-detail ">
+          <a name="method-i-check_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">check_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="check_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/ok.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;All checks passed&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/error.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Error. Cannot continue.&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- check_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- check_icon-method -->
+
+      
+        <div id="glsa_content-method" class="method-detail ">
+          <a name="method-i-glsa_content"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">glsa_content</span><span
+              class="method-args">(g, field)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="glsa_content-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">glsa_content</span>(<span class="ruby-identifier">g</span>, <span class="ruby-identifier">field</span>)
+  (<span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-identifier">field</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>]) <span class="ruby-operator">||</span> <span class="ruby-identifier">g</span>[<span class="ruby-identifier">field</span>]
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- glsa_content-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- glsa_content-method -->
+
+      
+        <div id="is_approval_icon-method" class="method-detail ">
+          <a name="method-i-is_approval_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">is_approval_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="is_approval_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 103</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_approval_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">'icons/approved.png'</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'This item is an approval'</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">'icons/not-approved.png'</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'This item is a rejection'</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- is_approval_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- is_approval_icon-method -->
+
+      
+        <div id="lastrev_content-method" class="method-detail ">
+          <a name="method-i-lastrev_content"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">lastrev_content</span><span
+              class="method-args">(g, field)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="lastrev_content-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">lastrev_content</span>(<span class="ruby-identifier">g</span>, <span class="ruby-identifier">field</span>)
+  (<span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-identifier">field</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>]) <span class="ruby-operator">||</span> <span class="ruby-identifier">g</span>.<span class="ruby-identifier">last_revision</span>[<span class="ruby-identifier">field</span>]
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- lastrev_content-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- lastrev_content-method -->
+
+      
+        <div id="prefixed_item-method" class="method-detail ">
+          <a name="method-i-prefixed_item"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">prefixed_item</span><span
+              class="method-args">(prefix, text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="prefixed_item-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">prefixed_item</span>(<span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">tf</span> = <span class="ruby-constant">Text</span><span class="ruby-operator">::</span><span class="ruby-constant">Format</span>.<span class="ruby-identifier">new</span>()
+  <span class="ruby-identifier">tf</span>.<span class="ruby-identifier">first_indent</span> = <span class="ruby-identifier">tf</span>.<span class="ruby-identifier">body_indent</span> = <span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+  
+  <span class="ruby-identifier">str</span> = <span class="ruby-identifier">tf</span>.<span class="ruby-identifier">format</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">str</span>[<span class="ruby-value">0</span>, <span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">length</span>] = <span class="ruby-identifier">prefix</span>  
+  <span class="ruby-identifier">str</span>.<span class="ruby-identifier">chomp</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- prefixed_item-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- prefixed_item-method -->
+
+      
+        <div id="restricted_icon-method" class="method-detail ">
+          <a name="method-i-restricted_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">restricted_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="restricted_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 87</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">restricted_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/confidential.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is CONFIDENTIAL.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/public.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is public.&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- restricted_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- restricted_icon-method -->
+
+      
+        <div id="status_icon-method" class="method-detail ">
+          <a name="method-i-status_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">status_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="status_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">status_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;request&quot;</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/request.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is a request.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;draft&quot;</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/draft.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is a draft.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;release&quot;</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/sent.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This item is a sent GLSA.&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-string">&quot;?&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- status_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- status_icon-method -->
+
+      
+        <div id="template_popups-method" class="method-detail ">
+          <a name="method-i-template_popups"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">template_popups</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="template_popups-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 145</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">template_popups</span>
+  <span class="ruby-identifier">render</span> <span class="ruby-value">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'template_popups'</span>, <span class="ruby-value">:locals</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:templates</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@templates</span>}
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- template_popups-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- template_popups-method -->
+
+      
+        <div id="workflow_icon-method" class="method-detail ">
+          <a name="method-i-workflow_icon"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">workflow_icon</span><span
+              class="method-args">(status)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="workflow_icon-source">
+<pre>
+<span class="ruby-comment"># File app/helpers/glsa_helper.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">workflow_icon</span>(<span class="ruby-identifier">status</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:commented</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/commented.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have commented on this item.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:approved</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/approved.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have approved this item.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:own</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/user.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This is your own draft.&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:todo</span>
+    <span class="ruby-identifier">image_tag</span> <span class="ruby-string">&quot;icons/not-approved.png&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Please comment and/or approve.&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- workflow_icon-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- workflow_icon-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

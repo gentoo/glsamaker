@@ -1,0 +1,1231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+  <title>Class: GlsaController</title>
+
+  <link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+  <script src="./js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="./app/controllers/glsa_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="app/controllers/glsa_controller.rb">app/controllers/glsa_controller.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link"><a href="ApplicationController.html">ApplicationController</a></p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-i-archive">#archive</a></li>
+          
+          <li><a href="#method-i-comment">#comment</a></li>
+          
+          <li><a href="#method-i-create">#create</a></li>
+          
+          <li><a href="#method-i-destroy">#destroy</a></li>
+          
+          <li><a href="#method-i-diff">#diff</a></li>
+          
+          <li><a href="#method-i-download">#download</a></li>
+          
+          <li><a href="#method-i-drafts">#drafts</a></li>
+          
+          <li><a href="#method-i-edit">#edit</a></li>
+          
+          <li><a href="#method-i-import_references">#import_references</a></li>
+          
+          <li><a href="#method-i-new">#new</a></li>
+          
+          <li><a href="#method-i-prepare_release">#prepare_release</a></li>
+          
+          <li><a href="#method-i-release">#release</a></li>
+          
+          <li><a href="#method-i-requests">#requests</a></li>
+          
+          <li><a href="#method-i-rev_diff">#rev_diff</a></li>
+          
+          <li><a href="#method-i-show">#show</a></li>
+          
+          <li><a href="#method-i-update">#update</a></li>
+          
+          <li><a href="#method-i-update_cache">#update_cache</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="./images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="./Glsamaker.html">Glsamaker</a></li>
+        
+          <li><a href="./Glsamaker/Bugs.html">Glsamaker::Bugs</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/ArchesMixin.html">Glsamaker::Bugs::ArchesMixin</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/Bug.html">Glsamaker::Bugs::Bug</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/BugReadyMixin.html">Glsamaker::Bugs::BugReadyMixin</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/Status.html">Glsamaker::Bugs::Status</a></li>
+        
+          <li><a href="./Glsamaker/Bugs/StatusMixin.html">Glsamaker::Bugs::StatusMixin</a></li>
+        
+          <li><a href="./Glsamaker/Diff.html">Glsamaker::Diff</a></li>
+        
+          <li><a href="./Glsamaker/HTTP.html">Glsamaker::HTTP</a></li>
+        
+          <li><a href="./Glsamaker/Helper.html">Glsamaker::Helper</a></li>
+        
+          <li><a href="./Glsamaker/Mail.html">Glsamaker::Mail</a></li>
+        
+          <li><a href="./Glsamaker/Portage.html">Glsamaker::Portage</a></li>
+        
+          <li><a href="./Glsamaker/Portage/Description.html">Glsamaker::Portage::Description</a></li>
+        
+          <li><a href="./Glsamaker/XML.html">Glsamaker::XML</a></li>
+        
+          <li><a href="./Admin.html">Admin</a></li>
+        
+          <li><a href="./Admin/IndexController.html">Admin::IndexController</a></li>
+        
+          <li><a href="./Admin/IndexHelper.html">Admin::IndexHelper</a></li>
+        
+          <li><a href="./Admin/TemplatesController.html">Admin::TemplatesController</a></li>
+        
+          <li><a href="./Admin/TemplatesHelper.html">Admin::TemplatesHelper</a></li>
+        
+          <li><a href="./Admin/UsersController.html">Admin::UsersController</a></li>
+        
+          <li><a href="./Admin/UsersHelper.html">Admin::UsersHelper</a></li>
+        
+          <li><a href="./Bugzilla.html">Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bug.html">Bugzilla::Bug</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla.html">Bugzilla::Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla/Bugzilla.html">Bugzilla::Bugzilla::Bugzilla</a></li>
+        
+          <li><a href="./Bugzilla/Bugzilla/Bugzilla/Change.html">Bugzilla::Bugzilla::Bugzilla::Change</a></li>
+        
+          <li><a href="./Bugzilla/Comment.html">Bugzilla::Comment</a></li>
+        
+          <li><a href="./Bugzilla/History.html">Bugzilla::History</a></li>
+        
+          <li><a href="./Comment.html">Comment</a></li>
+        
+          <li><a href="./Comment/CommentValidator.html">Comment::CommentValidator</a></li>
+        
+          <li><a href="./ApplicationController.html">ApplicationController</a></li>
+        
+          <li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+        
+          <li><a href="./Authentication.html">Authentication</a></li>
+        
+          <li><a href="./Authorization.html">Authorization</a></li>
+        
+          <li><a href="./Bug.html">Bug</a></li>
+        
+          <li><a href="./BugController.html">BugController</a></li>
+        
+          <li><a href="./BugHelper.html">BugHelper</a></li>
+        
+          <li><a href="./BugsController.html">BugsController</a></li>
+        
+          <li><a href="./BugsHelper.html">BugsHelper</a></li>
+        
+          <li><a href="./CommentsController.html">CommentsController</a></li>
+        
+          <li><a href="./CommentsHelper.html">CommentsHelper</a></li>
+        
+          <li><a href="./Cpe.html">Cpe</a></li>
+        
+          <li><a href="./Cve.html">Cve</a></li>
+        
+          <li><a href="./CveAssignment.html">CveAssignment</a></li>
+        
+          <li><a href="./CveChange.html">CveChange</a></li>
+        
+          <li><a href="./CveComment.html">CveComment</a></li>
+        
+          <li><a href="./CveController.html">CveController</a></li>
+        
+          <li><a href="./CveHelper.html">CveHelper</a></li>
+        
+          <li><a href="./CveReference.html">CveReference</a></li>
+        
+          <li><a href="./GLSAReleaseError.html">GLSAReleaseError</a></li>
+        
+          <li><a href="./Glsa.html">Glsa</a></li>
+        
+          <li><a href="./GlsaController.html">GlsaController</a></li>
+        
+          <li><a href="./GlsaHelper.html">GlsaHelper</a></li>
+        
+          <li><a href="./GlsaMailer.html">GlsaMailer</a></li>
+        
+          <li><a href="./IndexController.html">IndexController</a></li>
+        
+          <li><a href="./IndexHelper.html">IndexHelper</a></li>
+        
+          <li><a href="./Package.html">Package</a></li>
+        
+          <li><a href="./Reference.html">Reference</a></li>
+        
+          <li><a href="./Revision.html">Revision</a></li>
+        
+          <li><a href="./SearchController.html">SearchController</a></li>
+        
+          <li><a href="./SearchHelper.html">SearchHelper</a></li>
+        
+          <li><a href="./String.html">String</a></li>
+        
+          <li><a href="./Template.html">Template</a></li>
+        
+          <li><a href="./ToolsController.html">ToolsController</a></li>
+        
+          <li><a href="./ToolsHelper.html">ToolsHelper</a></li>
+        
+          <li><a href="./User.html">User</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">GlsaController</h1>
+
+    <div id="description" class="description">
+      
+<p>GLSA controller</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+
+      <!-- Methods -->
+      
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="archive-method" class="method-detail ">
+          <a name="method-i-archive"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">archive</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="archive-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">archive</span>
+  <span class="ruby-ivar">@pageID</span> = <span class="ruby-string">&quot;archive&quot;</span>
+  <span class="ruby-ivar">@pageTitle</span> = <span class="ruby-string">&quot;GLSA archive&quot;</span>    
+
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+      <span class="ruby-ivar">@month</span> = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:month</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">month</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-ivar">@year</span> = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:year</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">year</span>).<span class="ruby-identifier">to_i</span>
+
+      <span class="ruby-identifier">month_start</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-value">1</span>)
+      <span class="ruby-identifier">month_end</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>, <span class="ruby-value">1</span>) <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+
+      <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'release'</span>, <span class="ruby-value">:first_released_at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">month_start</span><span class="ruby-operator">..</span><span class="ruby-identifier">month_end</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">'updated_at DESC'</span>)
+    }
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> {
+      <span class="ruby-ivar">@month</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:view</span>][<span class="ruby-string">'month(2i)'</span>].<span class="ruby-identifier">to_i</span>
+      <span class="ruby-ivar">@year</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:view</span>][<span class="ruby-string">'month(1i)'</span>].<span class="ruby-identifier">to_i</span>
+
+      <span class="ruby-identifier">month_start</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-value">1</span>)
+      <span class="ruby-identifier">month_end</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>, <span class="ruby-value">1</span>) <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+
+      <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'release'</span>, <span class="ruby-value">:first_released_at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">month_start</span><span class="ruby-operator">..</span><span class="ruby-identifier">month_end</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">'updated_at DESC'</span>)
+      <span class="ruby-ivar">@table</span> = <span class="ruby-identifier">render_to_string</span> <span class="ruby-value">:partial</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;glsa_row&quot;</span>, <span class="ruby-value">:collection</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsas</span>, <span class="ruby-value">:as</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:glsa</span>, <span class="ruby-value">:locals</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:view</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:drafts</span> }
+    }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- archive-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- archive-method -->
+
+      
+        <div id="comment-method" class="method-detail ">
+          <a name="method-i-comment"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">comment</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="comment-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 368</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">comment</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- comment-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- comment-method -->
+
+      
+        <div id="create-method" class="method-detail ">
+          <a name="method-i-create"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">create</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="create-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;request&quot;</span>
+    <span class="ruby-keyword">begin</span>
+      <span class="ruby-identifier">glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">new_request</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:title</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:bugs</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:access</span>], (<span class="ruby-identifier">params</span>[<span class="ruby-value">:import_references</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>), <span class="ruby-identifier">current_user</span>)
+      
+      <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Mail</span>.<span class="ruby-identifier">request_notification</span>(<span class="ruby-identifier">glsa</span>, <span class="ruby-identifier">current_user</span>)
+      
+      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;Successfully created GLSA #{glsa.glsa_id}&quot;</span>
+      <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;requests&quot;</span>
+    <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">log_error</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+      <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new-request&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- create-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- create-method -->
+
+      
+        <div id="destroy-method" class="method-detail ">
+          <a name="method-i-destroy"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">destroy</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="destroy-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 365</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- destroy-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- destroy-method -->
+
+      
+        <div id="diff-method" class="method-detail ">
+          <a name="method-i-diff"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">diff</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="diff-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 332</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">diff</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  
+  <span class="ruby-identifier">rev_old</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:old</span>])
+  <span class="ruby-identifier">rev_new</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:new</span>])
+  
+  <span class="ruby-ivar">@diff</span> = <span class="ruby-identifier">with_format</span>(<span class="ruby-value">:xml</span>) { <span class="ruby-identifier">rev_diff</span>(<span class="ruby-ivar">@glsa</span>, <span class="ruby-identifier">rev_old</span>, <span class="ruby-identifier">rev_new</span>) }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- diff-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- diff-method -->
+
+      
+        <div id="download-method" class="method-detail ">
+          <a name="method-i-download"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">download</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="download-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 105</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">download</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_id</span>])
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Invalid revision ID&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">text</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wants</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">xml</span> { <span class="ruby-identifier">text</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>, <span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'xml'</span>)}
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">txt</span> { <span class="ruby-identifier">text</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>, <span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'txt'</span>)}
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Cannot download HTML format. Pick .xml or .txt&quot;</span>; <span class="ruby-keyword">return</span> }
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">send_data</span>(<span class="ruby-identifier">text</span>, <span class="ruby-value">:filename</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;glsa-#{@glsa.glsa_id}.#{params[:format]}&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- download-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- download-method -->
+
+      
+        <div id="drafts-method" class="method-detail ">
+          <a name="method-i-drafts"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">drafts</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="drafts-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">drafts</span>
+  <span class="ruby-ivar">@pageID</span> = <span class="ruby-string">&quot;drafts&quot;</span>
+  <span class="ruby-ivar">@pageTitle</span> = <span class="ruby-string">&quot;Pooled GLSA drafts&quot;</span>
+  <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'draft'</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">'updated_at DESC'</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- drafts-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- drafts-method -->
+
+      
+        <div id="edit-method" class="method-detail ">
+          <a name="method-i-edit"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">edit</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="edit-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+  
+  <span class="ruby-comment"># Packages</span>
+  <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">vulnerable_packages</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:comp</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&lt;&quot;</span>, <span class="ruby-value">:arch</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;*&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">vulnerable_packages</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+  <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">unaffected_packages</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:comp</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&gt;=&quot;</span>, <span class="ruby-value">:arch</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;*&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">unaffected_packages</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+  
+  <span class="ruby-comment"># References</span>
+  <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">references</span>.<span class="ruby-identifier">build</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">references</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+
+  <span class="ruby-ivar">@templates</span> = {}
+  <span class="ruby-constant">GLSAMAKER_TEMPLATE_TARGETS</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">target</span><span class="ruby-operator">|</span>
+    <span class="ruby-ivar">@templates</span>[<span class="ruby-identifier">target</span>] = <span class="ruby-constant">Template</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span>).<span class="ruby-identifier">all</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- edit-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- edit-method -->
+
+      
+        <div id="import_references-method" class="method-detail ">
+          <a name="method-i-import_references"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">import_references</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="import_references-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 371</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">import_references</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:go</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">'1'</span>
+      <span class="ruby-identifier">glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">Integer</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+      <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-identifier">glsa</span>)
+      <span class="ruby-identifier">refs</span> = []
+      
+      <span class="ruby-identifier">params</span>[<span class="ruby-value">:import</span>][<span class="ruby-value">:cve</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">cve_id</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">cve</span> = <span class="ruby-constant">Cve</span>.<span class="ruby-identifier">find_by_cve_id</span> <span class="ruby-identifier">cve_id</span>
+        <span class="ruby-identifier">refs</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">cve</span>.<span class="ruby-identifier">cve_id</span>, <span class="ruby-value">:url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">cve</span>.<span class="ruby-identifier">url</span>}
+      <span class="ruby-keyword">end</span>
+      
+      <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">add_references</span> <span class="ruby-identifier">refs</span>
+      
+      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;Imported #{refs.count} references.&quot;</span>
+      <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">glsa</span>.<span class="ruby-identifier">id</span>
+      <span class="ruby-keyword">return</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-constant">Integer</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+      <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+      <span class="ruby-ivar">@cves</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">related_cves</span>
+    <span class="ruby-keyword">end</span>      
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;Error: #{e.message}&quot;</span>, <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">500</span>
+    <span class="ruby-identifier">log_error</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">render</span> <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- import_references-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- import_references-method -->
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-i-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 53</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@pageID</span> = <span class="ruby-string">&quot;new&quot;</span>
+  <span class="ruby-ivar">@pageTitle</span> = <span class="ruby-string">&quot;New GLSA&quot;</span>
+  
+  <span class="ruby-comment"># TODO: Straight-to-draft editing</span>
+  <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new-request&quot;</span>
+  <span class="ruby-keyword">return</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;request&quot;</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new-request&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:what</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;draft&quot;</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;new-draft&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">render</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+        <div id="prepare_release-method" class="method-detail ">
+          <a name="method-i-prepare_release"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">prepare_release</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="prepare_release-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 253</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">prepare_release</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">access</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>
+    <span class="ruby-identifier">deny_access</span> <span class="ruby-string">&quot;Tried to prepare release&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">'request'</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">'You cannot release a request. Draft the advisory first.'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">restricted</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">'You cannot release a confidential draft. Make it public first.'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+
+  <span class="ruby-ivar">@comments_override</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_el_jefe?</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:override_approvals</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- prepare_release-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- prepare_release-method -->
+
+      
+        <div id="release-method" class="method-detail ">
+          <a name="method-i-release"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">release</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="release-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 279</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">release</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">access</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>
+    <span class="ruby-identifier">deny_access</span> <span class="ruby-string">&quot;Tried to prepare release&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">'request'</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">'You cannot release a request. Draft the advisory first.'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">restricted</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">'You cannot release a confidential draft. Make it public first.'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_el_jefe?</span>
+      <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">release!</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">release</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">invalidate_last_revision_cache</span>
+
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'1'</span>
+      <span class="ruby-identifier">of</span> = <span class="ruby-ivar">@template_format</span>
+      <span class="ruby-ivar">@template_format</span> = <span class="ruby-string">'txt'</span>
+      <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Mail</span>.<span class="ruby-identifier">send_text</span>(
+          <span class="ruby-identifier">render_to_string</span>({<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'glsa/show.txt.erb'</span>, <span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:txt</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}),
+          <span class="ruby-node">&quot;[ GLSA #{@glsa.glsa_id} ] #{@rev.title}&quot;</span>,
+          <span class="ruby-identifier">current_user</span>,
+          <span class="ruby-keyword">false</span>
+      )
+      <span class="ruby-ivar">@template_format</span> = <span class="ruby-identifier">of</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">GLSAReleaseError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;Internal error: #{e.message}. Cannot release advisory.&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ugly hack, but necessary to switch back to html</span>
+  <span class="ruby-ivar">@real_format</span> = <span class="ruby-string">'html'</span>
+  <span class="ruby-identifier">render</span>(<span class="ruby-value">:format</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:html</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'application'</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- release-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- release-method -->
+
+      
+        <div id="requests-method" class="method-detail ">
+          <a name="method-i-requests"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">requests</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="requests-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">requests</span>
+  <span class="ruby-ivar">@pageID</span> = <span class="ruby-string">&quot;requests&quot;</span>
+  <span class="ruby-ivar">@pageTitle</span> = <span class="ruby-string">&quot;Pooled GLSA requests&quot;</span>
+  <span class="ruby-ivar">@glsas</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'request'</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">'updated_at DESC'</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- requests-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- requests-method -->
+
+      
+        <div id="show-method" class="method-detail ">
+          <a name="method-i-show"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">show</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="show-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 87</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_id</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>.<span class="ruby-identifier">find_by_revid</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_id</span>])
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Invalid revision ID&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;show&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">wants</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> }
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">xml</span> { }
+    <span class="ruby-identifier">wants</span>.<span class="ruby-identifier">txt</span> { <span class="ruby-identifier">render</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- show-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- show-method -->
+
+      
+        <div id="update-method" class="method-detail ">
+          <a name="method-i-update"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">update</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="update-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 144</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  <span class="ruby-ivar">@prev_latest_rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Unknown GLSA ID&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;index&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># GLSA object</span>
+  <span class="ruby-comment"># The first editor is submitter</span>
+  <span class="ruby-comment"># TODO: Maybe take a better condition (adding bugs would make so. the submitter)</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">submitter</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">submitter</span> = <span class="ruby-identifier">current_user</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">status</span> = <span class="ruby-string">&quot;draft&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;request&quot;</span>
+
+  <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">restricted</span> = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:restricted</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;confidential&quot;</span>)
+
+  <span class="ruby-comment"># Force update</span>
+  <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">updated_at</span> = <span class="ruby-value">0</span>
+
+  <span class="ruby-identifier">revision</span> = <span class="ruby-constant">Revision</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">revid</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">next_revid</span>
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">glsa</span> = <span class="ruby-ivar">@glsa</span>
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">user</span> = <span class="ruby-identifier">current_user</span>
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">title</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:title</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">synopsis</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:synopsis</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">access</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:access</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">severity</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:severity</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">product</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:product</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">description</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:description</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">background</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:background</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">impact</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:impact</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">workaround</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:workaround</span>]
+  <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">resolution</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:resolution</span>]
+
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-node">&quot;Errors occurred while saving the Revision object: #{revision.errors.full_messages.join ', '}&quot;</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;edit&quot;</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Errors occurred while saving the GLSA object&quot;</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;edit&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Bugs</span>
+  <span class="ruby-identifier">bugzilla_warning</span> = <span class="ruby-keyword">false</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:bugs</span>]
+    <span class="ruby-identifier">bugs</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:bugs</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">bug</span><span class="ruby-operator">|</span> <span class="ruby-identifier">bug</span>.<span class="ruby-identifier">to_i</span> }
+
+    <span class="ruby-identifier">bugs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bug</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">begin</span>
+        <span class="ruby-identifier">b</span> = <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Bugs</span><span class="ruby-operator">::</span><span class="ruby-constant">Bug</span>.<span class="ruby-identifier">load_from_id</span>(<span class="ruby-identifier">bug</span>)
+
+        <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">bugs</span>.<span class="ruby-identifier">create</span>(
+          <span class="ruby-value">:bug_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">bug</span>,
+          <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">summary</span>,
+          <span class="ruby-value">:whiteboard</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">status_whiteboard</span>,
+          <span class="ruby-value">:arches</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">arch_cc</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)
+        )
+      <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">log_error</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span> { <span class="ruby-identifier">e</span>.<span class="ruby-identifier">inspect</span> }
+        <span class="ruby-comment"># In case of bugzilla errors, just keep the bug #</span>
+        <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">bugs</span>.<span class="ruby-identifier">create</span>(
+          <span class="ruby-value">:bug_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">bug</span>
+        )
+        <span class="ruby-identifier">bugzilla_warning</span> = <span class="ruby-keyword">true</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:package</span>].<span class="ruby-identifier">inspect</span>
+
+  <span class="ruby-comment"># Packages</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:package</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">package</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">package</span>.<span class="ruby-identifier">inspect</span>
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">package</span>[<span class="ruby-value">:atom</span>].<span class="ruby-identifier">strip</span> <span class="ruby-operator">==</span> <span class="ruby-string">''</span>
+    <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">packages</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">package</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># References</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:glsa</span>][<span class="ruby-value">:reference</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">reference</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">reference</span>.<span class="ruby-identifier">inspect</span>
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">reference</span>[<span class="ruby-value">:title</span>].<span class="ruby-identifier">strip</span> <span class="ruby-operator">==</span> <span class="ruby-string">''</span>
+    <span class="ruby-identifier">revision</span>.<span class="ruby-identifier">references</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">reference</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Comments</span>
+  <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">comment</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">read</span> = <span class="ruby-identifier">params</span>[<span class="ruby-node">&quot;commentread-#{comment.id}&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;true&quot;</span>
+    <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Sending emails</span>
+  <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Mail</span>.<span class="ruby-identifier">edit_notification</span>(<span class="ruby-ivar">@glsa</span>, <span class="ruby-identifier">rev_diff</span>(<span class="ruby-ivar">@glsa</span>, <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">revisions</span>[<span class="ruby-value">-2</span>], <span class="ruby-identifier">revision</span>), <span class="ruby-identifier">current_user</span>)
+
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;Saving was successful. #{'NOTE: Bugzilla integration is not available, only plain bug numbers.' if bugzilla_warning}&quot;</span>
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'show'</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>
+  
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- update-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- update-method -->
+
+      
+        <div id="update_cache-method" class="method-detail ">
+          <a name="method-i-update_cache"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">update_cache</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="update_cache-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 342</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_cache</span>
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-constant">Glsa</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_object_access!</span>(<span class="ruby-ivar">@glsa</span>)
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-ivar">@glsa</span>.<span class="ruby-identifier">last_revision</span>
+  
+  <span class="ruby-ivar">@rev</span>.<span class="ruby-identifier">update_cached_bug_metadata</span>
+  
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Successfully updated all caches.&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:redirect</span>]
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:redirect</span>]
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'show'</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:no_redirect</span>]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">log_error</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;Could not update caches: #{e.message}&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:redirect</span>]
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:redirect</span>]
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'show'</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:no_redirect</span>]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- update_cache-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- update_cache-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+      <div id="protected-instance-method-details" class="method-section section">
+        <h3 class="section-header">Protected Instance Methods</h3>
+
+      
+        <div id="rev_diff-method" class="method-detail ">
+          <a name="method-i-rev_diff"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">rev_diff</span><span
+              class="method-args">(glsa, rev_old, rev_new, format = :unified, context_lines = 3)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="rev_diff-source">
+<pre>
+<span class="ruby-comment"># File app/controllers/glsa_controller.rb, line 403</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rev_diff</span>(<span class="ruby-identifier">glsa</span>, <span class="ruby-identifier">rev_old</span>, <span class="ruby-identifier">rev_new</span>, <span class="ruby-identifier">format</span> = <span class="ruby-value">:unified</span>, <span class="ruby-identifier">context_lines</span> = <span class="ruby-value">3</span>)
+  <span class="ruby-ivar">@glsa</span> = <span class="ruby-identifier">glsa</span>
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-identifier">rev_old</span>
+  <span class="ruby-identifier">old_text</span> = <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span>.<span class="ruby-identifier">indent</span>(
+    <span class="ruby-identifier">render_to_string</span>(
+      <span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'glsa/_glsa.xml.builder'</span>,
+      <span class="ruby-value">:locals</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:glsa</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>, <span class="ruby-value">:rev</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@rev</span>},
+      <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'none'</span>
+    ),
+    {<span class="ruby-value">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, <span class="ruby-value">:maxcols</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">80</span>}
+  )    
+  
+  <span class="ruby-ivar">@rev</span> = <span class="ruby-identifier">rev_new</span>
+  <span class="ruby-identifier">new_text</span> = <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span>.<span class="ruby-identifier">indent</span>(
+    <span class="ruby-identifier">render_to_string</span>(
+      <span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'glsa/_glsa.xml.builder'</span>,
+      <span class="ruby-value">:locals</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:glsa</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@glsa</span>, <span class="ruby-value">:rev</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@rev</span>},
+      <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'none'</span>
+    ),
+    {<span class="ruby-value">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>, <span class="ruby-value">:maxcols</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">80</span>}
+  )
+
+  <span class="ruby-constant">Glsamaker</span><span class="ruby-operator">::</span><span class="ruby-constant">Diff</span>.<span class="ruby-identifier">diff</span>(<span class="ruby-identifier">old_text</span>, <span class="ruby-identifier">new_text</span>, <span class="ruby-identifier">format</span>, <span class="ruby-identifier">context_lines</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- rev_diff-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- rev_diff-method -->
+
+      
+      </div><!-- protected-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

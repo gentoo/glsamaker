@@ -3,16 +3,22 @@
 GLSAMaker is a core tool for the Gentoo Security Team.
 It is used to track, create, edit and review Security announcements and drafts.
 
-Project website: http://security.gentoo.org
+Project website: https://redmine.a3li.li/projects/glsamaker2
 
 ==Needed libraries
-* Rails 2.3.2
+* Rails 3.1
 * Nokogiri
 * FasterCSV
+* JSON
+* Mechanize
+* Rcov
+* text-format
+* xmlindent
+* Sphinx
 * Sparklines
 
 ==Copyright
- Copyright (C) 2009 Alex Legler <a3li@gentoo.org>
+ Copyright (C) 2009-2011 Alex Legler <a3li@gentoo.org>
  Copyright (C) 2009 Pierre-Yves Rofes <py@gentoo.org>
  Portions Copyright (C) 2006-2007 Jean-Philippe Lang
 
