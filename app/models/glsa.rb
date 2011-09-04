@@ -94,6 +94,7 @@ class Glsa < ActiveRecord::Base
 
   # Returns true if user is the owner of this GLSA.
   def is_owner?(user)
+    return false if user.nil?
     luser = (status == "request" ? requester : submitter)
     luser == user
   end
@@ -188,14 +189,20 @@ class Glsa < ActiveRecord::Base
     glsa.restricted = (access == "confidential")
     glsa.status = "request"
 
-    unless comment.strip.blank?
-      glsa.comments << Comment.new(:rating => "neutral", :text => comment, :user => user)
-    end
-
     begin
       glsa.save!
     rescue Exception => e
       raise Exception, "Error while saving the GLSA object: #{e.message}"
+    end
+
+    unless comment.strip.blank?
+      glsa.comments << Comment.new(:rating => "neutral", :text => comment, :user => user)
+
+      begin
+        glsa.save!
+      rescue Exception => e
+        raise Exception, "Error while saving the comment: #{e.message}"
+      end
     end
 
     revision = Revision.new
