@@ -38,7 +38,12 @@ module Authorization
 
   # Redirects the user to a 'Access Denied' screen and logs the incident
   def deny_access(msg)
-    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip} to #{request.url}: #{msg}"
+    log_unauthorized_access msg
     redirect_to :controller => '/index', :action => 'error', :type => 'access'
+  end
+
+  # Logs an unauthorized access attempt
+  def log_unauthorized_access(msg)
+    logger.warn "[#{Time.now.rfc2822}] UNAUTHORIZED ACCESS by #{current_user.login} from #{request.remote_ip} to #{request.url}: #{msg}"
   end
 end
