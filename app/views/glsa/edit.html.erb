@@ -31,8 +31,7 @@
   </div>
 
   <div class="box">
-    <%= box_title('Background', :icon => 'icons/background.png', :label => 'background',
-                  :toolbar => [{:uri => 'javascript:backgroundDialog();', :title => 'Get background', :icon => 'icons/background-go.png'}]) %>
+    <%= box_title('Background', :icon => 'icons/background.png', :label => 'background') %>
     <p>
       <textarea name="glsa[background]" id="background" class="nice" rows="3"><%= lastrev_content(@glsa, 'background') %></textarea>
     </p>
