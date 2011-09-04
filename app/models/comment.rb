@@ -11,6 +11,30 @@
 
 # Comment model
 class Comment < ActiveRecord::Base
-  belongs_to :Glsa, :class_name => "Glsa", :foreign_key => "glsa_id"
+  belongs_to :glsa, :class_name => "Glsa", :foreign_key => "glsa_id"
   belongs_to :user
+
+  include ActiveModel::Validations
+  validates :glsa_id, :presence => true
+  validates :user_id, :presence => true
+  validates :rating, :inclusion => { :in => %w[neutral approval rejection]}
+  validates :rating, :uniqueness => { :scope => [:glsa_id, :user_id], :if => Proc.new {|comment| comment.rating != 'neutral'}, :message => 'You have already approved or rejected this draft' }
+
+  class CommentValidator < ActiveModel::Validator
+    def validate(record)
+      if record.glsa.is_owner? record.user
+        if record.rating != 'neutral'
+          record.errors[:rating] << 'The owner of a draft cannot make approvals or rejections'
+        end
+      end
+
+      if record.user.access < 2
+        if record.rating != 'neutral'
+          record.errors[:rating] << 'You may not approve or reject drafts'
+        end
+      end
+    end
+  end
+
+  validates_with CommentValidator
 end
