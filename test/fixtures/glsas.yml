@@ -5,6 +5,8 @@ glsa_one:
 glsa_two:
   id: 2
   glsa_id: GLSA-200901-02
+  requester: 1
+  submitter: 1
 
 restricted_glsa:
   id: 3

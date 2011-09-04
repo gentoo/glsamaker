@@ -3,6 +3,7 @@ test_user:
   login: test
   name: Tim Est
   email: user@localhost.invalid
+  access: 3
 
 test_admin:
   id: 2
