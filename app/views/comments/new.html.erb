@@ -9,13 +9,17 @@
     <p>
       <%= f.text_area :text, :class => "nice", :rows => 2 %>
     </p>
-    
+
+    <% if current_user.access >= 2 and not @glsa.is_owner? current_user %>
     <div align="right">
       Rating:
       <%= f.radio_button :rating, "approval" %><label for="newcomment_rating_approval"><%= image_tag 'icons/unaffected.png', :alt => 'Approval', :title => 'Approval' %></label>&nbsp;
       <%= f.radio_button :rating, "rejection" %><label for="newcomment_rating_rejection"><%= image_tag 'icons/affected.png', :alt => 'Rejection', :title => 'Rejection' %></label>&nbsp;
-      <%= f.radio_button :rating, "neutral", :checked => true %><label for="newcomment_rating_neutral"><%= image_tag 'icons/reference', :alt => 'Neutral', :title => 'Neutral' %></label>
+      <%= f.radio_button :rating, "neutral", :checked => true %><label for="newcomment_rating_neutral"><%= image_tag 'icons/reference.png', :alt => 'Neutral', :title => 'Neutral' %></label>
     </div>
+    <% else %>
+      <%= f.hidden_field :rating, :value => 'neutral' %>
+    <% end %>
   <% end %>
 
     <p style="text-align: right;"><input type="submit" class="button" value="Add comment" id="addcommentsubmit" /></p>

@@ -2,5 +2,9 @@
 Element.insert('commentslist', { bottom: '<%= escape_javascript(@comment_text).html_safe %>'});
 Modalbox.hide();
 <% else %>
+<% if @error.is_a? ActiveModel::Errors %>
+alert('<%= escape_javascript(@error.full_messages.join "\n").html_safe %>');
+<% else %>
 alert('<%= escape_javascript(@error).html_safe %>');
+<% end %>
 <% end %>

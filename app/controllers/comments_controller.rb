@@ -31,12 +31,17 @@ class CommentsController < ApplicationController
       if comment_data['text'].strip != ''
         comment = @glsa.comments.build(comment_data)
         comment.user = current_user
+
         if comment.save
           Glsamaker::Mail.comment_notification(@glsa, comment, current_user)
 
           if @glsa.is_approved? and @glsa.approvals.count ==  @glsa.rejections.count + 2
             Glsamaker::Mail.approval_notification(@glsa)
           end
+        else
+          @error = comment.errors
+          render
+          return
         end
       end
 
