@@ -1,0 +1,29 @@
+<h1>Release finished</h1>
+
+<div class="box w40em">
+  <h2>Release information</h2>
+
+  <table>
+    <tr>
+      <td>Official ID</td>
+      <td><strong>GLSA <%= @glsa.glsa_id %></strong></td>
+    </tr>
+    <tr>
+      <td>Title</td>
+      <td><strong><%= @glsa.last_revision.title %></strong></td>
+    </tr>
+  </table>
+</div>
+
+<div class="box w40em">
+  <h2>Closed bugs</h2>
+
+  <table>
+    <% @glsa.last_revision.bugs.each do |bug| %>
+    <tr>
+      <td><%= bug.bug_id %></td>
+      <td><%= bug.title %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>

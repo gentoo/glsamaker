@@ -169,6 +169,27 @@ class Glsa < ActiveRecord::Base
     save!
   end
 
+  # Closes all bugs linked to this advisory and refreshes the metadata
+  def close_bugs(message)
+    last_revision.bugs.each do |bug|
+      b = Glsamaker::Bugs::Bug.load_from_id(bug.bug_id)
+
+      changes = {}
+      changes[:comment] = message
+      changes[:whiteboard] = b.status_whiteboard.gsub(/(ebuild\+?|upstream\+?|stable\+?|glsa)\??/, 'glsa').gsub(/glsa\/glsa/, 'glsa')
+      changes[:status] = "RESOLVED"
+      changes[:resolution] = "FIXED"
+
+      Bugzilla.update_bug(bug.bug_id, changes)
+      bug.update_cached_metadata
+    end
+  end
+
+  # Returns a publically accessible URL for the advisory if it's a released GLSA
+  def to_url
+    "http://security.gentoo.org/glsa/glsa-#{self.glsa_id}.xml"
+  end
+
   # Calculates the next GLSA ID for the given month, or the current month
   def self.next_id(month = Time.now)
     month_id = month.strftime("%Y%m")

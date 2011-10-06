@@ -25,6 +25,7 @@ Glsamaker::Application.routes.draw do
     post 'prepare_release',   :on => :member
     post 'release',           :on => :member
     get  'update_cache',      :on => :member
+    get  'finalize_release',  :on => :member
   end
   
   # The priority is based upon order of creation:

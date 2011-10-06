@@ -335,6 +335,19 @@ class GlsaController < ApplicationController
     render(:format => :html, :layout => 'application')
   end
 
+  def finalize_release
+    @glsa = Glsa.find(params[:id])
+
+    if params[:close_bugs] == '1'
+      message = "GLSA #{@glsa.glsa_id}"
+      with_format(:txt) do
+        message = render_to_string :partial => 'close_msg'
+      end
+      
+      @glsa.close_bugs(message)
+    end
+  end
+
   def diff
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)

@@ -20,11 +20,12 @@
 
   <p>
     Now, download the advisory XML and publish it in CVS.<br />
-    Then you can send the advisory email.
+    Then you can send the advisory email and close the relevant bugs in Bugzilla.
   </p>
 
   <div class='box-actions'>
     <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'xml')) %>'">Download XML</button>
-    <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'">Show Text</button>
+    <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'">Show text</button>
+    <button onclick="document.location = '<%= escape_javascript(finalize_release_glsa_path(@glsa, :close_bugs => '1')) %>'">Close bugs</button>
   </div>  
 </div>

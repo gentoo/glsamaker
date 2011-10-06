@@ -45,7 +45,7 @@
         Then, refresh the bug caches.
       </p>
       <div class="actions">
-        <%= button_to "Refresh bug caches and retry", :action => 'update_cache', :id => @glsa.id, :redirect => request.request_uri %>
+        <%= button_to "Refresh bug caches and retry", { :action => 'update_cache', :id => @glsa.id, :redirect => request.url }, :method => 'get' %>
       </div>
     </div>
   <% end %>
