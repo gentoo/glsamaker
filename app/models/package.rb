@@ -12,10 +12,10 @@
 # Package model
 class Package < ActiveRecord::Base
   belongs_to :revision
-  
-  # Returns the comparator in the format needed for the XML
-  def xml_comp
-    comps = {
+  validates :comp, :inclusion => { :in => %w[>= > = <= < *< *<= *> *>=] }
+
+  # Mapping XML comparators to internally used ones
+  COMP_MAP = {
       '>=' => 'ge',
       '>'  => 'gt',
       '='  => 'eq',
@@ -25,8 +25,14 @@ class Package < ActiveRecord::Base
       '*<=' => 'rle',
       '*>' => 'rgt',
       '*>=' => 'rge'
-    }
+    }.freeze
 
-    comps[self.comp]
+  # Returns the comparator in the format needed for the XML
+  def xml_comp
+    COMP_MAP[self.comp]
+  end
+
+  def self.reverse_comp(cmp)
+    COMP_MAP.invert[cmp]
   end
 end
