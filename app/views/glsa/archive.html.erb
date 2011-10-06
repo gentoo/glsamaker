@@ -2,7 +2,7 @@
   <span class="floatright">
     <%= form_tag(archive_glsas_path, :remote => true) do -%>
     <%= image_tag 'icons/calendar-select-month.png' %>
-    <%= date_select('view', 'month', :discard_day => true, :order => [:month, :year]) %>
+    <%= date_select('view', 'month', :discard_day => true, :order => [:month, :year], :start_year => 2003, :end_year => Time.now.year + 1) %>
     <%= image_submit_tag 'icons/next.png' %>
     <% end -%>
   </span>
