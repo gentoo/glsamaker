@@ -10,7 +10,7 @@ class CveController < ApplicationController
     @pageID = 'cve'
 
     condition = view_mask_to_condition(params[:view_map].to_i)
-    @cves = Cve.where(condition).limit(500).order('cve_id DESC')
+    @cves = Cve.where(condition).limit(1000).order('cve_id DESC')
 
     respond_to do |format|
       format.html
