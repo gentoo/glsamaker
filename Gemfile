@@ -37,6 +37,7 @@ gem "fastercsv"
 gem "diff-lcs", :require => "diff/lcs"
 gem "nokogiri"
 gem "text-format", :require => "text/format"
+gem "kramdown"
 
 gem "thinking-sphinx", "2.0.7"
 
