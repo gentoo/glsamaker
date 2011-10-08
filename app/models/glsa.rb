@@ -110,7 +110,7 @@ class Glsa < ActiveRecord::Base
       return :approved
     end
 
-    if comments.where(:user_id => user.id).all.count > 0
+    if comments.where(:user_id => user.id, :read => false).all.count > 0
       return :commented
     end
 
