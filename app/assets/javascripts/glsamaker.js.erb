@@ -126,11 +126,11 @@ function generateDescription() {
 function toggleCommentRead(comment) {
     if ($('commentread-' + comment).value == "true") {
         $('commentread-' + comment).value = "false";
-        $('commentflag-' + comment).update('<img src="/assets/icons/flag.png" alt="Todo" />');
+        $('commentflag-' + comment).update('<img src="<%= asset_path 'icons/flag.png' %>" alt="Todo" />');
     }
     else {
         $('commentread-' + comment).value = "true";
-        $('commentflag-' + comment).update('<img src="/assets/icons/flag-green.png" alt="Done." />');
+        $('commentflag-' + comment).update('<img src="<%= asset_path 'icons/flag-green.png' %>" alt="Done." />');
     }    
 }
 
