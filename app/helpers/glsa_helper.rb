@@ -122,11 +122,17 @@ module GlsaHelper
     
     text.gsub!(/<\/?(b|i)>/, '')
 
+    text.gsub!(/^\*\s+(.*)$/) do |s|
+      '* ' + word_wrap($1, 69).gsub("\n","\n  ")
+    end
+
     text.gsub!(/(?:<ul>\s*(.*?)<\/ul>(?:\s*\n)?)/m) do |s|
       $1.gsub(/<li>(.*?)<\/li>\s*/) do |t|
         ('* ' + word_wrap($1, 69)).gsub("\n", "\n  ") + "\n\n"
       end
     end
+
+    # TODO: ordered lists? never used...
     
     text.gsub!(/(?:<ol>\s*(.*?)<\/ol>(?:\s*\n)?)/m) do |s|
       nom = 0
@@ -144,6 +150,15 @@ module GlsaHelper
 
   def template_popups
     render :partial => 'template_popups', :locals => {:templates => @templates}
+  end
+
+  def xml_format(str)
+    content = Kramdown::Document.new(str).to_html
+
+    content.gsub! "<p><code>", "<code>"
+    content.gsub! "</code></p>", "</code>"
+
+    content
   end
 
 private

@@ -30,18 +30,24 @@ xml.glsa :id => glsa.glsa_id do
     end
   end
   
-  xml.background(rev.background || "")
-  
-  xml.description do
-    xml << (rev.description || "") + "\n"
+  xml.background do
+    xml << xml_format(rev.background || "")
   end
   
-  xml.impact({:type => rev.severity}, rev.impact || "")
+  xml.description do
+    xml << xml_format(rev.description || "")
+  end
   
-  xml.workaround(rev.workaround || "")
+  xml.impact({:type => rev.severity}) do
+    xml << xml_format (rev.impact || "")
+  end
+  
+  xml.workaround do
+    xml << xml_format(rev.workaround || "")
+  end
   
   xml.resolution do
-    xml << (rev.resolution || "")
+    xml << xml_format(rev.resolution || "")
   end
   
   xml.references do

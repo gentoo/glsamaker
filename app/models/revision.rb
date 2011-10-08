@@ -24,6 +24,7 @@ class Revision < ActiveRecord::Base
   validates_numericality_of :user_id, :message => "user id needed"
   validates_presence_of :title
 
+=begin
   validates_each :description, :resolution do |record, attr, value|
     # XML well-formedness test
     begin
@@ -32,7 +33,8 @@ class Revision < ActiveRecord::Base
       record.errors.add attr, "is not well-formed XML"
     end
   end
-  
+=end
+
   define_index do
     indexes title
     indexes synopsis
