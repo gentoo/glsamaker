@@ -106,11 +106,11 @@ class Glsa < ActiveRecord::Base
       return :own
     end
 
-    if comments.where(:rating => 'approval', :user_id => user.id).all.count > 1
+    if comments.where(:rating => 'approval', :user_id => user.id).all.count > 0
       return :approved
     end
 
-    if comments.where(:user_id => user.id).all.count > 1
+    if comments.where(:user_id => user.id).all.count > 0
       return :commented
     end
 
