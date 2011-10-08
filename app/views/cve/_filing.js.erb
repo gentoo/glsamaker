@@ -157,6 +157,7 @@ uki('#cve-file-2-go').click(
       parameters: params,
       onSuccess: function(response) {
         uki('#file-2-popup').hide();
+        uki('#cve-file-2-go').disabled(false);
         reloadTable();
       },
       onFailure: function(response) {
