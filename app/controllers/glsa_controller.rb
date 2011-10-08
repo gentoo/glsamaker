@@ -427,7 +427,7 @@ class GlsaController < ApplicationController
       render_to_string(
         :template => 'glsa/_glsa.xml.builder',
         :locals => {:glsa => @glsa, :rev => @rev},
-        :layout => 'none'import_references: rails-3 compat fix
+        :layout => 'none'
       ),
       {:indent => 2, :maxcols => 80}
     )    
