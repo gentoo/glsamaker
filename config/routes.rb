@@ -21,6 +21,7 @@ Glsamaker::Application.routes.draw do
     get  'diff',              :on => :member
     get  'download',          :on => :member
     get  'import_references', :on => :member
+    post 'import_references', :on => :member
     get  'prepare_release',   :on => :member
     post 'prepare_release',   :on => :member
     post 'release',           :on => :member
