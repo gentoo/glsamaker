@@ -48,7 +48,7 @@ module Glsamaker
       end
 
       # Nothing to do if there's no submitter yet
-      return if glsa.state == 'request'
+      return if glsa.status == 'request'
 
       rcpt = glsa.submitter
       return unless rcpt.can_access? glsa
