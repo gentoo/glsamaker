@@ -71,7 +71,11 @@
     <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
       page[:flash].drop_out
     end %>
-    <img src="/assets/icons/<%= flash[:error] ? 'error' : 'info' %>.png" alt="message icon" style="vertical-align: middle" />
+    <%- if flash[:error] -%>
+      <%= image_tag 'icons/error.png', :style => 'vertical-align: middle' %>
+    <%- else -%>
+      <%= image_tag 'icons/info.png', :style => 'vertical-align: middle' %>
+    <%- end -%>
     <%= flash[:error] ? flash[:error] : flash[:notice] %>
   </div>
   <%- end -%>
