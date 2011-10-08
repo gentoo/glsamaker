@@ -31,7 +31,9 @@ Affected packages
     -------------------------------------------------------------------
      Package              /     Vulnerable     /            Unaffected
     -------------------------------------------------------------------
-<%= render :partial => "show_package_row", :as => :package, :collection => @packages -%>
+<%- @packages.each do |package, items| -%>
+<%= render :partial => "show_package_row", :locals => {:items => items, :package => package} -%>
+<%- end -%>
 <% if @print_vulnerable -%>
     -------------------------------------------------------------------
      NOTE: Certain packages are still vulnerable. Users should migrate

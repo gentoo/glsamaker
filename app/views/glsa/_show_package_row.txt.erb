@@ -1,13 +1,13 @@
 <%= (@packages_count += 1).to_s.rjust(3) +  "  " -%>
-<%= if package[0].length <= 23
-      package[0].ljust(23)
+<%= if package.length <= 23
+      package.ljust(23)
     else
-      package[0] + "\n" + ' ' * 28
+      package + "\n" + ' ' * 28
     end -%>
 <%=
 
-vulnerable_versions = (package[1]['vulnerable'].sort_by { |p| p.version.to_i } if package[1].has_key? 'vulnerable') || []
-unaffected_versions = (package[1]['unaffected'].sort_by { |p| p.version.to_i } if package[1].has_key? 'unaffected') || []
+vulnerable_versions = (items['vulnerable'].sort_by { |p| p.version.to_i } if items.has_key? 'vulnerable') || []
+unaffected_versions = (items['unaffected'].sort_by { |p| p.version.to_i } if items.has_key? 'unaffected') || []
 
 versions = []
 
@@ -28,7 +28,7 @@ while vulnerable_versions.size > 0 or unaffected_versions.size > 0
   versions << line
 end  
 
-versions.join("\n" + ' ' * 28)
+versions.join("\n" + ' ' * 28).html_safe
 
 -%>
 
