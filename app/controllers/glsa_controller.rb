@@ -204,7 +204,7 @@ class GlsaController < ApplicationController
     if params[:glsa][:bugs]
       bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
 
-      bugs.each do |bug|
+      bugs.sort.each do |bug|
         begin
           b = Glsamaker::Bugs::Bug.load_from_id(bug)
 
@@ -236,7 +236,8 @@ class GlsaController < ApplicationController
     end
 
     # References
-    params[:glsa][:reference].each do |reference|
+    refs = params[:glsa][:reference].sort { |a, b| a[:title] <=> b[:title] }
+    refs.each do |reference|
       logger.debug reference.inspect
       next if reference[:title].strip == ''
       revision.references.create(reference)
@@ -426,7 +427,7 @@ class GlsaController < ApplicationController
       render_to_string(
         :template => 'glsa/_glsa.xml.builder',
         :locals => {:glsa => @glsa, :rev => @rev},
-        :layout => 'none'
+        :layout => 'none'import_references: rails-3 compat fix
       ),
       {:indent => 2, :maxcols => 80}
     )    
