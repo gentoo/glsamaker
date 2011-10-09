@@ -45,7 +45,7 @@
     <% end %>
     <p>
       <span style="float: right; font-size: 90%;"><%= @glsa.updated_at.to_s %></span>
-      Editor: <strong><%= @glsa.last_revision.user.name %></strong>
+      Editor: <strong><%= @rev.user.to_s %></strong>
     </p>
   </div>
   
