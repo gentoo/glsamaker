@@ -426,7 +426,7 @@ class GlsaController < ApplicationController
     @glsa = glsa
     old_text = ""
 
-    unless rev_old.nil? 
+    unless rev_old.nil?
       @rev = rev_old
       old_text = Glsamaker::XML.indent(
         render_to_string(
@@ -436,19 +436,30 @@ class GlsaController < ApplicationController
         ),
         {:indent => 2, :maxcols => 80}
       )
-
     end
 
-    @rev = rev_new
-    new_text = Glsamaker::XML.indent(
-      render_to_string(
-        :template => 'glsa/_glsa.xml.builder',
-        :locals => {:glsa => @glsa, :rev => @rev},
-        :layout => 'none'
-      ),
-      {:indent => 2, :maxcols => 80}
-    )
+    new_text = ""
 
-    Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
+    unless rev_new.nil?
+      @rev = rev_new
+      new_text = Glsamaker::XML.indent(
+        render_to_string(
+          :template => 'glsa/_glsa.xml.builder',
+          :locals => {:glsa => @glsa, :rev => @rev},
+          :layout => 'none'
+        ),
+        {:indent => 2, :maxcols => 80}
+      )
+    end
+
+    diff = ""
+    begin
+      diff = Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
+    rescue Exception => e
+      diff = "Error in diff provider. Cannot provide diff."
+      log_error e
+    end
+
+    diff
   end
 end
