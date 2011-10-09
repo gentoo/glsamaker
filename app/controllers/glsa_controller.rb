@@ -407,7 +407,9 @@ class GlsaController < ApplicationController
           cve = Cve.find_by_cve_id cve_id
           refs << {:title => cve.cve_id, :url => cve.url}
         end
-        
+
+        refs = refs.sort { |a, b| a[:title] <=> b[:title] }
+
         glsa.add_references refs
         
         flash[:notice] = "Imported #{refs.count} references."
