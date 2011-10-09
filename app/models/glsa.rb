@@ -172,6 +172,7 @@ class Glsa < ActiveRecord::Base
   # Closes all bugs linked to this advisory and refreshes the metadata
   def close_bugs(message)
     last_revision.bugs.each do |bug|
+      logger.info "Closing bug #{bug.bug_id}"
       b = Glsamaker::Bugs::Bug.load_from_id(bug.bug_id)
 
       changes = {}
