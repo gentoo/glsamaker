@@ -34,4 +34,12 @@ class GlsaMailer < ActionMailer::Base
     mail(:to => recipient.email,
          :subject => "[GLSAMaker] Draft approved: #{glsa.last_revision.title}")
   end
+
+  def text(recipient, subject, text, footer)
+    @text = text
+    @footer = footer
+
+    mail(:to => recipient.email,
+         :subject => subject)
+  end
 end

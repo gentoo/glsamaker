@@ -79,7 +79,7 @@ module Glsamaker
         return false
       end
 
-      GlsaMailer.deliver_text(user, subject, text, footer)
+      GlsaMailer.text(user, subject, text, footer).deliver
     end
 
   end
