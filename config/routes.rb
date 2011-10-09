@@ -19,6 +19,7 @@ Glsamaker::Application.routes.draw do
     post 'archive',           :on => :collection
 
     get  'diff',              :on => :member
+    post 'diff',              :on => :member
     get  'download',          :on => :member
     get  'import_references', :on => :member
     post 'import_references', :on => :member
