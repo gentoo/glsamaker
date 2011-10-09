@@ -465,7 +465,7 @@ class GlsaController < ApplicationController
 
     diff = ""
     begin
-      diff = Glsamaker::Diff.diff(old_text, new_text, formajefet, context_lines)
+      diff = Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
     rescue Exception => e
       diff = "Error in diff provider. Cannot provide diff."
       log_error e
