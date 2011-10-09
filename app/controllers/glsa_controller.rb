@@ -204,7 +204,7 @@ class GlsaController < ApplicationController
     if params[:glsa][:bugs]
       bugs = params[:glsa][:bugs].map {|bug| bug.to_i }
 
-      bugs.sort.each do |bug|
+      bugs.uniq.sort.each do |bug|
         begin
           b = Glsamaker::Bugs::Bug.load_from_id(bug)
 
