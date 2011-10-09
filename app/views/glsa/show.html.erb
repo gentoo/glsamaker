@@ -49,11 +49,11 @@
   </div>
   
   <div class="box">
-    <%= box_title('Bugs', :icon => 'icons/bug.png',
+    <%= box_title("Bugs (#{@rev.bugs.count})", :icon => 'icons/bug.png',
         :toolbar => [{:title => 'Update all cached metadata', :icon => 'icons/refresh.png', :uri => "/glsa/update_cache/#{@glsa.id}"}])
     %>
     <table id="bugtable">
-      <%= render :partial => "show_bug_row", :collection => @glsa.last_revision.bugs, :as => :bug %>
+      <%= render :partial => "show_bug_row", :collection => @rev.bugs, :as => :bug %>
     </table>
   </div>
 
