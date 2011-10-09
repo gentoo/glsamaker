@@ -424,16 +424,21 @@ class GlsaController < ApplicationController
   protected
   def rev_diff(glsa, rev_old, rev_new, format = :unified, context_lines = 3)
     @glsa = glsa
-    @rev = rev_old
-    old_text = Glsamaker::XML.indent(
-      render_to_string(
-        :template => 'glsa/_glsa.xml.builder',
-        :locals => {:glsa => @glsa, :rev => @rev},
-        :layout => 'none'
-      ),
-      {:indent => 2, :maxcols => 80}
-    )    
-    
+    old_text = ""
+
+    unless rev_old.nil? 
+      @rev = rev_old
+      old_text = Glsamaker::XML.indent(
+        render_to_string(
+          :template => 'glsa/_glsa.xml.builder',
+          :locals => {:glsa => @glsa, :rev => @rev},
+          :layout => 'none'
+        ),
+        {:indent => 2, :maxcols => 80}
+      )
+
+    end
+
     @rev = rev_new
     new_text = Glsamaker::XML.indent(
       render_to_string(
