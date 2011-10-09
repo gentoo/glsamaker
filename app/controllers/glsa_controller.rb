@@ -236,11 +236,13 @@ class GlsaController < ApplicationController
     end
 
     # References
-    refs = params[:glsa][:reference].sort { |a, b| a[:title] <=> b[:title] }
-    refs.each do |reference|
-      logger.debug reference.inspect
-      next if reference[:title].strip == ''
-      revision.references.create(reference)
+    unless params[:glsa][:reference].nil?
+      refs = params[:glsa][:reference].sort { |a, b| a[:title] <=> b[:title] }
+      refs.each do |reference|
+        logger.debug reference.inspect
+        next if reference[:title].strip == ''
+        revision.references.create(reference)
+      end
     end
 
     # Comments
