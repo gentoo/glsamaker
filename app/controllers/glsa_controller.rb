@@ -159,9 +159,8 @@ class GlsaController < ApplicationController
     end
 
     # GLSA object
-    # The first editor is submitter
-    # TODO: Maybe take a better condition (adding bugs would make so. the submitter)
-    if @glsa.submitter.nil?
+    # The first editor is submitter, we assume he edits the description during that
+    if @glsa.submitter.nil? and params[:glsa][:description].strip != ""
       @glsa.submitter = current_user
     end
 
@@ -170,7 +169,7 @@ class GlsaController < ApplicationController
     @glsa.restricted = (params[:glsa][:restricted] == "confidential")
 
     # Force update
-    @glsa.updated_at = 0
+    @glsa.touch
 
     revision = Revision.new
     revision.revid = @glsa.next_revid
