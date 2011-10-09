@@ -50,7 +50,7 @@
       <strong><%= comment.author %></strong>
       <small>at <%= comment.date %></small>
     </p>
-    <p><code><%= simple_format_without_paragraph(linkify_comment(comment.text)) %></code></p>
+    <p><code><%= simple_format_without_paragraph(linkify_comment(comment.text)).html_safe %></code></p>
   </li>
 <% commentID +=1 ; end %>
 </ol>
