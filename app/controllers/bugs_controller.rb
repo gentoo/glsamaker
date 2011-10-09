@@ -39,6 +39,7 @@ class BugsController < ApplicationController
         @bugs_text = render_to_string :partial => '/glsa/edit_bug_row', :collection => @added_bugs, :as => :bug
       rescue Exception => e
         @error = "Error: #{e.message}"
+        log_error e
       end
     else
       @error = "Cannot find GLSA"

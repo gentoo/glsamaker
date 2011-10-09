@@ -82,7 +82,17 @@ module Glsamaker
       def cc
         @cc
       end
-      
+
+      # Returns the Gentoo Bugzilla URI for the bug.
+      # Set +secure+ to false to get a HTTP instead of a HTTPS URI
+      def bug_url(secure = true)
+        if secure
+          "https://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?id=#{self.bug_id}"
+        else
+          "http://#{GLSAMAKER_BUGZIE_HOST}/show_bug.cgi?id=#{self.bug_id}"
+        end
+      end
+
       include StatusMixin
       include ArchesMixin
       include BugReadyMixin
