@@ -14,7 +14,7 @@ xml.glsa :id => glsa.glsa_id do
     xml.bug bug.bug_id
   end
   
-  xml.access rev.access
+  xml.access rev.release_access
   logger.debug rev.packages_by_atom.inspect
   xml.affected do
     rev.packages_by_atom.each_pair do |package, atoms|
@@ -38,7 +38,7 @@ xml.glsa :id => glsa.glsa_id do
     xml << xml_format(rev.description || "")
   end
   
-  xml.impact({:type => rev.release_severity}) do
+  xml.impact({:type => rev.severity}) do
     xml << xml_format (rev.impact || "")
   end
   
