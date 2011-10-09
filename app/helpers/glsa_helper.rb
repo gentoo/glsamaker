@@ -157,6 +157,10 @@ module GlsaHelper
 
     content.gsub! "<p><code>", "<code>"
     content.gsub! "</code></p>", "</code>"
+    content.gsub! "&lsquo;", "'"
+    content.gsub! "&rsquo;", "'"
+    content.gsub! "&ldquo;", '"'
+    content.gsub! "&rdquo;", '"'
 
     content
   end
