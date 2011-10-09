@@ -18,8 +18,8 @@ class Glsa < ActiveRecord::Base
   belongs_to :requester, :class_name => "User", :foreign_key => "requester"
   belongs_to :bugreadymaker, :class_name => "User", :foreign_key => "bugreadymaker"
 
-  has_many :revisions
-  has_many :comments
+  has_many :revisions, :dependent => :destroy
+  has_many :comments, :dependent => :destroy
   
   define_index do
     indexes glsa_id, :sortable => true

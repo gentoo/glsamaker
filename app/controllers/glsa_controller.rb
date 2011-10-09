@@ -391,9 +391,14 @@ class GlsaController < ApplicationController
   end
 
   def destroy
-  end
+    if !current_user.is_el_jefe?
+      deny_access "Cannot delete draft as non-admin user"
+    end
 
-  def comment
+    @glsa = Glsa.find(Integer(params[:id]))
+    @glsa.destroy
+    flash[:notice] = "GLSA successfully deleted."
+    redirect_to :controller => :index
   end
 
   def import_references
@@ -462,7 +467,7 @@ class GlsaController < ApplicationController
 
     diff = ""
     begin
-      diff = Glsamaker::Diff.diff(old_text, new_text, format, context_lines)
+      diff = Glsamaker::Diff.diff(old_text, new_text, formajefet, context_lines)
     rescue Exception => e
       diff = "Error in diff provider. Cannot provide diff."
       log_error e

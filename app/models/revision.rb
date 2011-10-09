@@ -14,9 +14,9 @@ require 'rexml/document'
 # Revision model
 class Revision < ActiveRecord::Base
   belongs_to :glsa, :class_name => "Glsa", :foreign_key => "glsa_id"
-  has_many :bugs
-  has_many :references
-  has_many :packages
+  has_many :bugs, :dependent => :destroy
+  has_many :references, :dependent => :destroy
+  has_many :packages, :dependent => :destroy
   has_many :vulnerable_packages, :class_name => "Package", :conditions => { :my_type => "vulnerable" }
   has_many :unaffected_packages, :class_name => "Package", :conditions => { :my_type => "unaffected" }
   belongs_to :user
