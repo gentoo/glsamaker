@@ -30,7 +30,7 @@ module GlsaHelper
   def add_unaffected_package_link(name)
     link_to_function(
         name,
-        "Element.insert('packages_table_unaffected', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => "<", :arch => "*", :my_type => "unaffected")))}' })",
+        "Element.insert('packages_table_unaffected', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => ">=", :arch => "*", :my_type => "unaffected")))}' })",
         :title => 'Add package')
   end
   
