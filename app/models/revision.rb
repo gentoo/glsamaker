@@ -104,4 +104,12 @@ class Revision < ActiveRecord::Base
 
     s
   end
+
+  def release_severity
+    if self.severity == "both"
+      "local, remote"
+    else
+      self.severity
+    end
+  end
 end
