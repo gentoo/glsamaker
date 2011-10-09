@@ -162,9 +162,8 @@ class GlsaController < ApplicationController
     # The first editor is submitter, we assume he edits the description during that
     if @glsa.submitter.nil? and params[:glsa][:description].strip != ""
       @glsa.submitter = current_user
+      @glsa.status = "draft" if @glsa.status == "request"
     end
-
-    @glsa.status = "draft" if @glsa.status == "request"
 
     @glsa.restricted = (params[:glsa][:restricted] == "confidential")
 
