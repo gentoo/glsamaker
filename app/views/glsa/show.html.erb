@@ -17,6 +17,7 @@
   <%= link_to "#{image_tag 'icons/diff.png'} Compare revisions".html_safe, diff_glsa_path(@glsa, :old => @glsa.last_revision.revid - 1, :new => @glsa.last_revision.revid), {:class => 'button'} %>
   <%= link_to "#{image_tag 'icons/sent.png'} Release advisory".html_safe, prepare_release_glsa_path(@glsa), {:class => 'button'} if current_user.access >= 2 %>
   <%= link_to "#{image_tag 'icons/delete.png'} Delete".html_safe, glsa_path(@glsa), :method => :delete, :confirm => "Do you really want to delete this item?", :class => 'button' if current_user.is_el_jefe? %>
+  <%= link_to "#{image_tag 'icons/bug.png'} Close bugs".html_safe, finalize_release_glsa_path(@glsa, :close_bugs => '1'), :method => :post, :class => 'button' if @glsa.status == 'release' %>
 </div>
 
 <div style="float: right; width: 40%;">
