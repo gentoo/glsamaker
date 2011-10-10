@@ -321,15 +321,14 @@ class GlsaController < ApplicationController
       @glsa.invalidate_last_revision_cache
 
       if params[:email] == '1'
-        of = @template_format
-        @template_format = 'txt'
-        Glsamaker::Mail.send_text(
-            render_to_string({:template => 'glsa/show.txt.erb', :format => :txt, :layout => false}),
-            "[ GLSA #{@glsa.glsa_id} ] #{@rev.title}",
-            current_user,
-            false
-        )
-        @template_format = of
+        with_format('txt') do
+          Glsamaker::Mail.send_text(
+              render_to_string({:template => 'glsa/show.txt.erb', :layout => false}),
+              "[ GLSA #{@glsa.glsa_id} ] #{@rev.title}",
+              current_user,
+              false
+          )
+        end
       end
     rescue GLSAReleaseError => e
       flash[:error] = "Internal error: #{e.message}. Cannot release advisory."
