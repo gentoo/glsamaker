@@ -25,7 +25,7 @@
 
   <div class='box-actions'>
     <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'xml')) %>'">Download XML</button>
-    <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'">Show text</button>
+    <button onclick="window.open('<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'); return false;">Show text</button>
     <%= button_to "Close bugs", finalize_release_glsa_path(@glsa, :close_bugs => '1'), :method => :post %>
   </div>  
 </div>

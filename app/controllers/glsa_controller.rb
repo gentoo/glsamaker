@@ -121,12 +121,22 @@ class GlsaController < ApplicationController
 
     text = nil
     respond_to do |wants|
-      wants.xml { text = render_to_string(:action => :show, :format => 'xml')}
-      wants.txt { text = render_to_string(:action => :show, :format => 'txt')}
-      wants.html { render :text => "Cannot download HTML format. Pick .xml or .txt"; return }
+      wants.xml do
+        text = render_to_string(:action => :show, :format => 'xml')
+        send_data(text, :filename => "glsa-#{@glsa.glsa_id}.#{params[:format]}")
+      end
+
+      wants.txt do
+        text = render_to_string(:template => 'glsa/_email_headers.txt.erb', :format => 'txt')
+        text += render_to_string(:action => :show, :format => 'txt')
+        render :text => text
+      end
+
+      wants.html do
+        render :text => "Cannot download HTML format. Pick .xml or .txt"
+        return
+      end
     end
-    
-    send_data(text, :filename => "glsa-#{@glsa.glsa_id}.#{params[:format]}")
   end
 
   def edit
