@@ -38,3 +38,9 @@ GLSAMAKER_BUGZIE_PW = nil
 
 # Location of xmlindent(1)
 GLSAMAKER_XMLINDENT = "/usr/bin/xmlindent"
+
+# Enabling exception notices
+#Glsamaker::Application.config.middleware.use ExceptionNotifier,
+#  :email_prefix => "[GLSAMaker Error] ",
+#  :sender_address => %{"GLSAMaker" <#{GLSAMAKER_FROM_EMAIL}>},
+#  :exception_recipients => %w{GLSAMAKER_ADMIN_EMAIL}

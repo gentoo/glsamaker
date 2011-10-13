@@ -26,6 +26,8 @@ gem 'thin'
 # Deploy with Capistrano
 gem 'capistrano'
 
+gem 'exception_notification'
+
 group :development do
   # To use debugger
   gem 'ruby-debug'
