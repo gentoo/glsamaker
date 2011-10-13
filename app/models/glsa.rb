@@ -199,7 +199,7 @@ class Glsa < ActiveRecord::Base
     return "#{month_id}-01" if items.length == 0
 
     items.first.glsa_id =~ /^#{month_id}-(\d+)$/
-    next_id = Integer($1) + 1
+    next_id = $1.to_i + 1
     "#{month_id}-#{format "%02d", next_id}"
   end
 
