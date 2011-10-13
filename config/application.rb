@@ -43,3 +43,6 @@ module Glsamaker
     config.assets.enabled = true
   end
 end
+
+# Manually load the kramdown extensions
+require 'lib/kramdown_ext'
