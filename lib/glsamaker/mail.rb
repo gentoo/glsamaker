@@ -16,6 +16,11 @@ module Glsamaker
         Rails.logger.info "Not sending email."
         return false
       end
+
+      if glsa.restricted
+        Rails.logger.info "Not sending email, confidential item."
+        return false
+      end
       
       User.find(:all, :conditions => 'id > 0').each do |rcpt|
         next unless rcpt.can_access? glsa
@@ -29,6 +34,11 @@ module Glsamaker
     def request_notification(glsa, user)
       if GLSAMAKER_NO_EMAIL
         Rails.logger.info "Not sending email."
+        return false
+      end
+
+      if glsa.restricted
+        Rails.logger.info "Not sending email, confidential item."
         return false
       end
       
@@ -50,6 +60,11 @@ module Glsamaker
       # Nothing to do if there's no submitter yet
       return if glsa.status == 'request'
 
+      if glsa.restricted
+        Rails.logger.info "Not sending email, confidential item."
+        return false
+      end
+
       rcpt = glsa.submitter
       return unless rcpt.can_access? glsa
       return if rcpt == user
@@ -62,6 +77,11 @@ module Glsamaker
     def approval_notification(glsa)
       if GLSAMAKER_NO_EMAIL
         Rails.logger.info "Not sending email."
+        return false
+      end
+
+      if glsa.restricted
+        Rails.logger.info "Not sending email, confidential item."
         return false
       end
 
