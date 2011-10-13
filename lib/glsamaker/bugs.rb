@@ -45,6 +45,8 @@ module Glsamaker
         
         if cc.is_a? String
           _cc = cc.split(/,\s*/)
+        elsif cc.nil?
+          _cc = []
         else
           _cc = cc
         end
