@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   validates_numericality_of :access, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 3, :message => "Access level must be between 0 and 3"
   
   validates_format_of :email, :with => /[\w.%+-]+?@[\w.-]+?\.\w{2,6}$/, :message => "Invalid Email address format"
+
+  scope :active, where(:disabled => false).where('id > ?', 0)
   
   # Is the user an admin? ;)
   def is_el_jefe?
@@ -42,6 +44,7 @@ class User < ActiveRecord::Base
   
   # Checks access to a given GLSA
   def can_access?(glsa)
+    return false if disabled?
     return false if access == 0 and not glsa.is_owner? self
     return false if access < 3 and glsa.restricted
     

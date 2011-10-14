@@ -22,7 +22,7 @@ module Glsamaker
         return false
       end
       
-      User.find(:all, :conditions => 'id > 0').each do |rcpt|
+      User.active.each do |rcpt|
         next unless rcpt.can_access? glsa
         
         unless rcpt.get_pref_category(:mail)[:edit] == false
@@ -42,7 +42,7 @@ module Glsamaker
         return false
       end
       
-      User.find(:all, :conditions => 'id > 0').each do |rcpt|
+      User.active.each do |rcpt|
         next unless rcpt.can_access? glsa        
         
         unless rcpt.get_pref_category(:mail)[:request] == false
