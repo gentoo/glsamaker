@@ -62,64 +62,86 @@
   <%= render :partial => "comments" %>
 </div>
 
-<p>
-<strong>GLSA revision date:</strong> <%= @rev.created_at %>
-</p>
+<table class="glsamaker-table code-preserve-ws nopadding" style="width: 59%;">
+  <tr>
+    <th>Field</th>
+    <th>Content</th>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/access.png' %> Access</th>
+    <td>
+      <%= @rev.access %>
+    </td>
+  </tr>
+  <tr class="odd">
+    <th class="left"><%= image_tag 'icons/severity.png' %> Severity</th>
+    <td>
+      <%= @rev.severity %>
+    </td>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/synopsis.png' %> Synopsis</th>
+    <td>
+      <%= sanitize(html_format(@rev.synopsis), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr class="odd">
+    <th class="left"><%= image_tag 'icons/unaffected.png' %> Unaffected packages</th>
+    <td>
+      <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
+        <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/affected.png' %> Vulnerable packages</th>
+    <td>
+      <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
+        <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+      <% end %>
+    </td>
+  </tr>
+  <tr class="odd">
+    <th class="left"><%= image_tag 'icons/background.png' %> Background</th>
+    <td>
+      <%= sanitize(html_format(@rev.background), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/document.png' %> Description</th>
+    <td>
+      <%= sanitize(html_format(@rev.description), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr class="odd">
+    <th class="left"><%= image_tag 'icons/impact.png' %> Impact</th>
+    <td>
+      <%= sanitize(html_format(@rev.impact), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/workaround.png' %> Workaround</th>
+    <td>
+      <%= sanitize(html_format(@rev.workaround), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr class="odd">
+    <th class="left"><%= image_tag 'icons/resolution.png' %> Resolution</th>
+    <td>
+      <%= sanitize(html_format(@rev.resolution), :tags => %w[p ul li code]) %>
+    </td>
+  </tr>
+  <tr>
+    <th class="left"><%= image_tag 'icons/reference.png' %> References</th>
+    <td>
+      <ul>
+        <% @rev.references.each do |r| %>
+          <li><%= link_to r.title, r.url -%></li>
+        <% end %>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-<p>
-<strong>Access:</strong> <%= @rev.access %> <br />
-<strong>Product:</strong> <%= @rev.product %> <br />
-<strong>Severity:</strong> <%= @rev.severity %> <br />
-<strong>Synopsis:</strong> <%= @rev.synopsis %> <br />
-</p>
-
-<p><strong>Related bugs:</strong><br />
-<% @rev.bugs.each do |b| %>
-      <%= link_to_function h(b.bug_id), "buginfo('#{b.bug_id}')" %>
-<% end %>
-</p>
-
-<p>
-<strong>Unaffected Packages:</strong><br />
-<ul>
-  <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
-    <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
-  <% end %>
-</ul>
-
-<strong>Vulnerable Packages:</strong><br />
-<ul>
-  <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
-    <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
-  <% end %>
-</ul>
-</p>
-
-<p><strong>Background:</strong> <%= h@rev.background %> </p>
-
-<p>
-  <strong>Description:</strong><br />
-  <%= sanitize(@rev.description, :tags => %w[p ul li code]) %> 
-</p>
-
-<p>
-  <strong>Impact:</strong><br />
-  <%= sanitize(@rev.impact, :tags => %w[p ul li code]) %>
-</p>
-
-<p><strong>Workaround:</strong><br />
-<%= @rev.workaround %></p>
-<p><strong>Resolution:</strong><br />
-<%= sanitize(@rev.resolution, :tags => %w[p ul li code]) %>
-</p>
-
-<% @refs = @rev.references %>
-<p><strong>References:</strong>
-<ul>
-<% @refs.each do |r| %>
-<li><%= link_to r.title, r.url -%></li>
-<% end %>
-</ul>
-</p>
-
+<br style="break: both;" />
 <br style="break: both;" />

@@ -165,6 +165,15 @@ module GlsaHelper
     content
   end
 
+  def html_format(str)
+    content = Kramdown::Document.new(str).to_xml
+
+    content.gsub! "<p><code>", "<code>"
+    content.gsub! "</code></p>", "</code>"
+
+    content
+  end
+
 private
   def shorten_args(text)
     text.gsub!(/# (.*)/) do |s|

@@ -308,6 +308,12 @@ table#bugtable td, table.list td {
   background-color: #DEDBEF;
 }
 
+table.code-preserve-ws code {
+  white-space: pre-wrap;
+  display: block;
+  margin-bottom: .5em;
+}
+
 /** boxes **/
 div.box, div.legend {
   padding: .4em; 
@@ -545,10 +551,21 @@ form.button_to {
 table.glsamaker-table {
 }
 
+table.glsamaker-table p {
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
+
 table.glsamaker-table th {
   border-bottom: 2px solid #4C3E61;
   border-right: 1px dotted #4C3E61;     
   padding: .5em;
+}
+
+table.glsamaker-table th.left {
+  border-right:  1px solid #4C3E61;
+  border-bottom: 1px solid #4C3E61;
+  text-align: left;
 }
 
 table.glsamaker-table tr.restricted, table.glsamaker-table tr.restricted a, .legend .red {
