@@ -88,17 +88,21 @@
   <tr class="odd">
     <th class="left"><%= image_tag 'icons/unaffected.png' %> Unaffected packages</th>
     <td>
-      <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
-        <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
-      <% end %>
+      <ul>
+        <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
+          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+        <% end %>
+      </ul>
     </td>
   </tr>
   <tr>
     <th class="left"><%= image_tag 'icons/affected.png' %> Vulnerable packages</th>
     <td>
-      <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
-        <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
-      <% end %>
+      <ul>
+        <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
+          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+        <% end %>
+      </ul>
     </td>
   </tr>
   <tr class="odd">
