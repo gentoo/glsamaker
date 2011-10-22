@@ -1,5 +1,5 @@
 <% comps = %w{ >= > *>= *> <= < *<= *< == } -%>
-<tr class="entry">
+<tr class="entry <%= 'invalid' if package.invalid? %>">
 <%= fields_for "glsa[package][]", package do |pf| %>
   <td><%= pf.text_field :atom, :class => :nice, :index => nil %></td>
   <td class="odd"><%= pf.select :comp, comps, {}, :index => nil %></td>

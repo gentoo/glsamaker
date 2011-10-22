@@ -144,23 +144,13 @@ class GlsaController < ApplicationController
     return unless check_object_access!(@glsa)
     @rev = @glsa.last_revision
     
-    # Packages
-    @rev.vulnerable_packages.build(:comp => "<", :arch => "*") if @rev.vulnerable_packages.length == 0
-    @rev.unaffected_packages.build(:comp => ">=", :arch => "*") if @rev.unaffected_packages.length == 0
-    
-    # References
-    @rev.references.build if @rev.references.length == 0
-
-    @templates = {}
-    GLSAMAKER_TEMPLATE_TARGETS.each do |target|
-      @templates[target] = Template.where(:target => target).all
-    end
+    set_up_editing
   end
 
   def update
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
-    @prev_latest_rev = @glsa.last_revision
+    @rev = @glsa.last_revision
 
     if @glsa.nil?
       flash[:error] = "Unknown GLSA ID"
@@ -196,14 +186,17 @@ class GlsaController < ApplicationController
     revision.resolution = params[:glsa][:resolution]
 
     unless revision.save
-      flash.now[:error] = "Errors occurred while saving the Revision object: #{revision.errors.full_messages.join ', '}"
+      flash[:error] = "Errors occurred while saving the Revision object: #{revision.errors.full_messages.join ', '}"
+      set_up_editing
       render :action => "edit"
       return
     end
 
     unless @glsa.save
       flash[:error] = "Errors occurred while saving the GLSA object"
+      set_up_editing
       render :action => "edit"
+      return
     end
 
     # Bugs
@@ -216,15 +209,19 @@ class GlsaController < ApplicationController
         begin
           b = Glsamaker::Bugs::Bug.load_from_id(bug)
 
-          revision.bugs.create(
+          revision.bugs.create!(
             :bug_id => bug,
             :title => b.summary,
             :whiteboard => b.status_whiteboard,
             :arches => b.arch_cc.join(', ')
           )
+        rescue ActiveRecord::RecordInvalid => e
+          flash[:error] = "Errors occurred while saving a bug: #{e.record.errors.full_messages.join ', '}"
+          set_up_editing
+          render :action => "edit"
+          return
         rescue Exception => e
           log_error e
-          logger.info { e.inspect }
           # In case of bugzilla errors, just keep the bug #
           revision.bugs.create(
             :bug_id => bug
@@ -234,13 +231,22 @@ class GlsaController < ApplicationController
       end
     end
 
-    logger.debug params[:glsa][:package].inspect
+    logger.debug "Packages: " + params[:glsa][:package].inspect
 
     # Packages
-    params[:glsa][:package].each do |package|
+    packages = params[:glsa][:package] || []
+    packages.each do |package|
       logger.debug package.inspect
       next if package[:atom].strip == ''
-      revision.packages.create(package)
+
+      begin
+        revision.packages.create!(package)
+      rescue ActiveRecord::RecordInvalid => e
+        flash[:error] = "Errors occurred while saving a package: #{e.record.errors.full_messages.join ', '}"
+        set_up_editing
+        render :action => "edit"
+        return
+      end
     end
 
     # References
@@ -255,7 +261,14 @@ class GlsaController < ApplicationController
           reference[:url] = "http://nvd.nist.gov/nvd.cfm?cvename=#{reference[:title].strip}"
         end
 
-        revision.references.create(reference)
+        begin
+          revision.references.create(reference)
+        rescue ActiveRecord::RecordInvalid => e
+          flash[:error] = "Errors occurred while saving a reference: #{e.record.errors.full_messages.join ', '}"
+          set_up_editing
+          render :action => "edit"
+          return
+        end
       end
     end
 
@@ -442,6 +455,56 @@ class GlsaController < ApplicationController
   end
   
   protected
+  def set_up_editing
+    # Packages
+    @rev.vulnerable_packages.build(:comp => "<", :arch => "*") if @rev.vulnerable_packages.length == 0
+    @rev.unaffected_packages.build(:comp => ">=", :arch => "*") if @rev.unaffected_packages.length == 0
+
+    # References
+    if params.has_key? :glsa and params[:glsa].has_key? :reference
+      @references = []
+      params[:glsa][:reference].each do |reference|
+        @references << Reference.new(reference)
+      end
+    elsif @rev.references.length == 0
+      @references = [Reference.new]
+    else
+      @references = @rev.references
+    end
+
+    # Bugs
+    if params.has_key? :glsa and params[:glsa].has_key? :bugs
+      @bugs = []
+      params[:glsa][:bugs].each do |bug|
+        @bugs << Bug.new(:bug_id => bug)
+      end
+    else
+      @bugs = @rev.bugs
+    end
+
+    # Packages
+    if params.has_key? :glsa and params[:glsa].has_key? :package
+      @unaffected_packages = []
+      @vulnerable_packages = []
+      params[:glsa][:package].each do |package|
+        if package[:my_type] == 'vulnerable'
+          @vulnerable_packages << Package.new(package)
+        elsif package[:my_type] == 'unaffected'
+          @unaffected_packages << Package.new(package)
+        end
+      end
+    else
+      @unaffected_packages = @rev.unaffected_packages
+      @vulnerable_packages = @rev.vulnerable_packages
+    end
+
+    @templates = {}
+    GLSAMAKER_TEMPLATE_TARGETS.each do |target|
+      @templates[target] = Template.where(:target => target).all
+    end
+  end
+
+
   def rev_diff(glsa, rev_old, rev_new, format = :unified, context_lines = 3)
     @glsa = glsa
     old_text = ""

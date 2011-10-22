@@ -17,16 +17,16 @@
     <%= box_title('Metadata', :icon => 'icons/metadata.png') %>
     <p style="float: left; width: 50%;"><label for="access"><%= image_tag 'icons/access.png' %> Access:</label>
       <select name="glsa[access]" id="access">
-        <%= options_for_select [['local', 'local'], ['remote', 'remote'], ['local, remote', 'both']], @rev.access %>
+        <%= options_for_select [['local', 'local'], ['remote', 'remote'], ['local, remote', 'both']], lastrev_content(@glsa, 'access') %>
       </select>
     </p>
     <p><label for="severity"><%= image_tag 'icons/severity.png' %> Severity:</label>
       <select name="glsa[severity]" id="severity">
-        <%= options_for_select %w{ low normal high }, @rev.severity %>
+        <%= options_for_select %w{ low normal high }, lastrev_content(@glsa, 'severity') %>
       </select>
     </p>
     <p><label for="keyword"><%= image_tag 'icons/keyword.png' %> GLSA Keyword:</label>
-      <%= text_field_tag "glsa[product]", @rev.product, :class => "nice" %>
+      <%= text_field_tag "glsa[product]", lastrev_content(@glsa, 'product'), :class => "nice" %>
     </p>
   </div>
 
@@ -41,7 +41,7 @@
     <%= box_title('Bugs', :icon => 'icons/bug.png',
                   :toolbar => [{:uri => "javascript:GLSAMaker.editing.bugs.add_dialog(#{@glsa.id})", :title => 'Add bug', :icon => 'icons/plus.png'}]) %>
     <table id="bugtable">
-      <%= render :partial => "edit_bug_row", :collection => @rev.bugs, :as => :bug %>
+      <%= render :partial => "edit_bug_row", :collection => @bugs, :as => :bug %>
     </table>
   </div>
 
@@ -82,7 +82,7 @@
         <td><%= image_tag 'icons/affected.png' %> Vulnerable
         (<%= add_vulnerable_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
-      <%= render :partial => 'package', :collection => @rev.vulnerable_packages %>
+      <%= render :partial => 'package', :collection => @vulnerable_packages %>
     </table>
 
     <table class="padcells swap centercells" id="packages_table_unaffected">
@@ -90,7 +90,7 @@
         <td><%= image_tag 'icons/unaffected.png' %> Unaffected
             (<%= add_unaffected_package_link(image_tag('icons/package-add.png')) %>)</td>
       </tr>
-      <%= render :partial => 'package', :collection => @rev.unaffected_packages %>
+      <%= render :partial => 'package', :collection => @unaffected_packages %>
 
     </table>
   </div>
@@ -155,7 +155,7 @@
       <th></th>
     </tr>
 
-    <%= render :partial => 'reference', :collection => @rev.references %>
+    <%= render :partial => 'reference', :collection => @references %>
     </table>
   </div>
 
