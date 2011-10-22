@@ -19,7 +19,7 @@ xml.glsa :id => glsa.glsa_id do
   xml.affected do
     rev.packages_by_atom.each_pair do |package, atoms|
       xml.package({:name => package, :auto => (atoms['unaffected'] || []).select {|a| !a.automatic}.length == 0 ? 'yes' : 'no',
-              :arch => atoms['vulnerable'].first.arch}) do
+              :arch => (atoms['vulnerable'].nil? || atoms['vulnerable'].length == 0) ? '*' : atoms['vulnerable'].first.arch}) do
         (atoms['unaffected'] || []).each do |a|
           xml.unaffected({:range => a.xml_comp}, a.version)
         end
