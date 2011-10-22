@@ -153,7 +153,7 @@ module GlsaHelper
   end
 
   def xml_format(str)
-    content = Kramdown::Document.new(str).to_xml
+    content = Kramdown::Document.new(str || "").to_xml
 
     content.gsub! "<p><code>", "<code>"
     content.gsub! "</code></p>", "</code>"
@@ -166,7 +166,7 @@ module GlsaHelper
   end
 
   def html_format(str)
-    content = Kramdown::Document.new(str).to_xml
+    content = Kramdown::Document.new(str || "").to_xml
 
     content.gsub! "<p><code>", "<code>"
     content.gsub! "</code></p>", "</code>"
