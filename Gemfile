@@ -42,6 +42,7 @@ gem "text-format", :require => "text/format"
 gem "kramdown"
 
 gem "thinking-sphinx", "2.0.7"
+gem "runspell"
 
 # gem "rdoc"
 

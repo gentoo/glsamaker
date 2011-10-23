@@ -100,6 +100,14 @@ module ApplicationHelper
     content
   end
 
+  # Checks a string for spelling mistakes
+  def spelling(str)
+    Glsamaker::Spelling.check_string(str, '<span class="spelling-error">'.html_safe, '</span>'.html_safe)
+  rescue
+    Rails.logger.error "Spell checking not available"
+    str
+  end
+
   # Renders a title bar for our boxes
   def box_title(title, options = {})
     content = "".html_safe

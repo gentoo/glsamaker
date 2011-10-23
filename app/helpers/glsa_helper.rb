@@ -174,6 +174,10 @@ module GlsaHelper
     content
   end
 
+  def field_content(str)
+    sanitize(html_format(spelling(str)), :tags => %w[p ul li code span])
+  end
+
 private
   def shorten_args(text)
     text.gsub!(/# (.*)/) do |s|

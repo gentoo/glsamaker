@@ -82,7 +82,7 @@
   <tr>
     <th class="left"><%= image_tag 'icons/synopsis.png' %> Synopsis</th>
     <td>
-      <%= sanitize(html_format(@rev.synopsis), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.synopsis) %>
     </td>
   </tr>
   <tr class="odd">
@@ -108,31 +108,31 @@
   <tr class="odd">
     <th class="left"><%= image_tag 'icons/background.png' %> Background</th>
     <td>
-      <%= sanitize(html_format(@rev.background), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.background) %>
     </td>
   </tr>
   <tr>
     <th class="left"><%= image_tag 'icons/document.png' %> Description</th>
     <td>
-      <%= sanitize(html_format(@rev.description), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.description) %>
     </td>
   </tr>
   <tr class="odd">
     <th class="left"><%= image_tag 'icons/impact.png' %> Impact</th>
     <td>
-      <%= sanitize(html_format(@rev.impact), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.impact) %>
     </td>
   </tr>
   <tr>
     <th class="left"><%= image_tag 'icons/workaround.png' %> Workaround</th>
     <td>
-      <%= sanitize(html_format(@rev.workaround), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.workaround) %>
     </td>
   </tr>
   <tr class="odd">
     <th class="left"><%= image_tag 'icons/resolution.png' %> Resolution</th>
     <td>
-      <%= sanitize(html_format(@rev.resolution), :tags => %w[p ul li code]) %>
+      <%= field_content(@rev.resolution) %>
     </td>
   </tr>
   <tr>
