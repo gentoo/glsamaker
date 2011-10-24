@@ -70,7 +70,32 @@ class Glsa < ActiveRecord::Base
 
   # Returns true if the draft is ready for sending
   def is_approved?
-    (approvals.count - rejections.count) >= 2
+    count = 0
+    users_who_approved = approvals.map { |a| a.user_id }
+    users_who_rejected = rejections.map { |a| a.user_id }
+
+    common_users = (users_who_approved & users_who_rejected)
+    common_users.each do |user|
+      approval = approvals.where(:user_id => user).order('created_at DESC').first
+      rejection = rejections.where(:user_id => user).order('created_at DESC').first
+
+      # if the approval was before a rejection => 0
+      if approval.created_at < rejection.created_at
+        count += 0
+      elsif approval.created_at > rejection.created_at
+        count += 1
+      end
+    end
+
+    (users_who_approved - common_users).each do |user|
+      count += 1
+    end
+
+    (users_who_rejected - common_users).each do |user|
+      count -= 1
+    end
+
+    (count >= 2)
   end
 
   # Returns true if it has comments
