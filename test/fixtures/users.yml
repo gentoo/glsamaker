@@ -11,6 +11,7 @@ test_admin:
   name: Alex Dmin
   email: admin@localhost.invalid
   jefe: true
+  access: 3
 
 test_locked:
   id: 3
