@@ -1,5 +1,5 @@
 <h1>
-  <%= @rev.title %>
+  <%= sanitize(spelling(@rev.title), :tags => %w[span]) %>
   <% if @glsa.restricted? %><span class="red">(CONFIDENTIAL)</span><% end %>
 </h1>
 
