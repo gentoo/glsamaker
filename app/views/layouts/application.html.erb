@@ -57,11 +57,13 @@
       <li><%= link_to "Drafts", drafts_glsas_path, :class => 'drafts' %></li>
       <li><%= link_to "Archive", archive_glsas_path, :class => 'archive' %></li>
 
+      <% if current_user.access >= 2 %>
       <li style="margin-right: 2em;">&nbsp;</li>
       <li><a href="/cve/list" class="cve">CVETool</a></li>
       <% if Module.constants.include? "Secunia" %>
       <li style="margin-right: 2em;">&nbsp;</li>
       <li><a href="/" class="secunia">Secunia Advisories</a></li>
+      <% end %>
       <% end %>
     </ul>
   </div>

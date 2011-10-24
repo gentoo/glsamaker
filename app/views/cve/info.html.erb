@@ -27,7 +27,7 @@ uki({ view: 'VSplitPane', rect: '500 600', anchors: 'left top right bottom', top
           { view: 'Button', rect: '135 4 70 20', text: 'Packages', anchors: 'bottom left', id: 'packages' },
           { view: 'Button', rect: '210 4 80 20', text: 'Comments', anchors: 'bottom left', id: 'comments' },  
           { view: 'Button', rect: '295 4 60 20', text: 'Changes', anchors: 'bottom left', id: 'changes' },
-          { view: 'Button', rect: '430 4 60 20', text: 'Actions', anchors: 'bottom right', id: 'actions' },          
+          <% if current_user.access >= 2 %>{ view: 'Button', rect: '430 4 60 20', text: 'Actions', anchors: 'bottom right', id: 'actions' },<% end %>
         ] }
     ]}
 }).attachTo(window, '500 600');

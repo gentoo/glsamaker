@@ -2,6 +2,8 @@ class CveController < ApplicationController
   include ApplicationHelper
   include CveHelper
 
+  before_filter :check_access, :except => [:info, :general_info, :references, :packages, :comments, :changes]
+
   def index
     @pageID = 'cve'
   end
@@ -288,6 +290,14 @@ class CveController < ApplicationController
   rescue Exception => e
     log_error e
     render :text => e.message, :status => 500
+  end
+
+  protected
+  def check_access
+    if current_user.access < 2
+      deny_access "User has no access to the CVEtool"
+      return false
+    end
   end
 
 end
