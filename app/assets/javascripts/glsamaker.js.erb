@@ -58,7 +58,7 @@ function generateResolution() {
     name = atom.split("/")[1];
     if (name == undefined)
       name = "UNDEFINED";
-    comp = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__comp").value;
+    comp = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__comp").value.replace('*', '');
     version = $('packages_table_unaffected').down(".entry", i).down("#glsa_package__version").value;
        
     resolution += "All " + name + " users should upgrade to the latest version:\n\n\
