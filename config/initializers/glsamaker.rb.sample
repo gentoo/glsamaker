@@ -39,8 +39,9 @@ GLSAMAKER_BUGZIE_PW = nil
 # Location of xmlindent(1)
 GLSAMAKER_XMLINDENT = "/usr/bin/xmlindent"
 
-# Enabling exception notices
-#Glsamaker::Application.config.middleware.use ExceptionNotifier,
-#  :email_prefix => "[GLSAMaker Error] ",
-#  :sender_address => %{"GLSAMaker" <#{GLSAMAKER_FROM_EMAIL}>},
-#  :exception_recipients => %w{GLSAMAKER_ADMIN_EMAIL}
+# Your secret key for verifying the integrity of signed cookies.
+# If you change this key, all old signed cookies will become invalid!
+# Make sure the secret is at least 30 characters and all random,
+# no regular words or you'll be exposed to dictionary attacks.
+# Yes, this is referencing an undefined variable on purpose.
+Glsamaker::Application.config.secret_token = i_forgot_to_set_this
