@@ -43,12 +43,18 @@ class CommentsController < ApplicationController
           render
           return
         end
+      else
+        @error = "Error: Comment text is empty."
+        render
+        return
       end
 
       begin
         @comment_number = @glsa.comments.count
+        @css_class = @comment_number.odd? ? 'odd-bright' : ''
         @comment_text = render_to_string :partial => "/glsa/comment", :object => comment
       rescue Exception => e
+        log_error e
         @error = "Error: #{e.message}"
       end
     else
