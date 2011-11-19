@@ -54,7 +54,8 @@
 
 <div id="left">
   <div class="box">
-    <%= box_title('Title', :icon => 'icons/title.png', :label => 'title') %>
+    <%= box_title('Title', :icon => 'icons/title.png',
+        :toolbar => [{:title => 'Add template', :uri => "javascript:GLSAMaker.editing.templates.dropdown(this, 'title');", :icon => 'icons/template.png'}]) %>
     <p><textarea name="glsa[title]" id="title" class="largetext nice" rows="1"><%= lastrev_content(@glsa, 'title') %></textarea></p>
   </div>
 
@@ -166,6 +167,7 @@
 <%= template_popups %>
 
 <script language="JavaScript" type="text/javascript">
+  GLSAMaker.editing.templates.observeClick($('title'));
   GLSAMaker.editing.templates.observeClick($('synopsis'));
   GLSAMaker.editing.templates.observeClick($('description'));
   GLSAMaker.editing.templates.observeClick($('impact'));
