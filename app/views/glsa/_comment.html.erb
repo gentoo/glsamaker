@@ -1,30 +1,27 @@
-<li>
+<li class="comment <%= @css_class || cycle("odd-bright", "") %>">
   <input type="hidden" name="commentread-<%= comment.id %>" id="commentread-<%= comment.id %>" value="<%= comment.read ? "true" : "false" %>" />
-  <span style="float: right;">
+  <span class="comment-toolbox">
     <%= link_to_function(comment.read ? image_tag("icons/flag-green.png", :title => 'done') : image_tag("icons/flag.png", :title => 'todo'),
                               "toggleCommentRead(#{comment.id})",
                               :title => 'Toggle read status',
                               :id => "commentflag-#{comment.id}") %>
   </span>
-   
-  <div style="float: left;">
+  <div class="comment-header">
     <%= case comment.rating
         when "approval"
-          image_tag('icons/unaffected.png', :title => 'Approval')
+          image_tag('icons/approval.png', :title => 'Approval')
         when "rejection"
-          image_tag('icons/affected.png', :title => 'Rejection')
+          image_tag('icons/rejection.png', :title => 'Rejection')
         else
-          image_tag('icons/reference.png', :title => 'Neutral')
+          image_tag('icons/comment.png', :title => 'Neutral')
         end -%>
-    <small style="color: grey; vertical-align: text-bottom;"><%= @comment_number ||= 1 %></small>
   </div>
   
-  <div style="margin-left: 35px;"><%= comment.text %></div>
-  <div style="font-size: 2px;">&nbsp;</div>
-  
-  <div style=" float: right;"><small>-- <%= comment.user.name %>, <%= comment.created_at %></small></div>
- 
-  <div style="float: none;">&nbsp;</div>
+  <div class="comment-text"><%= Kramdown::Document.new(h(comment.text)).to_html.html_safe %></div>
+  <div class="comment-author">
+    <span class="comment-number">#<strong><%= @comment_number ||= 1 %></strong></span>
+    &mdash;<strong><%= comment.user.name %></strong>, <%= comment.created_at %>
+   </div>
 </li>
 
 <% @comment_number += 1 -%>

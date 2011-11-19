@@ -274,15 +274,6 @@ span.hspacer {
   padding-right: 3em;
 }
 
-ul#commentslist  {
-  list-style-type: none;
-  padding-left: 1em;
-}
-
-ul#commentslist li {
-  margin-bottom: 8px;
-}
-
 /** Tables **/
 table {
   border-spacing: 0;
@@ -293,8 +284,12 @@ tr {
   border-spacing: .3em;
 }
 
-tr.odd, p.odd {
+.odd {
   background-color: #D3CFE5;
+}
+
+.odd-bright {
+  background-color: #DEDBEF;
 }
 
 tr.invalid, tr.invalid td {
@@ -402,6 +397,50 @@ div.box .box-actions {
   width: 100%;
 }
 
+/** comment list **/
+ul#commentslist  {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+li.comment {
+  border-bottom: 1px solid #8875B0;
+  padding: .25em;
+}
+
+.comment-header {
+  float: left;
+  text-align: center;
+}
+
+.comment-toolbox {
+  float: right;
+}
+
+.comment-text {
+  margin-left: 1.5em;
+}
+
+.comment-text p {
+  margin-bottom: .5em !important;
+}
+
+.comment-author {
+  font-size: smaller;
+  clear: both;
+  text-align: right;
+  padding-bottom: .3em;
+}
+
+.comment-number {
+  float: left;
+  color: gray;
+}
+
+#addcommentsubmit {
+  margin-right: 0;
+}
 
 /** popups **/
 div.popup {
@@ -420,6 +459,10 @@ div#right {
 
 div#left {
   width: 55%;
+}
+
+span.left {
+  float: left;
 }
 
 table.padcells td {
@@ -498,6 +541,12 @@ form p, form ul#commentslist {
 form.l label {
   width: 15em;
   float: left;
+}
+
+form.popupform p {
+  padding:  0;
+  margin: 0;
+  margin-bottom: .3em;
 }
 
 input.text {
