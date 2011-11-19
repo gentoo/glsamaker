@@ -57,7 +57,7 @@
       <%= check_icon((@glsa.is_approved? or @comments_override)) %>
     </span>
     <%= image_tag 'icons/comment.png' %> Review Status
-    (<%= @glsa.approvals.length %> <%= image_tag 'icons/approved.png' %>, <%= @glsa.rejections.length %> <%= image_tag 'icons/not-approved.png' %>)
+    (<%= @glsa.approvals.length %> <%= image_tag 'icons/approval.png' %>, <%= @glsa.rejections.length %> <%= image_tag 'icons/rejection.png' %>)
   </h2>
   <table class="list">
     <%= render :partial => "approval_row", :collection => @glsa.approvals, :as => :comment %>

@@ -102,9 +102,9 @@ module GlsaHelper
 
   def is_approval_icon(status)
     if status
-      image_tag 'icons/approved.png', :title => 'This item is an approval'
+      image_tag 'icons/approval.png', :title => 'This item is an approval'
     else
-      image_tag 'icons/not-approved.png', :title => 'This item is a rejection'
+      image_tag 'icons/rejection.png', :title => 'This item is a rejection'
     end
   end
   
