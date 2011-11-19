@@ -6,6 +6,6 @@
         ]
         ) %>
     <ul id="commentslist">
-      <%= render :partial => "comment", :collection => @glsa.comments.order("created_at DESC") %>
+      <%= render :partial => "comment", :collection => @glsa.comments.order("created_at ASC") %>
     </ul>
   </div>
