@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   protected
   def log_error(error)
     caller[0] =~ /`([^']*)'/ and where = $1
-    logger.error "[#{where}] #{error.class}: #{error.to_s}"
+    logger.error "[#{where}] #{error.class}: #{error.message}"
     logger.info error.backtrace.join("\n")
     #ExceptionNotifier::Notifier.exception_notification(request.env, error).deliver
   end
