@@ -33,7 +33,11 @@ class GlsaController < ApplicationController
         @year = (params[:year] || Date.today.year).to_i
 
         month_start = Date.new(@year, @month, 1)
-        month_end = Date.new(@year, @month + 1, 1) - 1
+        if @month == 12
+          month_end = Date.new(@year + 1, 1, 1) -1
+        else
+          month_end = Date.new(@year, @month + 1, 1) - 1
+        end
 
         @glsas = Glsa.where(:status => 'release', :first_released_at => month_start..month_end).order('updated_at DESC')
       }
