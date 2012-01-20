@@ -17,7 +17,12 @@ print_vulnerable = (unaffected_versions.size == 0 ? true : false)
 while vulnerable_versions.size > 0 or unaffected_versions.size > 0
   v = (vulnerable_versions.shift if vulnerable_versions.size > 0) || nil
   line = (v ? "#{v.comp} #{v.version}" : "").center(20)
-  
+
+  if v and v.arch != '*'
+    @arches[@packages_count] ||= []
+    @arches[@packages_count] += v.arch.split(' ')
+  end
+
   if print_vulnerable
     line += "Vulnerable!".rjust(22)
     print_vulnerable = false

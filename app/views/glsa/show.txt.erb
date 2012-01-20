@@ -1,6 +1,7 @@
 <%- @packages = @rev.packages_by_atom
     @packages_count = 0
-    @tf = ::Text::Format.new -%>
+    @tf = ::Text::Format.new
+    @arches = {} -%>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id %>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,8 +49,13 @@ Affected packages
 <% if @packages_count > 1 -%>
     -------------------------------------------------------------------
      <%= @packages_count %> affected packages
-<% # on all of their supported architectures. REMOVE? -%>
+<% end -%>
+<% if @arches != {} -%>
     -------------------------------------------------------------------
+     <% @arches.each_pair do |num, arches| -%>
+     # Package <%= num %> only applies to users of these architectures:
+       <%= arches.sort.join ", " %>
+     <% end -%>
 <% end -%>
 
 Description
