@@ -350,7 +350,7 @@ class GlsaController < ApplicationController
       if params[:email] == '1'
         with_format('txt') do
           Glsamaker::Mail.send_text(
-              render_to_string({:template => 'glsa/show.txt.erb', :layout => false}),
+              render_to_string({:template => 'glsa/show.txt.erb', :layout => false}).html_safe,
               "[ GLSA #{@glsa.glsa_id} ] #{@rev.title}",
               current_user,
               false
