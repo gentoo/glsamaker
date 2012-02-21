@@ -58,6 +58,21 @@ class Glsa < ActiveRecord::Base
     end
   end
 
+  # Returns the best available release date
+  def release_date
+    return first_released_at if status == 'release'
+    last_revision.created_at
+  end
+
+  # Returns the best available revision date
+  def revised_date
+    if status == 'release' and last_revision.created_at < first_released_at
+      first_released_at
+    else
+      last_revision.created_at
+    end
+  end
+
   # Returns all approving comments
   def approvals
     comments.where(:rating => 'approval')

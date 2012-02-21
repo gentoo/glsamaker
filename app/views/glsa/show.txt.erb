@@ -10,7 +10,7 @@ Gentoo Linux Security Advisory                           GLSA <%= @glsa.glsa_id 
 
 <%= prefixed_item(" Severity:", @rev.severity.capitalize.html_safe) %>
 <%= prefixed_item("    Title:", @rev.title.html_safe) %>
-<%= prefixed_item("     Date:", @rev.updated_at.strftime('%B %d, %Y')) %>
+<%= prefixed_item("     Date:", @glsa.release_date.strftime('%B %d, %Y')) %>
 <%= prefixed_item("     Bugs:", @rev.bugs.map {|b| "\##{b.bug_id}" }.join(', ')) %>
 <%= prefixed_item("       ID:", @glsa.glsa_id) %>
 
