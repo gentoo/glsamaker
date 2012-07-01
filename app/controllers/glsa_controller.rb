@@ -13,13 +13,13 @@
 class GlsaController < ApplicationController
   def requests
     @pageID = "requests"
-    @pageTitle = "Pooled GLSA requests"
+    @pageTitle = "GLSA requests"
     @glsas = Glsa.where(:status => 'request').order('updated_at DESC')
   end
 
   def drafts
     @pageID = "drafts"
-    @pageTitle = "Pooled GLSA drafts"
+    @pageTitle = "GLSA drafts"
     @glsas = Glsa.where(:status => 'draft').order('updated_at DESC')
   end
 
@@ -98,6 +98,7 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
     @rev = params[:rev_id].nil? ? @glsa.last_revision : @glsa.revisions.find_by_revid(params[:rev_id])
+    @pageTitle = "GLSA #{@glsa.glsa_id} (#{@rev.title})"
 
     if @rev == nil
       flash[:error] = "Invalid revision ID"
@@ -147,7 +148,8 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
     @rev = @glsa.last_revision
-    
+    @pageTitle = "Edit GLSA #{@glsa.glsa_id}"
+
     set_up_editing
   end
 
@@ -293,6 +295,7 @@ class GlsaController < ApplicationController
   def prepare_release
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
+    @pageTitle = "Releasing GLSA #{@glsa.glsa_id}"
 
     if current_user.access < 2
       deny_access "Tried to prepare release"
@@ -319,9 +322,10 @@ class GlsaController < ApplicationController
   def release
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
+    @pageTitle = "Releasing GLSA #{@glsa.glsa_id}"
 
     if current_user.access < 2
-      deny_access "Tried to prepare release"
+      deny_access "Tried to release"
       return
     end
 
@@ -370,6 +374,7 @@ class GlsaController < ApplicationController
 
   def finalize_release
     @glsa = Glsa.find(params[:id])
+    @pageTitle = "Released GLSA #{@glsa.glsa_id}"
 
     if params[:close_bugs] == '1'
       message = "GLSA #{@glsa.glsa_id}"
@@ -384,6 +389,7 @@ class GlsaController < ApplicationController
   def diff
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
+    @pageTitle = "Comparing GLSA #{@glsa.glsa_id}"
     
     rev_old = @glsa.revisions.find_by_revid(params[:old])
     rev_new = @glsa.revisions.find_by_revid(params[:new])

@@ -15,6 +15,7 @@ class IndexController < ApplicationController
   
   def index
     @my_drafts = Glsa.where(:status => 'draft', :submitter => current_user.id).order("updated_at DESC").limit(10)
+    @pageTitle = "Welcome"
   end
   
   def error
@@ -30,6 +31,7 @@ class IndexController < ApplicationController
   end
   
   def about
+    @pageTitle = "About GLSAMaker 2"
   end
   
   def profile
