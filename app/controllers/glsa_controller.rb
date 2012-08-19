@@ -34,9 +34,9 @@ class GlsaController < ApplicationController
 
         month_start = Date.new(@year, @month, 1)
         if @month == 12
-          month_end = Date.new(@year + 1, 1, 1) -1
+          month_end = DateTime.new(@year + 1, 1, 1, 23, 59, 59) -1
         else
-          month_end = Date.new(@year, @month + 1, 1) - 1
+          month_end = DateTime.new(@year, @month + 1, 1, 23, 59, 59) - 1
         end
 
         @glsas = Glsa.where(:status => 'release', :first_released_at => month_start..month_end).order('updated_at DESC')
@@ -49,9 +49,9 @@ class GlsaController < ApplicationController
         month_end = nil
         
         if @month == 12
-          month_end = Date.new(@year + 1, 1, 1) -1
+          month_end = DateTime.new(@year + 1, 1, 1, 23, 59, 59) -1
         else
-          month_end = Date.new(@year, @month + 1, 1) - 1
+          month_end = DateTime.new(@year, @month + 1, 1, 23, 59, 59) - 1
         end
 
         @glsas = Glsa.where(:status => 'release', :first_released_at => month_start..month_end).order('updated_at DESC')
