@@ -116,21 +116,45 @@ module Glsamaker
     
     # Returns information from the portage metadata cache
     # Values: :depend, :rdepend, :slot, :src_uri, :restrict, :homepage,
-    # :license, :description, :keywords, :inherited, :iuse, :required_use,
+    # :license, :description, :keywords, :iuse, :required_use,
     # :pdepend, :provide, :eapi, :properties, :defined_phases
     # as per portage/pym/portage/cache/metadata.py (database.auxdbkey_order)
-    def get_metadata(atom, version = :latest, what = [])
+    #
+    # @param [String] Package atom (without version, see next parameter)
+    # @param [String] Desired version, tries to use the last available one (as decided by a rather stupid technique)
+    # @return [Hash{Symbol => String, Array}] A hash with all available metadata (see above for keys)
+    def get_metadata(atom, version = :latest)
       raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
       raise(ArgumentError, "Invalid version string") if version.to_s.include? '..'
-      return {} if what == []
-      
-      lines = [nil, :depend, :rdepend, :slot, :src_uri, :restrict, :homepage,
-               :license, :description, :keywords, :inherited, :iuse, :required_use,
-               :pdepend, :provide, :eapi, :properties, :defined_phases]
+
+      items = {
+          'DEFINED_PHASES' => :defined_phases,
+          'DEPEND'         => :depend,
+          'DESCRIPTION'    => :description,
+          'EAPI'           => :eapi,
+          'HOMEPAGE'       => :homepage,
+          'IUSE'           => :iuse,
+          'KEYWORDS'       => :keywords,
+          'LICENSE'        => :license,
+          'PDEPEND'        => :pdepend,
+          'PROPERTIES'     => :properties,
+          'RDEPEND'        => :rdepend,
+          'RESTRICT'       => :restrict,
+          'REQUIRED_USE'   => :required_use,
+          'SLOT'           => :slot,
+          'SRC_URI'        => :src_uri
+      }
+
+      valid_keys = items.keys
+
+      # List of metadata items to split at space
+      split_keys = ['SRC_URI', 'IUSE', 'KEYWORDS', 'PROPERTIES', 'DEFINED_PHASES']
+
       cat, pkg = atom.split('/', 2)
+      r = Regexp.compile('^(\\w+)=([^\n]*)')
       result = {}
       
-      Dir.chdir(File.join(Glsamaker::Portage.portdir, 'metadata', 'cache', cat)) do
+      Dir.chdir(File.join(Glsamaker::Portage.portdir, 'metadata', 'md5-cache', cat)) do
         if version == :latest
           f = File.open(Dir.glob("#{pkg}-[0-9]*").last, 'r')
         else
@@ -138,8 +162,12 @@ module Glsamaker
         end
         
         while f.gets
-          if what.include?(lines[$.])
-            result[lines[$.]] = $_.chomp
+          if (match = r.match($_)) != nil and valid_keys.include? match[1]
+            if split_keys.include? match[1]
+              result[items[match[1]]] = match[2].split(' ')
+            else
+              result[items[match[1]]] = match[2]
+            end
           end
         end
         
