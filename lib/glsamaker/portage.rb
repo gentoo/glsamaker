@@ -62,7 +62,7 @@ module Glsamaker
     
     # Validates the atom +atom+
     def valid_atom?(atom)
-      atom =~ /[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/
+      atom =~ /^[+a-zA-Z0-9_-]+\/[+a-zA-Z0-9_-]+$/
     end    
     
     # Gets a description
