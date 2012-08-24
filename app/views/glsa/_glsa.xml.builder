@@ -39,7 +39,7 @@ xml.glsa :id => glsa.glsa_id do
   end
   
   xml.impact({:type => rev.severity}) do
-    xml << xml_format (rev.impact || "")
+    xml << xml_format(rev.impact || "")
   end
   
   xml.workaround do
