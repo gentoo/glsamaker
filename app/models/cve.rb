@@ -27,7 +27,7 @@ class Cve < ActiveRecord::Base
   
   def to_s(line_length = 78)
     str = "#{self.cve_id} #{"(%s):" % url}\n"
-    str += "  " + Glsamaker::help.word_wrap(self.summary, line_length-2).gsub(/\n/, "\n  ")
+    str += "  " + Glsamaker::help.word_wrap(self.summary, :line_width => line_length-2).gsub(/\n/, "\n  ")
   end
   
   # Returns the URL for this CVE at NVD (<tt>:nvd</tt>, default) or MITRE (<tt>:mitre</tt>)
