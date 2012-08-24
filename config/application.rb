@@ -45,4 +45,4 @@ module Glsamaker
 end
 
 # Manually load the kramdown extensions
-require 'lib/kramdown_ext'
+require_relative '../lib/kramdown_ext'
