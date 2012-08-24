@@ -120,8 +120,8 @@ module Glsamaker
     # :pdepend, :provide, :eapi, :properties, :defined_phases
     # as per portage/pym/portage/cache/metadata.py (database.auxdbkey_order)
     #
-    # @param [String] Package atom (without version, see next parameter)
-    # @param [String] Desired version, tries to use the last available one (as decided by a rather stupid technique)
+    # @param [String] atom Package atom (without version, see next parameter)
+    # @param [String] version Desired version, tries to use the last available one (as decided by a rather stupid technique)
     # @return [Hash{Symbol => String, Array}] A hash with all available metadata (see above for keys)
     def get_metadata(atom, version = :latest)
       raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
