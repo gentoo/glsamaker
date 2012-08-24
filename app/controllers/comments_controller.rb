@@ -60,6 +60,11 @@ class CommentsController < ApplicationController
     else
       @error = "Error: Cannot find GLSA"
     end
+
+    respond_to do |format|
+      format.html { render :status => 500 }
+      format.js
+    end
   end
 
   def show
