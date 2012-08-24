@@ -44,6 +44,11 @@ class BugsController < ApplicationController
     else
       @error = "Cannot find GLSA"
     end
+
+    respond_to do |format|
+      format.html { render :status => 500 }
+      format.js
+    end
   end
 
   def destroy
