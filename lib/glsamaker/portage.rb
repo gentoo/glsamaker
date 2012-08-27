@@ -63,7 +63,22 @@ module Glsamaker
     # Validates the atom +atom+
     def valid_atom?(atom)
       atom =~ /^[+a-zA-Z0-9_-]+\/[+a-zA-Z0-9_-]+$/
-    end    
+    end
+
+    # Checks if there are any ebuilds for the +atom+
+    def has_ebuilds?(atom)
+      return false unless valid_atom? atom
+
+      Dir.chdir("#{portdir}/#{atom}") do
+        Dir.glob('*.ebuild') do |ebuild|
+          return true
+        end
+      end
+
+      false
+    rescue Errno::ENOENT
+      false
+    end
     
     # Gets a description
     def get_description(atom)
