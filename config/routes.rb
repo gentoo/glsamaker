@@ -9,6 +9,8 @@ Glsamaker::Application.routes.draw do
   
   match 'admin'                       => 'admin/index#index'
 
+  match  'api/glsa/create_request'    => 'api/glsa#create_request'
+
   resources :glsas, :controller => 'glsa' do
     resources :comments
     resources :bugs
