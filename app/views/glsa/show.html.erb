@@ -140,7 +140,15 @@
     <td>
       <ul>
         <% @rev.references.each do |r| %>
-          <li><%= link_to r.title, r.url -%></li>
+          <li><%= link_to r.title, r.url -%>
+            <% if r.title.start_with? 'CVE' %> <br />
+              <% if (cve = Cve.where(:cve_id => r.title).first) != nil %>
+                <small><%= cve.summary %></small>
+              <% else %>
+                <small class="red">CVE not found in CVETool database. <strong>Double-check manually!</strong></small>
+              <% end %>
+            <% end %>
+          </li>
         <% end %>
       </ul>
     </td>
