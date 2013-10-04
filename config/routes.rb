@@ -3,7 +3,7 @@ Glsamaker::Application.routes.draw do
   match 'bug/:id'                     => 'bug#bug',             :as => :bug,          :via => :get
   match 'bug/:id/history'             => 'bug#history',         :as => :bughistory,   :via => :get
 
-  match 'cve/list.:format'            => 'cve#list',            :as => :cve,          :via => :get
+  match 'cve/list.:format'            => 'cve#list',            :as => :cve,          :via => [:get, :post]
   
   match 'search/results'              => 'search#results',      :as => :search,       :via => :get
   
