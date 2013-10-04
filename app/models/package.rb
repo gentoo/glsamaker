@@ -13,7 +13,7 @@
 class Package < ActiveRecord::Base
   belongs_to :revision
   validates :comp, :inclusion => { :in => %w[>= > = <= < *< *<= *> *>=] }
-  validates :arch, :format => { :with => /^(\*|((alpha|amd64|arm|hppa|ia64|m68k|mips|ppc|ppc64|s390|sh|sparc|x86) )*(alpha|amd64|arm|hppa|ia64|m68k|mips|ppc|ppc64|s390|sh|sparc|x86))$/ }
+  validates :arch, :format => { :with => /\A(\*|((alpha|amd64|arm|hppa|ia64|m68k|mips|ppc|ppc64|s390|sh|sparc|x86) )*(alpha|amd64|arm|hppa|ia64|m68k|mips|ppc|ppc64|s390|sh|sparc|x86))\z/ }
 
   # Mapping XML comparators to internally used ones
   COMP_MAP = {

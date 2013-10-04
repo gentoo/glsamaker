@@ -61,7 +61,7 @@ class Admin::TemplatesController < ApplicationController
     @template = Template.find(params[:id])
 
     respond_to do |format|
-      if @template.update_attributes(params[:template])
+      if @template.update_attributes(params[:template].permit(:name, :text, :target, :enabled))
         format.html { redirect_to admin_template_path(@template), :notice => 'Template was successfully updated.' }
         format.json { head :ok }
       else

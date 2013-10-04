@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'rails', '3.2.8'
+gem 'rails', '4.0.0'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -11,11 +11,11 @@ gem 'json'
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails', "~> 3.2.0"
-  gem 'coffee-rails', "~> 3.2.0"
-  gem 'uglifier'
-end
+#group :assets do
+#  gem 'sass-rails', "~> 3.2.0"
+#  gem 'coffee-rails', "~> 3.2.0"
+#  gem 'uglifier'
+#end
 
 gem 'prototype-rails'
 
@@ -48,7 +48,7 @@ gem "runspell"
 # gem "rdoc"
 
 group :test do
-  gem 'rcov'
+  gem 'simplecov'
   gem 'ci_reporter'
   gem 'rspec'
   gem 'minitest-reporters'

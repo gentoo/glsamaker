@@ -1,13 +1,13 @@
 Glsamaker::Application.routes.draw do
 
-  match 'bug/:id'                     => 'bug#bug',             :as => :bug
-  match 'bug/:id/history'             => 'bug#history',         :as => :bughistory
+  match 'bug/:id'                     => 'bug#bug',             :as => :bug,          :via => :get
+  match 'bug/:id/history'             => 'bug#history',         :as => :bughistory,   :via => :get
 
-  match 'cve/list.:format'            => 'cve#list',            :as => :cve
+  match 'cve/list.:format'            => 'cve#list',            :as => :cve,          :via => :get
   
-  match 'search/results'              => 'search#results',      :as => :search
+  match 'search/results'              => 'search#results',      :as => :search,       :via => :get
   
-  match 'admin'                       => 'admin/index#index'
+  match 'admin'                       => 'admin/index#index',   :via => :get
 
   resources :glsas, :controller => 'glsa' do
     resources :comments
@@ -91,6 +91,6 @@ Glsamaker::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  match ':controller(/:action(/:id(.:format)))', :via => [:get, :post]
   # 
 end
