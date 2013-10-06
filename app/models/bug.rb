@@ -13,12 +13,6 @@
 class Bug < ActiveRecord::Base
   belongs_to :revision
   
-  define_index do
-    indexes title
-    
-    has revision_id
-  end
-  
   def cc
     self.arches
   end

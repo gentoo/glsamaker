@@ -20,10 +20,6 @@ class Glsa < ActiveRecord::Base
 
   has_many :revisions, :dependent => :destroy
   has_many :comments, :dependent => :destroy
-  
-  define_index do
-    indexes glsa_id, :sortable => true
-  end
 
   # Returns the last revision object, referring to the current state of things
   def last_revision

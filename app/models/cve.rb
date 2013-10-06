@@ -16,15 +16,7 @@ class Cve < ActiveRecord::Base
   has_and_belongs_to_many :cpes, :class_name => "Cpe"
   has_many :cve_changes, :class_name => "CveChange", :foreign_key => "cve_id"
   has_many :assignments, :class_name => "CveAssignment", :foreign_key => "cve_id"
-  
-  define_index do
-    indexes cve_id, :sortable => true
-    indexes state,  :sortable => true
-    indexes summary
-    
-    has published_at, last_changed_at
-  end
-  
+
   def to_s(line_length = 78)
     str = "#{self.cve_id} #{"(%s):" % url}\n"
     str += "  " + Glsamaker::help.word_wrap(self.summary, :line_width => line_length-2).gsub(/\n/, "\n  ")

@@ -3,8 +3,9 @@ class SearchController < ApplicationController
   end
   
   def results
-    search = ThinkingSphinx.search params[:q], :max_matches => 1000, :per_page => 1000
-    
+    search = ThinkingSphinx.search(params[:q], :max_matches => 1000, :per_page => 1000)
+    search.context[:panes] << ThinkingSphinx::Panes::ExcerptsPane
+
     @results = {}
     search.each do |result|
       klass = result.class.to_s
@@ -29,6 +30,8 @@ class SearchController < ApplicationController
       end
     end
   rescue Riddle::ConnectionError => e
+    @error = true
+  rescue Riddle::ResponseError => e
     @error = true
   end
 end

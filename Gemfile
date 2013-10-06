@@ -42,7 +42,7 @@ gem "nokogiri"
 gem "text-format", :require => "text/format"
 gem "kramdown"
 
-gem "thinking-sphinx", "2.0.7"
+gem "thinking-sphinx", '~> 3.0.2'
 gem "runspell"
 
 # gem "rdoc"
