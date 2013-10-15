@@ -16,7 +16,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new(params[:user].permit([:login, :name, :email, :access, :disabled, :jefe]))
     
     if @user.save
       redirect_to(admin_user_path(@user), :notice => 'User was successfully created.')
@@ -48,7 +48,7 @@ class Admin::UsersController < ApplicationController
       return
     end
 
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(params[:user].permit([:login, :name, :email, :access, :disabled, :jefe]))
       redirect_to(admin_user_path(@user), :notice => 'User was successfully updated.')
     else
       render :action => "edit"
