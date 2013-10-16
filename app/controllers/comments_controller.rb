@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
     @glsa = Glsa.find(params[:glsa_id].to_i)
 
     unless @glsa.nil?
-      comment_data = params[:newcomment]
+      comment_data = params[:newcomment].permit([:text, :rating])
       comment = nil
 
       if comment_data['text'].strip != ''
