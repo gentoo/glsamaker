@@ -123,12 +123,12 @@ module GlsaHelper
     text.gsub!(/<\/?(b|i)>/, '')
 
     text.gsub!(/^\*\s+(.*)$/) do |s|
-      '* ' + word_wrap($1, 69).gsub("\n","\n  ")
+      '* ' + word_wrap($1, :line_width => 69).gsub("\n","\n  ")
     end
 
     text.gsub!(/(?:<ul>\s*(.*?)<\/ul>(?:\s*\n)?)/m) do |s|
       $1.gsub(/<li>(.*?)<\/li>\s*/) do |t|
-        ('* ' + word_wrap($1, 69)).gsub("\n", "\n  ") + "\n\n"
+        ('* ' + word_wrap($1, :line_width => 69)).gsub("\n", "\n  ") + "\n\n"
       end
     end
 
@@ -137,15 +137,15 @@ module GlsaHelper
     text.gsub!(/(?:<ol>\s*(.*?)<\/ol>(?:\s*\n)?)/m) do |s|
       nom = 0
       $1.gsub(/<li>(.*?)<\/li>\s*/) do |t|
-        ("#{nom += 1}. " + word_wrap($1, 68)).gsub("\n", "\n   ") + "\n\n"
+        ("#{nom += 1}. " + word_wrap($1, :line_with => 68)).gsub("\n", "\n   ") + "\n\n"
       end
     end
 
     text.gsub!(/(?:<code>\s*(.*?)<\/code>(?:\s*\n)?)/m) do |s|      
-      ('  ' + word_wrap(shorten_args ? shorten_args($1) : $1, 69)).gsub("\n", "\n  ") + "\n\n"
+      ('  ' + word_wrap(shorten_args ? shorten_args($1) : $1, :line_width => 69)).gsub("\n", "\n  ") + "\n\n"
     end
     
-    word_wrap(text.chomp, 71)
+    word_wrap(text.chomp, :line_width => 71)
   end
 
   def template_popups
