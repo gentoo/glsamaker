@@ -28,6 +28,10 @@ class Comment < ActiveRecord::Base
         end
       end
 
+      if record.glsa.submitter.nil?
+        record.errors[:rating] << 'You may not approve or reject advisories that have not been filled in yet'
+      end
+
       if record.user.access < 2
         if record.rating != 'neutral'
           record.errors[:rating] << 'You may not approve or reject drafts'
