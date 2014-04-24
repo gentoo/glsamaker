@@ -27,11 +27,12 @@ module Bugzilla
     did_retry = false
 
     begin
-      client = xmlrpc_client
+      client, token = xmlrpc_client
 
       result = client.call('Bug.add_comment', {
           'id' => bug.to_i,
-          'comment' => comment
+          'comment' => comment,
+          'token' => token,
       })
       result['id']
     rescue XMLRPC::FaultException => e
@@ -58,7 +59,7 @@ module Bugzilla
     did_retry = false
 
     begin
-      client = xmlrpc_client
+      client, token = xmlrpc_client
 
       rpc_data = {}
       rpc_data['ids'] = [bug]
@@ -76,6 +77,7 @@ module Bugzilla
       rpc_data['whiteboard'] = changes[:whiteboard] if changes.has_key?(:whiteboard)
       rpc_data['url'] = changes[:url] if changes.has_key?(:url)
       rpc_data['resolution'] = changes[:resolution] if changes.has_key?(:resolution)
+      rpd_data['token'] = token
 
       result = client.call('Bug.update', rpc_data)
       result['bugs'].first
@@ -102,7 +104,7 @@ module Bugzilla
     did_retry = false
 
     begin
-      client = xmlrpc_client
+      client, token = xmlrpc_client
 
       rpc_data = {}
       rpc_data['component'] = data[:component] if data.has_key?(:component)
@@ -116,6 +118,7 @@ module Bugzilla
       rpc_data['assigned_to'] = data[:assignee] if data.has_key?(:assignee)
       rpc_data['cc'] = data[:cc].to_a if data.has_key?(:cc)
       rpc_data['status'] = data[:status] if data.has_key?(:status)
+      rpc_data['token'] = token
 
       result = client.call('Bug.create', rpc_data)
       result['id']
@@ -140,7 +143,7 @@ module Bugzilla
     Rails.logger.debug "Called Bugzilla.log_in"
     raise unless GLSAMAKER_BUGZIE_USER and GLSAMAKER_BUGZIE_PW
 
-    client = xmlrpc_client
+    client, token = xmlrpc_client
 
     begin
       result = client.call('User.login', {
@@ -150,11 +153,11 @@ module Bugzilla
 
       Rails.logger.debug "Successfully logged in. UID: #{result['id']}"
 
-      cookie_file = File.join(Rails.root, 'tmp', 'bugzie-cookies.txt')
-      FileUtils.rm(cookie_file) if File.exist?(cookie_file)
-      FileUtils.touch(cookie_file)
-      File.chmod(0600, cookie_file)
-      File.open(cookie_file, 'w') {|f| f.write client.cookie }
+      token_file = File.join(Rails.root, 'tmp', 'bugzie-token.txt')
+      FileUtils.rm(token_file) if File.exist?(token_file)
+      FileUtils.touch(token_file)
+      File.chmod(0600, token_file)
+      File.open(token_file, 'w') {|f| f.write result['token'] }
 
       return true
     rescue XMLRPC::FaultException => e
@@ -167,11 +170,12 @@ module Bugzilla
     client = XMLRPC::Client.new(GLSAMAKER_BUGZIE_HOST, '/xmlrpc.cgi', 443, nil, nil, nil, nil, true)
     client.http_header_extra = {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"}
 
-    cookie_file = File.join(Rails.root, 'tmp', 'bugzie-cookies.txt')
-    if File.readable? cookie_file
-      client.cookie = File.read(cookie_file)
+    token = nil
+    token_file = File.join(Rails.root, 'tmp', 'bugzie-token.txt')
+    if File.readable? token_file
+      token = File.read(token_file)
     end
 
-    client
+    [client, token]
   end
 end
