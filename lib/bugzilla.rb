@@ -77,7 +77,7 @@ module Bugzilla
       rpc_data['whiteboard'] = changes[:whiteboard] if changes.has_key?(:whiteboard)
       rpc_data['url'] = changes[:url] if changes.has_key?(:url)
       rpc_data['resolution'] = changes[:resolution] if changes.has_key?(:resolution)
-      rpd_data['token'] = token
+      rpc_data['token'] = token
 
       result = client.call('Bug.update', rpc_data)
       result['bugs'].first
