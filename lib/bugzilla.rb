@@ -32,7 +32,7 @@ module Bugzilla
       result = client.call('Bug.add_comment', {
           'id' => bug.to_i,
           'comment' => comment,
-          'token' => token,
+          'Bugzilla_token' => token,
       })
       result['id']
     rescue XMLRPC::FaultException => e
@@ -77,7 +77,7 @@ module Bugzilla
       rpc_data['whiteboard'] = changes[:whiteboard] if changes.has_key?(:whiteboard)
       rpc_data['url'] = changes[:url] if changes.has_key?(:url)
       rpc_data['resolution'] = changes[:resolution] if changes.has_key?(:resolution)
-      rpc_data['token'] = token
+      rpc_data['Bugzilla_token'] = token
 
       result = client.call('Bug.update', rpc_data)
       result['bugs'].first
@@ -118,7 +118,7 @@ module Bugzilla
       rpc_data['assigned_to'] = data[:assignee] if data.has_key?(:assignee)
       rpc_data['cc'] = data[:cc].to_a if data.has_key?(:cc)
       rpc_data['status'] = data[:status] if data.has_key?(:status)
-      rpc_data['token'] = token
+      rpc_data['Bugzilla_token'] = token
 
       result = client.call('Bug.create', rpc_data)
       result['id']
