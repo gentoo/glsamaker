@@ -42,7 +42,7 @@ class Admin::TemplatesController < ApplicationController
   # POST /admin/templates
   # POST /admin/templates.json
   def create
-    @template = Template.new(params[:template])
+    @template = Template.new(params[:template]).permit(:name, :text, :target, :enabled)
 
     respond_to do |format|
       if @template.save
