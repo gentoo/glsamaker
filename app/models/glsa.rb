@@ -253,15 +253,15 @@ class Glsa < ActiveRecord::Base
       raise Exception, "Error while saving the GLSA object: #{e.message}"
     end
 
-    unless comment.strip.blank?
-      glsa.comments << Comment.new(:rating => "neutral", :text => comment, :user => user)
+    # unless comment.strip.blank?
+    #   glsa.comments << Comment.new(:rating => "neutral", :text => comment, :user => user)
 
-      begin
-        glsa.save!
-      rescue Exception => e
-        raise Exception, "Error while saving the comment: #{e.message}"
-      end
-    end
+    #   begin
+    #     glsa.save!
+    #   rescue Exception => e
+    #     raise Exception, "Error while saving the comment: #{e.message}"
+    #   end
+    # end
 
     revision = Revision.new
     revision.revid = glsa.next_revid
