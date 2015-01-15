@@ -18,8 +18,8 @@ uki(
       rightChildViews: [
         { view: 'Table', rect: '0 0 800 1000', minSize: '0 200', anchors: 'left top right bottom', columns: [
           { view: 'table.NumberColumn', label: 'ID', width: 50 },
-          { view: 'table.CustomColumn', label: 'CVE ID', width: 100, formatter: formatHlted, sort: 'DESC' },
-          { view: 'table.CustomColumn', label: 'Summary', resizable: true, minWidth: 300, width: (window.innerWidth - 200 - 50 - 100 - 80 - 15), formatter: formatHlted },
+          { view: 'table.CustomColumn', label: 'CVE ID', width: 150, formatter: formatHlted, sort: 'DESC' },
+          { view: 'table.CustomColumn', label: 'Summary', resizable: true, minWidth: 300, width: (window.innerWidth - 200 - 50 - 150 - 80 - 15), formatter: formatHlted },
           { view: 'table.CustomColumn', label: 'State', width: 80, formatter: formatHlted },
         ], multiselect: true, style: {fontSize: '12px', lineHeight: '12px'} }
       ]
