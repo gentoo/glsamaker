@@ -224,7 +224,7 @@ class Glsa < ActiveRecord::Base
 
   # Returns a publically accessible URL for the advisory if it's a released GLSA
   def to_url
-    "http://security.gentoo.org/glsa/glsa-#{self.glsa_id}.xml"
+    "https://security.gentoo.org/glsa/#{self.glsa_id}"
   end
 
   # Calculates the next GLSA ID for the given month, or the current month
