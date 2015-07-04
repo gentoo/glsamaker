@@ -158,6 +158,20 @@ class CveController < ApplicationController
     render :text => e.message, :status => 500
   end
 
+  def new
+    @cve = Cve.create(cve_id: params[:cve_id], summary: params[:summary], state: 'NEW')
+    render :text => "ok"
+    rescue Exception => e
+      log_error e
+      respond_to do |format|
+        format.html { flash.now[:error] = 'Filing the CVE failed. Is this a duplicate?' }
+        format.js {
+          raise 'Filing the CVE failed. Is this a dupliate?'
+          render :text => e.message, :status => 500
+        }
+      end
+  end
+
   def nfu
     @cves = params[:cves].split(',').map{|cve| Integer(cve)}
     logger.debug { "NFU CVElist: " + @cves.inspect + " Reason: " + params[:reason] }
