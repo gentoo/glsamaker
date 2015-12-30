@@ -1,9 +1,9 @@
-# Load the rails application
+# Load the rails Rpplication
 require File.expand_path('../application', __FILE__)
 
-# Initialize the rails application
-Glsamaker::Application.initialize!
+# Initialize the Rails application
+Rails.application.initialize!
 
-GLSAMAKER_VERSION="2.0"
+GLSAMAKER_VERSION = '2.0'
 
 require 'digest/md5'

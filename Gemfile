@@ -1,13 +1,13 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', '4.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2', ' > 0.3.10'
+gem 'mysql2', '~> 0.3.18'
 
-gem 'json'
+gem 'json', '~>1.8.2'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -17,7 +17,7 @@ gem 'json'
 #  gem 'uglifier'
 #end
 
-gem 'prototype-rails'
+gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
 
 # Use unicorn as the web server
 #gem 'unicorn'
@@ -35,15 +35,15 @@ group :development do
 #  gem 'require_relative'
 end
 
-gem "mechanize"
-gem "fastercsv"
-gem "diff-lcs", :require => "diff/lcs"
-gem "nokogiri"
-gem "text-format", :require => "text/format"
-gem "kramdown"
+gem 'mechanize'
+gem 'fastercsv'
+gem 'diff-lcs', require: 'diff/lcs'
+gem 'nokogiri'
+gem 'text-format-revised', require: 'text/format'
+gem 'kramdown'
 
-gem "thinking-sphinx", '~> 3.0.2'
-gem "runspell"
+gem 'thinking-sphinx', '~> 3.0.2'
+gem 'runspell'
 
 # gem "rdoc"
 
