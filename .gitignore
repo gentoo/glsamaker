@@ -18,3 +18,4 @@ coverage
 *.sphinx.conf
 db/sphinx
 .bundle
+vendor
