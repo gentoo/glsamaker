@@ -25,7 +25,7 @@ class GlsaController < ApplicationController
 
   def archive
     @pageID = "archive"
-    @pageTitle = "GLSA archive"    
+    @pageTitle = "GLSA archive"
 
     respond_to do |format|
       format.html {
@@ -47,7 +47,7 @@ class GlsaController < ApplicationController
 
         month_start = Date.new(@year, @month, 1)
         month_end = nil
-        
+
         if @month == 12
           month_end = DateTime.new(@year + 1, 1, 1, 23, 59, 59) -1
         else
@@ -59,15 +59,15 @@ class GlsaController < ApplicationController
       }
     end
   end
-  
+
   def new
     @pageID = "new"
     @pageTitle = "New GLSA"
-    
+
     # TODO: Straight-to-draft editing
     render :action => "new-request"
     return
-    
+
     if params[:what] == "request"
       render :action => "new-request"
     elsif params[:what] == "draft"
@@ -81,9 +81,9 @@ class GlsaController < ApplicationController
     if params[:what] == "request"
       begin
         glsa = Glsa.new_request(params[:title], params[:bugs], params[:comment], params[:access], (params[:import_references].to_i == 1), current_user)
-        
+
         Glsamaker::Mail.request_notification(glsa, current_user)
-        
+
         flash[:notice] = "Successfully created GLSA #{glsa.glsa_id}"
         redirect_to :action => "requests"
       rescue Exception => e
@@ -246,7 +246,7 @@ class GlsaController < ApplicationController
       next if package[:atom].strip == ''
 
       begin
-        revision.packages.create!(package)
+        revision.packages.create!(package.permit([:atom, :comp, :version, :arch, :automatic, :my_type]))
       rescue ActiveRecord::RecordInvalid => e
         flash[:error] = "Errors occurred while saving a package: #{e.record.errors.full_messages.join ', '}"
         set_up_editing
@@ -268,7 +268,7 @@ class GlsaController < ApplicationController
         end
 
         begin
-          revision.references.create(reference)
+          revision.references.create(reference.permit([:title, :url]))
         rescue ActiveRecord::RecordInvalid => e
           flash[:error] = "Errors occurred while saving a reference: #{e.record.errors.full_messages.join ', '}"
           set_up_editing
@@ -289,7 +289,7 @@ class GlsaController < ApplicationController
 
     flash[:notice] = "Saving was successful. #{'NOTE: Bugzilla integration is not available, only plain bug numbers.' if bugzilla_warning}"
     redirect_to :action => 'show', :id => @glsa
-    
+
   end
 
   def prepare_release
@@ -348,7 +348,7 @@ class GlsaController < ApplicationController
       else
         @glsa.release
       end
-      
+
       @glsa.invalidate_last_revision_cache
 
       if params[:email] == '1'
@@ -381,7 +381,7 @@ class GlsaController < ApplicationController
       with_format(:txt) do
         message = render_to_string :partial => 'close_msg'
       end
-      
+
       @glsa.close_bugs(message)
     end
   end
@@ -390,10 +390,10 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
     @pageTitle = "Comparing GLSA #{@glsa.glsa_id}"
-    
+
     rev_old = @glsa.revisions.find_by_revid(params[:old])
     rev_new = @glsa.revisions.find_by_revid(params[:new])
-    
+
     @diff = with_format(:xml) { rev_diff(@glsa, rev_old, rev_new) }
   end
 
@@ -401,9 +401,9 @@ class GlsaController < ApplicationController
     @glsa = Glsa.find(params[:id])
     return unless check_object_access!(@glsa)
     @rev = @glsa.last_revision
-    
+
     @rev.update_cached_bug_metadata
-    
+
     flash[:notice] = "Successfully updated all caches."
     if params[:redirect]
       redirect_to params[:redirect]
@@ -437,7 +437,7 @@ class GlsaController < ApplicationController
         glsa = Glsa.find(Integer(params[:id]))
         return unless check_object_access!(glsa)
         refs = []
-        
+
         params[:import][:cve].each do |cve_id|
           cve = Cve.find_by_cve_id cve_id
           refs << {:title => cve.cve_id, :url => cve.url}
@@ -446,7 +446,7 @@ class GlsaController < ApplicationController
         refs = refs.sort { |a, b| a[:title] <=> b[:title] }
 
         glsa.add_references refs
-        
+
         flash[:notice] = "Imported #{refs.count} references."
         redirect_to :action => "show", :id => glsa.id
         return
@@ -454,16 +454,16 @@ class GlsaController < ApplicationController
         @glsa = Glsa.find(Integer(params[:id]))
         return unless check_object_access!(@glsa)
         @cves = @glsa.related_cves
-      end      
+      end
     rescue Exception => e
       render :text => "Error: #{e.message}", :status => 500
       log_error e
       return
     end
-    
+
     render :layout => false
   end
-  
+
   protected
   def set_up_editing
     # Packages
