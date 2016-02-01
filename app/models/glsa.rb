@@ -30,7 +30,7 @@ class Glsa < ActiveRecord::Base
   def last_release_revision
     self.revisions.where(:is_release => true).order('release_revision DESC').first
   end
-  
+
   # Invalidates the last revision cache
   def invalidate_last_revision_cache
     @last_revision = nil
@@ -152,32 +152,32 @@ class Glsa < ActiveRecord::Base
 
     return :todo
   end
-  
+
   # Returns true if there are any pending comments left
   def has_pending_comments?
     comments.where(:read => false).all.count > 0
   end
-  
+
   # Returns all CVEs linked to this GLSA
   def related_cves
     last_revision.bugs.map do |bug|
-      CveAssignment.find_all_by_bug(bug.bug_id).map {|assignment| assignment.cve}.uniq
+      CveAssignment.where(bug: bug.bug_id).map {|assignment| assignment.cve}.uniq
     end.flatten
   end
-  
+
   # Bulk addition of references.
   # Expects an array of hashes <tt>{:title => ..., :url => ...}</tt>
   def add_references(refs)
     rev = last_revision.deep_copy
-    
+
     refs.each do |reference|
       rev.references.create(reference)
     end
-    
+
     invalidate_last_revision_cache
     self
   end
-  
+
   # Performs the steps to release the GLSA, performing santiy checks.
   def release
     raise GLSAReleaseError, 'Cannot release the GLSA as it is not approved' if not is_approved?
@@ -185,7 +185,7 @@ class Glsa < ActiveRecord::Base
     # TODO: releasing someone else's draft
     release!
   end
-  
+
   # Performs the steps to release the GLSA, performing not as many checks. The +release+ method is to be preferred.
   def release!
     # This one is not avoidable. Some information is only filled in during the first edit, thus making it required.
@@ -281,7 +281,7 @@ class Glsa < ActiveRecord::Base
     bugs.each do |bug|
       begin
         b = Glsamaker::Bugs::Bug.load_from_id(bug)
-      
+
         revision.bugs.create(
           :bug_id => bug,
           :title => b.summary,
