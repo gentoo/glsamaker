@@ -106,7 +106,7 @@ class Glsa < ActiveRecord::Base
       count -= 1
     end
 
-    (count >= 2)
+    (count >= 1)
   end
 
   # Returns true if it has comments
