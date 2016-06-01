@@ -51,7 +51,7 @@ class CveController < ApplicationController
     render :layout => false
   rescue Exception => e
     log_error e
-    render :text => e.message, :status => 500    
+    render :text => e.message, :status => 500
   end
 
   def bug
@@ -230,7 +230,13 @@ class CveController < ApplicationController
 
   # Popup methods
   def info
-    @cve = Cve.where(:cve_id => params[:id]).first
+    @cve = Cve.where(cve_id: params[:id]).first
+    fail ActionController::RoutingError, 'Not Found' unless @cve
+
+    respond_to do |wants|
+      wants.html {}
+      wants.json {}
+    end
   end
 
   def general_info
