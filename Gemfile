@@ -8,6 +8,7 @@ gem 'rails', '4.2.0'
 gem 'mysql2', '~> 0.3.18'
 
 gem 'json', '~>1.8.2'
+gem 'jbuilder', '~> 2.0'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -68,6 +68,9 @@ GEM
       domain_name (~> 0.5)
     i18n (0.7.0)
     innertube (1.1.0)
+    jbuilder (2.5.0)
+      activesupport (>= 3.0.0, < 5.1)
+      multi_json (~> 1.2)
     joiner (0.3.4)
       activerecord (>= 4.1.0)
     json (1.8.3)
@@ -94,6 +97,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    multi_json (1.12.1)
     mysql2 (0.3.20)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
@@ -193,6 +197,7 @@ DEPENDENCIES
   ci_reporter
   diff-lcs
   fastercsv
+  jbuilder (~> 2.0)
   json (~> 1.8.2)
   kramdown
   mechanize
