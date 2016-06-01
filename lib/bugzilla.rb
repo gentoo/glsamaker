@@ -23,6 +23,11 @@ module Bugzilla
   module_function
   # Adds a comment to a bug. Returns the comment id on success, raises an exception on failure.
   def add_comment(bug, comment)
+    if GLSAMAKER_BUGZIE_SKIP
+      Rails.logger.info 'Skipped Bugzilla.add_comment'
+      return
+    end
+
     Rails.logger.debug 'Called Bugzilla.add_comment'
     did_retry = false
 
@@ -55,6 +60,11 @@ module Bugzilla
 
   # Updates a bug. Returns an array of changes that were done on the bug.
   def update_bug(bug, changes = {})
+    if GLSAMAKER_BUGZIE_SKIP
+      Rails.logger.info 'Skipped Bugzilla.update_bug'
+      return
+    end
+
     Rails.logger.debug 'Called Bugzilla.update_bug'
     did_retry = false
 
@@ -100,6 +110,11 @@ module Bugzilla
 
   # Files a bug, and returns the id of the filed bug
   def file_bug(data)
+    if GLSAMAKER_BUGZIE_SKIP
+      Rails.logger.info 'Skipped Bugzilla.file_bug'
+      return
+    end
+
     Rails.logger.debug 'Called Bugzilla.file_bug'
     did_retry = false
 
