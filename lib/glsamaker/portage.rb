@@ -113,20 +113,19 @@ module Glsamaker
       
       x = Nokogiri::XML(File.read(File.join(portdir, atom, 'metadata.xml')))
       
-      herds = []
       maintainers = []
       
-      x.xpath('/pkgmetadata/herd').each {|h| herds << h.content }
       x.xpath('/pkgmetadata/maintainer/email').each {|m| maintainers << m.content }
-      
-      unless herds.first == "no-herd"
-        herds_xml = Nokogiri::XML(File.read(File.join(portdir, 'metadata', 'herds.xml')))
-        herds_email = herds.map {|h| herds_xml.xpath("/herds/herd/name[text()='#{h}']").first.parent.xpath("./email").first.content }
-        
-        (maintainers + herds_email).uniq
-      else
-        maintainers
+
+      if maintainers.empty?
+        if x.path('/pkgmetadata/comment()').text.include? "maintainer-needed"
+          maintainers = "maintainer-needed@gentoo.org"
+        else
+          raise(ArgumentError, "No Maintainer Information Found")
+        end
       end
+
+      maintainers
     end
     
     # Returns information from the portage metadata cache
