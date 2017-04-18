@@ -90,7 +90,7 @@
     <td>
       <ul>
         <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "unaffected" %>
-          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %>:<%= pkg.slot %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
         <% end %>
       </ul>
     </td>
@@ -100,7 +100,7 @@
     <td>
       <ul>
         <% @rev.packages.each do |pkg| ; next unless pkg.my_type == "vulnerable" %>
-          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
+          <li><%= pkg.comp %><strong><%= pkg.atom %></strong>-<%= pkg.version %>:<%= pkg.slot %> on <%= pkg.arch %> (auto: <%= pkg.automatic %>)</li>
         <% end %>
       </ul>
     </td>

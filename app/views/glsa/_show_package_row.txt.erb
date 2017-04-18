@@ -16,7 +16,12 @@ print_vulnerable = (unaffected_versions.size == 0 ? true : false)
 
 while vulnerable_versions.size > 0 or unaffected_versions.size > 0
   v = (vulnerable_versions.shift if vulnerable_versions.size > 0) || nil
-  line = (v ? "#{v.comp} #{v.version}" : "").center(20)
+  print_slot = (v.slot != '*' ? true : false)
+  if print_slot
+    line = (v ? "#{v.comp} #{v.version}:#{v.slot}" : "").center(20)
+  else
+    line = (v ? "#{v.comp} #{v.version}" : "").center(20)
+  end
 
   if v and v.arch != '*'
     @arches[@packages_count] ||= []
@@ -28,7 +33,12 @@ while vulnerable_versions.size > 0 or unaffected_versions.size > 0
     print_vulnerable = false
   else
     v = (unaffected_versions.shift if unaffected_versions.size > 0) || nil
-    line += (v ? "#{v.comp} #{v.version} #{v.automatic ? "" : (@print_noauto = true && "*")}" : "").rjust(22)
+    print_slot = (v.slot != '*' ? true : false)
+    if print_slot
+      line += (v ? "#{v.comp} #{v.version}:#{v.slot} #{v.automatic ? "" : (@print_noauto = true && "*")}" : "").rjust(22)
+    else
+      line += (v ? "#{v.comp} #{v.version} #{v.automatic ? "" : (@print_noauto = true && "*")}" : "").rjust(22)
+    end
   end
   versions << line
 end  

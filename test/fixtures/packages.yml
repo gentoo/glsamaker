@@ -3,6 +3,7 @@ package_one:
   atom: dev-lang/ruby
   version: 1.8.7_p334
   comp: '<'
+  slot: '1.8'
   arch: '*'
   automatic: 1
   revision_id: 1
@@ -13,5 +14,6 @@ package_two:
   version: 1.8.7_p334
   comp: '>='
   arch: '*'
+  slot: '1.8'
   automatic: 1
   revision_id: 1  

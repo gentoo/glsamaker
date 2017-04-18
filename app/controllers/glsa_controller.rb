@@ -246,7 +246,7 @@ class GlsaController < ApplicationController
       next if package[:atom].strip == ''
 
       begin
-        revision.packages.create!(package.permit([:atom, :comp, :version, :arch, :automatic, :my_type]))
+        revision.packages.create!(package.permit([:atom, :comp, :version, :arch, :automatic, :my_type, :slot]))
       rescue ActiveRecord::RecordInvalid => e
         flash[:error] = "Errors occurred while saving a package: #{e.record.errors.full_messages.join ', '}"
         set_up_editing
@@ -467,8 +467,8 @@ class GlsaController < ApplicationController
   protected
   def set_up_editing
     # Packages
-    @rev.vulnerable_packages.build(:comp => "<", :arch => "*") if @rev.vulnerable_packages.length == 0
-    @rev.unaffected_packages.build(:comp => ">=", :arch => "*") if @rev.unaffected_packages.length == 0
+    @rev.vulnerable_packages.build(:comp => "<", :slot => "*", :arch => "*") if @rev.vulnerable_packages.length == 0
+    @rev.unaffected_packages.build(:comp => ">=", :slot => "*", :arch => "*") if @rev.unaffected_packages.length == 0
 
     # References
     if params.has_key? :glsa and params[:glsa].has_key? :reference

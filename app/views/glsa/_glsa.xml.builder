@@ -19,10 +19,18 @@ xml.glsa :id => glsa.glsa_id do
       xml.package({:name => package, :auto => (atoms['unaffected'] || []).select {|a| !a.automatic}.length == 0 ? 'yes' : 'no',
               :arch => (atoms['vulnerable'].nil? || atoms['vulnerable'].length == 0) ? '*' : atoms['vulnerable'].first.arch}) do
         (atoms['unaffected'] || []).each do |a|
-          xml.unaffected({:range => a.xml_comp}, a.version)
+	  if a.slot != '*'
+            xml.unaffected({:range => a.xml_comp, :slot => a.slot}, a.version)
+          else
+	    xml.unaffected({:range => a.xml_comp}, a.version)
+	  end
         end
         (atoms['vulnerable'] || []).each do |a|
-          xml.vulnerable({:range => a.xml_comp}, a.version)
+	  if a.slot != '*'
+            xml.vulnerable({:range => a.xml_comp, :slot => a.slot}, a.version)
+	  else
+	    xml.vulnerable({:range => a.xml_comp}, a.version)
+	  end
         end
       end
     end
