@@ -146,7 +146,10 @@ ActiveRecord::Schema.define(version: 20170418102638) do
     t.string   "slot",        limit: 255
   end
 
+  add_index "packages", ["atom"], name: "atom", using: :btree
+  add_index "packages", ["comp"], name: "comp", using: :btree
   add_index "packages", ["revision_id"], name: "index_packages_on_revision_id", using: :btree
+  add_index "packages", ["slot"], name: "slot", using: :btree
 
   create_table "references", force: :cascade do |t|
     t.integer  "revision_id", limit: 4
@@ -218,4 +221,19 @@ ActiveRecord::Schema.define(version: 20170418102638) do
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
+  add_foreign_key "comments", "glsas", name: "comments_glsas_glsaid"
+  add_foreign_key "comments", "users", name: "comments_users_userid"
+  add_foreign_key "cpes_cves", "cpes", name: "cpes_cves_cpe_id"
+  add_foreign_key "cpes_cves", "cves", name: "cpes_cves_cve_id"
+  add_foreign_key "cve_assignments", "cves", name: "cve_assignments_cve_id"
+  add_foreign_key "cve_changes", "cves", name: "cve_changes_cve_id"
+  add_foreign_key "cve_changes", "users", name: "cve_changes_user_id"
+  add_foreign_key "cve_comments", "cves", name: "cve_comments_cve_id"
+  add_foreign_key "cve_comments", "users", name: "cve_comments_user_id"
+  add_foreign_key "cve_references", "cves", name: "cve_references_cve_id"
+  add_foreign_key "glsas", "users", column: "bugreadymaker", name: "glsas_users_bugreadymakers"
+  add_foreign_key "glsas", "users", column: "requester", name: "glsas_users_requesters"
+  add_foreign_key "glsas", "users", column: "submitter", name: "glsas_users_submitters"
+  add_foreign_key "references", "revisions", name: "references_revisions_revisionid"
+  add_foreign_key "revisions", "users", name: "revisions_user_userid"
 end
