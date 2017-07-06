@@ -12,10 +12,6 @@
 
 # Package model
 class Package < ActiveRecord::Base
-  belongs_to :revision
-  validates :comp, :inclusion => { :in => COMP_MAP.keys }
-  validates :arch, :format => { :with => /\A(\*|(#{ARCHLIST_REGEX} )*#{ARCHLIST_REGEX})\z/ }
-
   # Mapping XML comparators to internally used ones
   COMP_MAP = {
       '>=' => 'ge',
@@ -35,6 +31,11 @@ class Package < ActiveRecord::Base
   ARCHLIST_PREFIX = %w{ppc-aix amd64-linux arm-linux arm64-linux ppc64-linux x86-linux ppc-macos x86-macos x64-macos m68k-mint sparc-solaris sparc64-solaris x64-solaris x86-solaris x86-winnt x64-cygwin x86-cygwin}.freeze
   ARCHLIST = (ARCHLIST_BASE+ARCHLIST_FBSD+ARCHLIST_PREFIX).freeze
   ARCHLIST_REGEX = %r{(?:#{ARCHLIST.join('|')})}.freeze
+
+  # Model properties
+  belongs_to :revision
+  validates :comp, :inclusion => { :in => COMP_MAP.keys }
+  validates :arch, :format => { :with => /\A(\*|(#{ARCHLIST_REGEX} )*#{ARCHLIST_REGEX})\z/ }
 
   # Returns the comparator in the format needed for the XML
   def xml_comp
