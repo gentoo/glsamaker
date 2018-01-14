@@ -126,7 +126,7 @@
     </xsl:when>
     <xsl:otherwise>
      <xsl:if test="count(exslt:node-set($doc-struct)//chapter)&gt;1">
-      <form name="contents" action="http://www.gentoo.org">
+      <form name="contents" action="https://www.gentoo.org">
         <b><xsl:value-of select="func:gettext('Content')"/></b>:
         <select name="url" size="1" OnChange="location.href=form.url.options[form.url.selectedIndex].value" style="font-family:sans-serif,Arial,Helvetica">
           <xsl:for-each select="exslt:node-set($doc-struct)//chapter">
@@ -167,11 +167,11 @@
   <link REL="shortcut icon" HREF="{concat($ROOT,'favicon.ico')}" TYPE="image/x-icon"/>
 
   <!-- Support for opensearch -->
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/www-gentoo-org.xml" title="Gentoo Website"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/forums-gentoo-org.xml" title="Gentoo Forums"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/bugs-gentoo-org.xml" title="Gentoo Bugzilla"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/packages-gentoo-org.xml" title="Gentoo Packages"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/archives-gentoo-org.xml" title="Gentoo List Archives"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/www-gentoo-org.xml" title="Gentoo Website"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/forums-gentoo-org.xml" title="Gentoo Forums"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/bugs-gentoo-org.xml" title="Gentoo Bugzilla"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/packages-gentoo-org.xml" title="Gentoo Packages"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/archives-gentoo-org.xml" title="Gentoo List Archives"/>
 
   <xsl:if test="//glsaindex or //glsa-latest">
     <link rel="alternate" type="application/rss+xml">
@@ -299,11 +299,11 @@
   <link REL="shortcut icon" HREF="{concat($ROOT,'favicon.ico')}" TYPE="image/x-icon"/>
 
   <!-- Support for opensearch -->
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/www-gentoo-org.xml" title="Gentoo Website"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/forums-gentoo-org.xml" title="Gentoo Forums"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/bugs-gentoo-org.xml" title="Gentoo Bugzilla"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/packages-gentoo-org.xml" title="Gentoo Packages"/>
-  <link rel="search" type="application/opensearchdescription+xml" href="http://www.gentoo.org/search/archives-gentoo-org.xml" title="Gentoo List Archives"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/www-gentoo-org.xml" title="Gentoo Website"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/forums-gentoo-org.xml" title="Gentoo Forums"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/bugs-gentoo-org.xml" title="Gentoo Bugzilla"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/packages-gentoo-org.xml" title="Gentoo Packages"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://www.gentoo.org/search/archives-gentoo-org.xml" title="Gentoo List Archives"/>
 
   <xsl:if test="/*[1][@redirect]">
     <!-- Immediate HTML refresh in case redirect is not supported -->
@@ -317,7 +317,7 @@
   </xsl:if>
 
   <xsl:if test="/mainpage/newsitems">
-    <link rel="alternate" type="application/rss+xml" title="Gentoo Linux News RDF" href="http://www.gentoo.org/rdf/en/gentoo-news.rdf" />
+    <link rel="alternate" type="application/rss+xml" title="Gentoo Linux News RDF" href="https://www.gentoo.org/rdf/en/gentoo-news.rdf" />
   </xsl:if>
   <xsl:choose>
     <xsl:when test="/mainpage | /news">
@@ -353,7 +353,7 @@
 </xsl:if>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <xsl:variable name="www"><xsl:if test="$httphost!='www'">http://www.gentoo.org</xsl:if></xsl:variable>
+  <xsl:variable name="www"><xsl:if test="$httphost!='www'">https://www.gentoo.org</xsl:if></xsl:variable>
   <tr>
     <td valign="top" height="125" width="1%" bgcolor="#45347b">
     <a href="{concat($www,'/')}"><img border="0" src="{concat($ROOT,'images/gtop-www.jpg')}" alt="Gentoo Logo"/></a>
@@ -488,7 +488,7 @@
             </xsl:choose>
             <xsl:value-of select="format-number(number(substring-before(substring-after(pubDate,' '),' ')),'00')"/>
            </xsl:variable>
-           <xsl:if test="$planet//item[substring(pubDate,1,16)=$pubDate  and  not(contains(link, 'http://www.gentoo.org/news'))]">
+           <xsl:if test="$planet//item[substring(pubDate,1,16)=$pubDate  and  not(contains(link, 'https://www.gentoo.org/news'))]">
              <newsitem date="{$postdate}" planet="{$pubDate}"/>
            </xsl:if>
          </xsl:if>
@@ -568,7 +568,7 @@
                 <xsl:variable name="blogentries" xmlns="">
                   <xsl:for-each select="./newsitem">
                    <xsl:variable name="pubDate" select="@planet"/>
-                    <xsl:for-each select="$planet//item[substring(pubDate,1,16)=$pubDate  and  not(contains(link, 'http://www.gentoo.org/news'))]">
+                    <xsl:for-each select="$planet//item[substring(pubDate,1,16)=$pubDate  and  not(contains(link, 'https://www.gentoo.org/news'))]">
                      <tr>
                       <xsl:choose>
                        <xsl:when test="contains(title,': ')">
@@ -714,7 +714,7 @@
     <xsl:if test="string-length($glang)=0 or $glang='en'">Y</xsl:if>
   </xsl:variable>
   <xsl:variable name="www">
-    <xsl:if test="$httphost!='www'">http://www.gentoo.org</xsl:if>
+    <xsl:if test="$httphost!='www'">https://www.gentoo.org</xsl:if>
   </xsl:variable>
   <xsl:variable name="contact">
    <xsl:choose>
@@ -953,8 +953,8 @@ Copyright 2001-<xsl:value-of select="substring(func:today(),1,4)"/> Gentoo Found
 
   <xsl:variable name="llink">
     <xsl:choose>
-      <xsl:when test="starts-with(@link,'http://www.gentoo.org/')">
-        <xsl:value-of select="concat($ROOT, substring-after(@link, 'http://www.gentoo.org/'))"/>
+      <xsl:when test="starts-with(@link,'https://www.gentoo.org/')">
+        <xsl:value-of select="concat($ROOT, substring-after(@link, 'https://www.gentoo.org/'))"/>
       </xsl:when>
       <xsl:when test="starts-with(@link,'/')">
         <xsl:value-of select="concat($ROOT, substring-after(@link, '/'))"/>
@@ -1001,8 +1001,8 @@ Copyright 2001-<xsl:value-of select="substring(func:today(),1,4)"/> Gentoo Found
 <xsl:template match="fig">
   <xsl:variable name="llink">
     <xsl:choose>
-      <xsl:when test="starts-with(@link,'http://www.gentoo.org/')">
-        <xsl:value-of select="concat($ROOT, substring-after(@link, 'http://www.gentoo.org/'))"/>
+      <xsl:when test="starts-with(@link,'https://www.gentoo.org/')">
+        <xsl:value-of select="concat($ROOT, substring-after(@link, 'https://www.gentoo.org/'))"/>
       </xsl:when>
       <xsl:when test="starts-with(@link,'/')">
         <xsl:value-of select="concat($ROOT, substring-after(@link, '/'))"/>
@@ -1343,16 +1343,16 @@ Copyright 2001-<xsl:value-of select="substring(func:today(),1,4)"/> Gentoo Found
           </xsl:choose>
         </xsl:variable>
 
-        <!-- Strip http://www.gentoo.org from links if running on www.g.o
+        <!-- Strip https://www.gentoo.org from links if running on www.g.o
              Has no effect on actual www.g.o but helps when surfing on a local copy as long as httphost is set to www as well
              Rewrite http://www.gentoo.org/cgi-bin/viewcvs/ to use sources.gentoo.org/
           -->
         <xsl:variable name="llink">
           <xsl:choose>
-            <xsl:when test="starts-with($thelink, 'http://www.gentoo.org/cgi-bin/viewcvs.cgi')"><xsl:value-of select="concat('http://sources.gentoo.org/viewcvs.py', substring-after($thelink, 'http://www.gentoo.org/cgi-bin/viewcvs.cgi'))" /></xsl:when>
-            <xsl:when test="starts-with($thelink, '/cgi-bin/viewcvs.cgi')"><xsl:value-of select="concat('http://sources.gentoo.org/viewcvs.py', substring-after($thelink, '/cgi-bin/viewcvs.cgi'))" /></xsl:when>
-            <xsl:when test="$httphost='www' and starts-with($thelink, 'http://www.gentoo.org/')"><xsl:value-of select="substring-after($thelink, 'http://www.gentoo.org')" /></xsl:when>
-            <xsl:when test="not($httphost='www') and starts-with($thelink, '/') and not(starts-with($thelink, '/~'))"><xsl:value-of select="concat('http://www.gentoo.org', $thelink)" /></xsl:when>
+            <xsl:when test="starts-with($thelink, 'https://www.gentoo.org/cgi-bin/viewcvs.cgi')"><xsl:value-of select="concat('https://sources.gentoo.org/viewcvs.py', substring-after($thelink, 'https://www.gentoo.org/cgi-bin/viewcvs.cgi'))" /></xsl:when>
+            <xsl:when test="starts-with($thelink, '/cgi-bin/viewcvs.cgi')"><xsl:value-of select="concat('https://sources.gentoo.org/viewcvs.py', substring-after($thelink, '/cgi-bin/viewcvs.cgi'))" /></xsl:when>
+            <xsl:when test="$httphost='www' and starts-with($thelink, 'https://www.gentoo.org/')"><xsl:value-of select="substring-after($thelink, 'https://www.gentoo.org')" /></xsl:when>
+            <xsl:when test="not($httphost='www') and starts-with($thelink, '/') and not(starts-with($thelink, '/~'))"><xsl:value-of select="concat('https://www.gentoo.org', $thelink)" /></xsl:when>
             <!-- Add catid to links to /doc/LL/index.xml -->
             <xsl:when test="$catid != '0' and starts-with($thelink, '/doc/') and (substring-after(substring-after($thelink, '/doc/'), '/')='' or substring-after(substring-after($thelink, '/doc/'), '/')='index.xml')">
               <xsl:value-of select="concat($thelink, '?catid=', $catid)"/>
@@ -1755,7 +1755,7 @@ Copyright 2001-<xsl:value-of select="substring(func:today(),1,4)"/> Gentoo Found
     <!-- Source images from www.gentoo.org when on another server to
          prevent missing images after an update -->
     <xsl:choose>
-      <xsl:when test="$httphost != 'www'">http://www.gentoo.org/</xsl:when>
+      <xsl:when test="$httphost != 'www'">https://www.gentoo.org/</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$ROOT"/>
       </xsl:otherwise>
@@ -1905,10 +1905,10 @@ Copyright 2001-<xsl:value-of select="substring(func:today(),1,4)"/> Gentoo Found
           <input type="hidden" name="item_number" value="1000"/>
           <input type="hidden" name="image_url" value="/images/paypal.png"/>
           <input type="hidden" name="no_shipping" value="1"/>
-          <input type="hidden" name="return" value="http://www.gentoo.org"/>
-          <input type="hidden" name="cancel_return" value="http://www.gentoo.org"/>
+          <input type="hidden" name="return" value="https://www.gentoo.org"/>
+          <input type="hidden" name="cancel_return" value="https://www.gentoo.org"/>
 
-          <input type="image" src="http://images.paypal.com/images/x-click-but21.gif" name="submit" alt="Donate to Gentoo"/>
+          <input type="image" src="https://images.paypal.com/images/x-click-but21.gif" name="submit" alt="Donate to Gentoo"/>
         </form>
       </td>
     </tr>

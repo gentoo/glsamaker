@@ -24,7 +24,7 @@ module Glsamaker
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.scheme == "https"
       res = http.start {
-        http.request_get(uri.request_uri, {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"})
+        http.request_get(uri.request_uri, {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (https://security.gentoo.org/)"})
       }
             
       # Raises an exception if HTTP status suggests something went wrong

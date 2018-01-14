@@ -33,7 +33,7 @@ module Glsamaker
         def pgo(atom)
           raise(ArgumentError, "Invalid package atom") unless Portage.valid_atom?(atom)
 
-          n = Nokogiri::XML(Glsamaker::HTTP.get("http://packages.gentoo.org/package/#{atom}"))
+          n = Nokogiri::XML(Glsamaker::HTTP.get("https://packages.gentoo.org/package/#{atom}"))
 
           node = n.css('p.description').first.children.first
           if node.type == Nokogiri::XML::Node::TEXT_NODE

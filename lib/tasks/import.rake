@@ -113,8 +113,8 @@ namespace :import do
       glsa_list.push glsa.glsa_id 
     end
 
-    GLSA_URL = "http://www.gentoo.org/rdf/en/glsa-index.rdf"
-    GLSA_URL_BASE = "http://www.gentoo.org/security/en/glsa/glsa-%s.xml?passthru=1"
+    GLSA_URL = "https://www.gentoo.org/rdf/en/glsa-index.rdf"
+    GLSA_URL_BASE = "https://www.gentoo.org/security/en/glsa/glsa-%s.xml?passthru=1"
 
     default_user = User.first
     if default_user == nil

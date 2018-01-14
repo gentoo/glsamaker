@@ -183,7 +183,7 @@ module Bugzilla
 
   def xmlrpc_client
     client = XMLRPC::Client.new(GLSAMAKER_BUGZIE_HOST, '/xmlrpc.cgi', 443, nil, nil, nil, nil, true)
-    client.http_header_extra = {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (http://security.gentoo.org/)"}
+    client.http_header_extra = {'User-Agent' => "GLSAMaker/#{GLSAMAKER_VERSION} (https://security.gentoo.org/)"}
 
     token = ''
     token_file = File.join(Rails.root, 'tmp', 'bugzie-token.txt')
