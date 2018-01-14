@@ -25,9 +25,9 @@ class Cve < ActiveRecord::Base
   # Returns the URL for this CVE at NVD (<tt>:nvd</tt>, default) or MITRE (<tt>:mitre</tt>)
   def url(site = :nvd)
     if site == :nvd
-      "http://nvd.nist.gov/nvd.cfm?cvename=%s" % self.cve_id
+      "https://nvd.nist.gov/vuln/detail/%s" % self.cve_id
     elsif site == :mitre
-      "http://cve.mitre.org/cgi-bin/cvename.cgi?name=%s" % self.cve_id
+      "https://cve.mitre.org/cgi-bin/cvename.cgi?name=%s" % self.cve_id
     else
       raise ArgumentError, 'Invalid site'
     end

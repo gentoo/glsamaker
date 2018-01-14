@@ -264,7 +264,7 @@ class GlsaController < ApplicationController
 
         # Special handling: Add CVE URL automatically
         if reference[:title].strip =~ /^CVE-\d{4}-\d{4}/ and reference[:url].strip == ''
-          reference[:url] = "http://nvd.nist.gov/nvd.cfm?cvename=#{reference[:title].strip}"
+          reference[:url] = "https://nvd.nist.gov/vuln/detail/#{reference[:title].strip}"
         end
 
         begin

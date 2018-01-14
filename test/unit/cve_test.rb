@@ -4,15 +4,15 @@ class CveTest < ActiveSupport::TestCase
   test "URL generation" do
     cve = cves(:cve_one)
     
-    assert_equal('http://nvd.nist.gov/nvd.cfm?cvename=CVE-2004-1776', cve.url)
-    assert_equal('http://nvd.nist.gov/nvd.cfm?cvename=CVE-2004-1776', cve.url(:nvd))
-    assert_equal('http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2004-1776', cve.url(:mitre))
+    assert_equal('https://nvd.nist.gov/vuln/detail/CVE-2004-1776', cve.url)
+    assert_equal('https://nvd.nist.gov/vuln/detail/CVE-2004-1776', cve.url(:nvd))
+    assert_equal('https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2004-1776', cve.url(:mitre))
     assert_raise(ArgumentError) { cve.url(:invalid_site) }
   end
   
   test "to_s" do
     assert_equal(
-      "CVE-2004-1776 (http://nvd.nist.gov/nvd.cfm?cvename=CVE-2004-1776):\n  Cisco IOS 12.1(3) and 12.1(3)T allows remote attackers to read and modify\n  device configuration data via the cable-docsis read-write community string\n  used by the Data Over Cable Service Interface Specification (DOCSIS)\n  standard.",
+      "CVE-2004-1776 (https://nvd.nist.gov/vuln/detail/CVE-2004-1776):\n  Cisco IOS 12.1(3) and 12.1(3)T allows remote attackers to read and modify\n  device configuration data via the cable-docsis read-write community string\n  used by the Data Over Cable Service Interface Specification (DOCSIS)\n  standard.",
       cves(:cve_one).to_s
     )
   end
