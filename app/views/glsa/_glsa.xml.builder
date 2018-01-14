@@ -6,7 +6,7 @@ xml.glsa :id => glsa.glsa_id do
   xml.synopsis rev.synopsis
   xml.product({:type => "ebuild"}, rev.product)
   xml.announced glsa.release_date.strftime '%Y-%m-%d'
-  xml.revised glsa.revised_date.strftime('%Y-%m-%d') + ": #{rev.release_revision || 'draft'}"
+  xml.revised({:count => "#{rev.release_revision || 'draft'}"}, glsa.revised_date.strftime('%Y-%m-%d'))
 
   rev.bugs.each do |bug|
     xml.bug bug.bug_id
