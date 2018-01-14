@@ -213,7 +213,7 @@ class Glsa < ActiveRecord::Base
 
       changes = {}
       changes[:comment] = message
-      changes[:whiteboard] = b.status_whiteboard.gsub(/(ebuild\+?|upstream\+?|stable\+?|glsa)\??/, 'glsa').gsub(/glsa\/glsa/, 'glsa')
+      changes[:whiteboard] = b.status_whiteboard.gsub(/(ebuild\+?|upstream\+?|stable\+?|glsa)\??/, 'glsa+').gsub(/glsa\/glsa/, 'glsa+')
       changes[:status] = "RESOLVED"
       changes[:resolution] = "FIXED"
 
