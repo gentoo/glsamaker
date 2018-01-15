@@ -384,6 +384,10 @@ class GlsaController < ApplicationController
 
       @glsa.close_bugs(message)
     end
+
+    # ugly hack, but necessary to switch back to html
+    @real_format = 'html'
+    render(:format => :html, :layout => 'application')
   end
 
   def diff
