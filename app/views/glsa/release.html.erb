@@ -19,7 +19,7 @@
   <h2>Next steps</h2>
 
   <p>
-    Now, download the advisory XML and publish it in CVS.<br />
+    Now, download the advisory XML and publish it in Git.<br />
     Then you can send the advisory email and close the relevant bugs in Bugzilla.
   </p>
 
@@ -27,5 +27,5 @@
     <button onclick="document.location = '<%= escape_javascript(download_glsa_path(@glsa, :format => 'xml')) %>'">Download XML</button>
     <button onclick="window.open('<%= escape_javascript(download_glsa_path(@glsa, :format => 'txt')) %>'); return false;">Show text</button>
     <%= button_to "Close bugs", finalize_release_glsa_path(@glsa, :close_bugs => '1'), :method => :post %>
-  </div>  
+  </div>
 </div>
