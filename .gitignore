@@ -19,3 +19,5 @@ coverage
 db/sphinx
 .bundle
 vendor
+Gemfile.lock
+doc/app/.cache/*
