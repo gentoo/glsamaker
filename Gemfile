@@ -44,7 +44,11 @@ gem 'text-format-revised', require: 'text/format'
 gem 'kramdown'
 
 gem 'thinking-sphinx', '~> 3.1.4'
-gem 'runspell'
+
+#FIXME: runspell 0.0.1 is dead since 2011, we may need 
+#to create a new spelling module
+
+#gem 'runspell'
 
 # gem "rdoc"
 
