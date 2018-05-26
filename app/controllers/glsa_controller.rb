@@ -369,7 +369,7 @@ class GlsaController < ApplicationController
 
     # ugly hack, but necessary to switch back to html
     @real_format = 'html'
-    render(:format => :html, :layout => 'application')
+    render(:formats => [:html], :layout => 'application')
   end
 
   def finalize_release
@@ -387,7 +387,7 @@ class GlsaController < ApplicationController
 
     # ugly hack, but necessary to switch back to html
     @real_format = 'html'
-    render(:format => :html, :layout => 'application')
+    render(:formats => [:html], :layout => 'application')
   end
 
   def diff
