@@ -4,6 +4,6 @@ require File.expand_path('../application', __FILE__)
 # Initialize the Rails application
 Rails.application.initialize!
 
-GLSAMAKER_VERSION = '2.1.8'
+GLSAMAKER_VERSION = '2.1.9'
 
 require 'digest/md5'
