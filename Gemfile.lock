@@ -150,7 +150,6 @@ GEM
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
     ruby-progressbar (1.7.5)
-    runspell (0.0.1)
     simplecov (0.11.1)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -206,9 +205,12 @@ DEPENDENCIES
   nokogiri
   prototype-rails!
   rails (= 4.2.0)
+  rake (= 10.4.2)
   rspec
-  runspell
   simplecov
   text-format-revised
   thin
   thinking-sphinx (~> 3.1.4)
+
+BUNDLED WITH
+   1.14.6
