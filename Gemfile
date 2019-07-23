@@ -59,4 +59,8 @@ group :test do
   gem 'ci_reporter'
   gem 'rspec'
   gem 'minitest-reporters'
+
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
 end
