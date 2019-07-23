@@ -12,7 +12,7 @@ class CommentTest < ActiveSupport::TestCase
     c.save
 
     assert c.errors.any?
-    assert_equal ["You may not approve or reject drafts"], c.errors[:rating]
+    assert_includes c.errors[:rating], "You may not approve or reject drafts"
   end
 
   test "padawans should not be able to make rejections" do
@@ -24,7 +24,7 @@ class CommentTest < ActiveSupport::TestCase
     c.save
 
     assert c.errors.any?
-    assert_equal ["You may not approve or reject drafts"], c.errors[:rating]
+    assert_includes c.errors[:rating], "You may not approve or reject drafts"
   end
 
   test "advisory owners should not be able to approve their own drafts" do

@@ -25,7 +25,7 @@ class Admin::TemplatesControllerTest < ActionController::TestCase
 
   test "should create admin_template" do
     assert_difference('Template.count') do
-      post :create, :admin_template => @template.attributes
+      post :create, template: @template.attributes
     end
 
     assert_redirected_to admin_template_path(assigns(:template))

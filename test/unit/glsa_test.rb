@@ -32,7 +32,6 @@ class GlsaTest < ActiveSupport::TestCase
     
     assert_equal(glsa.last_revision.title, "Some title")
     assert_equal(glsa.last_revision.bugs.map{|bug| bug.bug_id}.sort, [236060, 260006])
-    assert_equal(glsa.comments.first.text, "some comment")
     assert !glsa.restricted
   end
   
