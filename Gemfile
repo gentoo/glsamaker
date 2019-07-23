@@ -7,7 +7,7 @@ gem 'rake', '10.4.2'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2', '~> 0.4.10'
 
 gem 'json', '~>1.8.2'
 gem 'jbuilder', '~> 2.0'

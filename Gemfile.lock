@@ -107,7 +107,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mysql2 (0.3.21)
+    mysql2 (0.4.10)
     net-http-digest_auth (1.4.1)
     net-http-persistent (3.0.1)
       connection_pool (~> 2.2)
@@ -229,7 +229,7 @@ DEPENDENCIES
   kramdown
   mechanize
   minitest-reporters
-  mysql2 (~> 0.3.18)
+  mysql2 (~> 0.4.10)
   nokogiri
   prototype-rails!
   rails (~> 4.2)
