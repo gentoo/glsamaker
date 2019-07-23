@@ -4,9 +4,6 @@ gem 'rails', '~> 4.2'
 gem 'xmlrpc'
 gem 'rake'
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
 gem 'mysql2', '~> 0.4.10'
 
 gem 'json', '~>1.8.2'
