@@ -197,6 +197,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     webrobots (0.1.2)
+    xmlrpc (0.3.0)
 
 PLATFORMS
   ruby
@@ -221,6 +222,7 @@ DEPENDENCIES
   text-format-revised
   thin
   thinking-sphinx (~> 3.1.4)
+  xmlrpc
 
 BUNDLED WITH
    1.17.3

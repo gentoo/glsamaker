@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
+gem 'xmlrpc'
 gem 'rake', '10.4.2'
 
 # Bundle edge Rails instead:
