@@ -9,6 +9,13 @@ revision_one:
   access: remote
   severity: normal
   description: lol hi
+  product: product
+  category: category
+  synopsis: synopsis
+  background: background
+  impact: impact
+  workaround: workaround
+  resolution: resolution
 
 revision_two:
   id: 2
