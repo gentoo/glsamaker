@@ -52,7 +52,6 @@ gem 'thinking-sphinx', '~> 3.1.4'
 group :test do
   gem 'simplecov'
   gem 'ci_reporter'
-  gem 'rspec'
   gem 'minitest-reporters'
 
   gem 'rubocop'
