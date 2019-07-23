@@ -6,7 +6,7 @@ gem 'rake'
 
 gem 'mysql2', '~> 0.4.10'
 
-gem 'json', '~>1.8.2'
+gem 'json', '~> 2.0'
 gem 'jbuilder', '~> 2.0'
 
 # Gems used only for assets and not required
