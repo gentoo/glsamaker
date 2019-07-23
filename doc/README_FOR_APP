@@ -8,7 +8,6 @@ Project website: https://redmine.a3li.li/projects/glsamaker2
 ==Needed libraries
 * Rails 3.1
 * Nokogiri
-* FasterCSV
 * JSON
 * Rcov
 * text-format

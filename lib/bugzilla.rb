@@ -10,7 +10,6 @@
 # For more information, see the LICENSE file.
 
 require 'nokogiri'
-require 'fastercsv'
 require 'fileutils'
 require 'xmlrpc/client'
 
