@@ -35,7 +35,6 @@ group :development do
 #  gem 'require_relative'
 end
 
-gem 'mechanize'
 gem 'fastercsv'
 gem 'diff-lcs', require: 'diff/lcs'
 gem 'nokogiri'
