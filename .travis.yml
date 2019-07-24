@@ -15,7 +15,7 @@ addons:
   mariadb: '10.2'
 
 before_script:
-  - cp config/initializers/glsamaker.rb.sample config/initializers/glsamaker.rb
+  - sed 's/i_forgot_to_set_this/"test-secret"' < config/initializers/glsamaker.rb.sample > config/initializers/glsamaker.rb
   - cp config/database.yml.mysql config/database.yml
   - mysql -e 'CREATE DATABASE glsamaker_test;'
 
