@@ -11,6 +11,13 @@ branches:
   only:
     - master
 
+addons:
+  mariadb: '10.2'
+
+before_script:
+  - cp config/database.yml.mysql config/database.yml
+  - mysql -e 'CREATE DATABASE glsamaker_test;'
+
 script:
   - bundle exec rubocop
   - bundle exec rake test RAILS_ENV=test
