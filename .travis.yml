@@ -14,6 +14,11 @@ branches:
 addons:
   mariadb: '10.2'
 
+before_install:
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
+
+
 before_script:
   - sed 's/i_forgot_to_set_this/"test-secret"/' < config/initializers/glsamaker.rb.sample > config/initializers/glsamaker.rb
   - cp config/database.yml.mysql config/database.yml
