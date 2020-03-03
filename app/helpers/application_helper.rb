@@ -152,6 +152,10 @@ module ApplicationHelper
     content_tag("h2", content, :class => "boxtitle")
   end
 
+  def last_import_start
+    Rails.cache.fetch(::CVE_CACHE_LAST_IMPORT)
+  end
+
   def with_format(format, &block)
     old_formats = formats
     begin

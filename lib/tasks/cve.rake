@@ -46,6 +46,7 @@ namespace :cve do
 
   desc 'Full CVE data import'
   task full_import: [:environment, 'db:load_config'] do
+    Rails.cache.write(CVE_CACHE_LAST_IMPORT, Time.now.utc)
     start_ts = Time.now
 
     (YEAR..Date.today.year).each do |year|
@@ -72,7 +73,7 @@ namespace :cve do
 
   desc 'Incrementally update last CVEs'
   task update: :environment do
-
+    Rails.cache.write(CVE_CACHE_LAST_IMPORT, Time.now.utc)
     info 'Running incremental CVE data update...'
 
     jsondata = status 'Downloading' do
@@ -90,7 +91,7 @@ namespace :cve do
 
   desc 'Update all CVEs'
   task update_all: :environment do
-
+    Rails.cache.write(CVE_CACHE_LAST_IMPORT, Time.now.utc)
     info 'Running complete CVE data update...'
 
     (YEAR..Date.today.year).each do |year|

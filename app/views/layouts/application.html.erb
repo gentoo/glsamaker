@@ -85,7 +85,8 @@
 <%= yield %>
   </div>
   <div id="footer">
-    <span><strong>GLSAMaker <%= GLSAMAKER_VERSION %></strong></span>
+    <span><strong>GLSAMaker <%= `git describe --tags` %></strong></span>
+    <span><strong>CVE Data current as of: <%= last_import_start ? last_import_start : 'unknown' %></strong></span>
     <span><%= link_to "About&hellip;".html_safe, :controller => 'index', :action => 'about' %></span>
 
     <span class="floatright"><strong>Administrative contact: <a href="mailto:<%= GLSAMAKER_ADMIN_EMAIL%>"><%= GLSAMAKER_ADMIN_EMAIL%></a></strong></span>
