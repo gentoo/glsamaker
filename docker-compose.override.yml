@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  http-serving:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - type: "bind"
+        source: "/var/log/glsamaker"
+        target: "/var/log/glsamaker"
+      - type: "bind"
+        source: "."
+        target: "/go/src/glsamaker"
+    environment:
+      GLSAMAKER_LOG_FILE: '/var/log/glsamaker/web.log'
+    ports:
+      - 127.0.0.1:5000:5000
+    command: "tail -f /dev/null"
+    depends_on:
+      - db
+  updater:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - type: "bind"
+        source: "."
+        target: "/go/src/glsamaker"
+      - type: "bind"
+        source: "/var/log/glsamaker"
+        target: "/var/log/glsamaker"
+    environment:
+      GLSAMAKER_LOG_FILE: '/var/log/glsamaker/updater.log'
+    command: "tail -f /dev/null"
+    depends_on:
+      - db
+  db:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: ${GLSAMAKER_POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${GLSAMAKER_POSTGRES_PASSWORD:-root}
+      POSTGRES_DB: ${GLSAMAKER_POSTGRES_DB:-glsamaker}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  pgadmin:

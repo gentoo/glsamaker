@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<div class="container mb-5">
+
+    {{ if .User.Show2FANotice }}
+        <div id="twofactor-notice" class="alert alert-warning pb-4" role="alert" style="background-color: #FCF8E3;">
+            <i class="fa fa-times float-right" onclick="document.getElementById('twofactor-notice').style.display = 'none';"  style="cursor: pointer;" aria-hidden="true"></i>
+
+            <small><h4>You are currently <u>not</u> using any Two-Factor-Authentication.</h4> The GLSAMaker offers the ability to protect certain operations (such as the login or releasing an advisory) by using WebAuthn (e.g. Security Keys) and Time-based one-time password (e.g. Google Authenticator).
+            <br/>
+            <span class="float-right"> <a id="disable-twofactor-notice" href="#" class="mr-1">Don't show again</a> &ndash; <a class="ml-1" href="/account/2fa">2FA Settings</a></span>
+            </small>
+        </div>
+    {{ end }}
+
+
+    <div class="row mt-2">
+        <div class="col-12">
+
+
+            <div id="page-index">
+
+                <div class="jumbotron">
+                    <h2 class="site-welcome stick-top" style="font-family: Bitter,'Open Sans',sans-serif; font-size: 2.5em;text-align: center;margin-bottom: 1em;">Welcome to Gentoo's GLSAMaker</h2>
+                <div>
+                        <form action="/search" method="get">
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+                                        <input id="large-quicksearch" name="q" class="form-control" title="Quick Search" placeholder="Enter a glsa or cve # or some search terms" autofocus="" required="">
+                                            <div class="btn-group">
+                                                <a href="page.cgi?id=quicksearch.html" title="Quick Search help" class="btn btn-outline-secondary" style="background: #fff;border-color:#ced4da;border-top-left-radius: 0px;border-bottom-left-radius: 0px;" type="button"><span class="fa fa-question"></span></a>
+                                                <button id="find" type="submit" class="btn btn-outline-secondary" style="background: #fff;border-color:#ced4da;" value="Quick Search">Search</button>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <ul class="additional_links" style="display: none;">
+                        </ul>
+                    </div><br>
+                    <small class="text-muted">The GLSAMaker supports different queries to navigate and search. Have look at the <a href="/about/search">documentation</a>.<br>
+                        The GLSAMaker can be used either by using this website or by using the corresponding <a href="/about/cli">command line tool</a>.</small>
+
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+
+    <!----------- page content ---------------->
+
+
+    <div class="bz_common_actions">
+
+        <div class="row" style="width:80%; margin: 0 auto;">
+
+            <div class="col-lg-3" style="cursor:pointer;">
+                <a href="/new">
+                    <div class="row index_page_icon" style="height: 170px; width: 145px; margin: 0 auto">
+                        <div class="col-12">
+                            <i class="fa fa-file-text" aria-hidden="true" style="font-size:100px;"></i>
+                        </div>
+                        <div class="col-12 mt-0" style="margin-top: 15px;">
+                            File a Request
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3" style="cursor:pointer;">
+                <a href="/dashboard">
+                    <div class="row index_page_icon" style="height: 170px; width: 145px; margin: 0 auto">
+                        <div class="col-12">
+                            <i class="fa fa-tachometer" aria-hidden="true" style="font-size:100px;"></i>
+                        </div>
+                        <div class="col-12 mt-0" style="margin-top: 15px;">
+                            Dashboard
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+            <div class="col-lg-3" onclick="" style="cursor:pointer;">
+                <a href="/cve/tool">
+                    <div class="row index_page_icon" style="height: 170px; width: 145px; margin: 0 auto">
+                        <div class="col-12">
+                            <i class="fa fa-table" aria-hidden="true" style="font-size:100px;"></i>
+                        </div>
+                        <div class="col-12 mt-0" style="margin-top: 15px;">
+                            CVE Tool
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3" style="cursor:pointer;">
+                <a href="/statistics">
+                    <div class="row index_page_icon" style="height: 170px; width: 145px; margin: 0 auto">
+                        <div class="col-12">
+                            <i class="fa fa-bar-chart" aria-hidden="true" style="font-size:100px;"></i>
+                        </div>
+                        <div class="col-12 mt-0" style="margin-top: 15px;">
+                            Statistics
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <br><br><br><br><br>
+        <ul style="display: none">
+            <li>
+                <a id="enter_bug" href="enter_bug.cgi"><span>File a Bug</span></a>
+
+
+            </li>
+            <li>
+                <a id="query" href="query.cgi"><span>Search</span></a>
+            </li>
+            <li>
+                <a id="account" href="userprefs.cgi"><span>User Preferences</span></a>
+            </li>
+            <li>
+                <a id="help" href="https://bugzilla.readthedocs.org/en/5.0/using/index.html"><span>Documentation</span></a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+
+
+<div id="TwoFactorModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}
+
+</body>
+</html>

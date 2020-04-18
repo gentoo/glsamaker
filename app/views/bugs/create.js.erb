@@ -1,6 +1,0 @@
-<% if @error == nil %>
-Element.insert('bugtable', { bottom: '<%= escape_javascript(@bugs_text).html_safe %>'});
-Modalbox.hide();
-<% else %>
-alert('<%= escape_javascript(@error).html_safe %>');
-<% end %>

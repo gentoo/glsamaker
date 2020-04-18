@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+
+
+            <h1>About the Search</h1>
+
+            <div class="px-5 py-3">
+
+                The search search can be used to for navigating through the GLSAMaker. The following types of search queries are supported
+
+                <h3 class="mt-4">Navigate to pages</h3>
+                <ul class="mt-3">
+                    <li><b>#home</b> will navigate to '/'</li>
+                    <li><b>#dashboard</b> will navigate to '/dashboard'</li>
+                    <li><b>#new</b> will navigate to '/new'</li>
+                    <li><b>#cvetool</b> will navigate to '/cve/tool'</li>
+                    <li><b>#requests</b> will navigate to '/requests'</li>
+                    <li><b>#drafts</b> will navigate to '/drafts'</li>
+                    <li><b>#all</b> will navigate to '/all'</li>
+                    <li><b>#archive</b> will navigate to '/archive'</li>
+                    <li><b>#about</b> will navigate to '/about'</li>
+                    <li><b>#admin</b> will navigate to '/admin'</li>
+                    <li><b>#password</b> will navigate to '/account/password'</li>
+                    <li><b>#2fa</b> will navigate to '/account/2fa'</li>
+                    <li><b>#statistics</b> will navigate to '/statistics'</li>
+                    <li><b>#logout</b> will navigate to '/logout'</li>
+                    <li><b>#bugzilla</b> will navigate to 'https://bugs.gentoo.org'</li>
+                </ul>
+
+                <h3 class="mt-4">Navigate to GLSAs</h3>
+
+                <ul class="mt-3">
+                    <li><b>numeric value</b> will navigate to '/glsa/#id'</li>
+                </ul>
+
+                <h3 class="mt-4">Search for GLSAs</h3>
+
+                <ul class="mt-3">
+                    <li><b>search string</b> will search for GLSAs in the following fields:
+                        <ul class="">
+                            <li>title</li>
+                            <li>type</li>
+                            <li>synopsis</li>
+                            <li>description</li>
+                            <li>workaround</li>
+                            <li>resolution</li>
+                            <li>keyword</li>
+                            <li>background</li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+{{template "footer" .}}
+
+</body>
+</html>

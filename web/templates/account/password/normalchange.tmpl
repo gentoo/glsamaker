@@ -1,0 +1,45 @@
+{{define "normalPasswordChange"}}
+
+    <!DOCTYPE html>
+    <html lang="en">
+    {{template "head"}}
+    <body>
+    {{template "header" .}}
+
+
+    <div id="2fa-overview" class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h1>Change your password</h1>
+            </div>
+
+            {{if .Message}}
+                <div class="col-12">
+                    <div class="alert alert-{{if .Success}}success{{else}}danger{{end}}" role="alert">
+                        {{.Message}}
+                    </div>
+                </div>
+            {{end}}
+
+            <div class="col-12 mt-4 px-5" id="totp-dialog">
+                <form action="/account/password" method="POST">
+                    <div class="card mx-auto" style="max-width: 600px;background: none;border: none;">
+                        <div class="card-body">
+                            <input name="oldPassword" class="my-2" type="password" style="width: 100%;" placeholder="Old Password"/>
+                            <input name="newPassword" class="my-2" type="password" style="width: 100%;" placeholder="New Password"/>
+                            <input name="confirmedNewPassword" class="my-2" type="password" style="width: 100%;" placeholder="Confirm New Password"/>
+                            <button type="submit" class="mt-2 float-right btn btn-primary"> Change </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {{template "footer" .}}
+
+    </body>
+    </html>
+
+{{end}}

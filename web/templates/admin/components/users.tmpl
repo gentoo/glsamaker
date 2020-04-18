@@ -1,0 +1,226 @@
+
+{{define "viewUsers"}}
+
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                <a onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');" style="outline : none;text-decoration: none;color:#000;" data-toggle="collapse" href="#collapseUserSettings"><i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> User Management</a>
+                <a href="/admin/edit/users"><i class="fa fa-pencil float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer;color:black;"></i></a>
+            </div>
+            <div class="card-body collapse show" id="collapseUserSettings">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="border-0" title="Badge of the user">Badge</th>
+                        <th class="border-0" title="Nickname of the user">Nick</th>
+                        <th class="border-0" title="Full name of the user">Name</th>
+                        <th class="border-0" title="E-Mail address of the user">Email</th>
+                        <th class="border-0" title="Does the user use TOTP?">TOTP</th>
+                        <th class="border-0" title="Does the user use WebAuthn?">WebAuthn</th>
+                        <th class="border-0" title="User is forced to rotate the password at the next login">Rotate Password</th>
+                        <th class="border-0" title="User is forced to use either TOTP or WebAuthn">Force 2FA</th>
+                        <th class="border-0" title="Is the user-account active? If disabled ">Active</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Users}}
+                            <tr>
+                                <td>
+
+                                    <span class="badge badge-secondary float-left mr-2" style="background: none;border: 1px solid {{.Badge.Color}};">
+                                        <i class="fa fa-user mr-1" aria-hidden="true" style="font-size: 0.8rem;color: {{.Badge.Color}};"></i>
+                                        <span class="text-uppercase" style="color:{{.Badge.Color}};">{{.Badge.Name}}</span>
+                                    </span>
+
+                                </td>
+                                <td>{{.Nick}}</td>
+                                <td>{{.Name}}</td>
+                                <td>{{.Email}}</td>
+                                <td>
+                                    {{if .IsUsingTOTP}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .IsUsingWebAuthn}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .ForcePasswordRotation}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Force2FA}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if not .Disabled}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                            </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+
+                {{if .NewUserNick}}
+                    <div class="alert alert-success" role="alert">
+                        The User <i>{{.NewUserNick}}</i> has been successfully created. The temporary password <i>{{.NewUserPassword}}</i> has been generated for this account. The user has to change the password during the next login.
+                    </div>
+                {{end}}
+
+            </div>
+        </div>
+    </div>
+
+{{end}}
+
+
+
+{{define "editUsers"}}
+
+    <div class="col-12 mt-4">
+        <form action="/admin/edit/users" method="post">
+            <input value="1" name="edit" hidden />
+            <div class="card">
+                <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                    <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> User Management
+                    <a href="/admin"><i class="fa fa-times float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer;color:black;"></i></a>
+                    <button type="submit" class="btn btn-sm mr-1 p-0 float-right"><i class="fa fa-save float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer;color:black;"></i></button>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="border-0" title="Badge of the user">Badge</th>
+                            <th class="border-0" title="Nickname of the user">Nick</th>
+                            <th class="border-0" title="Full name of the user">Name</th>
+                            <th class="border-0" title="E-Mail address of the user">Email</th>
+                            <th class="border-0" title="Does the user use TOTP?">TOTP</th>
+                            <th class="border-0" title="Does the user use WebAuthn?">WebAuthn</th>
+                            <th class="border-0" title="User is forced to rotate the password at the next login">Rotate Password</th>
+                            <th class="border-0" title="User is forced to use either TOTP or WebAuthn">Force 2FA</th>
+                            <th class="border-0" title="Is the user-account active? If disabled ">Active</th>
+                            <th class="border-0"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="userList">
+                        {{range .Users}}
+                            <tr>
+                                <td>
+                                    <span class="my-1 badge badge-secondary float-left mr-2" style="background: none;border: 1px solid {{.Badge.Color}};">
+                                        <i class="fa fa-user mr-1" aria-hidden="true" style="font-size: 0.8rem;color: {{.Badge.Color}};"></i>
+                                        <span class="text-uppercase" style="color:{{.Badge.Color}};">{{.Badge.Name}}</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input name="userId" type="text" value="{{.Id}}" hidden/>
+                                    <input name="userNick" class="form-control form-control-sm" value="{{.Nick}}" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    <input name="userName" class="form-control form-control-sm" value="{{.Name}}" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    <input name="userEmail" class="form-control form-control-sm" value="{{.Email}}" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    {{if .IsUsingTOTP}}
+                                        <i class="my-2 fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="my-2 fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .IsUsingWebAuthn}}
+                                        <i class="my-2 fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="my-2 fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    <input name="userPasswordRotation" class="m-2" type="checkbox" value="{{.Id}}" {{if .ForcePasswordRotation}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="userForce2FA" class="m-2" type="checkbox" value="{{.Id}}" {{if .Force2FA}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="userActive" class="m-2" type="checkbox" value="{{.Id}}" {{if not .Disabled}}checked{{end}}/>
+                                </td>
+                                <td>
+
+
+                                    <div class="dropdown">
+
+                                        <button type="button" class="float-right my-1 py-0 btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="/admin/edit/password/reset/{{.Id}}">Reset Password</a>
+                                        </div>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+                        {{end}}
+
+                        </tbody>
+
+                        <tbody id="addUserForm" class="border-0 pt-2">
+                            <tr>
+                                <td>
+                                    <span class="badge badge-secondary float-left mr-2" style="background: none;border: 1px solid grey;">
+                                        <i class="fa fa-user mr-1" aria-hidden="true" style="font-size: 0.8rem;color: grey;"></i>
+                                        <span class="text-uppercase" style="color:grey;">user</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input id="newNick" class="form-control form-control-sm" placeholder="nickname" value="" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    <input id="newName" class="form-control form-control-sm" placeholder="full name" value="" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    <input id="newEmail" class="form-control form-control-sm" placeholder="email" value="" style="max-width: 150px;"/>
+                                </td>
+                                <td>
+                                    <i class="my-2 fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                </td>
+                                <td>
+                                    <i class="my-2 fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                </td>
+                                <td>
+                                    <input class="m-2" type="checkbox" checked disabled/>
+                                </td>
+                                <td>
+                                    <input class="m-2" type="checkbox"/>
+                                </td>
+                                <td>
+                                    <input class="m-2" type="checkbox" />
+                                </td>
+                                <td>
+                                    <button id="addUser" type="button" class="float-right my-1 py-0 btn btn-outline-success btn-sm">Add</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{{end}}
+

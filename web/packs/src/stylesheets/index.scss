@@ -1,0 +1,27 @@
+.navigation_link {
+    color: #777;
+    font-style: italic;
+}
+
+.comment_tab {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-size: 13px;
+    display: table-cell;
+    padding: 2px 1em;
+    cursor: pointer;
+    background: transparent;
+}
+
+.active_comment_tab {
+    background: transparent;
+    border-bottom: 4px solid #54487a;
+    color: #54487a;
+}
+
+
+.index_page_icon {
+    color: #54487A;
+    text-align: center;
+}

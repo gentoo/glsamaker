@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<form id="glsa_edit" action="/glsa/edit/{{.Glsa.Id}}" method="POST">
+
+    <div class="container mb-5 mt-2">
+        <div class="row">
+
+
+            <div class="col-sm-12" style="margin-bottom:10px;">
+                    <small>
+                        <div class="navigation">
+                            <a href="/all"><b>GLSA List:</b></a>
+
+                            ({{.Glsa.Id}} of {{.GlsaCount}})
+                            &nbsp;&nbsp;
+                            {{ if eq 1 .Glsa.Id }}
+                                <span class="navigation_link"><i class="fa fa-angle-double-left" aria-hidden="true"></i> First</span>
+                            {{else}}
+                                <a href="/glsa/1" class="navigation_link" style="font-style: normal;"><i class="fa fa-angle-double-left" aria-hidden="true"></i> First</a>
+                            {{end}}
+
+                            {{ if eq (prevGLSA .Glsa.Id 1) .Glsa.Id }}
+                                <span class="navigation_link"><i class="fa fa-angle-left" aria-hidden="true"></i> Prev</span>
+                            {{else}}
+                                <a href="/glsa/{{prevGLSA .Glsa.Id .GlsaCount}}" class="navigation_link" style="font-style: normal;"><i class="fa fa-angle-left" aria-hidden="true"></i> Prev</a>
+                            {{end}}
+                            &nbsp;
+                            {{ if eq (nextGLSA .Glsa.Id .GlsaCount) .Glsa.Id }}
+                                <span class="navigation_link">Next <i class="fa fa-angle-right" aria-hidden="true"></i></span>
+                            {{else}}
+                                <a href="/glsa/{{nextGLSA .Glsa.Id .GlsaCount}}" class="navigation_link" style="font-style: normal;">Next <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            {{end}}
+
+                            {{ if eq .GlsaCount .Glsa.Id }}
+                                <span class="navigation_link" style="">Last <i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
+                            {{else}}
+                                <a href="/glsa/{{.GlsaCount}}" class="navigation_link" style="font-style: normal;">Last <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                            {{end}}
+
+
+                            <button type="submit" class="float-right btn btn-success btn-sm">Save GLSA</button>
+
+                            <a href="/glsa/{{.Glsa.Id}}" class="float-right btn btn-outline-danger btn-sm" style="margin-right:5px;">Cancel</a>
+
+
+                        </div>
+                    </small>
+            </div>
+
+            <div class="col-12 mt-2">
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <span class="badge {{if eq .Glsa.Type "request"}}badge-danger{{else if eq .Glsa.Type "draft"}}badge-warning{{else}}badge-success{{end}} text-capitalize">{{.Glsa.Type}}</span>
+                                <a style="color:#000000;" href="/glsa/{{.Glsa.Id}}">GLSA <span id="glsa-id">{{.Glsa.Id}}</span></a>
+
+                                <span id="summary_container">
+                                    <small style="margin-left:5px;color:#505152;">Created: {{.Glsa.Created}}</small>
+                                    <small style="margin-left:5px;color:#505152;">Updated: {{.Glsa.Updated}}</small>
+                                </span>
+
+
+
+                                <span class="badge badge-secondary float-right" style="background: none;border: 1px solid {{ if eq .Glsa.Status.Permission "public"}}green{{else}}black{{end}};">
+                                    <i class="fa {{ if eq .Glsa.Status.Permission "public"}}fa-globe{{else}}fa-user-secret{{end}} mr-1" aria-hidden="true" style="font-size: 0.8rem;color: {{ if eq .Glsa.Status.Permission "public"}}green{{else}}black{{end}};"></i>
+                                    <span style="color: {{ if eq .Glsa.Permission "public"}}green{{else}}black{{end}};">{{ if eq .Glsa.Status.Permission "public"}}PUBLIC{{else}}CONFIDENTAL{{end}}</span>
+                                </span>
+
+                                <span class="badge badge-danger float-right mr-2" style="background: none;border: 1px solid {{if eq .Glsa.Status.WorkflowStatus "commented" }}blue{{else if eq .Glsa.Status.WorkflowStatus "own"}}green{{else if eq .Glsa.Status.WorkflowStatus "approved"}}green{{else}}darkred{{end}};">
+                                    <i class="fa {{if eq .Glsa.Status.WorkflowStatus "commented" }}fa-comments-o{{else if eq .Glsa.Status.WorkflowStatus "own"}}fa-user{{else if eq .Glsa.Status.WorkflowStatus "approved"}}fa-check-circle-o{{else}}fa-times-circle{{end}} mr-1" aria-hidden="true" style="font-size: 0.8rem;color: {{if eq .Glsa.Status.WorkflowStatus "commented" }}blue{{else if eq .Glsa.Status.WorkflowStatus "own"}}green{{else if eq .Glsa.Status.WorkflowStatus "approved"}}green{{else}}darkred{{end}};"></i>
+                                    <span class="text-uppercase" style="color:{{if eq .Glsa.Status.WorkflowStatus "commented" }}blue{{else if eq .Glsa.Status.WorkflowStatus "own"}}green{{else if eq .Glsa.Status.WorkflowStatus "approved"}}green{{else}}darkred{{end}};">{{.Glsa.Status.WorkflowStatus}}</span>
+                                </span>
+
+                                <span class="badge badge-secondary float-right mr-2" style="background: none;border: 1px solid {{if eq .Glsa.Status.Approval "declined" }}darkred{{else if eq .Glsa.Status.Approval "approved"}}green{{else if eq .Glsa.Status.Approval "comments"}}orange{{else}}grey{{end}};">
+                                    <i class="fa fa-circle mr-1" aria-hidden="true" style="font-size: 0.8rem;color: {{if eq .Glsa.Status.Approval "declined" }}darkred{{else if eq .Glsa.Status.Approval "approved"}}green{{else if eq .Glsa.Status.Approval "comments"}}orange{{else}}grey{{end}};"></i>
+                                    <span class="text-uppercase" style="color:{{if eq .Glsa.Status.Approval "declined" }}darkred{{else if eq .Glsa.Status.Approval "approved"}}green{{else if eq .Glsa.Status.Approval "comments"}}orange{{else}}grey{{end}};">{{.Glsa.Status.Approval}}</span>
+                                </span>
+
+                                <span class="badge badge-secondary float-right mr-2" style="background: none;border: 1px solid {{if .Glsa.Status.BugReady }}green{{else}}darkred{{end}};padding-top:4px!important;padding-bottom:1.6px;">
+                                    <svg class="" style="width:13px;height:13px" viewBox="0 0 24 24">
+                                        <path fill="{{if .Glsa.Status.BugReady }}green{{else}}darkred{{end}}" d="M20,8H17.19C16.74,7.2 16.12,6.5 15.37,6L17,4.41L15.59,3L13.42,5.17C12.96,5.06 12.5,5 12,5C11.5,5 11.05,5.06 10.59,5.17L8.41,3L7,4.41L8.62,6C7.87,6.5 7.26,7.21 6.81,8H4V10H6.09C6.03,10.33 6,10.66 6,11V12H4V14H6V15C6,15.34 6.03,15.67 6.09,16H4V18H6.81C8.47,20.87 12.14,21.84 15,20.18C15.91,19.66 16.67,18.9 17.19,18H20V16H17.91C17.97,15.67 18,15.34 18,15V14H20V12H18V11C18,10.66 17.97,10.33 17.91,10H20V8M16,15A4,4 0 0,1 12,19A4,4 0 0,1 8,15V11A4,4 0 0,1 12,7A4,4 0 0,1 16,11V15M14,10V12H10V10H14M10,14H14V16H10V14Z" />
+                                    </svg>
+                                    <span class="" style="color:{{if .Glsa.Status.BugReady }}green{{else}}darkred{{end}};">{{if .Glsa.Status.BugReady }}READY{{else}}NOT READY{{end}}</span>
+                                </span>
+
+
+
+                            </div>
+
+                            <div class="col-sm-12">
+                                <h1 style="font-size: 20px;margin-top:10px;margin-bottom:4px;"><span id="short_desc_nonedit_display">
+                                        <input class="form-control p-2" type="text" name="title" value="{{.Glsa.Title}}" style="font-weight: 800; font-size: large; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                    </span></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 mt-4">
+
+                <div class="card">
+                    <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                        <a data-toggle="collapse" href="#collapseMetadata" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                            <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Metadata</a>
+                    </div>
+                    <div class="card-body collapse show" id="collapseMetadata">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="mr-2 text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-unlock" aria-hidden="true"></i> Permission:</small>
+                                <small style="font-size: 12px;">
+                                    <select name="permission" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                        <option value="public" {{if eq .Glsa.Permission "public"}}selected{{end}}>public</option>
+                                        <option value="confidential" {{if eq .Glsa.Permission "confidential"}}selected{{end}}>confidential</option>
+                                    </select>
+                                </small>
+                            </div>
+                            <div class="col-sm-3">
+                                <small class="mr-2 text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-address-card" aria-hidden="true"></i> Access: </small>
+                                <small style="font-size: 12px;">
+                                    <select name="access" class="custom-select" style="display: inline-block;max-width: 150px;height: 30px;padding: .25rem .5rem;">
+                                        <option value="local" {{if eq .Glsa.Access "local"}}selected{{end}}>local</option>
+                                        <option value="remote" {{if eq .Glsa.Access "remote"}}selected{{end}}>remote</option>
+                                        <option value="local,remote" {{if eq .Glsa.Access "local,remote"}}selected{{end}}>local, remote</option>
+                                    </select>
+                                </small>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <small class="mr-2 text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-balance-scale" aria-hidden="true"></i> Severity: </small>
+                                <small style="font-size: 12px;">
+                                    <select name="severity" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                        <option value="low" {{if eq .Glsa.Severity "low"}}selected{{end}}>low</option>
+                                        <option value="normal" {{if eq .Glsa.Severity "normal"}}selected{{end}}>normal</option>
+                                        <option value="high" {{if eq .Glsa.Severity "high"}}selected{{end}}>high</option>
+                                    </select>
+                                </small>
+                            </div>
+                            <div class="col-sm-3">
+                                <small class="mr-2 text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-tag" aria-hidden="true"></i> Keyword:</small>
+                                <small style="font-size: 12px;">
+                                    <input name="keyword" class="form-control" type="text" value="{{.Glsa.Keyword}}" style="max-width: 150px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                </small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                        <a data-toggle="collapse" href="#collapseOverview" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                            <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Overview</a>
+                    </div>
+                    <div class="card-body collapse show" id="collapseOverview">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <div class="row" style="margin-bottom:2px;">
+                                    <div class="col-md-auto align-h-right" style="min-width: 125px;padding-right:0px;color:#505050;">
+                                        <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Synopsis:</small>
+                                    </div>
+                                    <div class="col" style="color:#292929;padding-left:10px;">
+                                        <small style="font-size: 12px;">
+                                            <input name="synopsis" class="form-control" type="text" value="{{.Glsa.Synopsis}}" style="height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="row mt-3" style="margin-bottom:2px;">
+                                    <div class="col-6" style="margin-bottom:2px;">
+                                        <div class="row">
+                                            <div class="col-md-auto align-h-right" style="min-width: 125px; padding-right:0px;color:#505050;">
+                                                <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-file-text-o" aria-hidden="true"></i> Description:</small>
+                                            </div>
+                                            <div class="col" style="color:#292929;padding-left:10px;">
+                                                <small style="font-size: 12px;">
+                                                <textarea name="description" style="" rows="3" onfocusin="this.rows=5" onfocusout="this.rows=3" class="form-control">{{.Glsa.Description}}</textarea>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-md-auto" style="min-width: 125px; padding-right:0px;color:#505050;">
+                                                <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-medkit" aria-hidden="true"></i> Workaround:</small>
+                                            </div>
+                                            <div class="col" style="color:#292929;padding-left:10px;">
+                                                <textarea name="workaround" rows="3" onfocusin="this.rows=5" onfocusout="this.rows=3" class="form-control">{{.Glsa.Workaround}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="row mt-3 equal">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-md-auto" style="min-width: 125px; padding-right:0px;color:#505050;">
+                                                <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-bullseye" aria-hidden="true"></i> Impact:</small>
+                                            </div>
+                                            <div class="col" style="color:#292929;padding-left:10px;">
+                                                <textarea name="impact" rows="3" onfocusin="this.rows=5" onfocusout="this.rows=3" class="form-control">{{.Glsa.Impact}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="row" style="padding-right:0px;color:#505050;">
+                                            <div class="col-md-auto align-h-right" style="min-width: 125px;padding-right:0px;color:#505050;">
+                                                <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-align-right" aria-hidden="true"></i> Background:</small>
+                                            </div>
+                                            <div class="col" style="color:#292929;padding-left:10px;">
+                                                <textarea name="background" rows="3" onfocusin="this.rows=5" onfocusout="this.rows=3" class="form-control">{{.Glsa.Background}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                        <a data-toggle="collapse" href="#collapseResolution" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                            <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Resolution</a>
+                    </div>
+                    <div class="card-body collapse show" id="collapseResolution">
+                        <textarea name="resolution" rows="7" onfocusin="this.rows=10" onfocusout="this.rows=7" class="form-control">{{.Glsa.Resolution}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                        <a data-toggle="collapse" href="#collapsePackages" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                            <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Packages</a>
+                    </div>
+                    <div class="card-body collapse show" id="collapsePackages">
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-12 align-h-right mb-2" style="padding-right:0px;color:#505050;">
+                                        <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Vulnerable:</small>
+                                    </div>
+                                </div>
+
+                                <div id="vulnerable_package_list" class="row">
+                                {{ range .Glsa.Packages}}
+                                    {{ if .Affected}}
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-md-auto" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <input name="package_vulnerable" value="true" hidden />
+                                                        <input name="package_atom" class="form-control" type="text" value="{{.Atom}}" style="width:150px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <select name="package_identifier" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                            <option value=">=" {{if eq .Identifier ">="}}selected{{end}}>&gt;=</option>
+                                                            <option value=">" {{if eq .Identifier ">"}}selected{{end}}>&gt; </option>
+                                                            <option value="*>=" {{if eq .Identifier "*>="}}selected{{end}}>*&gt;=&nbsp;&nbsp;&nbsp; </option>
+                                                            <option value="*>" {{if eq .Identifier "*>"}}selected{{end}}>*&gt; </option>
+                                                            <option value="<=" {{if eq .Identifier "<="}}selected{{end}}>&lt;= </option>
+                                                            <option value="<" {{if eq .Identifier "<"}}selected{{end}}>&lt; </option>
+                                                            <option value="*<=" {{if eq .Identifier "*<="}}selected{{end}}>*&lt;= </option>
+                                                            <option value="*<" {{if eq .Identifier "*<"}}selected{{end}}>*&lt; </option>
+                                                            <option value=">=" {{if eq .Identifier "="}}selected{{end}}>= </option>
+                                                        </select>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <input name="package_version" class="form-control" type="text" value="{{ .Version }}" style="width: 80px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <input name="package_slot" class="form-control" type="text" value="{{ .Slot }}" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <input name="package_arch" class="form-control" type="text" value="{{ .Arch }}" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <select name="package_auto" class="custom-select" id="inputGroupSelect01" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                            <option value="yes" {{if .Auto}}selected{{end}}>yes&nbsp;&nbsp;&nbsp; </option>
+                                                            <option value="no" {{if not .Auto}}selected{{end}}>no</option>
+                                                        </select>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-auto pl-0" style="color:#292929;">
+                                                    <small style="font-size: 12px;">
+                                                        <button type="button"  class="btn btn-outline-danger btn-delete-package" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block">-</button>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{end}}
+                                {{end}}
+                                </div>
+
+                                <div class="row mt-2"><div class="col-12"><hr/></div></div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-auto" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-vulnerable-package-atom" class="form-control" type="text" placeholder="add new package" style="width:150px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <select id="add-vulnerable-package-identifier" class="custom-select" id="inputGroupSelect01" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                <option value=">=" selected>&gt;=</option>
+                                                <option value=">">&gt; </option>
+                                                <option value="*>=">*&gt;=&nbsp;&nbsp;&nbsp; </option>
+                                                <option value="*>">*&gt; </option>
+                                                <option value="<=">&lt;= </option>
+                                                <option value="<">&lt; </option>
+                                                <option value="*<=">*&lt;= </option>
+                                                <option value="*<">*&lt; </option>
+                                                <option value="=">= </option>
+                                            </select>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-vulnerable-package-version" class="form-control" type="text" placeholder="version" style="width: 80px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-vulnerable-package-slot" class="form-control" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-vulnerable-package-arch" class="form-control" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <select id="add-vulnerable-package-auto" class="custom-select" id="inputGroupSelect01" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                <option value="true" selected>yes&nbsp;&nbsp;&nbsp; </option>
+                                                <option value="false">no</option>
+                                            </select>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <button type="button" class="btn btn-outline-success btn-add-vulnerable-package" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block">+</button>
+                                        </small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <div class="row">
+                                    <div class="col-12 mb-2" style="padding-right:0px;color:#505050;">
+                                        <small class="text-uppercase text-muted" style="font-size: 12px;"><i class="fa fa-shield" aria-hidden="true"></i> Unaffected:</small>
+                                    </div>
+                                </div>
+
+                                <div id="unaffected_package_list" class="row">
+                                    {{ range .Glsa.Packages}}
+                                        {{ if not .Affected}}
+
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-md-auto" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <input name="package_vulnerable" type="text" value="false" hidden />
+                                                            <input name="package_atom" class="form-control" type="text" value="{{.Atom}}" style="width:150px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <select name="package_identifier" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                                <option value=">=" {{if eq .Identifier ">="}}selected{{end}}>&gt;=</option>
+                                                                <option value=">" {{if eq .Identifier ">"}}selected{{end}}>&gt; </option>
+                                                                <option value="*>=" {{if eq .Identifier "*>="}}selected{{end}}>*&gt;=&nbsp;&nbsp;&nbsp; </option>
+                                                                <option value="*>" {{if eq .Identifier "*>"}}selected{{end}}>*&gt; </option>
+                                                                <option value="<=" {{if eq .Identifier "<="}}selected{{end}}>&lt;= </option>
+                                                                <option value="<" {{if eq .Identifier "<"}}selected{{end}}>&lt; </option>
+                                                                <option value="*<=" {{if eq .Identifier "*<="}}selected{{end}}>*&lt;= </option>
+                                                                <option value="*<" {{if eq .Identifier "*<"}}selected{{end}}>*&lt; </option>
+                                                                <option value=">=" {{if eq .Identifier "="}}selected{{end}}>= </option>
+                                                            </select>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <input name="package_version" class="form-control" type="text" value="{{.Version}}" style="width: 80px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <input name="package_slot" class="form-control" type="text" value="{{.Slot}}" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <input name="package_arch" class="form-control" type="text" value="{{.Arch}}" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <select name="package_auto" class="custom-select" id="inputGroupSelect01" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                                <option value="yes" {{if .Auto}}selected{{end}}>yes&nbsp;&nbsp;&nbsp; </option>
+                                                                <option value="no" {{if not .Auto}}selected{{end}}>no</option>
+                                                            </select>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                                        <small style="font-size: 12px;">
+                                                            <button type="button" class="btn btn-outline-danger btn-delete-package" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block">-</button>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        {{end}}
+                                    {{end}}
+                                </div>
+
+                                <div class="row mt-2"><div class="col-12"><hr/></div></div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-auto" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-unaffected-package-atom" class="form-control" type="text" placeholder="add new package" style="width:150px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <select id="add-unaffected-package-identifier" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                <option value=">=" selected>&gt;=</option>
+                                                <option value=">">&gt; </option>
+                                                <option value="*>=">*&gt;=&nbsp;&nbsp;&nbsp; </option>
+                                                <option value="*>">*&gt; </option>
+                                                <option value="<=">&lt;= </option>
+                                                <option value="<">&lt; </option>
+                                                <option value="*<=">*&lt;= </option>
+                                                <option value="*<">*&lt; </option>
+                                                <option value="=">= </option>
+                                            </select>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-unaffected-package-version" class="form-control" type="text" placeholder="version" style="width: 80px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-unaffected-package-slot" class="form-control" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <input id="add-unaffected-package-arch" class="form-control" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <select id="add-unaffected-package-auto" class="custom-select" style="display: inline-block;max-width: 100px;height: 30px;padding: .25rem .5rem;">
+                                                <option value="1" selected>yes&nbsp;&nbsp;&nbsp; </option>
+                                                <option value="1">no</option>
+                                            </select>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-auto pl-0" style="color:#292929;">
+                                        <small style="font-size: 12px;">
+                                            <button type="button" class="btn btn-outline-success btn-add-unaffected-package" type="text" placeholder="*" style="width: 30px; height: 30px;padding: .25rem .5rem;display: inline-block">+</button>
+                                        </small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-6 px-0">
+
+                <div class="col-12 mt-4">
+                    <div class="card">
+                        <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                            <a data-toggle="collapse" href="#collapseBugs" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                            <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Bugs</a>
+                        </div>
+                        <div class="card-body collapse show" id="collapseBugs">
+                            <div id="bugs-list" class="row">
+
+                                {{ range $key, $value := .Glsa.Bugs }}
+
+                                    <div class="col-sm-12 {{if ne $key 0}}mt-2{{end}}">
+                                        <div class="row" style="margin-bottom:2px;">
+                                            <div class="col-md-auto align-h-right" style="padding-right:0px;color:#505050;">
+                                                <small style="font-size: 12px;">
+
+                                                    <small style="font-size: 12px;">
+                                                        <input name="bugs" class="form-control" type="text" value="{{$value.Id}}" style="max-width: 75px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                    </small>
+
+                                                </small>
+                                            </div>
+                                            <div class="col py-1" style="color:#292929;padding-left:10px;">
+                                                <small style="font-size: 12px;">{{$value.Summary}}</small>
+
+                                            </div>
+
+                                            <small style="font-size: 12px;margin-top: 2px;">
+                                                <button type="button" class="btn btn-outline-danger mr-3 py-0 btn-delete-bug" type="text" style="height: 25px;display: inline-block">Delete</button>
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                {{ end }}
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12"><hr/></div>
+
+                                <div class="col-sm-12">
+
+                                    <div class="row equal">
+                                        <div class="col-md-auto align-h-right" style="padding-right:0px;color:#505050;">
+                                            <small style="font-size: 12px;">
+
+                                                <small style="font-size: 12px;">
+                                                    <input class="form-control" type="text" id="new_bug_id" placeholder="bug id" style="max-width: 75px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                </small>
+                                            </small>
+                                        </div>
+                                        <div class="col py-1" style="color:#292929;padding-left:10px;">
+                                            <small class="text-muted" style="font-size: 12px;">Enter a bug id to add a new bug</small>
+                                        </div>
+                                        <small style="font-size: 12px;margin-top: 2px;">
+                                            <button type="button" class="btn btn-outline-success btn-add-bug mr-3 py-0" type="text" style="height: 25px;display: inline-block">Add</button>
+                                        </small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-6 px-0">
+
+                <div class="col-12 mt-4">
+                    <div class="card">
+                        <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                            <a data-toggle="collapse" href="#collapseReferences" style="outline : none;text-decoration: none;color:#000;" onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');">
+                                <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> References</a>
+                        </div>
+                        <div class="card-body collapse show" id="collapseReferences">
+                            <div id="reference_list" class="row">
+
+                                {{ range $key, $value := .Glsa.References }}
+
+                                <div class="col-sm-12 {{if ne $key 0}}mt-2{{end}}">
+                                    <div class="row" style="margin-bottom:2px;">
+                                        <div class="col-md-auto align-h-right" style="padding-right:0px;color:#505050;">
+                                            <small style="font-size: 12px;">
+
+                                                <small style="font-size: 12px;">
+                                                    <input name="reference_title" class="form-control" type="text" value="{{$value.Title}}" style="max-width: 125px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                </small>
+
+                                            </small>
+                                        </div>
+                                        <div class="col" style="color:#292929;padding-left:10px;">
+                                            <small style="font-size: 12px;">
+                                                <input name="reference_url" class="form-control" type="text" value="{{$value.URL}}" style="height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                            </small>
+                                        </div>
+                                        <small style="font-size: 12px;margin-top: 2px;">
+                                            <button type="button" class="btn btn-outline-danger btn-delete-reference mr-3 py-0" type="text" style="height: 25px;display: inline-block">Delete</button>
+                                        </small>
+                                    </div>
+                                </div>
+
+                                {{ end }}
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-sm-12"><hr/></div>
+
+                                <div class="col-sm-12">
+
+                                    <div class="row equal">
+                                        <div class="col-md-auto align-h-right" style="padding-right:0px;color:#505050;">
+                                            <small style="font-size: 12px;">
+                                                <small style="font-size: 12px;">
+                                                    <input id="new_reference_title" class="form-control" type="text" placeholder="CVE ID" style="max-width: 125px;height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                                </small>
+                                            </small>
+                                        </div>
+                                        <div class="col" style="color:#292929;padding-left:10px;">
+                                            <small class="text-muted" style="font-size: 12px;">
+
+                                                <input id="new_reference_url" class="form-control" type="text" placeholder="Reference URL" style="height: 30px;padding: .25rem .5rem;display: inline-block" />
+                                            </small>
+
+
+                                        </div>
+                                        <small style="font-size: 12px;margin-top: 2px;">
+                                            <button type="button" class="btn btn-outline-success btn-add-reference mr-3 py-0" type="text" style="height: 25px;display: inline-block">Add</button>
+                                        </small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {{if .User.Permissions.Glsa.Comment}}
+                <div class="col-12 mt-3"><hr/></div>
+            {{else if .Glsa.Comments}}
+                <div class="col-12 mt-3"><hr/></div>
+            {{end}}
+
+            <div class="col-12">
+                <div id="comments-section" class="row">
+
+                    {{ range .Glsa.Comments}}
+
+                        <div class="col-12 mt-3">
+                            <div id="c0" class="card" style="padding:0px;{{if eq .Type "approve"}}background:#DFF0D8;{{else if eq .Type "decline"}}background:#F2DEDE;{{end}}">
+                                <div class="card-header" style="{{if eq .Type "approve"}}background:#DFF0D8;{{else if eq .Type "decline"}}background:#F2DEDE;{{end}}">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                <span style="color:#000!important;">
+                                                  <span class="vcard"><a class="email" href="mailto:max@magorsch.de" title="Max Magorsch <max@magorsch.de>"> <b class="text-dark">{{.User}}</b></a></span>
+                                                </span>
+                                                    <span class="ml-2">
+
+                                                    <span class="badge badge-secondary" title="{{.UserBadge.Description}}" style="background: none;border: 1px solid {{.UserBadge.Color}};">
+                                                        <span class="text-capitalize" style="color: {{.UserBadge.Color}};">{{.UserBadge.Name}}</span>
+                                                    </span>
+                                                </span>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                <span style="color:#505050; font-weight: normal;margin-left:2px;">
+                                                  {{.Date}}
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <a href="#" class="btn btn-default btn-xs float-right" style="background:transparent;color:#505050;border:none;"><i class="fa fa-compress" aria-hidden="true"></i></a>
+                                                <a class="btn btn-default btn-xs float-right" href="#add_comment" style="background:transparent;color:#505050;border:none;"><i class="fa fa-reply" aria-hidden="true"></i></a>
+                                                <a href="#" class="btn btn-default btn-xs float-right" style="background:transparent;color:#505050;border:none;"><i class="fa fa-tag" aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    {{if eq .Type "approve"}}<b class="mr-2">Approved: </b>{{else if eq .Type "decline"}}<b class="mr-2">Declined: </b>{{end}}
+                                    {{.Message}}
+                                </div>
+                            </div>
+                        </div>
+
+                    {{end}}
+
+                </div>
+            </div>
+
+
+            {{if .User.Permissions.Glsa.Comment}}
+                <div class="col-12 mt-4">
+                    <div id="add_comment">
+                        <label class="" for="comment" accesskey="c"><b>Add Comment</b></label>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="comment_tabs" role="tablist">
+                                    <div id="comment_tab" class="comment_tab active_comment_tab" role="tab" aria-selected="true">Comment</div>
+                                    <div id="comment_preview_tab" class="comment_tab" role="tab" aria-selected="false">Preview</div>
+                                </div>
+                                <textarea name="comment" id="comment" class="form-control comment-textarea" rows="10" cols="60" onfocusout="this.rows=10" onfocus="this.rows=15"></textarea>
+                                <br><div class="knob-buttons">
+                                    {{if .User.Permissions.Glsa.Approve}}
+                                        {{if eq .Glsa.CreatorId .User.Id}}
+                                            {{if .User.Permissions.Glsa.ApproveOwnGlsa}}
+                                                <input class="btn btn-outline-success btn-sm float-right mr-2" type="button" value="Approve" id="save-new-glsa-approve">
+                                            {{end}}
+                                        {{else}}
+                                            <input class="btn btn-outline-success btn-sm float-right mr-2" type="button" value="Approve" id="save-new-glsa-approve">
+                                        {{end}}
+                                    {{end}}
+                                    {{if .User.Permissions.Glsa.Decline}}
+                                        <input class="btn btn-outline-danger btn-sm float-right mr-2" type="button" value="Decline" id="save-new-glsa-decline">
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{end}}
+
+
+        </div>
+    </div>
+
+</form>
+
+
+
+<script src="/assets/glsa.js"></script>
+<script src="/assets/edit.js"></script>
+
+
+{{template "footer" .}}
+
+</body>
+</html>

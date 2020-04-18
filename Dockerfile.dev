@@ -1,0 +1,10 @@
+FROM golang:1.14.0
+RUN apt update && apt install -y ca-certificates ntp ntpdate
+WORKDIR /go/src/glsamaker
+COPY . /go/src/glsamaker
+RUN go get github.com/go-pg/pg/v9
+RUN go get github.com/google/uuid
+RUN go get github.com/skip2/go-qrcode
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bin .
+
+CMD ["/go/src/glsamaker/bin/glsamaker"]

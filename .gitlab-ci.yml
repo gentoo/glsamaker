@@ -1,0 +1,32 @@
+stages:
+  - build
+  - test
+
+info:
+  stage: .pre
+  script:
+    - docker info
+  
+build:
+  stage: build
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHA
+    LATEST_IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest
+  script:
+    - echo $IMAGE_TAG
+    - echo $LATEST_IMAGE_TAG
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    - docker pull $LATEST_IMAGE_TAG || true
+    - docker build --cache-from $LATEST_IMAGE_TAG -t $IMAGE_TAG -t $LATEST_IMAGE_TAG .
+    - docker push $LATEST_IMAGE_TAG
+    - docker push $IMAGE_TAG
+
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml  
+  - template: SAST.gitlab-ci.yml
+
+variables:
+  DS_DISABLE_DIND: "true"
+  SAST_DISABLE_DIND: "true"
+

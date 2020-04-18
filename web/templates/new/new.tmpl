@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+
+            <h2 class="ml-1 mb-4">New GLSA request </h2>
+
+            <div class="card px-2 mx-1">
+                <div class="card-body">
+
+                    <form action="/new" method="POST">
+
+
+                        <div class="col-sm-12 pr-0">
+                            <span class="badge badge-danger badge-request">Request</span>
+                            <span class="badge badge-warning badge-draft" style="display: none;">Draft</span>
+                            &nbsp;<a style="color:#000000;" href="">GLSA {{.NewID}}</a>
+
+                            <span id="summary_container">
+                                    <small style="margin-left:5px;color:#505152;">Created: 2020-04-08 16:05 UTC</small>
+                                </span>
+
+
+
+                            <span class="badge badge-secondary float-right badge-public" style="background: none;border: 1px solid green;">
+                                <i class="fa fa-globe mr-1" aria-hidden="true" style="font-size: 0.8rem;color: green;"></i>
+                                <span class="" style="color:green;">PUBLIC</span>
+                            </span>
+
+                            <span class="badge badge-secondary float-right badge-confidential" style="background: none;border: 1px solid black;display: none;">
+                                <i class="fa fa-user-secret mr-1" aria-hidden="true" style="font-size: 0.8rem;color: black;"></i>
+                                <span class="text-uppercase" style="color:black;">Confidential</span>
+                            </span>
+
+
+                            <span class="badge badge-danger float-right mr-2" style="background: none;border: 1px solid green;">
+                                <i class="fa fa-user mr-1" aria-hidden="true" style="font-size: 0.8rem;color: green;"></i>
+                                <span class="" style="color:green;">OWN</span>
+                            </span>
+
+                            <span class="badge badge-secondary badge-nocomment float-right mr-2" style="background: none;border: 1px solid grey;">
+                                <i class="fa fa-circle mr-1" aria-hidden="true" style="font-size: 0.8rem;color: grey;"></i>
+                                <span class="" style="color:grey;">NONE</span>
+                            </span>
+
+                            <span class="badge badge-secondary badge-comment float-right mr-2" style="background: none;border: 1px solid orange;display: none;">
+                                <i class="fa fa-circle mr-1" aria-hidden="true" style="font-size: 0.8rem;color: orange;"></i>
+                                <span class="text-uppercase" style="color:orange;">Comment</span>
+                            </span>
+
+
+                            <span class="badge badge-secondary badge-notbugready float-right mr-2" style="background: none;border: 1px solid darkred;padding-top:4px!important;padding-bottom:1.6px;">
+                                <svg class="" style="width:13px;height:13px" viewBox="0 0 24 24">
+                                    <path fill="darkred" d="M20,8H17.19C16.74,7.2 16.12,6.5 15.37,6L17,4.41L15.59,3L13.42,5.17C12.96,5.06 12.5,5 12,5C11.5,5 11.05,5.06 10.59,5.17L8.41,3L7,4.41L8.62,6C7.87,6.5 7.26,7.21 6.81,8H4V10H6.09C6.03,10.33 6,10.66 6,11V12H4V14H6V15C6,15.34 6.03,15.67 6.09,16H4V18H6.81C8.47,20.87 12.14,21.84 15,20.18C15.91,19.66 16.67,18.9 17.19,18H20V16H17.91C17.97,15.67 18,15.34 18,15V14H20V12H18V11C18,10.66 17.97,10.33 17.91,10H20V8M16,15A4,4 0 0,1 12,19A4,4 0 0,1 8,15V11A4,4 0 0,1 12,7A4,4 0 0,1 16,11V15M14,10V12H10V10H14M10,14H14V16H10V14Z" />
+                                </svg>
+                                <span class="" style="color:darkred;">NOT READY</span>
+                            </span>
+
+                            <span class="badge badge-secondary badge-bugready float-right mr-2" style="background: none;border: 1px solid green;padding-top:4px!important;padding-bottom:1.6px;display: none;">
+                                <svg class="" style="width:13px;height:13px" viewBox="0 0 24 24">
+                                    <path fill="green" d="M20,8H17.19C16.74,7.2 16.12,6.5 15.37,6L17,4.41L15.59,3L13.42,5.17C12.96,5.06 12.5,5 12,5C11.5,5 11.05,5.06 10.59,5.17L8.41,3L7,4.41L8.62,6C7.87,6.5 7.26,7.21 6.81,8H4V10H6.09C6.03,10.33 6,10.66 6,11V12H4V14H6V15C6,15.34 6.03,15.67 6.09,16H4V18H6.81C8.47,20.87 12.14,21.84 15,20.18C15.91,19.66 16.67,18.9 17.19,18H20V16H17.91C17.97,15.67 18,15.34 18,15V14H20V12H18V11C18,10.66 17.97,10.33 17.91,10H20V8M16,15A4,4 0 0,1 12,19A4,4 0 0,1 8,15V11A4,4 0 0,1 12,7A4,4 0 0,1 16,11V15M14,10V12H10V10H14M10,14H14V16H10V14Z" />
+                                </svg>
+                                <span class="" style="color:green;">READY</span>
+                            </span>
+
+
+                        </div>
+
+                        <div class="col-sm-12">
+                            <h1 style="font-size: 20px;margin-top:10px;margin-bottom:4px;"><span id="short_desc_nonedit_display">
+                                        New Gentoo Linux Security Advisories Request
+                                    </span></h1>
+                        </div>
+
+
+                        <style>
+                            .advanced-fields {
+                                color: grey;
+                            }
+                        </style>
+
+
+
+                        <div class="row mt-5">
+                            <div class="col-2 text-right">
+                                <b>Bugs</b><br/>
+                                <small>Please enter the relevant bug ID(s), separate more than one bug with a comma.</small>
+                            </div>
+                            <div class="col-10">
+                                <input id="bugs" name="bugs" type="text" class="form-control" style="display:inline-block;max-width: 200px;background: none;"/>
+                                <i id="bug-spinner" class="fa fa-lg fa-refresh fa-spin ml-3" style="display: none;" aria-hidden="true"></i>
+                                <i id="bug-refresh-ok" class="fa fa-lg fa-check ml-3" style="display: none;color: green;" aria-hidden="true"></i>
+                                <i id="bug-refresh-failed" class="fa fa-lg fa-times ml-3" style="display: none;color: darkred;" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right">
+                                <b>Title</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="title" name="title" rows="5" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="synopsisField">
+                            <div class="col-2 text-right">
+                                <b>Synopsis</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <input id="synopsis" name="synopsis" class="form-control" style="max-width: 600px;background: none;" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="sescriptionField">
+                            <div class="col-2 text-right">
+                                <b>Description</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea oninput="this.value != '' ? [document.querySelector('.badge-draft').style.display = 'inline-block',document.querySelector('.badge-request').style.display = 'none'] : [document.querySelector('.badge-draft').style.display = 'none',document.querySelector('.badge-request').style.display = 'inline-block'] ; " id="description" name="description" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="workaroundField">
+                            <div class="col-2 text-right">
+                                <b>Workaround</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="workaround" name="workaround" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="impactField">
+                            <div class="col-2 text-right">
+                                <b>Impact</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="impact" name="impact" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="backgroundField">
+                            <div class="col-2 text-right">
+                                <b>Background</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="background" name="background" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="resolutionField">
+                            <div class="col-2 text-right">
+                                <b>Resolution</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="resolution" name="resolution" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right">
+                                <b>References</b>
+                            </div>
+                            <div class="col-10">
+                                <div class="form-check">
+                                    <input id="importReferences3" name="importReferences3" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label py-1" for="exampleCheck1"> Don't import any references</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="importReferences" name="importReferences" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label py-1" for="exampleCheck1"> Import CVEs from linked bugs</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="importReferences2" name="importReferences2" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label py-1" for="exampleCheck1"> Import CVEs from linked bugs and all references from the CVEs</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right">
+                                <b>Permissions</b><br/>
+                                <small>Mark this request as public or confidental.</small>
+                            </div>
+                            <div class="col-10">
+                                <select onchange="this.value == 'confidential' ? [document.querySelector('.badge-public').style.display = 'none', document.querySelector('.badge-confidential').style.display = 'block'] : [document.querySelector('.badge-public').style.display = 'block', document.querySelector('.badge-confidential').style.display = 'none']; " class="custom-select" id="permissions" name="permissions" style="max-width: 200px;" required>
+                                    <option selected value="public">public</option>
+                                    <option value="confidential">confidental</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="accessField">
+                            <div class="col-2 text-right">
+                                <b>Access</b><br/>
+                                <small>Mark this request as public or confidental.</small>
+                            </div>
+                            <div class="col-10">
+                                <select class="custom-select" id="access" name="access" style="max-width: 200px;" required>
+                                    <option value="local">local</option>
+                                    <option selected value="remote">remote</option>
+                                    <option value="local,remote">local, remote</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="severityField">
+                            <div class="col-2 text-right">
+                                <b>Severity</b><br/>
+                                <small>Mark this request as public or confidental.</small>
+                            </div>
+                            <div class="col-10">
+                                <select class="custom-select" id="severity" name="severity" style="max-width: 200px;" required>
+                                    <option value="low">low</option>
+                                    <option selected value="normal">normal</option>
+                                    <option value="high">high</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="keywordField">
+                            <div class="col-2 text-right">
+                                <b>Keyword</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <input id="keyword" name="keyword" class="form-control" style="max-width: 300px;background: none;" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 collapse advanced-fields" id="comment">
+                            <div class="col-2 text-right">
+                                <b>Comment</b><br/>
+                                <small>Either take the suggested title or enter a new custom one.</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea oninput="this.value != '' ? [document.querySelector('.badge-comment').style.display = 'inline-block',document.querySelector('.badge-nocomment').style.display = 'none'] : [document.querySelector('.badge-comment').style.display = 'none',document.querySelector('.badge-nocomment').style.display = 'inline-block'] ; " id="comment" name="comment" rows="3" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+                        <hr class="mt-4"/>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right"></div>
+                            <div class="col-10">
+                                <button type="submit" class="btn btn-primary float-right"> File Request <i class="fa fa-angle-double-right ml-1" aria-hidden="true"></i></button>
+                                <button onclick="this.innerHTML = this.innerHTML == 'Advanced Mode' ? 'Simple Mode' : 'Advanced Mode';" class="btn btn-outline-secondary float-right mr-3" type="button" data-toggle="collapse" data-target=".advanced-fields" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Advanced Mode</button>
+
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
+
+<script src="/assets/newglsa.js"></script>
+
+</body>
+</html>

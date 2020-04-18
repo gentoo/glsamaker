@@ -1,0 +1,424 @@
+{{define "viewPermissions"}}
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                <a onclick="this.getElementsByTagName('i')[0].classList.toggle('fa-caret-down');this.getElementsByTagName('i')[0].classList.toggle('fa-caret-right');" style="outline : none;text-decoration: none;color:#000;" data-toggle="collapse" href="#collapsePermissionSettings"><i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> User Permissions</a>
+                <a href="/admin/edit/permissions"><i class="fa fa-pencil float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer;color:black;"></i></a>
+            </div>
+            <div class="card-body collapse show" id="collapsePermissionSettings">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td style="border-top:none;"></td>
+                        <th colspan="11" class="border-0">GLSA</th>
+                        <th colspan="6" class="border-0">CVE</th>
+                        <th colspan="4" class="border-0">Admin</th>
+                    </tr>
+                    <tr>
+                        <th>User</th>
+                        <!-- GLSA Permissions -->
+                        <th title="View GLSAs">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </th>
+                        <th title="Manually trigger an update of the Bug data">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </th>
+                        <th title="Add comments to GLSAs">
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="Add GLSAs">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </th>
+                        <th title="Edit GLSAs">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </th>
+                        <th title="Delete GLSAs">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="Approve GLSAs">
+                            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                        </th>
+                        <th title="Approve own GLSAs">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                        </th>
+                        <th title="Decline GLSAs">
+                            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                        </th>
+                        <th title="Release GLSAs">
+                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="View confidential GLSAs">
+                            <i class="fa fa-user-secret" aria-hidden="true"></i>
+                        </th>
+                        <!-- CVE Permissions -->
+                        <th title="View the CVETool">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </th>
+                        <th title="Manually trigger an update of the CVE data">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </th>
+                        <th title="Add comments to CVEs">
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="Add packages to CVEs">
+                            <i class="fa fa-hdd-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="Change the State of CVEs">
+                            <i class="fa fa-random" aria-hidden="true"></i>
+                        </th>
+                        <th title="Assign and Create Bugs using the CVETool">
+                            <i class="fa fa-bug" aria-hidden="true"></i>
+                        </th>
+                        <!-- Admin Permissions -->
+                        <th title="View Admin Area">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </th>
+                        <th title="Manage Templates">
+                            <i class="fa fa-files-o" aria-hidden="true"></i>
+                        </th>
+                        <th title="Manage Global Settings">
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                        </th>
+                        <th title="Manage Users">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Users}}
+                            <tr>
+                                <td>{{.Email}}</td>
+                                <!-- GLSA Permissions -->
+                                <td>
+                                    {{if .Permissions.Glsa.View}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.UpdateBugs}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Comment}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Create}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Edit}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Delete}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Approve}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.ApproveOwnGlsa}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Decline}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Release}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Glsa.Confidential}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <!-- CVE Permissions -->
+                                <td>
+                                    {{if .Permissions.CVETool.View}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.CVETool.UpdateCVEs}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.CVETool.Comment}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.CVETool.AddPackage}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.CVETool.ChangeState}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.CVETool.AssignBug}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <!-- Admin Permissions -->
+                                <td>
+                                    {{if .Permissions.Admin.View}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Admin.CreateTemplates}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Admin.GlobalSettings}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                                <td>
+                                    {{if .Permissions.Admin.ManageUsers}}
+                                        <i class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                                    {{else}}
+                                        <i class="fa fa-times" style="color: darkred;" aria-hidden="true"></i>
+                                    {{end}}
+                                </td>
+                            </tr>
+                        {{end}}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+
+
+{{define "editPermissions"}}
+    <div class="col-12 mt-4">
+        <form action="/admin/edit/permissions" method="post">
+            <input value="1" name="edit" hidden />
+            <div class="card">
+                <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                    <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> User Permissions
+                    <button type="submit" class="btn btn-sm p-0 float-right"><i class="fa fa-save float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer;color:black;"></i></button>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td style="border-top:none;"></td>
+                            <th colspan="11" class="border-0">GLSA</th>
+                            <th colspan="6" class="border-0">CVE</th>
+                            <th colspan="4" class="border-0">Admin</th>
+                        </tr>
+                        <tr>
+                            <th>User</th>
+                            <!-- GLSA Permissions -->
+                            <th title="View GLSAs">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </th>
+                            <th title="Manually trigger an update of the Bug data">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                            </th>
+                            <th title="Add comments to GLSAs">
+                                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="Add GLSAs">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </th>
+                            <th title="Edit GLSAs">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </th>
+                            <th title="Delete GLSAs">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="Approve GLSAs">
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                            </th>
+                            <th title="Approve own GLSAs">
+                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            </th>
+                            <th title="Decline GLSAs">
+                                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                            </th>
+                            <th title="Release GLSAs">
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="View confidential GLSAs">
+                                <i class="fa fa-user-secret" aria-hidden="true"></i>
+                            </th>
+                            <!-- CVE Permissions -->
+                            <th title="View the CVETool">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </th>
+                            <th title="Manually trigger an update of the CVE data">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                            </th>
+                            <th title="Add comments to CVEs">
+                                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="Add packages to CVEs">
+                                <i class="fa fa-hdd-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="Change the State of CVEs">
+                                <i class="fa fa-random" aria-hidden="true"></i>
+                            </th>
+                            <th title="Assign and Create Bugs using the CVETool">
+                                <i class="fa fa-bug" aria-hidden="true"></i>
+                            </th>
+                            <!-- Admin Permissions -->
+                            <th title="View Admin Area">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </th>
+                            <th title="Manage Templates">
+                                <i class="fa fa-files-o" aria-hidden="true"></i>
+                            </th>
+                            <th title="Manage Global Settings">
+                                <i class="fa fa-globe" aria-hidden="true"></i>
+                            </th>
+                            <th title="Manage Users">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range .Users}}
+                            <tr>
+                                <td>
+                                    <input name="user" type="text" value="{{.Id}}" hidden/>
+                                    {{.Email}}
+                                </td>
+                                <!-- GLSA Permissions -->
+                                <td>
+                                    <input name="glsa-view" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.View}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-updateBugs" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.UpdateBugs}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-comment" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Comment}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-create" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Create}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-edit" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Edit}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-delete" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Delete}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-approve" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Approve}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-approveOwnGlsa" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.ApproveOwnGlsa}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-decline" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Decline}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-release" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Release}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="glsa-confidential" type="checkbox" value="{{.Id}}" {{if .Permissions.Glsa.Confidential}}checked{{end}}/>
+                                </td>
+                                <!-- CVE Permissions -->
+                                <td>
+                                    <input name="cve-view" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.View}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="cve-updateCVEs" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.UpdateCVEs}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="cve-comment" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.Comment}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="cve-addPackage" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.AddPackage}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="cve-changeState" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.ChangeState}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="cve-assignBug" type="checkbox" value="{{.Id}}" {{if .Permissions.CVETool.AssignBug}}checked{{end}}/>
+                                </td>
+                                <!-- Admin Permissions -->
+                                <td>
+                                    <input name="admin-view" type="checkbox" value="{{.Id}}" {{if .Permissions.Admin.View}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="admin-createTemplates" type="checkbox" value="{{.Id}}" {{if .Permissions.Admin.CreateTemplates}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="admin-globalSettings" type="checkbox" value="{{.Id}}" {{if .Permissions.Admin.GlobalSettings}}checked{{end}}/>
+                                </td>
+                                <td>
+                                    <input name="admin-manageUsers" type="checkbox" value="{{.Id}}" {{if .Permissions.Admin.ManageUsers}}checked{{end}}/>
+                                </td>
+                            </tr>
+                        {{end}}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+{{end}}
+

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<style>
+
+    .colvis-btn {
+        background: white !important;
+        border: 1px solid #ced4da;
+        color: #495057;
+    }
+
+    .colvis-btn:hover {
+        background: white !important;
+        border: 1px solid #ced4da;
+        color: #495057;
+    }
+
+    .dt-button-collection > .dropdown-menu {
+        background: #54487A;
+    }
+
+    .buttons-columnVisibility:not(.active) {
+        background: white!important;
+        color: black!important;
+    }
+
+    td:hover {
+        cursor: pointer;
+    }
+
+    tr:not(.even):not(.odd), tr[role=row]:not(.even):not(.odd){
+        background: none!important;
+    }
+
+    .collapsing {
+        transition: none !important;
+    }
+
+
+</style>
+
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+
+            <table id="table_id" class="data-table table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="render-bold noVis">ID</th>
+                    <th class="no-sort">Description</th>
+                    <th class="hide no-sort">Packages</th>
+                    <th class="hide no-sort render-bug">Bugs</th>
+                    <th class="no-sort">BaseScore</th>
+                    <th class="hide no-sort">Impact</th>
+                    <th class="hide no-sort">References</th>
+                    <th class="hide no-sort">Comments</th>
+                    <th>LastModifiedDate</th>
+                    <th class="hide">PublishedDate</th>
+                    <th class="render-state">State</th>
+                    <th class="hide noVis">Changelog</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}
+
+
+<script>
+    window.userCanComment = "{{.User.Permissions.CVETool.Comment}}" == "true";
+    window.userCanChangeState = "{{.User.Permissions.CVETool.ChangeState}}" == "true";
+    window.userCanAssignBug = "{{.User.Permissions.CVETool.AssignBug}}" == "true";
+    window.userCanAddPackage = "{{.User.Permissions.CVETool.AddPackage}}" == "true";
+</script>
+
+
+</body>
+</html>

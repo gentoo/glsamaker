@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Gentoo Security</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#54487a">
+    <meta name="description" content="Gentoo CVE Tool">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="icon" href="https://packages.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+
+<body style="border-top: none;background: #fff;">
+
+<div class="container vh-100 d-flex">
+    <div class="row flex-grow-1">
+        <div class="col-12 d-flex align-items-center">
+
+            <div class="row w-100">
+
+                <div class="col-12 align-items-center">
+                    <div class="card border-grey mx-auto" style="max-width: 430px;border-color: lightgrey!important;">
+                        <div class="card-body">
+                            <div class="text-center" style="margin-top:10px;margin-bottom:20px;">
+                                <object data="https://www.gentoo.org/assets/img/logo/gentoo-signet.svg" type="image/svg+xml" style="max-width: 80px;">
+                                    <img src="https://assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux logo">
+                                </object>
+                                <h4 class="mt-2">TOTP Login</h4>
+                            </div>
+
+                            <form name="login" action="/login/2fa/totp" method="POST">
+
+                                <div class="row mt-5 pt-3">
+                                    <div class="col-12" style="padding-bottom:20px!important;padding-left:80px!important;padding-right:80px!important;">
+                                        <input  placeholder="One-time Password" type="text" maxlength="6" size="35" id="token" name="token" class="form-control" required="">
+                                    </div>
+
+                                    <input style="display: none;" name="cameFrom" id="cameFrom" value="{{ .CameFrom }}" />
+
+                                </div>
+
+                                <div class="text-right mt-3" style="width:100%;">
+                                    <input type="submit" class="btn btn-primary" style="border-color: #54487A!important;background-color: #54487A!important;" name="GoAheadAndLogIn" value="Log in" id="log_in">
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3 align-items-center">
+                    <div class="card border-0 text-right text-muted mx-auto" style="max-width: 430px;">
+                        <span class="" style="font-size: 80%;">
+                            <a class="mr-4 text-muted" style="text-decoration: none;" data-toggle="collapse" href="#help-notice" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Help</a>
+                            <a class="text-muted" style="text-decoration: none;" data-toggle="collapse" href="#reset-notice" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Lost my Authenticators</a>
+                        </span>
+
+
+
+                        <div class="card-body">
+                            <div class="collapse mt-2" id="help-notice">
+                                <div class="card card-body border-0 p-0">
+                                    <small>You've activated 2FA using TOTP for your account. Please use one of your registered Authenticators to generate a TOTP and log in.</small>
+                                </div>
+                            </div>
+
+                            <div class="collapse mt-2" id="reset-notice">
+                                <div class="card card-body border-0 p-0">
+                                    <small>In case you lost all authenticators that you have registered, please contact the security team and ask an admin to temporarly disabled WebAuthn for your account.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

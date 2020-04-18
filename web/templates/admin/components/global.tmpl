@@ -1,0 +1,45 @@
+{{define "viewGlobal"}}
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                    <i class="fa fa-caret-right" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Global 2FA Settings (coming soon)
+                    <i class="fa fa-pencil float-right mt-1 text-muted d-none" aria-hidden="true" style="margin-right:5px;"></i>
+                </div>
+                <div class="card-body d-none">
+                    <div class="row">
+                        <div class="col-sm-6 text-muted">
+                            Force 2FA to login (coming soon)
+                            <i class="fa fa-times float-right mr-3 p-1" style="color: darkred;" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-sm-6 text-muted">
+                            Force 2FA to release GLSA (coming soon)
+                            <i class="fa fa-times float-right mr-3 p-1" style="color: darkred;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{{end}}
+
+{{define "editGlobal"}}
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header" style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;font-weight:bold;font-size:13px;">
+                <i class="fa fa-caret-down" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i> Global 2FA Settings
+                <i class="fa fa-pencil float-right mt-1" aria-hidden="true" style="margin-right:5px;cursor: pointer"></i>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        Force 2FA to login
+                        <i class="fa fa-times float-right mr-3 p-1" style="color: darkred;" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-6 text-muted">
+                        Force 2FA to release GLSA (coming soon)
+                        <i class="fa fa-times float-right mr-3 p-1" style="color: darkred;" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+
+<div id="2fa-overview" class="container">
+    <div class="row mb-5">
+        <div class="col-12">
+            <h1>Two Factor Authentication</h1>
+        </div>
+
+        {{ if .User.Force2FA }}
+            {{ if .User.IsUsingTOTP }}
+            {{ else if .User.IsUsingWebAuthn }}
+            {{ else }}
+                <div class="col-12 mt-2">
+                    <div class="alert alert-warning" role="alert">
+                        Sorry, but you have to enable 2FA for your account before you can continue.
+                    </div>
+                </div>
+            {{end}}
+        {{end}}
+
+        <div class="col-12 px-5 mt-5">
+
+            <h2>Time-based One-time Passwords{{ if .User.IsUsingTOTP }} <small><span class="ml-2 badge badge-success">active</span></small>{{end}}</h2>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+
+        </div>
+
+        <div class="col-12 px-5" id="totp-dialog">
+            <div class="card mx-auto" style="max-width: 500px;background: none;">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="data:image/png;base64,{{ .QRcode }}" width="100%" />
+                        </div>
+                        <div class="col-6">
+                            <p id="token-description" class="mt-4"><small>Please scan the qr-code and enter the six-digit code shown in your Authenticator app.</small></p>
+                            <input id="token" name="token" class="form-control" type="text" style="background: #FAFAFA;" placeholder="123 456"/>
+                            <button id="token-btn" class="btn btn-primary float-right mt-3" onclick="verifyTOTPToken();">Verify</button>
+
+                            <style>
+
+                                .correct-totp {
+                                    border: green solid 1px;
+                                    color: green;
+                                }
+
+                                .false-totp {
+                                    border: red solid 1px;
+                                    color: red;
+                                }
+
+                            </style>
+
+                            <script>
+
+                                function verifyTOTPToken(){
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function() {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            if(this.responseText == "true"){
+                                                document.getElementById("token").classList.remove("false-totp");
+                                                document.getElementById("token").classList.add("correct-totp");
+                                                document.getElementById("token-description").classList.add("text-success");
+                                                document.getElementById("token-description").classList.remove("text-danger");
+                                            }else{
+                                                document.getElementById("token").classList.remove("correct-totp");
+                                                document.getElementById("token").classList.add("false-totp");
+                                                document.getElementById("token-description").classList.remove("text-success");
+                                                document.getElementById("token-description").classList.add("text-danger");
+                                            }
+                                        }
+                                    };
+                                    xhttp.open("POST", "/account/2fa/totp/verify", true);
+                                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                    xhttp.send("token=" + document.getElementById("token").value);
+                                }
+                            </script>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        {{ if .User.IsUsingTOTP }}
+        <div class="col-12 px-5 text-right">
+            <a class="btn btn-outline-danger" href="/account/2fa/totp/disable">Disable</a>
+        </div>
+        {{ else }}
+        <div class="col-12 px-5 text-right">
+            <a class="btn btn-outline-success" href="/account/2fa/totp/activate">Activate</a>
+        </div>
+        {{ end }}
+
+        <div class="col-12 px-5 py-3"><hr/></div>
+
+
+
+        <div class="col-12 px-5">
+
+            <h2>WebAuthn{{ if .User.IsUsingWebAuthn }} <small><span class="ml-2 badge badge-success">active</span></small>{{end}}</h2>
+            <!-- div: not set up yet -->
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+
+        </div>
+
+
+        <div class="col-12 px-5" id="totp-dialog">
+            <div class="card mx-auto" style="max-width: 500px;background: none;">
+                <div class="card-body" style="min-height: 220px;">
+
+                    <div class="row">
+
+                        {{ if .User.WebauthnCredentials }}
+                            <div class="col-6">
+                                    <div class="list-group list-group-flush" style="background: none;">
+                                        {{range .User.WebauthnCredentials}}
+                                            <a class="list-group-item list-group-item-action flex-column align-items-start" style="background: none;">
+                                                <h4 class="mb-1"><i class="fa fa-shield" aria-hidden="true"></i> {{CredentialName $.User .}}</h4>
+                                                <small class="text-muted">ID: {{ WebAuthnID . }}</small>
+                                            </a>
+                                        {{end}}
+                                    </div>
+                            </div>
+                        {{ else }}
+                            <div class="col-6 text-center">
+                                <i class="fa fa-exclamation-circle mt-4" aria-hidden="true" style="font-size: 120px;"></i>
+                                <h3>No Authenticators present.</h3>
+                            </div>
+                        {{ end }}
+
+                        <div class="col-6">
+                            <p id="token-description" class="mt-2"><small>Click on the button below to add a new authenticator.</small></p>
+                            <input id="webauthn-name" name="token" class="form-control" maxlength="20" type="text" style="background: #FAFAFA;" placeholder="Authenticator Name"/>
+
+                            <button id="register-webauthn" class="btn btn-primary float-right mt-4">Add New</button>
+                            {{ if .User.WebauthnCredentials }}
+                                <button class="btn btn-outline-danger float-right mt-4 mr-2">Delete All</button>
+                            {{ end }}
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        {{ if .User.IsUsingWebAuthn }}
+            <div class="col-12 px-5 mt-3 text-right">
+                <a class="btn btn-outline-danger" href="/account/2fa/webauthn/disable">Disable</a>
+            </div>
+        {{ else }}
+            <div class="col-12 px-5 mt-3 text-right">
+                <a class="btn btn-outline-success" href="/account/2fa/webauthn/activate">Activate</a>
+            </div>
+        {{ end }}
+
+    </div>
+
+
+
+
+
+
+</div>
+
+
+{{template "footer" .}}
+
+<script src="/assets/account.js"></script>
+
+
+</body>
+</html>

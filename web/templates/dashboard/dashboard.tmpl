@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<style>
+    #bar > svg{
+        display:block;
+    }
+    #bar{
+        width:100%;
+        height:180px;
+        margin:0;
+        padding: 0;
+    }
+</style>
+
+<div class="container mb-5">
+
+
+    <h1>Dashboard</h1>
+    <hr/>
+
+    <div class="row mt-2 pb-3 d-none"><div class="col-12"><hr/></div></div>
+
+    <div class="row mt-4">
+        <div class="col-xs-12 col-md-6">
+            <h2>Requests & Drafts <small class="text-muted" style="font-size: 16px;">recently created</small></h2>
+            <table class="table table frontpage-table">
+
+                <tbody>
+
+                {{range .GLSAs}}
+                    <tr>
+                        <td class="text-left"><span class="badge {{if eq .Type "request"}}badge-danger{{else if eq .Type "draft"}}badge-warning{{else}}badge-success{{end}} text-capitalize">{{.Type}}</span></td>
+                        <td><a href="/glsa/{{.Id}}" rel="nofollow" title="{{.Title}}">{{.Title}}</a></td>
+                        <td class="frontpage-table-planet-author">{{.Creator.Nick}}</td>
+                    </tr>
+                {{end}}
+
+                </tbody></table>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <h2>Recent Statistics <small class="text-muted" style="font-size: 16px;">from our <a href="/statistics">Statistics Page</a></small></h2>
+            <div id="bar"></div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xs-12 col-md-6">
+            <h2>Recent CVEs <small class="text-muted" style="font-size: 16px;">view more at the <a href="/cve/tool">CVE Tool</a></small></h2>
+            <table class="table  frontpage-table">
+
+                <tbody>
+
+                {{range .CVEs}}
+                    <tr>
+                        <td class="frontpage-table-planet-author">{{.Id}}</td>
+                        <td style="max-height: 30px; overflow-y: hidden; display: block;text-overflow: ellipsis;"><a href="#" rel="nofollow" title="{{.Description}}">{{.Description}}</a></td>
+                        <td class="frontpage-table-planet-author">{{.LastModifiedDate}}</td>
+                    </tr>
+                {{end}}
+
+                </tbody></table>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <h2>Recent Comments <small class="text-muted" style="font-size: 16px;"> on <a href="/all">GLSAs</a> and <a href="/cve/tool">CVEs</a></small></h2>
+            <table class="table ">
+
+                <tbody>
+
+                {{range .Comments}}
+                <tr>
+                    <td>
+                        {{if .GlsaId}}
+                        <span class="badge badge-{{if eq .Type "approve"}}success{{else if eq .Type "decline"}}danger{{else}}primary{{end}}">
+                        GLSA <span class="text-capitalize">{{if eq .Type "approve"}}{{.Type}}{{else if eq .Type "decline"}}{{.Type}}{{else}}{{end}}</span>
+                        </span>
+                        {{else}}
+                            <span class="badge badge-info">
+                            CVE
+                        </span>
+                        {{end}}
+                    </td>
+                    <td>
+                        <a href="{{if .GlsaId}}/glsa/{{.GlsaId}}{{end}}">{{.Message}}</a>
+                    </td>
+                    <td class="text-right">
+                        {{.User}}
+                    </td>
+                    <td class="text-right">
+                        {{.Date}}
+                    </td>
+                </tr>
+                {{end}}
+
+                </tbody></table>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+{{template "footer" .}}
+
+
+<script>
+    window.CHART_DATA = [
+        {
+            type: 'GLSAs',
+            stage: 'request',
+            count: {{.StatisticsData.Requests}},
+        },
+        {
+            type: 'GLSAs',
+            stage: 'draft',
+            count: {{.StatisticsData.Drafts}},
+        },
+        {
+            type: 'GLSAs',
+            stage: 'glsa',
+            count: {{.StatisticsData.Glsas}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'New',
+            count: {{.StatisticsData.New}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Assigned',
+            count: {{.StatisticsData.Assigned}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Later',
+            count: {{.StatisticsData.Later}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'NFU',
+            count: {{.StatisticsData.NFU}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Invalid',
+            count: {{.StatisticsData.Invalid}},
+        }
+    ];
+</script>
+
+<script src="/assets/statistics.js"></script>
+
+</body>
+</html>

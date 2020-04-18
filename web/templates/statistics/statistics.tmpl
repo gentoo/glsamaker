@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<div class="container mb-5">
+
+
+    <h1 class="mb-4">
+        Statistics<br/>
+        <small class="text-muted" style="font-size: 70%;">Stay tuned, this is just a first placeholder. More is coming soon.</small>
+    </h1>
+
+
+    <style>
+        #bar > svg{
+            display:block;
+        }
+        #bar{
+            width:100%;
+            height:400px;
+            margin:0;
+            padding: 0;
+        }
+    </style>
+
+    <div class="col-12">
+
+        <div id="bar"></div>
+
+    </div>
+
+
+
+</div>
+
+
+{{template "footer" .}}
+
+<script>
+    window.CHART_DATA = [
+        {
+            type: 'GLSAs',
+            stage: 'request',
+            count: {{.Data.Requests}},
+        },
+        {
+            type: 'GLSAs',
+            stage: 'draft',
+            count: {{.Data.Drafts}},
+        },
+        {
+            type: 'GLSAs',
+            stage: 'glsa',
+            count: {{.Data.Glsas}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'New',
+            count: {{.Data.New}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Assigned',
+            count: {{.Data.Assigned}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Later',
+            count: {{.Data.Later}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'NFU',
+            count: {{.Data.NFU}},
+        },
+        {
+            type: 'CVEs',
+            stage: 'Invalid',
+            count: {{.Data.Invalid}},
+        }
+    ];
+</script>
+
+<script src="/assets/statistics.js"></script>
+
+</body>
+</html>

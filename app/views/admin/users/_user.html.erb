@@ -1,9 +1,0 @@
-<tr class="<%= cycle 'even', 'odd' %>">
-  <td><%= user.id %></td>
-  <td><strong><%= user.login %></strong></td>
-  <td><%= link_to user.name, admin_user_path(user) %></td>
-  <td><%= user.email %></td>
-  <td><%= access_string user.access %></td>
-  <td><%= user.disabled %></td>
-  <td><%= user.jefe %></td>
-</tr>
