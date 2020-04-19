@@ -25,17 +25,18 @@ func isCommand(command string) bool {
 
 func main() {
 
-	waitForPostgres()
-
 	errorLogFile := logger.CreateLogFile(config.LogFile())
 	defer errorLogFile.Close()
 	initLoggers(os.Stdout, errorLogFile)
 
 	if isCommand("--serve") {
+		waitForPostgres(10)
 		app.Serve()
 	} else if isCommand("--full-update") {
+		waitForPostgres(5)
 		cveimport.FullUpdate()
 	} else if isCommand("--update") {
+		waitForPostgres(7)
 		cveimport.Update()
 	} else {
 		printHelp()
@@ -55,6 +56,6 @@ func initLoggers(infoHandler io.Writer, errorHandler io.Writer) {
 
 // TODO this has to be solved differently
 // wait for postgres to come up
-func waitForPostgres() {
-	time.Sleep(5 * time.Second)
+func waitForPostgres(seconds int) {
+	time.Sleep(time.Duration(seconds) * time.Second)
 }
