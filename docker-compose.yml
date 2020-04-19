@@ -14,6 +14,7 @@ services:
     restart: always
     environment:
       GLSAMAKER_LOG_FILE: '/var/log/glsamaker/web.log'
+      GLSAMAKER_POSTGRES_PASS: ${GLSAMAKER_POSTGRES_PASS:-root}
     command: "/go/src/glsamaker/bin/glsamaker --serve"
     depends_on:
       - db
@@ -27,6 +28,7 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     environment:
       GLSAMAKER_LOG_FILE: '/var/log/glsamaker/updater.log'
+      GLSAMAKER_POSTGRES_PASS: ${GLSAMAKER_POSTGRES_PASS:-root}
     command: "/go/src/glsamaker/bin/glsamaker --full-update"
     depends_on:
       - db
@@ -35,7 +37,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${GLSAMAKER_POSTGRES_USER:-root}
-      POSTGRES_PASSWORD: ${GLSAMAKER_POSTGRES_PASSWORD:-root}
+      POSTGRES_PASSWORD: ${GLSAMAKER_POSTGRES_PASS:-root}
       POSTGRES_DB: ${GLSAMAKER_POSTGRES_DB:-glsamaker}
     volumes:
       - ${GLSAMAKER_POSTGRES_DATA_PATH:-/var/lib/postgresql/data}:/var/lib/postgresql/data
