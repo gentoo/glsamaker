@@ -14,6 +14,7 @@ services:
     restart: always
     environment:
       GLSAMAKER_LOG_FILE: '/var/log/glsamaker/web.log'
+      GLSAMAKER_DOMAIN: ${GLSAMAKER_DOMAIN:-localhost}
       GLSAMAKER_POSTGRES_PASS: ${GLSAMAKER_POSTGRES_PASS:-root}
     command: "/go/src/glsamaker/bin/glsamaker --serve"
     depends_on:

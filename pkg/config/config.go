@@ -2,6 +2,12 @@ package config
 
 import "os"
 
+
+
+func Domain() string {
+	return getEnv("GLSAMAKER_DOMAIN", "localhost")
+}
+
 func PostgresUser() string {
 	return getEnv("GLSAMAKER_POSTGRES_USER", "root")
 }

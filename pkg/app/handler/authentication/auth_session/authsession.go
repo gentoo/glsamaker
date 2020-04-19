@@ -1,6 +1,7 @@
 package auth_session
 
 import (
+	"glsamaker/pkg/config"
 	"glsamaker/pkg/database/connection"
 	"glsamaker/pkg/logger"
 	"glsamaker/pkg/models"
@@ -52,7 +53,7 @@ func createSessionCookie(w http.ResponseWriter, sessionID string) {
 
 	ck := http.Cookie{
 		Name:    "session",
-		Domain:  "localhost",
+		Domain:  config.Domain(),
 		Path:    "/",
 		Expires: expires,
 	}

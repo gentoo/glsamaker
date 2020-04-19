@@ -3,6 +3,7 @@ package totp
 import (
 	"glsamaker/pkg/app/handler/authentication/auth_session"
 	"glsamaker/pkg/app/handler/authentication/utils"
+	"glsamaker/pkg/config"
 	"glsamaker/pkg/models/users"
 	"bytes"
 	"encoding/base64"
@@ -38,7 +39,7 @@ func GetToken(user *users.User) string {
 func Generate(email string) (string, string) {
 
 	key, _ := totp.Generate(totp.GenerateOpts{
-		Issuer:      "glsamakertest.gentoo.org",
+		Issuer:      config.Domain(),
 		AccountName: email,
 	})
 

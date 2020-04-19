@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/duo-labs/webauthn.io/session"
 	webauthn_lib "github.com/duo-labs/webauthn/webauthn"
+	"glsamaker/pkg/config"
 	"log"
 	"net/http"
 )
@@ -101,8 +102,8 @@ func CreateWebAuthn() {
 	if WebAuthn == nil {
 		authn, _ := webauthn_lib.New(&webauthn_lib.Config{
 			RPDisplayName: "Gentoo GLSAMaker",                               // Display Name for your site
-			RPID:          "glsamakertest.gentoo.org",                       // Generally the domain name for your site
-			RPOrigin:      "https://glsamakertest.gentoo.org",               // The origin URL for WebAuthn requests
+			RPID:          config.Domain(),                                  // Generally the domain name for your site
+			RPOrigin:      "https://" + config.Domain(),                     // The origin URL for WebAuthn requests
 			RPIcon:        "https://assets.gentoo.org/tyrian/site-logo.png", // Optional icon URL for your site
 		})
 
