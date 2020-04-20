@@ -439,10 +439,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body">
-                                {{if eq .Type "approve"}}<b class="mr-2">Approved: </b>{{else if eq .Type "decline"}}<b class="mr-2">Declined: </b>{{end}}
-                                {{.Message}}
-                            </div>
+                            <div class="card-body" style="white-space: pre-wrap;">{{if eq .Type "approve"}}<b class="mr-2">Approved: </b>{{else if eq .Type "decline"}}<b class="mr-2">Declined: </b>{{end}} {{.Message}}</div>
                         </div>
                     </div>
 

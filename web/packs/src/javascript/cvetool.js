@@ -229,7 +229,7 @@ function format ( d ) {
         commentsObjects.forEach(function (comment, index) {
             if(comment.Message != "") {
                 var commentDate = '<small class="text-muted">' + comment.Date.split("T")[0] + ' ' + comment.Date.split("T")[1].split(".")[0] + ' UTC</small>';
-                comments = comments + '<div class="col-3 text-right mb-3"><b>' + comment.User.Name + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body">' + escape(comment.Message) + '</div></div></div>';
+                comments = comments + '<div class="col-3 text-right mb-3"><b>' + comment.User.Name + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body" style="white-space: pre-wrap;">' + comment.Message + '</div></div></div>';
             }
         });
     }
@@ -454,7 +454,7 @@ function changeState(cveid, reason, newState){
                 // add comment
                 var comment = JSON.parse(data);
                 var commentDate = '<small class="text-muted">' + comment.Date.split("T")[0] + ' ' + comment.Date.split("T")[1].split(".")[0] + ' UTC</small>';
-                var newComment = '<div class="col-3 text-right mb-3"><b>' + comment.User + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body">' + escape(comment.Message) + '</div></div></div>';
+                var newComment = '<div class="col-3 text-right mb-3"><b>' + comment.User + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body" style="white-space: pre-wrap;">' + comment.Message + '</div></div></div>';
                 $('.comments-section[data-cveid="' + cveid + '"]').append(newComment);
 
             }
