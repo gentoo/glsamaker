@@ -98,7 +98,7 @@ func CveData(w http.ResponseWriter, r *http.Request) {
 		q = q.WhereOr("description LIKE " + "'%" + search_value + "%'").
 			WhereOr("id LIKE " + "'%" + search_value + "%'")
 		return q, nil
-	}).Relation("Bugs").Relation("Comments").Select()
+	}).Relation("Bugs").Relation("Comments").Relation("Comments.User").Select()
 
 	if err != nil || len(cves) == 0 {
 		logger.Info.Println("Error finding cves:")

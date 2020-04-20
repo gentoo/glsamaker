@@ -29,7 +29,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	connection.DB.Model(&cves).Order("last_modified_date DESC").Limit(5).Select()
 
 	var comments []*cve.Comment
-	connection.DB.Model(&comments).Order("date DESC").Limit(5).Select()
+	connection.DB.Model(&comments).Relation("User").Order("date DESC").Limit(5).Select()
 
 	requests, _ := connection.DB.Model((*models.Glsa)(nil)).Where("type = ?", "request").Count()
 	drafts, _ := connection.DB.Model((*models.Glsa)(nil)).Where("type = ?", "draft").Count()

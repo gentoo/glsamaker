@@ -73,7 +73,8 @@ type Comment struct {
 	Id        int64 `pg:",pk,unique"`
 	GlsaId    int64
 	CVEId     string
-	User      int64
+	UserId    int64
+	User      *users.User
 	UserBadge users.Badge
 	Type      string
 	Message   string

@@ -82,7 +82,8 @@ func AddNewCommment(id string, user *users.User, comment string, commentType str
 
 	newComment := cve.Comment{
 		GlsaId:    glsaID,
-		User:      user.Id,
+		UserId:    user.Id,
+		User:      user,
 		UserBadge: user.Badge,
 		Type:      commentType,
 		Message:   comment,

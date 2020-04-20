@@ -26,7 +26,8 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		Where("type = ?", "request").
 		Relation("Bugs").
 		Relation("Creator").
-		Relation("Comments")).
+		Relation("Comments").
+		Relation("Comments.User")).
 		Select()
 
 	if err != nil {

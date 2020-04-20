@@ -7,6 +7,7 @@ import (
 	"glsamaker/pkg/logger"
 	"glsamaker/pkg/models/cve"
 	"encoding/json"
+	"glsamaker/pkg/models/users"
 	"net/http"
 	"time"
 )
@@ -23,7 +24,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 
 	id, comment, err := getParams(r)
 
-	newComment, err := addNewCommment(id, user.Id, comment)
+	newComment, err := addNewCommment(id, user, comment)
 
 	if err != nil {
 		logger.Info.Println("Err")
@@ -38,7 +39,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func addNewCommment(id string, userID int64, comment string) (cve.Comment, error) {
+func addNewCommment(id string, user *users.User, comment string) (cve.Comment, error) {
 
 	cveItem := &cve.DefCveItem{Id: id}
 	err := connection.DB.Select(cveItem)
@@ -49,7 +50,8 @@ func addNewCommment(id string, userID int64, comment string) (cve.Comment, error
 
 	newComment := cve.Comment{
 		CVEId:   id,
-		User:    userID,
+		UserId:  user.Id,
+		User:    user,
 		Message: comment,
 		Date:    time.Now(),
 	}

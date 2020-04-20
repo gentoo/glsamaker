@@ -66,7 +66,7 @@ function commentGLSA(glsaid, comment, commentType){
                     '<div class="row">' +
                     '<div class="col-sm-12">' +
                     '<span style="color:#000!important;">' +
-                    '<span class="vcard"><a class="email" href="mailto:' + comment.User + '"> <b class="text-dark">' + comment.User + '</b></a></span>' +
+                    '<span class="vcard"><a class="email" href="mailto:' + comment.User.Email + '"> <b class="text-dark">' + comment.User.Name + '</b></a></span>' +
                     '</span>' +
                     '<span class="ml-2">' +
                     '<span class="badge badge-secondary" title="' + comment.UserBadge.Description + '" style="background: none;border: 1px solid ' + comment.UserBadge.Color + ';">' +

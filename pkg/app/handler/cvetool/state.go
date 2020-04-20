@@ -48,7 +48,7 @@ func ChangeState(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newComment, err := addNewCommment(id, user.Id, "Changed status to "+newState+": "+reason)
+	newComment, err := addNewCommment(id, user, "Changed status to "+newState+": "+reason)
 
 	if err != nil {
 		logger.Error.Println("Err")

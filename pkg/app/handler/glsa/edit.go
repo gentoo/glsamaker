@@ -45,6 +45,7 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		Relation("Bugs").
 		Relation("Creator").
 		Relation("Comments").
+		Relation("Comments.User").
 		WherePK()).
 		Select()
 

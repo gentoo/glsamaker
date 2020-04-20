@@ -679,7 +679,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                 <span style="color:#000!important;">
-                                                  <span class="vcard"><a class="email" href="mailto:max@magorsch.de" title="Max Magorsch <max@magorsch.de>"> <b class="text-dark">{{.User}}</b></a></span>
+                                                  <span class="vcard"><a class="email" href="mailto:{{.User.Email}}" title="{{.User.Name}} <{{.User.Email}}>"> <b class="text-dark">{{.User.Name}}</b></a></span>
                                                 </span>
                                                     <span class="ml-2">
 
@@ -731,6 +731,7 @@
                                 </div>
                                 <textarea name="comment" id="comment" class="form-control comment-textarea" rows="10" cols="60" onfocusout="this.rows=10" onfocus="this.rows=15"></textarea>
                                 <br><div class="knob-buttons">
+                                    <input class="btn btn-outline-primary btn-sm float-right" type="button" value="Add Comment" id="save-new-glsa-comment">
                                     {{if .User.Permissions.Glsa.Approve}}
                                         {{if eq .Glsa.CreatorId .User.Id}}
                                             {{if .User.Permissions.Glsa.ApproveOwnGlsa}}

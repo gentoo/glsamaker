@@ -86,7 +86,7 @@ func (glsa *Glsa) ComputeStatus(user *users.User) {
 		status.WorkflowStatus = "approved"
 	} else {
 		for _, comment := range glsa.Comments {
-			if comment.User == user.Id {
+			if comment.UserId == user.Id {
 				status.WorkflowStatus = "commented"
 				break
 			}
@@ -99,7 +99,7 @@ func (glsa *Glsa) ComputeStatus(user *users.User) {
 func (glsa *Glsa) ComputeCommentBadges() {
 	for _, comment := range glsa.Comments {
 		user := new(users.User)
-		connection.DB.Model(user).Where("id = ?", comment.User).Select()
+		connection.DB.Model(user).Where("id = ?", comment.UserId).Select()
 
 		comment.UserBadge = user.Badge
 	}

@@ -26,7 +26,8 @@ func View(w http.ResponseWriter, r *http.Request) {
 	err := user.CanAccess(connection.DB.Model(glsa).
 		Relation("Bugs").
 		Relation("Creator").
-		Relation("Comments").WherePK()).
+		Relation("Comments").
+		Relation("Comments.User").WherePK()).
 		Select()
 
 	if err != nil {
