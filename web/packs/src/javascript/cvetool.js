@@ -238,7 +238,7 @@ function format ( d ) {
         bugs_cards = '';
 
         JSON.parse(d[3]).forEach(function(bug) {
-            var newBug = '<div class="col-3 text-right mb-3"><b> Bug ' + bug.id + '</b></div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body pt-2"><span class="bug-title" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escapeHtml(bug.summary) + '</span><div class="row"><div class="col-6"><small>Alias: </small><small class="bug-alias" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + bug.alias.join(", ") + '</small><br/><small>Status: </small><small class="bug-status" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escapeHtml(bug.status) + '</small></div><div class="col-6"><small>Whiteboard: </small><small class="bug-whiteboard" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escapeHtml(bug.whiteboard) + '</small><br/><small>Created: </small><small class="bug-created" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escapeHtml(bug.creation_time) + '</small></div></div></div></div></div>';
+            var newBug = '<div class="col-3 text-right mb-3"><b> Bug ' + bug.id + '</b></div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body pt-2"><span class="bug-title" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escape(bug.summary) + '</span><div class="row"><div class="col-6"><small>Alias: </small><small class="bug-alias" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + bug.alias.join(", ") + '</small><br/><small>Status: </small><small class="bug-status" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escape(bug.status) + '</small></div><div class="col-6"><small>Whiteboard: </small><small class="bug-whiteboard" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escape(bug.whiteboard) + '</small><br/><small>Created: </small><small class="bug-created" data-cveid="' + d[0] + '" data-bugid="' + bug.id + '">' + escape(bug.creation_time) + '</small></div></div></div></div></div>';
             bugs_cards = bugs_cards + newBug;
         });
 
@@ -466,7 +466,7 @@ function changeState(cveid, reason, newState){
                 // add comment
                 var comment = JSON.parse(data);
                 var commentDate = '<small class="text-muted">' + comment.Date.split("T")[0] + ' ' + comment.Date.split("T")[1].split(".")[0] + ' UTC</small>';
-                var newComment = '<div class="col-3 text-right mb-3"><b>' + comment.User + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body">' + escapeHtml(comment.Message) + '</div></div></div>';
+                var newComment = '<div class="col-3 text-right mb-3"><b>' + comment.User + '</b><br/>' + commentDate + '</div><div class="col-9 mb-3"><div class="card" style="background: none;"><div class="card-body">' + escape(comment.Message) + '</div></div></div>';
                 $('.comments-section[data-cveid="' + cveid + '"]').append(newComment);
 
             }
@@ -510,33 +510,23 @@ function updateBugInformation(cveid, bugid){
     $.getJSON( BUGZILLA_URL +  "/rest/bug?id=" + bugid, function( data ) {
         console.log(data.bugs[0]);
 
-        console.log(escapeHtml(data.bugs[0].alias.join(", ")));
-        console.log(escapeHtml(data.bugs[0].status));
-        console.log(escapeHtml(data.bugs[0].resolution));
-        console.log(escapeHtml(data.bugs[0].whiteboard));
-        console.log(escapeHtml(data.bugs[0]['creation_time']));
-        console.log(escapeHtml(data.bugs[0]['last_change_time']));
+        console.log(escape(data.bugs[0].alias.join(", ")));
+        console.log(escape(data.bugs[0].status));
+        console.log(escape(data.bugs[0].resolution));
+        console.log(escape(data.bugs[0].whiteboard));
+        console.log(escape(data.bugs[0]['creation_time']));
+        console.log(escape(data.bugs[0]['last_change_time']));
 
-        $('.bug-title[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html(escapeHtml(data.bugs[0].summary));
+        $('.bug-title[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html(escape(data.bugs[0].summary));
 
-        $('.bug-alias[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0].alias.join(", ")) + '</i>');
-        $('.bug-status[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0].status) + '</i>');
-        $('.bug-resolution[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0].resolution) + '</i>');
-        $('.bug-whiteboard[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0].whiteboard) + '</i>');
-        $('.bug-created[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0]['creation_time']) + '</i>');
-        $('.bug-last-update[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escapeHtml(data.bugs[0]['last_change_time']) + '</i>');
+        $('.bug-alias[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0].alias.join(", ")) + '</i>');
+        $('.bug-status[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0].status) + '</i>');
+        $('.bug-resolution[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0].resolution) + '</i>');
+        $('.bug-whiteboard[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0].whiteboard) + '</i>');
+        $('.bug-created[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0]['creation_time']) + '</i>');
+        $('.bug-last-update[data-cveid="' + cveid + '"][data-bugid="' + bugid + '"]').html('<i>' + escape(data.bugs[0]['last_change_time']) + '</i>');
 
     });
-}
-
-
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 }
 
 export default {initDatatable, destroyDatatable}
