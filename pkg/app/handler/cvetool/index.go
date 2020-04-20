@@ -11,6 +11,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-pg/pg/v9/orm"
+	"glsamaker/pkg/models/users"
+	"html"
 	"net/http"
 	"strconv"
 	"strings"
@@ -124,6 +126,18 @@ func CveData(w http.ResponseWriter, r *http.Request) {
 				//referenceList = append(referenceList, "<a href=\"" + reference.Url + "\">" + strings.ToLower(reference.Refsource) + "</a>")
 			}
 			references := strings.Join(referenceList, ", ")
+
+			for k,_ := range cve.Comments {
+				cve.Comments[k].Message = html.EscapeString(cve.Comments[k].Message)
+				cve.Comments[k].User = &users.User{
+					Id:                      cve.Comments[k].User.Id,
+					Email:                   cve.Comments[k].User.Email,
+					Nick:                    cve.Comments[k].User.Nick,
+					Name:                    cve.Comments[k].User.Name,
+					Password:                users.Argon2Parameters{},
+					Badge:                   cve.Comments[k].User.Badge,
+				}
+			}
 
 			comments, _ := json.Marshal(cve.Comments)
 
