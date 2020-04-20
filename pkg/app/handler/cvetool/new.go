@@ -16,7 +16,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 
 	user := utils.GetAuthenticatedUser(r)
 
-	if !user.Permissions.Glsa.View {
+	if !user.Permissions.CVETool.AddCVE {
 		authentication.AccessDenied(w, r)
 		return
 	}

@@ -152,6 +152,7 @@ func EditPermissions(w http.ResponseWriter, r *http.Request) {
 		cveView := getArrayParam("cve-view", r)
 		cveUpdateCVEs := getArrayParam("cve-updateCVEs", r)
 		cveComment := getArrayParam("cve-comment", r)
+		cveAddCVE := getArrayParam("cve-addCVE", r)
 		cveAddPackage := getArrayParam("cve-addPackage", r)
 		cveChangeState := getArrayParam("cve-changeState", r)
 		cveAssignBug := getArrayParam("cve-assignBug", r)
@@ -181,6 +182,7 @@ func EditPermissions(w http.ResponseWriter, r *http.Request) {
 					View:        containsInt(cveView, changedUser.Id),
 					UpdateCVEs:  containsInt(cveUpdateCVEs, changedUser.Id),
 					Comment:     containsInt(cveComment, changedUser.Id),
+					AddCVE:      containsInt(cveAddCVE, changedUser.Id),
 					AddPackage:  containsInt(cveAddPackage, changedUser.Id),
 					ChangeState: containsInt(cveChangeState, changedUser.Id),
 					AssignBug:   containsInt(cveAssignBug, changedUser.Id),

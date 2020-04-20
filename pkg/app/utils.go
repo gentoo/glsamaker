@@ -27,6 +27,7 @@ func defaultAdminPermissions() users.Permissions {
 			View:        true,
 			UpdateCVEs:  true,
 			Comment:     true,
+			AddCVE:      true,
 			AddPackage:  true,
 			ChangeState: true,
 			AssignBug:   true,

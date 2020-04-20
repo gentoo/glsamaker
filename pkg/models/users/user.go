@@ -111,6 +111,7 @@ type CVEToolPermissions struct {
 	View        bool
 	UpdateCVEs  bool
 	Comment     bool
+	AddCVE      bool
 	AddPackage  bool
 	ChangeState bool
 	AssignBug   bool
