@@ -59,6 +59,7 @@ type DefCveItem struct {
 	LastModifiedDate string     `json:"lastModifiedDate,omitempty"`
 	PublishedDate    string     `json:"publishedDate,omitempty"`
 
+	ManuallyCreated bool `json:"-"`
 	Comments []Comment `pg:",fk:cve_id"`
 	Packages []gpackage.Package
 	Bugs     []bugzilla.Bug `pg:"many2many:def_cve_item_to_bugs,joinFK:bug_id"`

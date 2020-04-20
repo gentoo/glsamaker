@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+<body>
+{{template "header" .}}
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+
+            <h2 class="ml-1 mb-4">New CVE </h2>
+
+            <div class="card px-2 mx-1">
+                <div class="card-body">
+
+                    <form action="/cve/new" method="POST">
+
+
+                        <div class="col-sm-12 pr-0">
+                            <span class="badge badge-danger badge-request">New</span>
+                            <span class="badge badge-warning badge-draft" style="display: none;">Draft</span>
+                            &nbsp;<a id="cve_id_label" style="color:#000000;" href="">CVE </a>
+
+                            <span id="summary_container">
+                                    <small style="margin-left:5px;color:#505152;">Created: 2020-04-08 16:05 UTC</small>
+                                </span>
+
+
+                        </div>
+
+                        <div class="col-sm-12">
+                            <h1 style="font-size: 20px;margin-top:10px;margin-bottom:4px;"><span id="short_desc_nonedit_display">
+                                        New Common Vulnerabilities and Exposures Report
+                                    </span></h1>
+                        </div>
+
+
+                        <style>
+                            .advanced-fields {
+                                color: grey;
+                            }
+                        </style>
+
+
+
+                        <div class="row mt-5">
+                            <div class="col-2 text-right">
+                                <b>ID</b><br/>
+                                <small>Please enter the ID of the new CVE here.</small>
+                            </div>
+                            <div class="col-10">
+                                <input placeholder="CVE-YYYY-NNNN" id="id" name="id" type="text" class="form-control" style="display:inline-block;max-width: 200px;background: none;"/>
+                                <i id="bug-spinner" class="fa fa-lg fa-refresh fa-spin ml-3" style="display: none;" aria-hidden="true"></i>
+                                <i id="bug-refresh-ok" class="fa fa-lg fa-check ml-3" style="display: none;color: green;" aria-hidden="true"></i>
+                                <i id="bug-refresh-failed" class="fa fa-lg fa-times ml-3" style="display: none;color: darkred;" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right">
+                                <b>Base Score</b><br/>
+                                <small>You can set a BaseScore for the CVE here</small>
+                            </div>
+                            <div class="col-10">
+                                <input placeholder="optional" id="basescore" name="basescore" type="text" class="form-control" style="display:inline-block;max-width: 200px;background: none;"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right">
+                                <b>Summary</b><br/>
+                                <small>Please summarize the new CVE here</small>
+                            </div>
+                            <div class="col-10">
+                                <textarea id="summary" name="summary" rows="5" class="form-control" style="max-width: 600px;background: none;"></textarea>
+                            </div>
+                        </div>
+
+
+                        <hr class="mt-4"/>
+
+                        <div class="row mt-4">
+                            <div class="col-2 text-right"></div>
+                            <div class="col-10">
+                                <button type="submit" class="btn btn-primary float-right"> Create CVE <i class="fa fa-angle-double-right ml-1" aria-hidden="true"></i></button>
+
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
+
+
+</body>
+</html>

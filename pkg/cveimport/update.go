@@ -82,6 +82,7 @@ func importCVEs(year string) {
 			}
 		}
 		cveitem.Description = description
+		cveitem.ManuallyCreated = false
 
 		_, err := connection.DB.Model(cveitem).OnConflict("(id) DO UPDATE").Insert()
 		if err != nil {

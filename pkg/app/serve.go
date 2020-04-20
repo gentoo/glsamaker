@@ -77,6 +77,7 @@ func Serve() {
 	requireLogin("/new", newRequest.Show)
 
 	requireLogin("/cve/update", cvetool.Update)
+	requireLogin("/cve/new", cvetool.New)
 	requireLogin("/cve/tool", cvetool.Show)
 	requireLogin("/cve/tool/fullscreen", cvetool.ShowFullscreen)
 	requireLogin("/cve/data", cvetool.CveData)

@@ -31,6 +31,17 @@ func renderIndexFullscreenTemplate(w http.ResponseWriter, user *users.User) {
 	templates.ExecuteTemplate(w, "showFullscreen.tmpl", createPageData("cvetool", user))
 }
 
+// renderIndexTemplate renders all templates used for the landing page
+func renderNewCVETemplate(w http.ResponseWriter, user *users.User) {
+	templates := template.Must(
+		template.Must(
+			template.New("Show").
+				ParseGlob("web/templates/layout/*.tmpl")).
+			ParseGlob("web/templates/index/new.tmpl"))
+
+	templates.ExecuteTemplate(w, "new.tmpl", createPageData("cvetool", user))
+}
+
 // createPageData creates the data used in the template of the landing page
 func createPageData(page string, user *users.User) interface{} {
 	return struct {

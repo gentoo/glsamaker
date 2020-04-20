@@ -89,6 +89,13 @@ function initDatatable(){
                         }
                     },
                     {
+                        text: 'New',
+                        className: 'btn-sm btn-outline-secondary float-left colvis-btn new-btn',
+                        action: function ( e, dt, node, config ) {
+                            Turbolinks.visit("/cve/new");
+                        }
+                    },
+                    {
                         text: 'State',
                         className: 'btn-sm btn-outline-secondary float-left colvis-btn mr-2 dropdown-toggle view-filter-state'
                     }
@@ -105,9 +112,12 @@ function initDatatable(){
 
 
                     $('#table_id_filter').prepend( '<div id="filterByStateDropdown" class="dropdown"> <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> <button id="filterByStateNew" class="dropdown-item"><span class="badge badge-danger state">New</span></button> <button id="filterByStateAssigned" class="dropdown-item"><span class="badge badge-success state">Assigned</span></button> <button id="filterByStateNFU" class="dropdown-item"><span class="badge badge-info state">NFU</span></button> <button id="filterByStateLater" class="dropdown-item"><span class="badge badge-warning state">Later</span></button> <button id="filterByStateInvalid" class="dropdown-item"><span class="badge badge-dark state">Invalid</span></button> <div class="dropdown-divider"></div> <button id="filterByStateAll" class="dropdown-item">All</button> </div> </div>' );
-                    $('#table_id_filter').prepend( "<span class='m-1 float-left'> Filter by </span>" );
+                    $('#table_id_filter').prepend( "<span class='m-1 ml-5 float-left'> Filter by </span>" );
                     $('.view-filter-state').prependTo( $('#filterByStateDropdown') );
                     document.querySelector(".view-filter-state").setAttribute('data-toggle', 'dropdown');
+
+                    $('#table_id_filter').prepend( $('.new-btn') );
+                    $('#table_id_filter').prepend( "<span class='m-1 float-left'> Create </span>" );
 
                     $("#filterByStateNew").on('click', function () {
                         $('.view-filter-state').text("New");
