@@ -10,6 +10,7 @@ import (
 	"glsamaker/pkg/models/users"
 	"encoding/json"
 	"errors"
+	"html"
 	"net/http"
 	"strconv"
 	"time"
@@ -39,6 +40,15 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		logger.Info.Println(err)
 		w.Write([]byte("err"))
 		return
+	}
+
+	newComment.Message = html.EscapeString(newComment.Message)
+	newComment.User = &users.User{
+		Id:                      newComment.User.Id,
+		Email:                   newComment.User.Email,
+		Nick:                    newComment.User.Nick,
+		Name:                    newComment.User.Name,
+		Badge:                   newComment.User.Badge,
 	}
 
 	newCommentString, _ := json.Marshal(newComment)
