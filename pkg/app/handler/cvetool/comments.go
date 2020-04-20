@@ -26,7 +26,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 
 	newComment, err := addNewCommment(id, user, comment)
 
-	if err != nil {
+	if err != nil || comment == "" {
 		logger.Info.Println("Err")
 		logger.Info.Println(err)
 		w.Write([]byte("err"))

@@ -26,16 +26,11 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !user.CanEditCVEs() {
-		w.Write([]byte("err"))
-		return
-	}
-
 	id, comment, commentType, err := getParams(r)
 
 	newComment, err := AddNewCommment(id, user, comment, commentType)
 
-	if err != nil {
+	if err != nil || comment == "" {
 		logger.Info.Println("Err")
 		logger.Info.Println(err)
 		w.Write([]byte("err"))

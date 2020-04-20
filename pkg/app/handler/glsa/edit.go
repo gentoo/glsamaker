@@ -9,6 +9,7 @@ import (
 	"glsamaker/pkg/models/bugzilla"
 	"glsamaker/pkg/models/gpackage"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -179,6 +180,10 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 
 	currentGlsa.ComputeStatus(user)
 	currentGlsa.ComputeCommentBadges()
+
+	// sort the comments by creation date
+	sort.Slice(currentGlsa.Comments, func(p, q int) bool {
+		return currentGlsa.Comments[p].Date.Before(currentGlsa.Comments[q].Date) })
 
 	glsaCount, err := connection.DB.Model((*models.Glsa)(nil)).Count()
 

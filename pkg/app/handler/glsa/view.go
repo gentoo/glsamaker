@@ -6,6 +6,7 @@ import (
 	"glsamaker/pkg/database/connection"
 	"glsamaker/pkg/models"
 	"net/http"
+	"sort"
 	"strconv"
 )
 
@@ -42,6 +43,10 @@ func View(w http.ResponseWriter, r *http.Request) {
 
 	glsa.ComputeStatus(user)
 	glsa.ComputeCommentBadges()
+
+	// sort the comments by creation date
+	sort.Slice(glsa.Comments, func(p, q int) bool {
+		return glsa.Comments[p].Date.Before(glsa.Comments[q].Date) })
 
 	glsaCount, err := connection.DB.Model((*models.Glsa)(nil)).Count()
 

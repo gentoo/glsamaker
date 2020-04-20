@@ -20,12 +20,6 @@ func ChangeState(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !user.CanEditCVEs() {
-		logger.Error.Println("Err, user can not edit.")
-		w.Write([]byte("err"))
-		return
-	}
-
 	id, newState, reason, err := getStateParams(r)
 
 	cveItem := &cve.DefCveItem{Id: id}
