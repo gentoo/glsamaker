@@ -8,6 +8,7 @@ import (
 	"glsamaker/pkg/models/cve"
 	"encoding/json"
 	"glsamaker/pkg/models/users"
+	"html"
 	"net/http"
 	"time"
 )
@@ -52,7 +53,7 @@ func addNewCommment(id string, user *users.User, comment string) (cve.Comment, e
 		CVEId:   id,
 		UserId:  user.Id,
 		User:    user,
-		Message: comment,
+		Message: html.EscapeString(comment),
 		Date:    time.Now(),
 	}
 

@@ -91,7 +91,7 @@ func AddNewCommment(id string, user *users.User, comment string, commentType str
 		User:      user,
 		UserBadge: user.Badge,
 		Type:      commentType,
-		Message:   comment,
+		Message:   html.EscapeString(comment),
 		Date:      time.Now(),
 	}
 
