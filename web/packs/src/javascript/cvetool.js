@@ -415,34 +415,22 @@ function registerChangeStateListener(){
     $( ".change-state-nfu" ).click(function() {
         var cveid = $(this).data( "cveid" );
         var reason = $('.change-state-reason[data-cveid="' + cveid + '"]').val();
-        if(reason != "") {
-            changeState(cveid, reason, "NFU");
-            $("#collapseExample-" + cveid).removeClass('show');
-        }else{
-            $('.change-state-reason[data-cveid="' + cveid + '"]').addClass('is-invalid');
-        }
+        changeState(cveid, reason, "NFU");
+        $("#collapseExample-" + cveid).removeClass('show');
     });
 
     $( ".change-state-invalid" ).click(function() {
         var cveid = $(this).data( "cveid" );
         var reason = $('.change-state-reason[data-cveid="' + cveid + '"]').val();
-        if(reason != "") {
-            changeState(cveid, reason, "Invalid");
-            $("#collapseExample-" + cveid).removeClass('show');
-        }else{
-            $('.change-state-reason[data-cveid="' + cveid + '"]').addClass('is-invalid');
-        }
+        changeState(cveid, reason, "Invalid");
+        $("#collapseExample-" + cveid).removeClass('show');
     });
 
     $( ".change-state-later" ).click(function() {
         var cveid = $(this).data( "cveid" );
         var reason = $('.change-state-reason[data-cveid="' + cveid + '"]').val();
-        if(reason != ""){
-            changeState(cveid, reason, "Later");
-            $("#collapseExample-" + cveid).removeClass('show');
-        }else{
-            $('.change-state-reason[data-cveid="' + cveid + '"]').addClass('is-invalid');
-        }
+        changeState(cveid, reason, "Later");
+        $("#collapseExample-" + cveid).removeClass('show');
     });
 }
 
