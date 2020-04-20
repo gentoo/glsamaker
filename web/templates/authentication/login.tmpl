@@ -41,10 +41,12 @@
                                         <label for="password" class="d-none">Password:</label>
                                         <input style="border-top: none;border-left: none; border-right: none; border-radius: 0px;" type="password" size="35" id="password" name="password" placeholder="Password" class="form-control" required="">
                                     </div>
-                                    <div class="col-12" style="padding-bottom:20px!important;padding-left:50px!important;padding-right:50px!important;">
-                                        <input type="checkbox" id="restrictlogin" name="restrictlogin" checked="checked">
-                                        <small class="text-muted">Restrict this session to this IP address
-                                            (using this option improves security)</small>
+                                    <div class="col-12 n-f" style="padding-bottom:20px!important;padding-left:50px!important;padding-right:50px!important;">
+                                        <label for="restrictlogin">
+                                            <input type="checkbox" id="restrictlogin" name="restrictlogin" checked="checked" />
+                                            <small class="text-muted">Restrict this session to this IP address
+                                                    (using this option improves security)</small>
+                                        </label>
                                     </div>
                                     <div class="col-12">
                                         <input style="display: none;" name="cameFrom" id="cameFrom" value="{{ .CameFrom }}" />
