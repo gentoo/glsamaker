@@ -14,6 +14,7 @@ import (
 	"glsamaker/pkg/models/users"
 	"html"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -138,6 +139,10 @@ func CveData(w http.ResponseWriter, r *http.Request) {
 					Badge:                   cve.Comments[k].User.Badge,
 				}
 			}
+
+			// sort the comments by creation date
+			sort.Slice(cve.Comments, func(p, q int) bool {
+				return cve.Comments[p].Date.Before(cve.Comments[q].Date) })
 
 			comments, _ := json.Marshal(cve.Comments)
 
