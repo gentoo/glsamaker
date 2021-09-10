@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  http:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    volumes:
+      - /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${GLSAMAKER_POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${GLSAMAKER_POSTGRES_PASS:-root}
