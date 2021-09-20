@@ -2,9 +2,10 @@
 <%= fields_for "glsa[reference][]", reference do |rf| %>
   <td><%= rf.text_field :title, :class => :nice, :size => 18, :index => nil %></td>
   <td><%= rf.text_field :url, :class => :nice, :index => nil %></td>
-  <td><%= link_to_function(
+  <td><%= link_to(
               image_tag('icons/reference-remove.png', :alt => 'Remove reference'),
-              "GLSAMaker.editing.references.del(this)",
+              nil,
+              :onclick => "GLSAMaker.editing.references.del(this)",
               :title => 'Remove reference') %></td>
 <% end %>
 </tr>

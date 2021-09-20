@@ -19,7 +19,7 @@
   <% end %>
   <!--<td>
     <% if glsa.last_revision; glsa.last_revision.bugs.each do |b| %>
-      <%= link_to_function b.bug_id, "buginfo('#{b.bug_id}')" %>
+      <%= link_to b.bug_id, nil, :onclick => "buginfo('#{b.bug_id}')" %>
     <% end ; end %>
   </td>-->
   <% if current_user.is_el_jefe? %>

@@ -7,9 +7,10 @@
   <td class="odd"><%= pf.text_field :slot, :class => :nice, :size => 5, :index => nil %></td>
   <td><%= pf.text_field :arch, :class => :nice, :size => 7, :index => nil %></td>
   <td class="odd"><%= pf.select :automatic, [["yes", true], ["no", false]], {}, :index => nil %></td>
-  <td><%= link_to_function(
-              image_tag('icons/package-remove.png', :alt => 'Remove package'), 
-	      "GLSAMaker.editing.packages.del(this)",
+  <td><%= link_to(
+              image_tag('icons/package-remove.png', :alt => 'Remove package'),
+							nil,
+				:onclick => "GLSAMaker.editing.packages.del(this)",
 	      :title => 'Remove package') %>
 			<%= pf.hidden_field :my_type, :index => nil %></td>
 <% end %>

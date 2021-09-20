@@ -21,21 +21,23 @@ module GlsaHelper
   end
   
   def add_vulnerable_package_link(name)
-    link_to_function(
+    link_to(
         name,
-        "Element.insert('packages_table_vulnerable', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => "<", :slot => "*", :arch => "*", :my_type => "vulnerable")))}' })",
+        nil,
+        :onclick => "Element.insert('packages_table_vulnerable', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => "<", :slot => "*", :arch => "*", :my_type => "vulnerable")))}' })",
         :title => 'Add package')
   end
 
   def add_unaffected_package_link(name)
-    link_to_function(
+    link_to(
         name,
-        "Element.insert('packages_table_unaffected', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => ">=", :slot => "*", :arch => "*", :my_type => "unaffected")))}' })",
+        nil,
+        :onclick => "Element.insert('packages_table_unaffected', { bottom: '#{escape_javascript(render(:partial => '/glsa/package', :object =>  Package.new(:comp => ">=", :slot => "*", :arch => "*", :my_type => "unaffected")))}' })",
         :title => 'Add package')
   end
   
   def add_reference_link(name)
-    link_to_function name, :title => "Add reference" do |page|
+    link_to name, nil, :title => "Add reference" do |page|
       page.insert_html :bottom, :references_table, :partial => 'reference', :object => Reference.new
     end
   end

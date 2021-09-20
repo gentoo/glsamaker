@@ -120,9 +120,10 @@ module ApplicationHelper
           span_content << image_tag('separator.png')
         else
           if toolbar_item[:uri].start_with? 'javascript:'
-            span_content << link_to_function(
+            span_content << link_to(
                 image_tag(toolbar_item[:icon]),
-                toolbar_item[:uri].gsub(/^javascript:/, ''),
+                nil,
+                :onclick => toolbar_item[:uri].gsub(/^javascript:/, ''),
                 :title => toolbar_item[:title]
             ) << ' '
           else

@@ -5,9 +5,10 @@
     <a href="javascript:///" onclick="buginfo(<%= bug.bug_id %>);"><strong><%= bug.bug_id %></strong></a> <small><a href="<%= bug.bug_url %>">[BZ]</a></small></td>
   <td><%= truncate(bug.title, :length => 60) %></td>
   <td>
-    <%= link_to_function(
+    <%= link_to(
       image_tag('icons/minus.png', :alt => 'Mark as deleted'),
-      "GLSAMaker.editing.bugs.del(#{bug.bug_id});"
+      nil,
+      :onclick => "GLSAMaker.editing.bugs.del(#{bug.bug_id});"
     ) %>
   </td>
 </tr>

@@ -1,5 +1,5 @@
 <tr>
-  <td class="nowrap"><%= link_to_function cve.colorize(:cve_id).html_safe, "cvepopup('#{cve.cve_id}')" %></td>
+  <td class="nowrap"><%= link_to cve.colorize(:cve_id).html_safe, nil, :onclick => "cvepopup('#{cve.cve_id}')" %></td>
   <td><%= cve.state %></td>
   <td><%= sanitize(cve.excerpts.summary, :tags => %w[span], :attributes => %w[class]) %></td>
   <td><%= cve.cvss %></td>

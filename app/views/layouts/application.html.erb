@@ -70,7 +70,7 @@
 
   <%- if flash[:notice] or flash[:error] -%>
   <div id="flash" class="<%= flash[:error] ? "error" : "notice" %>">
-    <%= link_to_function(image_tag('icons/close.png'), {:style => 'float: right;', :alt => 'Hide the notification'}) do |page|
+    <%= link_to(image_tag('icons/close.png'), nil, :style => 'float: right;', :alt => 'Hide the notification') do |page|
       page[:flash].drop_out
     end %>
     <%- if flash[:error] -%>
