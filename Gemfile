@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2'
+#gem 'rails', '~> 4.2'
 gem 'xmlrpc'
 gem 'rake'
 
@@ -17,7 +17,7 @@ gem 'jbuilder', '~> 2.0'
 #  gem 'uglifier'
 #end
 
-gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
+# gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
 
 # Use unicorn as the web server
 #gem 'unicorn'
