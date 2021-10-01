@@ -1,6 +1,6 @@
 FROM python:3.9-bullseye
 
-RUN pip install flask flask-login wtforms
+RUN pip install flask flask_login flask_wtf flask_sqlalchemy wtforms sqlalchemy psycopg2 py-bcrypt
 
 WORKDIR /var/lib/glsamaker
 
