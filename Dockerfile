@@ -1,10 +1,10 @@
 FROM python:3.9-bullseye
 
-RUN pip install flask flask_login flask_wtf flask_sqlalchemy wtforms sqlalchemy psycopg2 bcrypt
-
 WORKDIR /var/lib/glsamaker
 
 COPY . /var/lib/glsamaker
+
+RUN pip install .
 
 EXPOSE 8080
 
