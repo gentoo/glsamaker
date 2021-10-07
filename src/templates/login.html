@@ -1,10 +1,13 @@
 {% extends "template.html" %}
 {% block body %}
 <h1>Login</h1>
-<form action="", method="post">
+{% if error %}
+<p>Invalid user or password</p>
+{% endif %}
+<form method="post">
     {{ form.hidden_tag() }}
     <p>{{ form.username.label }}<br>
-    {{ form.username(size=32) }}<br>
+    {{ form.username() }}<br>
     </p>
     <p>{{ form.password.label }}<br>
     {{ form.password() }}<br>

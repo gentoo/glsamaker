@@ -54,10 +54,12 @@ def login():
                               user.password.encode('utf-8')):
                 login_user(user)
                 return redirect('/')
-            else:
-                app.logger.info("bad password for {}".format(username))
+            app.logger.info(
+                "Login attempt for '{}' with bad password".format(username))
+            return render_template('login.html', form=form, error=True)
         else:
-            app.logger.info("user unrecognized")
+            app.logger.info(
+                "Login attempt from unknown user '{}'".format(form.user))
     return render_template('login.html', form=form)
 
 
