@@ -8,7 +8,8 @@ services:
     ports:
       - 127.0.0.1:8080:8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: postgres:13
     volumes:
