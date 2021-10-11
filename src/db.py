@@ -1,4 +1,3 @@
-import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
@@ -24,7 +23,15 @@ class Database:
         with self.app.app_context():
             db.create_all()
 
-    def create_user(self, nick, password_hash):
+    def add_model(self, model):
         with self.app.app_context():
-            db.session.add(User(nick=nick, password=password_hash))
+            db.session.add(model)
             db.session.commit()
+
+    def update_glsa(self, table, model):
+        with self.app.app_context():
+            db.session.merge(model)
+            db.session.commit()
+
+    def create_user(self, nick, password_hash):
+        self.add_model(User(nick=nick, password=password_hash))
