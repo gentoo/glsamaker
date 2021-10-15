@@ -3,8 +3,9 @@ import os
 from logging.config import dictConfig
 
 import bcrypt
-from flask import redirect, render_template, Flask
-from flask_login import current_user, login_user, login_required, LoginManager, UserMixin
+from flask import redirect, render_template, request, Flask
+from flask_login import current_user, login_user, login_required
+from flask_login import LoginManager, UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
@@ -42,6 +43,16 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(id=user_id).first()
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect('/login')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -52,28 +63,24 @@ def login():
         if user:
             if bcrypt.checkpw(password.encode('utf-8'),
                               user.password.encode('utf-8')):
+                # Success, so login user and redirect to homepage
                 login_user(user)
+                app.logger.info("Successful login for '{}'".format(username))
                 return redirect('/')
+            # Otherwise, return a generic error message to the user,
+            # but log exactly what happened
             app.logger.info(
                 "Login attempt for '{}' with bad password".format(username))
-            return render_template('login.html', form=form, error=True)
         else:
             app.logger.info(
-                "Login attempt from unknown user '{}'".format(form.user))
+                "Login attempt from unknown user '{}'".format(username))
+
+    if request.method == 'POST':
+        return render_template('login.html', form=form, error=True)
     return render_template('login.html', form=form)
 
 
 @app.route('/')
 @login_required
-def hello():
+def home():
     return "Hello World, {}!!\n".format(current_user.nick)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter_by(id=user_id).first()
-
-
-@login_manager.unauthorized_handler
-def unauthorized():
-    return redirect('/login')
