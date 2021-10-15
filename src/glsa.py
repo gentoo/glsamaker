@@ -45,6 +45,7 @@ class GLSA(db.Model):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
+    # TODO: references
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     requested_time = db.Column(db.DateTime())
     submitted_time = db.Column(db.DateTime())
