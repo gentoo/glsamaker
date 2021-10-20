@@ -14,4 +14,4 @@ COPY . /var/lib/glsamaker
 
 EXPOSE 8080
 
-CMD /var/lib/glsamaker/src/run.py
+CMD /var/lib/glsamaker/src/glsamaker.py
