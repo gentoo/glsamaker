@@ -1,5 +1,5 @@
 from app import db
-from user import User
+from models.user import User
 
 class GLSA(db.Model):
     __tablename__ = 'glsas'

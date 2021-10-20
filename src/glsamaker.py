@@ -4,9 +4,9 @@ from datetime import datetime
 import os
 from xml.etree import ElementTree
 
-import website
 from app import app, db
-from glsa import GLSA
+from models.glsa import GLSA
+import views
 
 def get_xml_text(xml_root, match):
     tags = xml_root.findall(match)

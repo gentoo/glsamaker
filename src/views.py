@@ -11,8 +11,8 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
 from app import app
-from glsa import GLSA
-from user import User
+from models.glsa import GLSA
+from models.user import User
 
 dictConfig({
     'version': 1,
