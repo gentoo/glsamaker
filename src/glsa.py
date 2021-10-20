@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-
-from db import User, db
-
+from app import db
+from user import User
 
 class GLSA(db.Model):
     __tablename__ = 'glsas'
@@ -47,5 +45,6 @@ class GLSA(db.Model):
     resolution = db.Column(db.String())
     # TODO: references
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
+    submitter = db.Column(db.Integer, db.ForeignKey(User.id))
     requested_time = db.Column(db.DateTime())
     submitted_time = db.Column(db.DateTime())

@@ -4,10 +4,9 @@ from datetime import datetime
 import os
 from xml.etree import ElementTree
 
-from db import Database
+import website
+from app import app, db
 from glsa import GLSA
-from website import app
-
 
 def get_xml_text(xml_root, match):
     tags = xml_root.findall(match)
@@ -64,18 +63,19 @@ def xml_to_glsa(xml):
     return glsa
 
 
-def populate_glsa_db(db):
+def populate_glsa_db():
     glsa_xmls = [f for f in os.listdir('glsa')
                  if f.endswith('.xml')]
     for xml in glsa_xmls:
         app.logger.info("Ingesting {}".format(xml))
         with open(os.path.join('glsa', xml), 'r') as xml:
             glsa = xml_to_glsa(xml)
-            db.update_glsa(GLSA, glsa)
+            db.session.merge(glsa)
+            db.session.commit()
     app.logger.info("Finished populating GLSA table")
 
 
 if __name__ == "__main__":
-    db = Database(app)
-    populate_glsa_db(db)
+    db.create_all()
+    populate_glsa_db()
     app.run(host='0.0.0.0', port=8080)

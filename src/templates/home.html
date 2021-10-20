@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+{% block body %}
+<table>
+	<tr>
+		<th>GLSA ID</th>
+		<th>Title</th>
+		<th>Submitted At</th>
+		<th>Submitted By</th>
+	</tr>
+{% for glsa in glsas %}
+	<tr>
+		<td>{{ glsa.id }}</td>
+		<td>{{ glsa.title }}</td>
+		<td>{{ glsa.submitted_time }}</td>
+		<td>{{ glsa.requestor }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}

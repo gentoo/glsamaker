@@ -10,7 +10,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
-from db import User
+from app import app
+from glsa import GLSA
+from user import User
 
 dictConfig({
     'version': 1,
@@ -27,11 +29,6 @@ dictConfig({
         'handlers': ['wsgi']
     }
 })
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(32)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://root:root@db/postgres"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -83,4 +80,5 @@ def login():
 @app.route('/')
 @login_required
 def home():
-    return "Hello World, {}!!\n".format(current_user.nick)
+    glsas = GLSA.query.order_by(GLSA.id).all()
+    return render_template('home.html', glsas=glsas)
