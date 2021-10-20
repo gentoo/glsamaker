@@ -14,3 +14,14 @@ class User(UserMixin, db.Model):
     def __init__(self, nick, password):
         self.nick = nick
         self.password = password
+
+
+def nick_to_uid(nick):
+    user = User.query.filter(User.nick == nick).first()
+    if user:
+        return user.id
+    return None
+
+
+def create_user(nick, password=None):
+    db.session.merge(User(nick, password))

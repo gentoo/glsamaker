@@ -6,7 +6,9 @@ from xml.etree import ElementTree
 
 from app import app, db
 from models.glsa import GLSA
+from models.user import User, nick_to_uid, create_user
 import views
+
 
 def get_xml_text(xml_root, match):
     tags = xml_root.findall(match)
@@ -50,6 +52,17 @@ def xml_to_glsa(xml):
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
     glsa.resolution = get_xml_text(root, 'resolution')
+    requester = get_xml_text(root, './/metadata[@tag="requester"]')
+    submitter = get_xml_text(root, './/metadata[@tag="submitter"]')
+
+    if not User.query.filter(User.nick == requester).first():
+        create_user(requester)
+
+    if not User.query.filter(User.nick == submitter).first():
+        create_user(submitter)
+
+    glsa.requester = nick_to_uid(requester)
+    glsa.submitter = nick_to_uid(submitter)
 
     # Handle these conditionally because not all GLSAs have these fields
     requested_tag = get_xml_attrib(root, './/metadata[@tag="requester"]')
@@ -76,7 +89,7 @@ def populate_glsa_db():
             with open(os.path.join('glsa', xml), 'r') as xml:
                 glsa = xml_to_glsa(xml)
                 db.session.merge(glsa)
-                db.session.commit()
+    db.session.commit()
     app.logger.info("Finished populating GLSA table")
 
 
