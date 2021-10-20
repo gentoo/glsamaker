@@ -67,11 +67,16 @@ def populate_glsa_db():
     glsa_xmls = [f for f in os.listdir('glsa')
                  if f.endswith('.xml')]
     for xml in glsa_xmls:
-        app.logger.info("Ingesting {}".format(xml))
-        with open(os.path.join('glsa', xml), 'r') as xml:
-            glsa = xml_to_glsa(xml)
-            db.session.merge(glsa)
-            db.session.commit()
+        # The GLSA IDs in the database are formatted like
+        # yyyymm-xx, so we need to transform the filename into this
+        # format before checking the db for its existence
+        glsa = os.path.splitext(xml)[0].replace('glsa-', '')
+        if not GLSA.query.filter(GLSA.id == glsa).first():
+            app.logger.info("Ingesting {}".format(xml))
+            with open(os.path.join('glsa', xml), 'r') as xml:
+                glsa = xml_to_glsa(xml)
+                db.session.merge(glsa)
+                db.session.commit()
     app.logger.info("Finished populating GLSA table")
 
 
