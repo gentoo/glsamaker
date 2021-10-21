@@ -1,10 +1,19 @@
 from app import db
 from models.user import User
+from models.bug import Bug
+
+
+glsa_to_bug = db.Table('glsa_to_bug',
+                       db.Column('glsa_id', db.String(),
+                                 db.ForeignKey('glsa.glsa_id')),
+                       db.Column('bug_id', db.String(),
+                                 db.ForeignKey('bug.bug_id')))
+
 
 class GLSA(db.Model):
     __tablename__ = 'glsa'
 
-    id = db.Column(db.String(), primary_key=True)
+    glsa_id = db.Column(db.String(), primary_key=True)
     title = db.Column(db.String())
     synopsis = db.Column(db.String())
     product_type = db.Column(db.Enum('ebuild', 'infrastructure',
@@ -13,7 +22,7 @@ class GLSA(db.Model):
     announced = db.Column(db.String())
     revision_count = db.Column(db.Integer())
     revised_date = db.Column(db.Date())
-    # TODO: bugs
+    bugs = db.relationship("Bug", secondary=glsa_to_bug)
     # TODO: lots of variation here, we should cleanup eventually
     access = db.Column(db.Enum('unknown', 'local', 'remote',
                                'local, remote',

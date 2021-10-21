@@ -5,6 +5,7 @@ import os
 from xml.etree import ElementTree
 
 from app import app, db
+from models.bug import Bug
 from models.glsa import GLSA
 from models.user import User, nick_to_uid, create_user
 import views
@@ -37,7 +38,7 @@ def get_xml_attrib(xml_root, match):
 def xml_to_glsa(xml):
     root = ElementTree.parse(xml).getroot()
     glsa = GLSA()
-    glsa.id = root.attrib['id']
+    glsa.glsa_id = root.attrib['id']
     glsa.title = get_xml_text(root, 'title')
     glsa.synopsis = get_xml_text(root, 'synopsis')
     glsa.product_type = get_xml_attrib(root, 'product')['type'].strip()
@@ -45,6 +46,10 @@ def xml_to_glsa(xml):
     glsa.announced = datetime.fromisoformat(get_xml_text(root, 'announced'))
     glsa.revision_count = get_xml_attrib(root, 'revised')['count']
     glsa.revised_date = datetime.fromisoformat(get_xml_text(root, 'revised'))
+
+    for bug in root.findall('bug'):
+        glsa.bugs.append(Bug(bug.text))
+
     glsa.access = get_xml_text(root, 'access')
     glsa.background = get_xml_text(root, 'background')
     glsa.description = get_xml_text(root, 'description')
@@ -79,13 +84,14 @@ def xml_to_glsa(xml):
 def populate_glsa_db():
     glsa_xmls = [f for f in os.listdir('glsa')
                  if f.endswith('.xml')]
+    app.logger.info("Checking for new GLSAs")
     for xml in glsa_xmls:
         # The GLSA IDs in the database are formatted like
         # yyyymm-xx, so we need to transform the filename into this
         # format before checking the db for its existence
         glsa = os.path.splitext(xml)[0].replace('glsa-', '')
-        if not GLSA.query.filter(GLSA.id == glsa).first():
-            app.logger.info("Ingesting {}".format(xml))
+        if not GLSA.query.filter(GLSA.glsa_id == glsa).first():
+            app.logger.debug("Ingesting {}".format(xml))
             with open(os.path.join('glsa', xml), 'r') as xml:
                 glsa = xml_to_glsa(xml)
                 db.session.merge(glsa)
