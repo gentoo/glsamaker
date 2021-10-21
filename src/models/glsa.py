@@ -2,7 +2,7 @@ from app import db
 from models.user import User
 
 class GLSA(db.Model):
-    __tablename__ = 'glsas'
+    __tablename__ = 'glsa'
 
     id = db.Column(db.String(), primary_key=True)
     title = db.Column(db.String())
