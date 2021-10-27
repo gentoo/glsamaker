@@ -1,11 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-from app import db
+from app import app, db
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     nick = db.Column(db.String())
@@ -24,4 +24,5 @@ def nick_to_uid(nick):
 
 
 def create_user(nick, password=None):
+    app.logger.info("Creating user {}".format(nick))
     db.session.merge(User(nick, password))

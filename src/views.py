@@ -80,5 +80,5 @@ def login():
 @app.route('/')
 @login_required
 def home():
-    glsas = GLSA.query.order_by(GLSA.id).all()
+    glsas = GLSA.query.order_by(GLSA.glsa_id).all()
     return render_template('home.html', glsas=glsas)
