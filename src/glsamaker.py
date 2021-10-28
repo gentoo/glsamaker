@@ -7,6 +7,7 @@ from xml.etree import ElementTree
 from app import app, db
 from models.bug import Bug
 from models.glsa import GLSA
+from models.reference import Reference
 from models.user import User, nick_to_uid, create_user
 import views
 
@@ -57,6 +58,10 @@ def xml_to_glsa(xml):
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
     glsa.resolution = get_xml_text(root, 'resolution')
+
+    for uri in root.find('references'):
+        glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))
+
     requester = get_xml_text(root, './/metadata[@tag="requester"]')
     submitter = get_xml_text(root, './/metadata[@tag="submitter"]')
 

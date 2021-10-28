@@ -1,6 +1,7 @@
 from app import db
-from models.user import User
 from models.bug import Bug
+from models.reference import Reference
+from models.user import User
 
 
 glsa_to_bug = db.Table('glsa_to_bug',
@@ -8,6 +9,12 @@ glsa_to_bug = db.Table('glsa_to_bug',
                                  db.ForeignKey('glsa.glsa_id')),
                        db.Column('bug_id', db.String(),
                                  db.ForeignKey('bug.bug_id')))
+
+glsa_to_ref = db.Table('glsa_to_ref',
+                       db.Column('glsa_id', db.String(),
+                                 db.ForeignKey('glsa.glsa_id')),
+                       db.Column('ref_text', db.String(),
+                                 db.ForeignKey('reference.ref_text')))
 
 
 class GLSA(db.Model):
@@ -52,7 +59,7 @@ class GLSA(db.Model):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
-    # TODO: references
+    references = db.relationship("Reference", secondary=glsa_to_ref)
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     submitter = db.Column(db.Integer, db.ForeignKey(User.id))
     requested_time = db.Column(db.DateTime())
