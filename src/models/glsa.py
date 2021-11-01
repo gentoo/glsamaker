@@ -2,6 +2,7 @@ from app import db
 from models.bug import Bug
 from models.reference import Reference
 from models.user import User
+from models.package import Package
 
 
 glsa_to_bug = db.Table('glsa_to_bug',
@@ -15,6 +16,13 @@ glsa_to_ref = db.Table('glsa_to_ref',
                                  db.ForeignKey('glsa.glsa_id')),
                        db.Column('ref_text', db.String(),
                                  db.ForeignKey('reference.ref_text')))
+
+glsa_to_affected = db.Table('glsa_to_affected',
+                            db.Column('glsa_id', db.String(),
+                                      db.ForeignKey('glsa.glsa_id')),
+                            db.Column('affected_id', db.Integer(),
+                                      db.ForeignKey('affected.affected_id')))
+
 
 
 class GLSA(db.Model):
@@ -50,7 +58,7 @@ class GLSA(db.Model):
                                # glsa-200312-01
                                '',
                                name='access_types'))
-    # TODO: affected
+    affected = db.relationship("Affected", secondary=glsa_to_affected)
     background = db.Column(db.String())
     description = db.Column(db.String())
     impact_type = db.Column(db.Enum('minimal', 'low', 'medium',

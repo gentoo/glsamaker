@@ -7,8 +7,12 @@ from xml.etree import ElementTree
 from app import app, db
 from models.bug import Bug
 from models.glsa import GLSA
+from models.package import Affected, Package
 from models.reference import Reference
 from models.user import User, nick_to_uid, create_user
+
+# This "unused" import is necessary so the logging is send to stdout
+# as specified in views.py
 import views
 
 
@@ -52,6 +56,20 @@ def xml_to_glsa(xml):
         glsa.bugs.append(Bug(bug.text))
 
     glsa.access = get_xml_text(root, 'access')
+
+    for package in root.find('affected').findall('package'):
+        pkg = package.attrib['name']
+        Package.maybe_add_pkg(pkg)
+        arch = package.attrib['arch']
+        for tag in package:
+            atom_range = tag.attrib['range']
+            range_type = tag.tag
+            slot = None
+            if 'slot' in tag.attrib:
+                slot = tag.attrib['slot']
+            glsa.affected.append(Affected(pkg, atom_range, arch,
+                                          slot, range_type))
+
     glsa.background = get_xml_text(root, 'background')
     glsa.description = get_xml_text(root, 'description')
     glsa.impact_type = get_xml_attrib(root, 'impact')['type'].strip()
