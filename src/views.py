@@ -57,7 +57,7 @@ def login():
         username = form.username.data
         password = form.password.data
         user = User.query.filter_by(nick=username).first()
-        if user:
+        if user and user.password:
             if bcrypt.checkpw(password.encode('utf-8'),
                               user.password.encode('utf-8')):
                 # Success, so login user and redirect to homepage
@@ -68,9 +68,17 @@ def login():
             # but log exactly what happened
             app.logger.info(
                 "Login attempt for '{}' with bad password".format(username))
-        else:
+        elif not user:
             app.logger.info(
                 "Login attempt from unknown user '{}'".format(username))
+        elif not user.password:
+            app.logger.info(
+                "Login attempt for passwordless user '{}'".format(username))
+        else:
+            app.logger.info("Unexpected error in login")
+            app.logger.info("User: {}".format(username))
+            app.logger.info("Password: {}".format(password))
+            app.logger.info("User query: {}".format(user))
 
     if request.method == 'POST':
         return render_template('login.html', form=form, error=True)
