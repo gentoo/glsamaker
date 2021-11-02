@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}
+<h1>GLSA Archive</h1>
 <table>
 	<tr>
 		<th>GLSA ID</th>
@@ -12,8 +13,8 @@
 	<tr>
 		<td>{{ glsa.glsa_id }}</td>
 		<td>{{ glsa.title }}</td>
-		<td>{{ glsa.submitted_time }}</td>
-		<td>{{ glsa.requestor }}</td>
+		<td>{{ glsa.submitted_time | default("Unknown", true) }}</td>
+		<td>{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
 	</tr>
 {% endfor %}
 </table>

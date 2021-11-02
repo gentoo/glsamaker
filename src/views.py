@@ -12,7 +12,7 @@ from wtforms.validators import DataRequired
 
 from app import app
 from models.glsa import GLSA
-from models.user import User
+from models.user import User, uid_to_nick
 
 dictConfig({
     'version': 1,
@@ -32,6 +32,11 @@ dictConfig({
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+# Terrible hack to allow uid_to_nick to be accessible in jinja
+# templates so we can use it in places like archive.html
+app.jinja_env.globals.update(uid_to_nick=uid_to_nick)
 
 
 class LoginForm(FlaskForm):
@@ -85,8 +90,29 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/')
+@app.route('/drafts')
 @login_required
-def home():
+def drafts():
+    return render_template('drafts.html')
+
+
+@app.route('/new')
+@login_required
+def new():
+    return render_template('new.html')
+
+
+@app.route('/')
+@app.route('/archive')
+@login_required
+def archive():
+    # TODO: paginate
     glsas = GLSA.query.order_by(GLSA.glsa_id).all()
-    return render_template('home.html', glsas=glsas)
+    return render_template('archive.html', glsas=glsas)
+
+
+@app.route('/glsa/<glsa_id>')
+@login_required
+def glsa(glsa_id):
+    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    return render_template('glsa.html')

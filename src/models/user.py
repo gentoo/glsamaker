@@ -16,6 +16,13 @@ class User(UserMixin, db.Model):
         self.password = password
 
 
+def uid_to_nick(uid):
+    user = User.query.filter(User.id == uid).first()
+    if user:
+        return user.nick
+    return None
+
+
 def nick_to_uid(nick):
     user = User.query.filter(User.nick == nick).first()
     if user:
