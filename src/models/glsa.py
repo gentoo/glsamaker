@@ -68,7 +68,14 @@ class GLSA(db.Model):
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
     references = db.relationship("Reference", secondary=glsa_to_ref)
+    # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     submitter = db.Column(db.Integer, db.ForeignKey(User.id))
     requested_time = db.Column(db.DateTime())
     submitted_time = db.Column(db.DateTime())
+
+    def get_bugs(self):
+        return [bug.bug_id for bug in self.bugs]
+
+    def get_references(self):
+        return [ref.ref_text for ref in self.references]

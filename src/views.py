@@ -115,4 +115,6 @@ def archive():
 @login_required
 def glsa(glsa_id):
     advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
-    return render_template('glsa.html')
+    if not advisory:
+        return render_template('glsa.html'), 404
+    return render_template('glsa.html', glsa=advisory)

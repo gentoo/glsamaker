@@ -1,4 +1,95 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}
+<h2>GLSA</h2>
+<table>
+	<tr>
+		<th>Field</th>
+		<th>Content</th>
+	</tr>
+	<tr>
+		<td>ID</td>
+		<td>{{ glsa.glsa_id }}</td>
+	</tr>
+	<tr>
+		<td>Title</td>
+		<td>{{ glsa.title }}</td>
+	</tr>
+	<tr>
+		<td>Synopsis</td>
+		<td>{{ glsa.synopsis }}</td>
+	</tr>
+	<tr>
+		<td>Product Type</td>
+		<td>{{ glsa.product_type }}</td>
+	</tr>
+	<tr>
+		<td>Announced</td>
+		<td>{{ glsa.announced }}</td>
+	</tr>
+	<tr>
+		<td>Revision Count</td>
+		<td>{{ glsa.revision_count }}</td>
+	</tr>
+	<tr>
+		<td>Revision Date</td>
+		<td>{{ glsa.revised_date }}</td>
+	</tr>
+	<tr>
+		<td>Bugs</td>
+		<td>{{ ', '.join(glsa.get_bugs()) }}</td>
+	</tr>
+	<tr>
+		<td>Access</td>
+		<td>{{ glsa.access }}</td>
+	</tr>
+	<tr>
+		<td>Affected</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Background</td>
+		<td>{{ glsa.background }}</td>
+	</tr>
+	<tr>
+		<td>Description</td>
+		<td>{{ glsa.description }}</td>
+	</tr>
+	<tr>
+		<td>Impact Type</td>
+		<td>{{ glsa.impact_type }}</td>
+	</tr>
+	<tr>
+		<td>Impact</td>
+		<td>{{ glsa.impact }}</td>
+	</tr>
+	<tr>
+		<td>Workaround</td>
+		<td>{{ glsa.workaround }}</td>
+	</tr>
+	<tr>
+		<td>Resolution</td>
+		<td>{{ glsa.resolution }}</td>
+	</tr>
+	<tr>
+		<td>References</td>
+		<td>{{ ', '.join(glsa.get_references()) }}</td>
+	</tr>
+	<tr>
+		<td>Requester</td>
+		<td>{{ uid_to_nick(glsa.requester) }}</td>
+	</tr>
+	<tr>
+		<td>Submitter</td>
+		<td>{{ uid_to_nick(glsa.submitter) }}</td>
+	</tr>
+	<tr>
+		<td>Requested</td>
+		<td>{{ glsa.requested_time }}</td>
+	</tr>
+	<tr>
+		<td>Submitted</td>
+		<td>{{ glsa.submitted_time }}</td>
+	</tr>
+</table>
 {% endblock %}
