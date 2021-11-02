@@ -11,7 +11,7 @@
 	</tr>
 {% for glsa in glsas %}
 	<tr>
-		<td>{{ glsa.glsa_id }}</td>
+		<td><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
 		<td>{{ glsa.title }}</td>
 		<td>{{ glsa.submitted_time | default("Unknown", true) }}</td>
 		<td>{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
