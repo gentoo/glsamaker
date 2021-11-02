@@ -29,7 +29,14 @@ def get_xml_text(xml_root, match):
     text = tags[0].text
 
     if text:
-        return text.strip()
+        text = text.strip()
+        # If the actual text in the tag is behind some more <p> tags
+        # or similar, the strip will make the text empty. We need to
+        # enumerate those and get the text out of them.
+        if not text:
+            text = '\n'.join([tag.text for tag in tags[0]
+                              if tag.text is not None])
+        return text
     return text
 
 
