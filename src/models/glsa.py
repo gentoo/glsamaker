@@ -67,6 +67,7 @@ class GLSA(db.Model):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
+    resolution_code = db.Column(db.String())
     references = db.relationship("Reference", secondary=glsa_to_ref)
     # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))

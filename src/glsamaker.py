@@ -34,9 +34,8 @@ def get_xml_text(xml_root, match):
         # or similar, the strip will make the text empty. We need to
         # enumerate those and get the text out of them.
         if not text:
-            text = '\n'.join([tag.text for tag in tags[0]
+            text = '\n'.join([tag.text for tag in tags[0].findall('p')
                               if tag.text is not None])
-        return text
     return text
 
 
@@ -83,6 +82,7 @@ def xml_to_glsa(xml):
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
     glsa.resolution = get_xml_text(root, 'resolution')
+    glsa.resolution_code = get_xml_text(root, './resolution/code')
 
     for uri in root.find('references'):
         glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))
