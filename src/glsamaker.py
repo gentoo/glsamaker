@@ -50,6 +50,7 @@ def xml_to_glsa(xml):
     root = ElementTree.parse(xml).getroot()
     glsa = GLSA()
     glsa.glsa_id = root.attrib['id']
+    glsa.draft = False
     glsa.title = get_xml_text(root, 'title')
     glsa.synopsis = get_xml_text(root, 'synopsis')
     glsa.product_type = get_xml_attrib(root, 'product')['type'].strip()

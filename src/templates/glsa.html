@@ -2,6 +2,9 @@
 {% block body %}
 {% include "navbar.html" %}
 <h2>GLSA</h2>
+{% if glsa.draft %}
+<a href="/edit_glsa/{{ glsa.glsa_id }}">Edit</a>
+{% endif %}
 <table>
 	<tr>
 		<th>Field</th>

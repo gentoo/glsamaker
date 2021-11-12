@@ -1,16 +1,19 @@
+import datetime
 import sys
 import os
+import uuid
 from logging.config import dictConfig
 
-import bcrypt
 from flask import redirect, render_template, request, Flask
-from flask_login import current_user, login_user, login_required
 from flask_login import LoginManager, UserMixin
+from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired
+import bcrypt
 
-from app import app
+from app import app, db
+from models.bug import Bug
 from models.glsa import GLSA
 from models.user import User, uid_to_nick
 
@@ -43,6 +46,27 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign In')
+
+
+class GLSAForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    synopsis = StringField('Synopsis', validators=[DataRequired()])
+    # TODO: validators
+    product_type = SelectField('Product Type',
+                               choices=['ebuild', 'infrastructure'])
+    bugs = StringField('Bugs', validators=[])
+    access = SelectField('Access',
+                         choices=['remote', 'local', 'local and remote'])
+    background = TextAreaField('Background', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    impact = StringField('Impact', validators=[DataRequired()])
+    impact_type = SelectField('Impact Type', choices=['low', 'normal', 'high'])
+    workaround = TextAreaField('Workaround', validators=[DataRequired()])
+    resolution = TextAreaField('Resolution', validators=[DataRequired()])
+    resolution_code = TextAreaField('Resolution Code',
+                                    validators=[DataRequired()])
+    references = StringField('References', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 
 @login_manager.user_loader
@@ -90,19 +114,49 @@ def login():
     return render_template('login.html', form=form)
 
 
+@app.route('/')
 @app.route('/drafts')
 @login_required
 def drafts():
-    return render_template('drafts.html')
+    glsas = GLSA.query.filter_by(draft=True)
+    return render_template('drafts.html', glsas=glsas)
 
 
-@app.route('/new')
+@app.route('/edit_glsa', methods=['GET', 'POST'])
+@app.route('/edit_glsa/<glsa_id>', methods=['GET', 'POST'])
 @login_required
-def new():
-    return render_template('new.html')
+def edit_glsa(glsa_id=None):
+    form = GLSAForm()
+    if not glsa_id:
+        glsa = GLSA()
+        glsa.requester = current_user.id
+    else:
+        glsa = GLSA.query.filter_by(glsa_id=glsa_id).first()
+
+    if form.validate_on_submit() and request.method == 'POST':
+        glsa.glsa_id = str(uuid.uuid4())
+        glsa.title = form.title.data
+        glsa.synopsis = form.synopsis.data
+        glsa.product_type = form.product_type.data
+        glsa.bugs = [Bug(bug.strip()) for bug in form.bugs.data.split(',')]
+        glsa.access = form.access.data
+        # TODO: affected
+        glsa.background = form.background.data
+        glsa.description = form.description.data
+        glsa.impact = form.impact.data
+        glsa.impact_type = form.impact_type.data
+        glsa.workaround = form.workaround.data
+        glsa.resolution = form.resolution.data
+        glsa.resolution_code = form.resolution_code.data
+        glsa.submitted_time = datetime.datetime.now()
+        glsa.draft = True
+        db.session.merge(glsa)
+        db.session.commit()
+        return drafts()
+
+    return render_template('edit_glsa.html', form=form, glsa=glsa, new=True)
 
 
-@app.route('/')
 @app.route('/archive')
 @login_required
 def archive():
@@ -113,7 +167,7 @@ def archive():
 
 @app.route('/glsa/<glsa_id>')
 @login_required
-def glsa(glsa_id):
+def show_glsa(glsa_id):
     advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
     if not advisory:
         return render_template('glsa.html'), 404

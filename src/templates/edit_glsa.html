@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+{% if new %}
+<h1>New GLSA</h1>
+{% else %}
+<h1>Edit GLSA</h1>
+{% endif %}
+<h3>{{ glsa.glsa_id | default('Unreleased', true) }}</h3>
+<form method="post">
+	{{ form.hidden_tag() }}
+	<div>
+		<label>Title</label>
+		{{ form.title }}
+	</div>
+	<div>
+		<label>Synopsis</label>
+		{{ form.synopsis }}
+	</div>
+	<div>
+		<label>Product Type</label>
+		{{ form.product_type }}
+	</div>
+	<div>
+		<label>Announced</label>
+		{{ glsa.announced | default('TBD', true) }}
+	</div>
+	<div>
+		<label>Revision Count</label>
+		{{ glsa.revision_count | default('0', true) }}
+	</div>
+	<div>
+		<label>Revision Date</label>
+		{{ glsa.revised_date | default('', true) }}
+	</div>
+	<div>
+		<label>Bugs</label>
+		{{ form.bugs }}
+	</div>
+	<div>
+		<label>Access</label>
+		{{ form.access }}
+	</div>
+	<div>
+		<label>Affected</label>
+		<input></input>
+	</div>
+	<div>
+		<label>Background</label>
+		{{ form.background }}
+	</div>
+	<div>
+		<label>Description</label>
+		{{ form.description }}
+	</div>
+	<div>
+		<label>Impact</label>
+		{{ form.impact }}
+	</div>
+	<div>
+		<label>Impact Type</label>
+		{{ form.impact_type }}
+	</div>
+	<div>
+		<label>Workaround</label>
+		{{ form.workaround }}
+	</div>
+	<div>
+		<label>Resolution</label>
+		{{ form.resolution }}
+	</div>
+	<div>
+		<label>Resolution Code</label>
+		{{ form.resolution_code }}
+	</div>
+	<div>
+		<label>References</label>
+		{{ form.references }}
+	</div>
+	<div>
+		<label>Requester</label>
+		{{ uid_to_nick(glsa.requester) }}
+	</div>
+	<div>
+		<label>Submitter</label>
+		{{ uid_to_nick(glsa.submitter) | default('TBD', true) }}
+	</div>
+	<div>
+		<label>Requested</label>
+		{{ glsa.requested_time | default('TBD', true) }}
+	</div>
+	<div>
+		<label>Submitted</label>
+		{{ glsa.submitted_time | default('TBD', true) }}
+	</div>
+	{{ form.submit }}
+</form>
+{% endblock %}

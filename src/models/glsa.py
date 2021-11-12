@@ -29,6 +29,7 @@ class GLSA(db.Model):
     __tablename__ = 'glsa'
 
     glsa_id = db.Column(db.String(), primary_key=True)
+    draft = db.Column(db.Boolean())
     title = db.Column(db.String())
     synopsis = db.Column(db.String())
     product_type = db.Column(db.Enum('ebuild', 'infrastructure',

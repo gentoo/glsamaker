@@ -6,12 +6,14 @@
 {% endif %}
 <form method="post">
     {{ form.hidden_tag() }}
-    <p>{{ form.username.label }}<br>
-    {{ form.username() }}<br>
-    </p>
-    <p>{{ form.password.label }}<br>
-    {{ form.password() }}<br>
-    </p>
-    <p>{{ form.submit() }}</p>
+	<div>
+		<label>{{ form.username.label }}</label>
+		{{ form.username }}
+	</div>
+	<div>
+		<label>{{ form.password.label }}</label>
+		{{ form.password }}
+	</div>
+    {{ form.submit }}
 </form>
 {% endblock %}
