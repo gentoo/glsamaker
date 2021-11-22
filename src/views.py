@@ -17,8 +17,9 @@ import bcrypt
 from app import app, db
 from models.bug import Bug
 from models.glsa import GLSA
-from models.user import User, uid_to_nick
 from models.package import Affected
+from models.reference import Reference
+from models.user import User, uid_to_nick
 
 dictConfig({
     'version': 1,
@@ -132,15 +133,18 @@ def parse_atoms(request, range_type):
     atoms = request.form.getlist('{}[]'.format(range_type))
     arches = request.form.getlist('{}_arch[]'.format(range_type))
     for pkg, arch in zip(atoms, arches):
-        package = atom(pkg)
-        pn = str(package.unversioned_atom)
-        # Silly hack to get the range type chars at the front of
-        # the string
-        pkg_range = Affected.range_types[pkg.replace(package.cpvstr, '')]
-        version = package.fullver
-        slot = package.slot or '*'
-        ret.append(Affected(pn, version, pkg_range, arch, slot,
-                            range_type))
+        pkg = pkg.strip()
+        arch = arch.strip()
+        if pkg != '' and arch != '':
+            package = atom(pkg)
+            pn = str(package.unversioned_atom)
+            # Silly hack to get the range type chars at the front of
+            # the string
+            pkg_range = Affected.range_types[pkg.replace(package.cpvstr, '')]
+            version = package.fullver
+            slot = package.slot or '*'
+            ret.append(Affected(pn, version, pkg_range, arch, slot,
+                                range_type))
     return ret
 
 
@@ -183,6 +187,8 @@ def edit_glsa(glsa_id=None):
         glsa.workaround = form.workaround.data
         glsa.resolution = form.resolution.data
         glsa.resolution_code = form.resolution_code.data
+        glsa.references = [Reference.new(text.strip())
+                           for text in form.references.data.split(', ')]
         glsa.submitted_time = datetime.datetime.now()
         glsa.draft = True
         db.session.merge(glsa)
