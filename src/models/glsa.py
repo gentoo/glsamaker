@@ -81,3 +81,9 @@ class GLSA(db.Model):
 
     def get_references(self):
         return [ref.ref_text for ref in self.references]
+
+    def get_unaffected(self):
+        return [pkg for pkg in self.affected if pkg.range_type == 'unaffected']
+
+    def get_vulnerable(self):
+        return [pkg for pkg in self.affected if pkg.range_type == 'vulnerable']

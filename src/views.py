@@ -8,7 +8,9 @@ from flask import redirect, render_template, request, Flask
 from flask_login import LoginManager, UserMixin
 from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField
+from pkgcore.ebuild.atom import atom
+from sqlalchemy import desc
+from wtforms import SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField, Field
 from wtforms.validators import DataRequired
 import bcrypt
 
@@ -16,6 +18,7 @@ from app import app, db
 from models.bug import Bug
 from models.glsa import GLSA
 from models.user import User, uid_to_nick
+from models.package import Affected
 
 dictConfig({
     'version': 1,
@@ -118,29 +121,61 @@ def login():
 @app.route('/drafts')
 @login_required
 def drafts():
-    glsas = GLSA.query.filter_by(draft=True)
+    glsas = GLSA.query.filter_by(draft=True).order_by(desc(GLSA.submitted_time))
     return render_template('drafts.html', glsas=glsas)
+
+
+def parse_atoms(request, range_type):
+    ret = []
+    # TODO: these need to be properly in the flask form for proper
+    # validation, but flask forms with lists is hard
+    atoms = request.form.getlist('{}[]'.format(range_type))
+    arches = request.form.getlist('{}_arch[]'.format(range_type))
+    for pkg, arch in zip(atoms, arches):
+        package = atom(pkg)
+        pn = str(package.unversioned_atom)
+        # Silly hack to get the range type chars at the front of
+        # the string
+        pkg_range = Affected.range_types[pkg.replace(package.cpvstr, '')]
+        version = package.fullver
+        slot = package.slot or '*'
+        ret.append(Affected(pn, version, pkg_range, arch, slot,
+                            range_type))
+    return ret
 
 
 @app.route('/edit_glsa', methods=['GET', 'POST'])
 @app.route('/edit_glsa/<glsa_id>', methods=['GET', 'POST'])
 @login_required
 def edit_glsa(glsa_id=None):
-    form = GLSAForm()
     if not glsa_id:
         glsa = GLSA()
+        glsa.glsa_id = str(uuid.uuid4())
         glsa.requester = current_user.id
     else:
         glsa = GLSA.query.filter_by(glsa_id=glsa_id).first()
 
+    form = GLSAForm(title=glsa.title, synopsis=glsa.synopsis,
+                    product_type=glsa.product_type,
+                    bugs=', '.join([bug.bug_id for bug in glsa.bugs]),
+                    access=glsa.access,
+                    background=glsa.background,
+                    description=glsa.description, impact=glsa.impact,
+                    impact_type=glsa.impact_type,
+                    workaround=glsa.workaround,
+                    resolution=glsa.resolution,
+                    resolution_code=glsa.resolution_code,
+                    references=', '.join(
+                        [ref.ref_text for ref in glsa.references]))
+
     if form.validate_on_submit() and request.method == 'POST':
-        glsa.glsa_id = str(uuid.uuid4())
         glsa.title = form.title.data
         glsa.synopsis = form.synopsis.data
         glsa.product_type = form.product_type.data
-        glsa.bugs = [Bug(bug.strip()) for bug in form.bugs.data.split(',')]
+        glsa.bugs = [Bug.new(bug.strip()) for bug in form.bugs.data.split(',')]
         glsa.access = form.access.data
-        # TODO: affected
+        glsa.affected = parse_atoms(request, 'unaffected') + \
+            parse_atoms(request, 'vulnerable')
         glsa.background = form.background.data
         glsa.description = form.description.data
         glsa.impact = form.impact.data

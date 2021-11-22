@@ -66,16 +66,16 @@ def xml_to_glsa(xml):
 
     for package in root.find('affected').findall('package'):
         pkg = package.attrib['name']
-        Package.maybe_add_pkg(pkg)
         arch = package.attrib['arch']
         for tag in package:
+            version = tag.text
             atom_range = tag.attrib['range']
             range_type = tag.tag
             slot = None
             if 'slot' in tag.attrib:
                 slot = tag.attrib['slot']
-            glsa.affected.append(Affected(pkg, atom_range, arch,
-                                          slot, range_type))
+            glsa.affected.append(Affected(pkg, version, atom_range,
+                                          arch, slot, range_type))
 
     glsa.background = get_xml_text(root, 'background')
     glsa.description = get_xml_text(root, 'description')

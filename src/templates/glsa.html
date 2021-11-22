@@ -1,4 +1,18 @@
 {% extends "base.html" %}
+{% macro package_table(packages) %}
+<table>
+	<tr>
+		<th>Atom</th>
+		<th>Arch</th>
+	</tr>
+	{% for pkg in packages %}
+	<tr>
+		<td>{{ pkg.versioned_atom() }}</td>
+		<td>{{ pkg.arch }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endmacro %}
 {% block body %}
 {% include "navbar.html" %}
 <h2>GLSA</h2>
@@ -47,8 +61,16 @@
 		<td>{{ glsa.access }}</td>
 	</tr>
 	<tr>
-		<td>Affected</td>
-		<td></td>
+		<td>Unaffected</td>
+		<td>
+			{{ package_table(glsa.get_unaffected()) }}
+		</td>
+	</tr>
+	<tr>
+		<td>Vulnerable</td>
+		<td>
+			{{ package_table(glsa.get_vulnerable()) }}
+		</td>
 	</tr>
 	<tr>
 		<td>Background</td>

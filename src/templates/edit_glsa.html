@@ -42,8 +42,56 @@
 		{{ form.access }}
 	</div>
 	<div>
-		<label>Affected</label>
-		<input></input>
+		<label>Unaffected</label>
+		<button type="button" onclick="newrow('unaffected')">New</button>
+		<table id="unaffected">
+			<tr>
+				<th>Atom</th>
+				<th>Arch</th>
+			</tr>
+			{% for pkg in glsa.get_unaffected() %}
+			<tr>
+				<td>
+					<input name="unaffected[]" value="{{ pkg.versioned_atom() }}">
+				</td>
+				<td><input name="unaffected_arch[]" value="{{ pkg.arch }}"></td>
+				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td>
+					<input name="unaffected[]">
+				</td>
+				<td><input name="unaffected_arch[]"></td>
+				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<label>Vulnerable</label>
+		<button type="button" onclick="newrow('vulnerable')">New</button>
+		<table id="vulnerable">
+			<tr>
+				<th>Atom</th>
+				<th>Arch</th>
+			</tr>
+			{% for pkg in glsa.get_vulnerable() %}
+			<tr>
+				<td>
+					<input name="vulnerable[]" value="{{ pkg.versioned_atom() }}">
+				</td>
+				<td><input name="vulnerable_arch[]" value="{{ pkg.arch }}"></td>
+				<td><button onclick="deleterow(this)"><b>-</b></button></td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td>
+					<input name="vulnerable[]">
+				</td>
+				<td><input name="vulnerable_arch[]"></td>
+				<td><button onclick="deleterow(this)"><b>-</b></button></td>
+			</tr>
+		</table>
 	</div>
 	<div>
 		<label>Background</label>

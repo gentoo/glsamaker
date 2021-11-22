@@ -17,11 +17,23 @@ class Package(db.Model):
 class Affected(db.Model):
     __tablename__ = 'affected'
 
+    range_types = {'=': 'eq',
+                   '>=': 'ge',
+                   '<=': 'le',
+                   '>': 'gt',
+                   '<': 'lt',
+                   # ??
+                   'rge': '',
+                   'rgt': '',
+                   'rle': ''}
+    range_types_rev = {v: k for k, v in range_types.items()}
+
     affected_id = db.Column(db.Integer(), primary_key=True)
     pkg = db.Column(db.ForeignKey('package.pkg'))
     # Less than, greater than, greater than-equal to, etc.
     pkg_range = db.Column(db.Enum('eq', 'ge', 'gt', 'le', 'lt', 'rge',
                                   'rgt', 'rle', name='atom_ranges'))
+    version = db.Column(db.String())
     arch = db.Column(db.String())
     slot = db.Column(db.String())
     # The two types of package version specifiers are unaffected and
@@ -31,9 +43,21 @@ class Affected(db.Model):
     range_type = db.Column(db.Enum('unaffected', 'vulnerable',
                            name='range_types'))
 
-    def __init__(self, pkg, pkg_range, arch, slot, range_type):
+    def __init__(self, pkg, version, pkg_range, arch, slot, range_type):
+        Package.maybe_add_pkg(pkg)
         self.pkg = pkg
         self.pkg_range = pkg_range
+        self.version = version
         self.arch = arch
         self.slot = slot
         self.range_type = range_type
+
+    def versioned_atom(self):
+        atom = self.range_types_rev[self.pkg_range]
+        atom += self.pkg
+        atom += '-' + self.version
+
+        if self.slot and self.slot != '*':
+            atom += ':' + self.slot
+
+        return atom
