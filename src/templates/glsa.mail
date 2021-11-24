@@ -34,19 +34,17 @@ Affected packages
      Vulnerable Packages
     -------------------------------------------------------------------
 
-{% for affected in glsa.get_vulnerable() -%}
+{% for affected in glsa.get_vulnerable() %}
   {{ affected.versioned_atom() }}
-{% endfor -%}
-
+{% endfor %}
 
     -------------------------------------------------------------------
      Unaffected Packages
     -------------------------------------------------------------------
 
-{% for affected in glsa.get_unaffected() -%}
+{% for affected in glsa.get_unaffected() %}
   {{ affected.versioned_atom() }}
-{% endfor -%}
-
+{% endfor %}
 
 Description
 ===========
@@ -75,9 +73,9 @@ References
 
 {% for ref in glsa.references %}
 [ {{ loop.index }} ] {{ ref.ref_text }}
-{% if ref.url %}
-	  {{ ref.url }}
-{% endif %}
+{%- if ref.url %}
+  {{ ref.url }}
+{%- endif %}
 {% endfor %}
 
 Availability
@@ -100,7 +98,7 @@ https://bugs.gentoo.org.
 License
 =======
 
-Copyright {{ glsa.announced.year }} Gentoo Foundation, Inc; referenced text
+Copyright {{ glsa.submitted_time.year }} Gentoo Foundation, Inc; referenced text
 belongs to its owner(s).
 
 The contents of this document are licensed under the
