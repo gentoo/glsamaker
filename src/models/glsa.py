@@ -1,4 +1,8 @@
-from app import db
+from datetime import datetime
+
+from sqlalchemy import select
+
+from app import app, db
 from models.bug import Bug
 from models.reference import Reference
 from models.user import User
@@ -7,35 +11,41 @@ from models.package import Package
 
 glsa_to_bug = db.Table('glsa_to_bug',
                        db.Column('glsa_id', db.String(),
-                                 db.ForeignKey('glsa.glsa_id')),
+                                 db.ForeignKey('glsa.glsa_id',
+                                               onupdate="cascade")),
                        db.Column('bug_id', db.String(),
-                                 db.ForeignKey('bug.bug_id')))
+                                 db.ForeignKey('bug.bug_id',
+                                               onupdate="cascade")))
 
 glsa_to_ref = db.Table('glsa_to_ref',
                        db.Column('glsa_id', db.String(),
-                                 db.ForeignKey('glsa.glsa_id')),
+                                 db.ForeignKey('glsa.glsa_id',
+                                               onupdate="cascade")),
                        db.Column('ref_text', db.String(),
-                                 db.ForeignKey('reference.ref_text')))
+                                 db.ForeignKey('reference.ref_text',
+                                               onupdate="cascade")))
 
 glsa_to_affected = db.Table('glsa_to_affected',
                             db.Column('glsa_id', db.String(),
-                                      db.ForeignKey('glsa.glsa_id')),
+                                      db.ForeignKey('glsa.glsa_id',
+                                                    onupdate="cascade")),
                             db.Column('affected_id', db.Integer(),
-                                      db.ForeignKey('affected.affected_id')))
-
+                                      db.ForeignKey('affected.affected_id',
+                                                    onupdate="cascade")))
 
 
 class GLSA(db.Model):
     __tablename__ = 'glsa'
 
-    glsa_id = db.Column(db.String(), primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    glsa_id = db.Column(db.String(), unique=True)
     draft = db.Column(db.Boolean())
     title = db.Column(db.String())
     synopsis = db.Column(db.String())
     product_type = db.Column(db.Enum('ebuild', 'infrastructure',
                                      name='product_types'))
     product = db.Column(db.String())
-    announced = db.Column(db.String())
+    announced = db.Column(db.Date())
     revision_count = db.Column(db.Integer())
     revised_date = db.Column(db.Date())
     bugs = db.relationship("Bug", secondary=glsa_to_bug)
@@ -73,8 +83,20 @@ class GLSA(db.Model):
     # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     submitter = db.Column(db.Integer, db.ForeignKey(User.id))
+    acked_by = db.Column(db.Integer, db.ForeignKey(User.id))
     requested_time = db.Column(db.DateTime())
     submitted_time = db.Column(db.DateTime())
+
+    @classmethod
+    def next_id(cls):
+        now = datetime.now()
+        date = '{}{:02}'.format(now.year, now.month)
+        query = db.session.query(cls).filter(cls.glsa_id.startswith(date)).all()
+        n = 1
+        if query:
+            ids = [int(x.glsa_id.split('-')[1]) for x in query]
+            n = max(ids) + 1
+        return '{}-{:02}'.format(date, n)
 
     def get_bugs(self):
         return [bug.bug_id for bug in self.bugs]

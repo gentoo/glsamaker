@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import sys
 import os
 import uuid
@@ -10,7 +10,7 @@ from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
 from sqlalchemy import desc
-from wtforms import SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField, Field
+from wtforms import BooleanField, SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField, Field
 from wtforms.validators import DataRequired
 import bcrypt
 
@@ -20,6 +20,7 @@ from models.glsa import GLSA
 from models.package import Affected
 from models.reference import Reference
 from models.user import User, uid_to_nick
+from release import release_email, release_xml
 
 dictConfig({
     'version': 1,
@@ -70,6 +71,8 @@ class GLSAForm(FlaskForm):
     resolution_code = TextAreaField('Resolution Code',
                                     validators=[DataRequired()])
     references = StringField('References', validators=[DataRequired()])
+    release = BooleanField('Release')
+    ack = BooleanField('Ack')
     submit = SubmitField('Submit')
 
 
@@ -189,13 +192,24 @@ def edit_glsa(glsa_id=None):
         glsa.resolution_code = form.resolution_code.data
         glsa.references = [Reference.new(text.strip())
                            for text in form.references.data.split(', ')]
-        glsa.submitted_time = datetime.datetime.now()
-        glsa.draft = True
-        db.session.merge(glsa)
+        glsa.requested_time = datetime.now()
+        if form.release.data:
+            glsa.glsa_id = GLSA.next_id()
+            glsa.draft = False
+            glsa.submitter = current_user.id
+            glsa.submitted_time = datetime.now()
+            release_email(glsa)
+            release_xml(glsa)
+        elif form.ack.data:
+            glsa.acked_by = current_user.id
+        else:
+            glsa.draft = True
+            db.session.add(glsa)
         db.session.commit()
-        return drafts()
+        return redirect('/drafts')
 
-    return render_template('edit_glsa.html', form=form, glsa=glsa, new=True)
+    return render_template('edit_glsa.html', form=form, glsa=glsa,
+                           current_user=current_user, new=True)
 
 
 @app.route('/archive')

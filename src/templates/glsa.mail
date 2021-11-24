@@ -1,0 +1,109 @@
+From: {{ smtpuser }}
+Date: {{ date }}
+Subject: [ {{ glsa.glsa_id }} ] {{ glsa.title }}
+Reply-To: security@gentoo.org
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                                           https://security.gentoo.org/
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ Severity: {{ glsa.impact_type }}
+    Title: {{ glsa.title }}
+     Date: {{ glsa.announced }}
+     Bugs: {{ ', '.join(glsa.get_bugs()) }}
+       ID: {{ glsa.glsa_id }}
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Synopsis
+========
+
+{{ glsa.synopsis }}
+
+Background
+==========
+
+{{ glsa.background }}
+
+Affected packages
+=================
+
+    -------------------------------------------------------------------
+     Vulnerable Packages
+    -------------------------------------------------------------------
+
+{% for affected in glsa.get_vulnerable() -%}
+  {{ affected.versioned_atom() }}
+{% endfor -%}
+
+
+    -------------------------------------------------------------------
+     Unaffected Packages
+    -------------------------------------------------------------------
+
+{% for affected in glsa.get_unaffected() -%}
+  {{ affected.versioned_atom() }}
+{% endfor -%}
+
+
+Description
+===========
+
+{{ glsa.description }}
+
+Impact
+======
+
+{{ glsa.impact }}
+
+Workaround
+==========
+
+{{ glsa.workaround }}
+
+Resolution
+==========
+
+{{ glsa.resolution }}
+
+{{ glsa.resolution_code }}
+
+References
+==========
+
+{% for ref in glsa.references %}
+[ {{ loop.index }} ] {{ ref.ref_text }}
+{% if ref.url %}
+	  {{ ref.url }}
+{% endif %}
+{% endfor %}
+
+Availability
+============
+
+This GLSA and any updates to it are available for viewing at
+the Gentoo Security Website:
+
+ https://security.gentoo.org/glsa/{{ glsa.glsa_id }}
+
+Concerns?
+=========
+
+Security is a primary focus of Gentoo Linux and ensuring the
+confidentiality and security of our users' machines is of utmost
+importance to us. Any security concerns should be addressed to
+security@gentoo.org or alternatively, you may file a bug at
+https://bugs.gentoo.org.
+
+License
+=======
+
+Copyright {{ glsa.announced.year }} Gentoo Foundation, Inc; referenced text
+belongs to its owner(s).
+
+The contents of this document are licensed under the
+Creative Commons - Attribution / Share Alike license.
+
+https://creativecommons.org/licenses/by-sa/2.5

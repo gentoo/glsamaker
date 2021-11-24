@@ -141,6 +141,17 @@
 		<label>Submitted</label>
 		{{ glsa.submitted_time | default('TBD', true) }}
 	</div>
+	{% if glsa.acked_by and glsa.acked_by != current_user %}
+	<div>
+		<label>Release?</label>
+		{{ form.release }}
+	</div>
+	{% elif glsa.requester != current_user and not new %}
+	<div>
+		<label>Ack?</label>
+		{{ form.ack }}
+	</div>
+	{% endif %}
 	{{ form.submit }}
 </form>
 {% endblock %}

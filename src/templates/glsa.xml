@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">
+<glsa id="{{ glsa.glsa_id }}">
+	<title>{{ glsa.title }}</title>
+	<synopsis>{{ glsa.synopsis }}</synopsis>
+	<product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
+	<announced>{{ glsa.announced }}</announced>
+	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date }}</revised>
+	{% for bug in glsa.get_bugs() -%}
+	<bug>{{ bug }}</bug>
+	{% endfor -%}
+	<access>{{ glsa.access }}</access>
+	<affected>
+		{% for affected in glsa.affected -%}
+		<package name="{{ affected.pkg }}" auto="yes" arch="{{ affected.arch }}">
+			<{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
+		</package>
+		{% endfor -%}
+	</affected>
+	<background>
+		{{ glsa.background }}
+	</background>
+	<description>
+		{{ glsa.description }}
+	</description>
+	<impact type="{{ glsa.impact_type }}">
+		{{ glsa.impact }}
+	</impact>
+	<workaround>
+		{{ glsa.workaround }}
+	</workaround>
+	<resolution>
+		{{ glsa.resolution }}
+
+		<code>
+			{{ glsa.resolution_code }}
+		</code>
+	</resolution>
+	<references>
+		{% for ref in glsa.references %}
+		{% if ref.url %}
+		<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>
+		{% else %}
+		<uri>{{ ref.ref_text }}</uri>
+		{% endif %}
+		{% endfor %}
+	</references>
+	<metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() }}">{{ uid_to_nick(glsa.requester) }}</metadata>
+	<metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
+</glsa>
