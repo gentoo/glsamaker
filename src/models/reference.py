@@ -9,7 +9,11 @@ class Reference(db.Model):
 
     def __init__(self, ref_text, url=None):
         self.ref_text = ref_text
-        self.url = url
+        if url:
+            self.url = url
+        else:
+            if ref_text.startswith('CVE'):
+                self.url = 'https://nvd.nist.gov/vuln/detail/' + self.ref_text
 
     # TODO: see bug.py's new TODO
     @classmethod
