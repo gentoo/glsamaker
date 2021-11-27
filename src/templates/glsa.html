@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% macro package_table(packages) %}
-<table>
+<table class="bordered">
 	<tr>
 		<th>Atom</th>
 		<th>Arch</th>
 	</tr>
 	{% for pkg in packages %}
 	<tr>
-		<td>{{ pkg.versioned_atom() }}</td>
-		<td>{{ pkg.arch }}</td>
+		<td class="bordered">{{ pkg.versioned_atom() }}</td>
+		<td class="bordered">{{ pkg.arch }}</td>
 	</tr>
 	{% endfor %}
 </table>
@@ -19,108 +19,108 @@
 {% if glsa.draft %}
 <a href="/edit_glsa/{{ glsa.glsa_id }}">Edit</a>
 {% endif %}
-<table>
+<table class="bordered">
 	<tr>
 		<th>Field</th>
 		<th>Content</th>
 	</tr>
 	<tr>
-		<td>ID</td>
-		<td>{{ glsa.glsa_id }}</td>
+		<td class="bordered">ID</td>
+		<td class="bordered">{{ glsa.glsa_id }}</td>
 	</tr>
 	<tr>
-		<td>Title</td>
-		<td>{{ glsa.title }}</td>
+		<td class="bordered">Title</td>
+		<td class="bordered">{{ glsa.title }}</td>
 	</tr>
 	<tr>
-		<td>Synopsis</td>
-		<td>{{ glsa.synopsis }}</td>
+		<td class="bordered">Synopsis</td>
+		<td class="bordered">{{ glsa.synopsis }}</td>
 	</tr>
 	<tr>
-		<td>Product Type</td>
-		<td>{{ glsa.product_type }}</td>
+		<td class="bordered">Product Type</td>
+		<td class="bordered">{{ glsa.product_type }}</td>
 	</tr>
 	<tr>
-		<td>Announced</td>
-		<td>{{ glsa.announced }}</td>
+		<td class="bordered">Announced</td>
+		<td class="bordered">{{ glsa.announced }}</td>
 	</tr>
 	<tr>
-		<td>Revision Count</td>
-		<td>{{ glsa.revision_count }}</td>
+		<td class="bordered">Revision Count</td>
+		<td class="bordered">{{ glsa.revision_count }}</td>
 	</tr>
 	<tr>
-		<td>Revision Date</td>
-		<td>{{ glsa.revised_date }}</td>
+		<td class="bordered">Revision Date</td>
+		<td class="bordered">{{ glsa.revised_date }}</td>
 	</tr>
 	<tr>
-		<td>Bugs</td>
-		<td>{{ ', '.join(glsa.get_bugs()) }}</td>
+		<td class="bordered">Bugs</td>
+		<td class="bordered">{{ ', '.join(glsa.get_bugs()) }}</td>
 	</tr>
 	<tr>
-		<td>Access</td>
-		<td>{{ glsa.access }}</td>
+		<td class="bordered">Access</td>
+		<td class="bordered">{{ glsa.access }}</td>
 	</tr>
 	<tr>
-		<td>Unaffected</td>
-		<td>
+		<td class="bordered">Unaffected</td>
+		<td class="bordered">
 			{{ package_table(glsa.get_unaffected()) }}
 		</td>
 	</tr>
 	<tr>
-		<td>Vulnerable</td>
-		<td>
+		<td class="bordered">Vulnerable</td>
+		<td class="bordered">
 			{{ package_table(glsa.get_vulnerable()) }}
 		</td>
 	</tr>
 	<tr>
-		<td>Background</td>
-		<td>{{ glsa.background }}</td>
+		<td class="bordered">Background</td>
+		<td class="bordered">{{ glsa.background }}</td>
 	</tr>
 	<tr>
-		<td>Description</td>
-		<td>{{ glsa.description }}</td>
+		<td class="bordered">Description</td>
+		<td class="bordered">{{ glsa.description }}</td>
 	</tr>
 	<tr>
-		<td>Impact Type</td>
-		<td>{{ glsa.impact_type }}</td>
+		<td class="bordered">Impact Type</td>
+		<td class="bordered">{{ glsa.impact_type }}</td>
 	</tr>
 	<tr>
-		<td>Impact</td>
-		<td>{{ glsa.impact }}</td>
+		<td class="bordered">Impact</td>
+		<td class="bordered">{{ glsa.impact }}</td>
 	</tr>
 	<tr>
-		<td>Workaround</td>
-		<td>{{ glsa.workaround }}</td>
+		<td class="bordered">Workaround</td>
+		<td class="bordered">{{ glsa.workaround }}</td>
 	</tr>
 	<tr>
-		<td>Resolution</td>
-		<td>{{ glsa.resolution }}</td>
+		<td class="bordered">Resolution</td>
+		<td class="bordered">{{ glsa.resolution }}</td>
 	</tr>
 	<tr>
-		<td>Resolution Code</td>
-		<td>
+		<td class="bordered">Resolution Code</td>
+		<td class="bordered">
 			<code>{{ glsa.resolution_code }}</code>
 		</td>
 	</tr>
 	<tr>
-		<td>References</td>
-		<td>{{ ', '.join(glsa.get_references()) }}</td>
+		<td class="bordered">References</td>
+		<td class="bordered">{{ ', '.join(glsa.get_references()) }}</td>
 	</tr>
 	<tr>
-		<td>Requester</td>
-		<td>{{ uid_to_nick(glsa.requester) }}</td>
+		<td class="bordered">Requester</td>
+		<td class="bordered">{{ uid_to_nick(glsa.requester) }}</td>
 	</tr>
 	<tr>
-		<td>Submitter</td>
-		<td>{{ uid_to_nick(glsa.submitter) }}</td>
+		<td class="bordered">Submitter</td>
+		<td class="bordered">{{ uid_to_nick(glsa.submitter) }}</td>
 	</tr>
 	<tr>
-		<td>Requested</td>
-		<td>{{ glsa.requested_time }}</td>
+		<td class="bordered">Requested</td>
+		<td class="bordered">{{ glsa.requested_time }}</td>
 	</tr>
 	<tr>
-		<td>Submitted</td>
-		<td>{{ glsa.submitted_time }}</td>
+		<td class="bordered">Submitted</td>
+		<td class="bordered">{{ glsa.submitted_time }}</td>
 	</tr>
 </table>
 {% endblock %}

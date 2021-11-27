@@ -42,12 +42,12 @@
 		{{ form.access }}
 	</div>
 	<div>
-		<label>Unaffected</label>
-		<button type="button" onclick="newrow('unaffected')">New</button>
-		<table id="unaffected">
+		<table id="unaffected" class="bordered">
+			<caption><b>Unaffected</b></caption>
 			<tr>
 				<th>Atom</th>
 				<th>Arch</th>
+				<th><button type="button" onclick="newrow('unaffected')">New</button></th>
 			</tr>
 			{% for pkg in glsa.get_unaffected() %}
 			<tr>
@@ -68,12 +68,12 @@
 		</table>
 	</div>
 	<div>
-		<label>Vulnerable</label>
-		<button type="button" onclick="newrow('vulnerable')">New</button>
-		<table id="vulnerable">
+		<table id="vulnerable" class="bordered">
+			<caption><b>Vulnerable</b></caption>
 			<tr>
 				<th>Atom</th>
 				<th>Arch</th>
+				<th><button type="button" onclick="newrow('vulnerable')">New</button></th>
 			</tr>
 			{% for pkg in glsa.get_vulnerable() %}
 			<tr>

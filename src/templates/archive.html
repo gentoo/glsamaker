@@ -2,7 +2,7 @@
 {% block body %}
 {% include "navbar.html" %}
 <h1>GLSA Archive</h1>
-<table>
+<table class="bordered">
 	<tr>
 		<th>GLSA ID</th>
 		<th>Title</th>
@@ -12,15 +12,15 @@
 	</tr>
 {% for glsa in glsas %}
 	<tr>
-		<td><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
-		<td>{{ glsa.title }}</td>
+		<td class="bordered"><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
+		<td class="bordered">{{ glsa.title }}</td>
 		{% if glsa.submitted_time %}
-		<td>{{ glsa.submitted_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
+		<td class="bordered">{{ glsa.submitted_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
 		{% else %}
-		<td>{{ glsa.submitted_time | default("Unknown", true) }}</td>
+		<td class="bordered">{{ glsa.submitted_time | default("Unknown", true) }}</td>
 		{% endif %}
-		<td>{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
-		<td>{{ uid_to_nick(glsa.acked_by) | default("Unknown", true) }}</td>
+		<td class="bordered">{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
+		<td class="bordered">{{ uid_to_nick(glsa.acked_by) | default("Unknown", true) }}</td>
 	</tr>
 {% endfor %}
 </table>
