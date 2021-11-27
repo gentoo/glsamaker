@@ -14,7 +14,11 @@
 	<tr>
 		<td><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
 		<td>{{ glsa.title }}</td>
+		{% if glsa.submitted_time %}
+		<td>{{ glsa.submitted_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
+		{% else %}
 		<td>{{ glsa.submitted_time | default("Unknown", true) }}</td>
+		{% endif %}
 		<td>{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
 		<td>{{ uid_to_nick(glsa.acked_by) | default("Unknown", true) }}</td>
 	</tr>

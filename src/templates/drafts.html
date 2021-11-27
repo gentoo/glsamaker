@@ -6,15 +6,19 @@
 	<tr>
 		<th>GLSA ID</th>
 		<th>Title</th>
-		<th>Submitted At</th>
-		<th>Submitted By</th>
+		<th>Requested At</th>
+		<th>Requested By</th>
+		<th>Acked By</th>
 	</tr>
 {% for glsa in glsas %}
 	<tr>
 		<td><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
 		<td>{{ glsa.title }}</td>
-		<td>{{ glsa.submitted_time | default("Unknown", true) }}</td>
+		<td>{{ glsa.requested_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
 		<td>{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
+		{% if glsa.acked_by %}
+		<td>{{ uid_to_nick(glsa.acked_by) | default("") }}</td>
+		{% endif %}
 	</tr>
 {% endfor %}
 </table>
