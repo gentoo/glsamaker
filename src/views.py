@@ -216,7 +216,7 @@ def edit_glsa(glsa_id=None):
 @login_required
 def archive():
     # TODO: paginate
-    glsas = GLSA.query.order_by(GLSA.glsa_id).all()
+    glsas = GLSA.query.filter_by(draft=False).order_by(GLSA.glsa_id).all()
     return render_template('archive.html', glsas=glsas)
 
 
