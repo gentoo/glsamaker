@@ -4,6 +4,7 @@ import os
 import uuid
 from logging.config import dictConfig
 
+from bugzilla import Bugzilla
 from flask import redirect, render_template, request, Flask
 from flask_login import LoginManager, UserMixin
 from flask_login import current_user, login_user, login_required
@@ -42,6 +43,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+bgo = Bugzilla('https://bugs.gentoo.org')
+
+
 # Terrible hack to allow uid_to_nick to be accessible in jinja
 # templates so we can use it in places like archive.html
 app.jinja_env.globals.update(uid_to_nick=uid_to_nick)
@@ -70,7 +74,7 @@ class GLSAForm(FlaskForm):
     resolution = TextAreaField('Resolution', validators=[DataRequired()])
     resolution_code = TextAreaField('Resolution Code',
                                     validators=[DataRequired()])
-    references = StringField('References', validators=[DataRequired()])
+    references = StringField('References', validators=[])
     release = BooleanField('Release')
     ack = BooleanField('Ack')
     submit = SubmitField('Submit')
@@ -151,6 +155,15 @@ def parse_atoms(request, range_type):
     return ret
 
 
+def bugs_aliases(bugs):
+    try:
+        bugs = bgo.getbugs(bugs)
+    except:
+        # TODO: This isn't great but sometimes bugzie is down :(
+        return []
+    return sorted([alias for bug in bugs for alias in bug.alias])
+
+
 @app.route('/edit_glsa', methods=['GET', 'POST'])
 @app.route('/edit_glsa/<glsa_id>', methods=['GET', 'POST'])
 @login_required
@@ -190,8 +203,13 @@ def edit_glsa(glsa_id=None):
         glsa.workaround = form.workaround.data
         glsa.resolution = form.resolution.data
         glsa.resolution_code = form.resolution_code.data
-        glsa.references = [Reference.new(text.strip())
-                           for text in form.references.data.split(', ')]
+
+        # There may already be references, but the references we
+        # already have might also be bug aliases. Use list() and set()
+        # hackery to ensure list uniqueness
+        alias_refs = bugs_aliases([bug.bug_id for bug in glsa.bugs])
+        glsa.references = list(set([Reference.new(text.strip())
+                                    for text in (form.references.data.split(', ') + alias_refs)]))
         glsa.requested_time = datetime.now()
         if form.release.data:
             glsa.glsa_id = GLSA.next_id()
