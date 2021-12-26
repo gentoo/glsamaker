@@ -1,2 +1,5 @@
 venv
 etc
+glsamaker.egg-info
+.tox
+**/__pycache__

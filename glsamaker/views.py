@@ -15,13 +15,13 @@ from wtforms import BooleanField, SelectField, StringField, TextAreaField, Passw
 from wtforms.validators import DataRequired
 import bcrypt
 
-from app import app, db
-from models.bug import Bug
-from models.glsa import GLSA
-from models.package import Affected
-from models.reference import Reference
-from models.user import User, uid_to_nick
-from release import release_email, release_xml
+from glsamaker.app import app, db
+from glsamaker.models.bug import Bug
+from glsamaker.models.glsa import GLSA
+from glsamaker.models.package import Affected
+from glsamaker.models.reference import Reference
+from glsamaker.models.user import User, uid_to_nick
+from glsamaker.release import release_email, release_xml
 
 dictConfig({
     'version': 1,

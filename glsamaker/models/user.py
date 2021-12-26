@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-from app import app, db
+from glsamaker.app import app, db
 
 
 class User(UserMixin, db.Model):

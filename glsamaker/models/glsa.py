@@ -2,11 +2,11 @@ from datetime import datetime
 
 from sqlalchemy import select
 
-from app import app, db
-from models.bug import Bug
-from models.reference import Reference
-from models.user import User
-from models.package import Package
+from glsamaker.app import app, db
+from glsamaker.models.bug import Bug
+from glsamaker.models.reference import Reference
+from glsamaker.models.user import User
+from glsamaker.models.package import Package
 
 
 glsa_to_bug = db.Table('glsa_to_bug',

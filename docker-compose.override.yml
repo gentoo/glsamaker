@@ -15,10 +15,12 @@ services:
   db:
     image: postgres:13
     volumes:
-      - /var/lib/postgresql/data
+      - data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${GLSAMAKER_POSTGRES_USER:-root}
       POSTGRES_PASSWORD: ${GLSAMAKER_POSTGRES_PASS:-root}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
+volumes:
+  data:

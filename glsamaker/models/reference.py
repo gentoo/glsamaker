@@ -1,4 +1,4 @@
-from app import db
+from glsamaker.app import db
 
 
 class Reference(db.Model):
