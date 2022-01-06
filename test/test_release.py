@@ -20,6 +20,9 @@ def file_contents(path):
 
 
 def test_generate_xml():
+    # TODO: instead of diffing literal strings of XML, we should be
+    # diffing actual xml contents.. somehow. Currently, we're often
+    # testing for inconsequential whitespace differences
     db.create_all()
     for glsa_xml in glsa_xmls:
         glsa = glsamaker.xml_to_glsa(glsa_xml)

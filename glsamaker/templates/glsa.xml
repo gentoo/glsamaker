@@ -2,49 +2,51 @@
 <!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">
 <glsa id="{{ glsa.glsa_id }}">
 	<title>{{ glsa.title }}</title>
-	<synopsis>{{ glsa.synopsis }}</synopsis>
+	<synopsis>{{ glsa.synopsis }}
+	</synopsis>
 	<product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
-	<announced>{{ glsa.announced }}</announced>
-	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date }}</revised>
+	<announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
+	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
 	{% for bug in glsa.get_bugs() -%}
 	<bug>{{ bug }}</bug>
 	{% endfor -%}
 	<access>{{ glsa.access }}</access>
 	<affected>
-		{% for affected in glsa.affected -%}
+		{% for affected in glsa.affected %}
 		<package name="{{ affected.pkg }}" auto="yes" arch="{{ affected.arch }}">
 			<{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
 		</package>
-		{% endfor -%}
+		{% endfor %}
 	</affected>
 	<background>
-		{{ glsa.background }}
+		<p>{{ glsa.background }}</p>
 	</background>
 	<description>
-		{{ glsa.description }}
+		<p>{{ glsa.description -}}
+
+		</p>
 	</description>
 	<impact type="{{ glsa.impact_type }}">
-		{{ glsa.impact }}
+		<p>{{ glsa.impact }}</p>
 	</impact>
 	<workaround>
-		{{ glsa.workaround }}
+		<p>{{ glsa.workaround }}</p>
 	</workaround>
 	<resolution>
-		{{ glsa.resolution }}
+		<p>{{ glsa.resolution }}</p>
 
 		<code>
 			{{ glsa.resolution_code }}
 		</code>
 	</resolution>
 	<references>
-		{% for ref in glsa.references %}
+		{%- for ref in glsa.references -%}
 		{% if ref.url %}
-		<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>
-		{% else %}
+		<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri> {% else %}
 		<uri>{{ ref.ref_text }}</uri>
-		{% endif %}
+		{%- endif -%}
 		{% endfor %}
 	</references>
-	<metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() }}">{{ uid_to_nick(glsa.requester) }}</metadata>
-	<metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
+	<metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
+	<metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
 </glsa>
