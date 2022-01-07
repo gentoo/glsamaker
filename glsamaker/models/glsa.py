@@ -104,6 +104,21 @@ class GLSA(db.Model):
     def get_references(self):
         return [ref.ref_text for ref in self.references]
 
+    def get_pkgs(self):
+        return set([pkg.pkg for pkg in self.affected])
+
+    def get_affected_arch(self, pn):
+        ret = set()
+        for pkg in [pkg for pkg in self.affected if pkg.pkg == pn]:
+            ret.add(pkg.arch)
+        if len(ret) > 1:
+            app.logger.error("Something has gone horribly wrong with GLSA {}!".format(self.id))
+            app.logger.error("{} has multiple arches: {}".format(pkg, ret))
+        return list(ret)[0]
+
+    def get_affected_for_pkg(self, pn):
+        return [pkg for pkg in self.affected if pkg.pkg == pn]
+
     def get_unaffected(self):
         return [pkg for pkg in self.affected if pkg.range_type == 'unaffected']
 

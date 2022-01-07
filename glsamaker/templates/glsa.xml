@@ -12,11 +12,13 @@
 	{% endfor -%}
 	<access>{{ glsa.access }}</access>
 	<affected>
-		{% for affected in glsa.affected %}
-		<package name="{{ affected.pkg }}" auto="yes" arch="{{ affected.arch }}">
+		{%- for pkg in glsa.get_pkgs() %}
+		<package name="{{ pkg }}" auto="yes" arch="{{ glsa.get_affected_arch(pkg) }}">
+			{%- for affected in glsa.get_affected_for_pkg(pkg) %}
 			<{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
+			{%- endfor %}
 		</package>
-		{% endfor %}
+		{%- endfor %}
 	</affected>
 	<background>
 		<p>{{ glsa.background }}</p>
