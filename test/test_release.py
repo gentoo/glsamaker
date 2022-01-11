@@ -4,7 +4,7 @@ import os
 from sqlalchemy import create_engine
 
 from glsamaker import release
-from glsamaker import glsamaker
+from glsamaker import main
 from glsamaker.app import app, db
 
 
@@ -25,7 +25,7 @@ def test_generate_xml():
     # testing for inconsequential whitespace differences
     db.create_all()
     for glsa_xml in glsa_xmls:
-        glsa = glsamaker.xml_to_glsa(glsa_xml)
+        glsa = main.xml_to_glsa(glsa_xml)
         glsa_contents = [x.strip() for x in file_contents(glsa_xml).splitlines()]
         with app.app_context():
             xml = [x.strip() for x in release.generate_xml(glsa).splitlines()]

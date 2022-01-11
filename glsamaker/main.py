@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 from xml.etree import ElementTree
 
-#from . import models
 from glsamaker.app import app, db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
