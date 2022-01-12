@@ -16,6 +16,25 @@ from glsamaker.models.user import User, nick_to_uid, create_user
 import glsamaker.views
 
 
+def flatten_paragraphs(paragraphs):
+    # Split each paragraph into their own list and strip whitespace from each
+    # sub-list item
+    p_lines = [[l.strip() for l in line.splitlines()] for line in paragraphs]
+
+    # Join each paragraph into one line
+    joined_lines = [' '.join(line) for line in p_lines]
+
+    # Return a flattened string where paragraphs are separated by newlines
+    return '\n'.join(joined_lines).strip()
+
+
+def flatten_tags(tag):
+    # Get the text of the tags we want to flatten
+    paragraphs = [p.text.strip() for p in tag.findall('p')]
+
+    return flatten_paragraphs(paragraphs)
+
+
 def get_xml_text(xml_root, match):
     tags = xml_root.findall(match)
 
@@ -26,17 +45,20 @@ def get_xml_text(xml_root, match):
     # Need to be able to handle the case in glsa-201608-01 where the
     # <product> is empty, so text will be None and would error on
     # on .strip()
-    text = tags[0].text
+    text = tags[0].text.strip()
 
-    if text:
-        text = text.strip()
-        # If the actual text in the tag is behind some more <p> tags
-        # or similar, the strip will make the text empty. We need to
-        # enumerate those and get the text out of them.
-        if not text:
-            text = '\n'.join([tag.text for tag in tags[0].findall('p')
-                              if tag.text is not None])
+    # If the actual text in the tag is behind some more <p> tags
+    # or similar, the strip will make the text empty. We need to
+    # enumerate those and get the text out of them.
+    if not text:
+        text = flatten_tags(tags[0])
     return text
+
+
+def get_xml_text_lines(xml_root, match):
+    text = get_xml_text(xml_root, match)
+    return '\n'.join(
+        list(filter(None, [line.strip() for line in text.splitlines()])))
 
 
 def get_xml_attrib(xml_root, match):
@@ -52,7 +74,7 @@ def xml_to_glsa(xml):
     glsa.glsa_id = root.attrib['id']
     glsa.draft = False
     glsa.title = get_xml_text(root, 'title')
-    glsa.synopsis = get_xml_text(root, 'synopsis')
+    glsa.synopsis = flatten_paragraphs([get_xml_text(root, 'synopsis')])
     glsa.product_type = get_xml_attrib(root, 'product')['type'].strip()
     glsa.product = get_xml_text(root, 'product')
     glsa.announced = datetime.fromisoformat(get_xml_text(root, 'announced'))
@@ -83,7 +105,7 @@ def xml_to_glsa(xml):
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
     glsa.resolution = get_xml_text(root, 'resolution')
-    glsa.resolution_code = get_xml_text(root, './resolution/code')
+    glsa.resolution_code = get_xml_text_lines(root, './resolution/code')
 
     for uri in root.find('references'):
         glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))
