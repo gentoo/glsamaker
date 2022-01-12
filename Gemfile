@@ -17,7 +17,7 @@ gem 'jbuilder', '~> 2.0'
 #  gem 'uglifier'
 #end
 
-gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
+gem 'prototype-rails', '~> 4.0.1'
 
 # Use unicorn as the web server
 #gem 'unicorn'
