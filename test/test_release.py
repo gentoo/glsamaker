@@ -1,3 +1,4 @@
+from datetime import datetime
 import difflib
 import os
 
@@ -11,12 +12,16 @@ from glsamaker.app import app, db
 app.jinja_loader.searchpath.append('glsamaker/templates')
 
 
-glsa_xmls = ['test/files/glsa/glsa-202107-55.xml']
+glsas = ['test/files/glsa/glsa-202107-55']
+
+
+def striplines(lines):
+    return [line.strip() for line in lines]
 
 
 def file_contents(path):
     with open(path) as f:
-        return f.read()
+        return f.readlines()
 
 
 def test_generate_xml():
@@ -24,14 +29,33 @@ def test_generate_xml():
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
     db.create_all()
-    for glsa_xml in glsa_xmls:
-        glsa = main.xml_to_glsa(glsa_xml)
-        glsa_contents = [x.strip() for x in file_contents(glsa_xml).splitlines()]
+    for glsa_path in glsas:
+        xml_path = '{}.xml'.format(glsa_path)
+        glsa = main.xml_to_glsa(xml_path)
+        glsa_contents = striplines(file_contents(xml_path))
         with app.app_context():
-            xml = [x.strip() for x in release.generate_xml(glsa).splitlines()]
-            f = os.path.basename(glsa_xml)
+            xml = striplines(release.generate_xml(glsa).splitlines())
+            f = os.path.basename(xml_path)
             for x in difflib.unified_diff(glsa_contents, xml,
-                                        fromfile='{}.test'.format(f),
-                                        tofile=f):
+                                          fromfile='{}.test'.format(f),
+                                          tofile=f):
                 print(x)
             assert glsa_contents == release.generate_xml(glsa)
+
+
+def test_generate_mail():
+    for glsa_path in glsas:
+        xml_path = '{}.xml'.format(glsa_path)
+        mail_path = '{}.mail'.format(glsa_path)
+        glsa = main.xml_to_glsa(xml_path)
+        mail_contents = [line.strip('\n') for line in file_contents(mail_path)]
+        with app.app_context():
+            now = datetime.now().ctime()
+            generated_mail = release.generate_mail(glsa, '', now)
+            f = os.path.basename(mail_path)
+            for x in difflib.unified_diff(mail_contents,
+                                          generated_mail.splitlines(),
+                                          fromfile='{}.test'.format(f),
+                                          tofile=f):
+                print(x)
+            assert mail_contents == release.generate_mail(glsa, '', now)
