@@ -7,8 +7,8 @@ from git import Repo
 from glsamaker.app import app, config
 
 
-def generate_mail(glsa, user, date):
-    return render_template('glsa.mail', glsa=glsa, smtpuser=user, date=date)
+def generate_mail(glsa, date):
+    return render_template('glsa.mail', glsa=glsa, date=date)
 
 
 def release_email(glsa):
@@ -21,8 +21,8 @@ def release_email(glsa):
         smtp.starttls()
         smtp.login(user, password)
         smtp.sendmail(user, [to],
-                      generate_mail(glsa=glsa, user=user,
-                                    date=datetime.now().ctime()))
+                      generate_mail(glsa=glsa,
+                                    date=datetime.now().strftime('%a, %d %b %Y %X')))
 
 
 def generate_xml(glsa):

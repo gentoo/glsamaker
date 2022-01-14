@@ -1,6 +1,6 @@
-From: {{ smtpuser }}
+From: glsamaker@gentoo.org
 Date: {{ date }}
-Subject: [ {{ glsa.glsa_id }} ] {{ glsa.title }}
+Subject: [ GLSA {{ glsa.glsa_id }} ] {{ glsa.title }}
 Reply-To: security@gentoo.org
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -9,10 +9,10 @@ Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
                                            https://security.gentoo.org/
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- Severity: {{ glsa.impact_type }}
+ Severity: {{ glsa.impact_type.capitalize() }}
     Title: {{ glsa.title }}
-     Date: {{ glsa.announced }}
-     Bugs: {{ ', '.join(glsa.get_bugs()) }}
+     Date: {{ glsa.announced.strftime('%B %d, %Y') }}
+     Bugs: {% for bug in glsa.get_bugs() %}#{{ bug }}{% endfor %}
        ID: {{ glsa.glsa_id }}
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

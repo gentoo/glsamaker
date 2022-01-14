@@ -50,12 +50,12 @@ def test_generate_mail():
         glsa = main.xml_to_glsa(xml_path)
         mail_contents = [line.strip('\n') for line in file_contents(mail_path)]
         with app.app_context():
-            now = datetime.now().ctime()
-            generated_mail = release.generate_mail(glsa, '', now)
+            time = 'Fri, 23 Jul 2021 22:10:35 -0500'
+            generated_mail = release.generate_mail(glsa, time)
             f = os.path.basename(mail_path)
             for x in difflib.unified_diff(mail_contents,
                                           generated_mail.splitlines(),
                                           fromfile='{}.test'.format(f),
                                           tofile=f):
                 print(x)
-            assert mail_contents == release.generate_mail(glsa, '', now)
+            assert mail_contents == release.generate_mail(glsa, time)
