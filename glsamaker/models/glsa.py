@@ -119,8 +119,37 @@ class GLSA(db.Model):
     def get_affected_for_pkg(self, pn):
         return [pkg for pkg in self.affected if pkg.pkg == pn]
 
+    def get_vulnerable_for_pkg(self, pn):
+        return [pkg for pkg in self.affected if pkg.pkg == pn and pkg.range_type == 'vulnerable']
+
+    def get_unaffected_for_pkg(self, pn):
+        return [pkg for pkg in self.affected if pkg.pkg == pn and pkg.range_type == 'unaffected']
+
     def get_unaffected(self):
         return [pkg for pkg in self.affected if pkg.range_type == 'unaffected']
 
     def get_vulnerable(self):
         return [pkg for pkg in self.affected if pkg.range_type == 'vulnerable']
+
+    def generate_mail_table(self):
+        # TODO: Maybe try to do this in jinja. It worked for ruby in
+        # glsamakerv2..
+        # Probably needs to reorganize this in the db properly, so
+        # that we can access glsa -> package -> affected ranges rather
+        # than glsa -> affected package ranges
+
+        ret = []
+        current_pkg = None
+        idx = 1
+
+        for i, pkg in enumerate(self.get_pkgs()):
+            ret += ['']
+            vulnerable_ranges = self.get_vulnerable_for_pkg(pkg)
+            unaffected_ranges = self.get_unaffected_for_pkg(pkg)
+            vuln = vulnerable_ranges.pop()
+            unaff = unaffected_ranges.pop()
+            ret[i] += '  {}  {}'.format(idx, pkg).ljust(32, ' ') \
+                + '{} {}'.format(vuln.range_types_rev[vuln.pkg_range], vuln.version)
+            ret[i] += '{} {} '.format(unaff.range_types_rev[unaff.pkg_range], unaff.version).rjust(70 - len(ret[i]))
+
+        return '\n'.join(ret)

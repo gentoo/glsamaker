@@ -31,20 +31,9 @@ Affected packages
 =================
 
     -------------------------------------------------------------------
-     Vulnerable Packages
+     Package              /     Vulnerable     /            Unaffected
     -------------------------------------------------------------------
-
-{% for affected in glsa.get_vulnerable() %}
-  {{ affected.versioned_atom() }}
-{% endfor %}
-
-    -------------------------------------------------------------------
-     Unaffected Packages
-    -------------------------------------------------------------------
-
-{% for affected in glsa.get_unaffected() %}
-  {{ affected.versioned_atom() }}
-{% endfor %}
+{{ glsa.generate_mail_table() }}
 
 Description
 ===========
