@@ -39,7 +39,7 @@ def get_xml_text(xml_root, match):
     tags = xml_root.findall(match)
 
     # Sometimes GLSAs don't have all of the fields they should
-    if len(tags) == 0:
+    if len(tags) == 0 or not tags[0].text:
         return ""
 
     # Need to be able to handle the case in glsa-201608-01 where the
