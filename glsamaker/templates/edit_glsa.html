@@ -81,7 +81,7 @@
 					<input name="vulnerable[]" value="{{ pkg.versioned_atom() }}">
 				</td>
 				<td><input name="vulnerable_arch[]" value="{{ pkg.arch }}"></td>
-				<td><button onclick="deleterow(this)"><b>-</b></button></td>
+				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -89,7 +89,7 @@
 					<input name="vulnerable[]">
 				</td>
 				<td><input name="vulnerable_arch[]"></td>
-				<td><button onclick="deleterow(this)"><b>-</b></button></td>
+				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
 			</tr>
 		</table>
 	</div>

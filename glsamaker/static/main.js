@@ -9,6 +9,7 @@ function newrow(which) {
 	var remove = document.createElement('button');
 	atom.setAttribute('name', which + '[]');
 	arch.setAttribute('name', which + '_arch[]');
+	remove.setAttribute('type', 'button');
 	remove.setAttribute('onclick', 'deleterow(this)');
 	remove.innerHTML = '<b>-</b>';
 	atomCol.appendChild(atom);
