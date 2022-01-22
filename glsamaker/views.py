@@ -174,6 +174,9 @@ def edit_glsa(glsa_id=None):
         glsa.requester = current_user.id
     else:
         glsa = GLSA.query.filter_by(glsa_id=glsa_id).first()
+        # No editing released advisories for now
+        if not glsa.draft:
+            return redirect('/drafts'), 400
 
     form = GLSAForm(title=glsa.title, synopsis=glsa.synopsis,
                     product_type=glsa.product_type,
