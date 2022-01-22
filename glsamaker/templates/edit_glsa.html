@@ -11,11 +11,11 @@
 	{{ form.hidden_tag() }}
 	<div>
 		<label>Title</label>
-		{{ form.title }}
+		{{ form.title(size=50) }}
 	</div>
 	<div>
 		<label>Synopsis</label>
-		{{ form.synopsis }}
+		{{ form.synopsis(size=50) }}
 	</div>
 	<div>
 		<label>Product Type</label>
@@ -95,15 +95,15 @@
 	</div>
 	<div>
 		<label>Background</label>
-		{{ form.background }}
+		{{ form.background(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>Description</label>
-		{{ form.description }}
+		{{ form.description(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>Impact</label>
-		{{ form.impact }}
+		{{ form.impact(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>Impact Type</label>
@@ -111,15 +111,15 @@
 	</div>
 	<div>
 		<label>Workaround</label>
-		{{ form.workaround }}
+		{{ form.workaround(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>Resolution</label>
-		{{ form.resolution }}
+		{{ form.resolution(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>Resolution Code</label>
-		{{ form.resolution_code }}
+		{{ form.resolution_code(cols=60, rows=12) }}
 	</div>
 	<div>
 		<label>References</label>

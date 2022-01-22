@@ -68,7 +68,7 @@ class GLSAForm(FlaskForm):
                          choices=['remote', 'local', 'local and remote'])
     background = TextAreaField('Background', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    impact = StringField('Impact', validators=[DataRequired()])
+    impact = TextAreaField('Impact', validators=[DataRequired()])
     impact_type = SelectField('Impact Type', choices=['low', 'normal', 'high'])
     workaround = TextAreaField('Workaround', validators=[DataRequired()])
     resolution = TextAreaField('Resolution', validators=[DataRequired()])
