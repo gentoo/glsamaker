@@ -8,150 +8,158 @@
 {% endif %}
 <h3>{{ glsa.glsa_id | default('Unreleased', true) }}</h3>
 <form method="post">
-	{{ form.hidden_tag() }}
-	<div>
-		<label>Title</label>
-		{{ form.title(size=50) }}
-	</div>
-	<div>
-		<label>Synopsis</label>
-		{{ form.synopsis(size=50) }}
-	</div>
-	<div>
-		<label>Product Type</label>
-		{{ form.product_type }}
-	</div>
-	<div>
-		<label>Announced</label>
-		{{ glsa.announced | default('TBD', true) }}
-	</div>
-	<div>
-		<label>Revision Count</label>
-		{{ glsa.revision_count | default('0', true) }}
-	</div>
-	<div>
-		<label>Revision Date</label>
-		{{ glsa.revised_date | default('', true) }}
-	</div>
-	<div>
-		<label>Bugs</label>
-		{{ form.bugs }}
-	</div>
-	<div>
-		<label>Access</label>
-		{{ form.access }}
-	</div>
-	<div>
-		<table id="unaffected" class="bordered">
-			<caption><b>Unaffected</b></caption>
-			<tr>
-				<th>Atom</th>
-				<th>Arch</th>
-				<th><button type="button" onclick="newrow('unaffected')">New</button></th>
-			</tr>
-			{% for pkg in glsa.get_unaffected() %}
-			<tr>
-				<td>
-					<input name="unaffected[]" value="{{ pkg.versioned_atom() }}">
-				</td>
-				<td><input name="unaffected_arch[]" value="{{ pkg.arch }}"></td>
-				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
-			</tr>
-			{% endfor %}
-			<tr>
-				<td>
-					<input name="unaffected[]">
-				</td>
-				<td><input name="unaffected_arch[]"></td>
-				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
-			</tr>
-		</table>
-	</div>
-	<div>
-		<table id="vulnerable" class="bordered">
-			<caption><b>Vulnerable</b></caption>
-			<tr>
-				<th>Atom</th>
-				<th>Arch</th>
-				<th><button type="button" onclick="newrow('vulnerable')">New</button></th>
-			</tr>
-			{% for pkg in glsa.get_vulnerable() %}
-			<tr>
-				<td>
-					<input name="vulnerable[]" value="{{ pkg.versioned_atom() }}">
-				</td>
-				<td><input name="vulnerable_arch[]" value="{{ pkg.arch }}"></td>
-				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
-			</tr>
-			{% endfor %}
-			<tr>
-				<td>
-					<input name="vulnerable[]">
-				</td>
-				<td><input name="vulnerable_arch[]"></td>
-				<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
-			</tr>
-		</table>
-	</div>
-	<div>
-		<label>Background</label>
-		{{ form.background(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>Description</label>
-		{{ form.description(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>Impact</label>
-		{{ form.impact(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>Impact Type</label>
-		{{ form.impact_type }}
-	</div>
-	<div>
-		<label>Workaround</label>
-		{{ form.workaround(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>Resolution</label>
-		{{ form.resolution(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>Resolution Code</label>
-		{{ form.resolution_code(cols=60, rows=12) }}
-	</div>
-	<div>
-		<label>References</label>
-		{{ form.references }}
-	</div>
-	<div>
-		<label>Requester</label>
-		{{ uid_to_nick(glsa.requester) }}
-	</div>
-	<div>
-		<label>Submitter</label>
-		{{ uid_to_nick(glsa.submitter) | default('TBD', true) }}
-	</div>
-	<div>
-		<label>Requested</label>
-		{{ glsa.requested_time | default('TBD', true) }}
-	</div>
-	<div>
-		<label>Submitted</label>
-		{{ glsa.submitted_time | default('TBD', true) }}
-	</div>
-	{% if glsa.acked_by and glsa.acked_by != current_user %}
-	<div>
-		<label>Release?</label>
-		{{ form.release }}
-	</div>
-	{% elif glsa.requester != current_user and not new %}
-	<div>
-		<label>Ack?</label>
-		{{ form.ack }}
-	</div>
-	{% endif %}
-	{{ form.submit }}
+	<table>
+		{{ form.hidden_tag() }}
+		<tr>
+			<td>Title</td>
+			<td>{{ form.title(size=50) }}</td>
+		</tr>
+		<tr>
+			<td>Synopsis</td>
+			<td>{{ form.synopsis(size=50) }}</td>
+		</tr>
+		<tr>
+			<td>Product Type</td>
+			<td>{{ form.product_type }}</td>
+		</tr>
+		<tr>
+			<td>Announced</td>
+			<td>{{ glsa.announced | default('TBD', true) }}</td>
+		</tr>
+		<tr>
+			<td>Revision Count</td>
+			<td>{{ glsa.revision_count | default('0', true) }}</td>
+		</tr>
+		<tr>
+			<td>Revision Date</td>
+			<td>{{ glsa.revised_date | default('', true) }}</td>
+		</tr>
+		<tr>
+			<td>Bugs</td>
+			<td>{{ form.bugs }}</td>
+		</tr>
+		<tr>
+			<td>Access</td>
+			<td>{{ form.access }}</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<table id="unaffected" class="bordered">
+					<caption><b>Unaffected</b></caption>
+					<tr>
+						<th>Atom</th>
+						<th>Arch</th>
+						<th><button type="button" onclick="newrow('unaffected')">New</button></th>
+					</tr>
+					{% for pkg in glsa.get_unaffected() %}
+					<tr>
+						<td>
+							<input name="unaffected[]" value="{{ pkg.versioned_atom() }}">
+						</td>
+						<td><input name="unaffected_arch[]" value="{{ pkg.arch }}"></td>
+						<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td>
+							<input name="unaffected[]">
+						</td>
+						<td><input name="unaffected_arch[]"></td>
+						<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<table id="vulnerable" class="bordered">
+					<caption><b>Vulnerable</b></caption>
+					<tr>
+						<th>Atom</th>
+						<th>Arch</th>
+						<th><button type="button" onclick="newrow('vulnerable')">New</button></th>
+					</tr>
+					{% for pkg in glsa.get_vulnerable() %}
+					<tr>
+						<td>
+							<input name="vulnerable[]" value="{{ pkg.versioned_atom() }}">
+						</td>
+						<td><input name="vulnerable_arch[]" value="{{ pkg.arch }}"></td>
+						<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td>
+							<input name="vulnerable[]">
+						</td>
+						<td><input name="vulnerable_arch[]"></td>
+						<td><button type="button" onclick="deleterow(this)"><b>-</b></button></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>Background</td>
+			<td>{{ form.background(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>{{ form.description(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>Impact</td>
+			<td>{{ form.impact(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>Impact Type</td>
+			<td>{{ form.impact_type }}</td>
+		</tr>
+		<tr>
+			<td>Workaround</td>
+			<td>{{ form.workaround(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>Resolution</td>
+			<td>{{ form.resolution(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>Resolution Code</td>
+			<td>{{ form.resolution_code(cols=60, rows=12) }}</td>
+		</tr>
+		<tr>
+			<td>References</td>
+			<td>{{ form.references }}</td>
+		</tr>
+		<tr>
+			<td>Requester</td>
+			<td>{{ uid_to_nick(glsa.requester) }}</td>
+		</tr>
+		<tr>
+			<td>Submitter</td>
+			<td>{{ uid_to_nick(glsa.submitter) | default('TBD', tdue) }}</td>
+		</tr>
+		<tr>
+			<td>Requested</td>
+			<td>{{ glsa.requested_time | default('TBD', tdue) }}</td>
+		</tr>
+		<tr>
+			<td>Submitted</td>
+			<td>{{ glsa.submitted_time | default('TBD', tdue) }}</td>
+		</tr>
+		{% if glsa.acked_by and glsa.acked_by != current_user %}
+		<tr>
+			<td>Release?</td>
+			<td>{{ form.release }}</td>
+		</tr>
+		{% elif glsa.requester != current_user and not new %}
+		<tr>
+			<td>Ack?</td>
+			<td>{{ form.ack }}</td>
+		</tr>
+		{% endif %}
+		<tr><td>{{ form.submit }}</td></tr>
+	</table>
 </form>
 {% endblock %}

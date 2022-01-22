@@ -18,5 +18,11 @@ function newrow(which) {
 }
 
 function deleterow(t) {
-	t.parentElement.parentElement.remove();
+	/* We only want to allow removal if there's more than one to remove.
+	 * 2 = one regular row and row heading, only remove if there's
+	 * more rows than this
+	 */
+	if (t.parentElement.parentElement.parentElement.childElementCount > 2) {
+		t.parentElement.parentElement.remove();
+	}
 }
