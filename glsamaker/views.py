@@ -5,7 +5,7 @@ import uuid
 from logging.config import dictConfig
 
 from bugzilla import Bugzilla
-from flask import redirect, render_template, request, Flask
+from flask import redirect, render_template, request, Flask, Response
 from flask_login import LoginManager, UserMixin
 from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
@@ -15,13 +15,13 @@ from wtforms import BooleanField, SelectField, StringField, TextAreaField, Passw
 from wtforms.validators import DataRequired
 import bcrypt
 
-from glsamaker.app import app, db
+from glsamaker.app import app, db, config
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User, uid_to_nick
-from glsamaker.release import release_email, release_xml
+from glsamaker.release import release_email, release_xml, generate_mail, generate_xml
 
 dictConfig({
     'version': 1,
@@ -69,7 +69,7 @@ class GLSAForm(FlaskForm):
     background = TextAreaField('Background', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     impact = TextAreaField('Impact', validators=[DataRequired()])
-    impact_type = SelectField('Impact Type', choices=['low', 'normal', 'high'])
+    impact_type = SelectField('Impact Type', choices=['normal', 'low', 'high'])
     workaround = TextAreaField('Workaround', validators=[DataRequired()])
     resolution = TextAreaField('Resolution', validators=[DataRequired()])
     resolution_code = TextAreaField('Resolution Code',
@@ -219,8 +219,10 @@ def edit_glsa(glsa_id=None):
             glsa.draft = False
             glsa.submitter = current_user.id
             glsa.submitted_time = datetime.now()
-            release_email(glsa)
-            release_xml(glsa)
+            if config['glsamaker']['autorelease']:
+                app.logger.info("Autorelease disabled, not automatically adding XML or sending email")
+                release_email(glsa)
+                release_xml(glsa)
         elif form.ack.data:
             glsa.acked_by = current_user.id
         else:
@@ -248,3 +250,24 @@ def show_glsa(glsa_id):
     if not advisory:
         return render_template('glsa.html'), 404
     return render_template('glsa.html', glsa=advisory)
+
+@app.route('/glsa/<glsa_id>/mail')
+@login_required
+def glsa_mail(glsa_id):
+    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    if not advisory or not advisory.announced:
+        return redirect('/'), 400
+    mail = generate_mail(advisory, date=datetime.now().strftime('%a, %d %b %Y %X'))
+    return Response(mail, mimetype='text/plain',
+                    headers={"Content-disposition":
+                             "attachment; filename=glsa-{}.mail".format(advisory.glsa_id)})
+
+@app.route('/glsa/<glsa_id>/xml')
+@login_required
+def glsa_xml(glsa_id):
+    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    if not advisory or not advisory.announced:
+        return redirect('/'), 400
+    return Response(generate_xml(advisory), mimetype='text/plain',
+                    headers={"Content-disposition":
+                             "attachment; filename=glsa-{}.xml".format(advisory.glsa_id)})
