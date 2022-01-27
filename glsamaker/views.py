@@ -231,6 +231,9 @@ def edit_glsa(glsa_id=None):
         db.session.commit()
         return redirect('/drafts')
 
+    if glsa_id:
+        return render_template('edit_glsa.html', form=form, glsa=glsa,
+                               current_user=current_user)
     return render_template('edit_glsa.html', form=form, glsa=glsa,
                            current_user=current_user, new=True)
 
