@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import sys
 import os
 import uuid
@@ -214,15 +214,28 @@ def edit_glsa(glsa_id=None):
         glsa.references = list(set([Reference.new(text.strip())
                                     for text in (form.references.data.split(', ') + alias_refs)]))
         glsa.requested_time = datetime.now()
+
+        # Release it!
         if form.release.data:
             glsa.glsa_id = GLSA.next_id()
             glsa.draft = False
             glsa.submitter = current_user.id
             glsa.submitted_time = datetime.now()
-            if config['glsamaker']['autorelease']:
-                app.logger.info("Autorelease disabled, not automatically adding XML or sending email")
+            glsa.announced = date.today()
+
+            # Yes, it's a bit weird, but it's what has been done in the past
+            # The first revision is made on the date the GLSA is announced.
+            glsa.revised_date = glsa.announced
+
+            app.logger.info(config['glsamaker'])
+            app.logger.info(config['glsamaker']['autorelease'])
+            if 'glsamaker' in config and \
+               'autorelease' in config['glsamaker'] and \
+               config['glsamaker']['autorelease'] == 'yes':
                 release_email(glsa)
                 release_xml(glsa)
+            else:
+                app.logger.info("Autorelease disabled, not automatically adding XML or sending email")
         elif form.ack.data:
             glsa.acked_by = current_user.id
         else:
