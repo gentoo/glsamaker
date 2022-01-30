@@ -222,6 +222,7 @@ def edit_glsa(glsa_id=None):
             glsa.submitter = current_user.id
             glsa.submitted_time = datetime.now()
             glsa.announced = date.today()
+            glsa.revision_count = 1
 
             # Yes, it's a bit weird, but it's what has been done in the past
             # The first revision is made on the date the GLSA is announced.
