@@ -18,13 +18,14 @@
 <h2>GLSA</h2>
 {% if glsa.draft %}
 <a href="/edit_glsa/{{ glsa.glsa_id }}">Edit</a>
-{% endif %}
+{% else %}
 <form method="get" action="/glsa/{{ glsa.glsa_id }}/xml">
 	<button type="submit">Download XML</button>
 </form>
 <form method="get" action="/glsa/{{ glsa.glsa_id }}/mail">
 	<button type="submit">Download mailable text</button>
 </form>
+{% endif %}
 <table class="bordered">
 	<tr>
 		<th>Field</th>
