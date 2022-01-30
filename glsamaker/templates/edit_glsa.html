@@ -153,7 +153,7 @@
 			<td>Release?</td>
 			<td>{{ form.release }}</td>
 		</tr>
-		{% elif glsa.requester != current_user and not new %}
+		{% elif glsa.requester != current_user.id and not new %}
 		<tr>
 			<td>Ack?</td>
 			<td>{{ form.ack }}</td>

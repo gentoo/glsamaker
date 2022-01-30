@@ -102,7 +102,7 @@ def login():
                               user.password.encode('utf-8')):
                 # Success, so login user and redirect to homepage
                 login_user(user)
-                app.logger.info("Successful login for '{}'".format(username))
+                app.logger.info("Successful login for '{}', id '{}'".format(username, user.id))
                 return redirect('/')
             # Otherwise, return a generic error message to the user,
             # but log exactly what happened
