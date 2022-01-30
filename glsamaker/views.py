@@ -199,6 +199,8 @@ def edit_glsa(glsa_id=None):
         glsa.access = form.access.data
         glsa.affected = parse_atoms(request, 'unaffected') + \
             parse_atoms(request, 'vulnerable')
+        glsa.product = ','.join(sorted([cpn.split('/')[1]
+                                        for cpn in glsa.get_pkgs()]))
         glsa.background = form.background.data
         glsa.description = form.description.data
         glsa.impact = form.impact.data
