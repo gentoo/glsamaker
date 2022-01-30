@@ -236,6 +236,8 @@ def edit_glsa(glsa_id=None):
                 release_xml(glsa)
             else:
                 app.logger.info("Autorelease disabled, not automatically adding XML or sending email")
+            db.session.commit()
+            return redirect('/glsa/' + glsa.glsa_id)
         elif form.ack.data:
             glsa.acked_by = current_user.id
         else:
