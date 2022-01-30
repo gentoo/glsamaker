@@ -138,15 +138,15 @@
 		</tr>
 		<tr>
 			<td>Submitter</td>
-			<td>{{ uid_to_nick(glsa.submitter) | default('TBD', tdue) }}</td>
+			<td>{{ uid_to_nick(glsa.submitter) | default('TBD', true) }}</td>
 		</tr>
 		<tr>
 			<td>Requested</td>
-			<td>{{ glsa.requested_time | default('TBD', tdue) }}</td>
+			<td>{{ glsa.requested_time | default('TBD', true) }}</td>
 		</tr>
 		<tr>
 			<td>Submitted</td>
-			<td>{{ glsa.submitted_time | default('TBD', tdue) }}</td>
+			<td>{{ glsa.submitted_time | default('TBD', true) }}</td>
 		</tr>
 		{% if glsa.acked_by and glsa.acked_by != current_user %}
 		<tr>
