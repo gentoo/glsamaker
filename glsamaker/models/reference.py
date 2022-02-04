@@ -14,6 +14,8 @@ class Reference(db.Model):
         else:
             if ref_text.startswith('CVE'):
                 self.url = 'https://nvd.nist.gov/vuln/detail/' + self.ref_text
+            elif ref_text.startswith('WSA'):
+                self.url = 'https://webkitgtk.org/security/' + self.ref_text + '.html'
 
     # TODO: see bug.py's new TODO
     @classmethod
