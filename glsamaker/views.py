@@ -156,12 +156,13 @@ def parse_atoms(request, range_type):
 
 
 def bugs_aliases(bugs):
-    try:
-        bugs = bgo.getbugs(bugs)
-    except:
-        # TODO: This isn't great but sometimes bugzie is down :(
-        return []
-    return sorted([alias for bug in bugs for alias in bug.alias])
+    ret = []
+    bugs = bgo.getbugs(bugs)
+    for bug in bugs:
+        if bug.blocks:
+            ret += bugs_aliases(bug.blocks)
+            app.logger.info("Found {} in blocking bug {}".format(ret, bug.id))
+    return sorted(ret + [alias for bug in bugs for alias in bug.alias])
 
 
 @app.route('/edit_glsa', methods=['GET', 'POST'])
@@ -212,9 +213,10 @@ def edit_glsa(glsa_id=None):
         # There may already be references, but the references we
         # already have might also be bug aliases. Use list() and set()
         # hackery to ensure list uniqueness
-        alias_refs = bugs_aliases([bug.bug_id for bug in glsa.bugs])
+        alias_refs = list(set(bugs_aliases([bug.bug_id for bug in glsa.bugs])))
         glsa.references = list(set([Reference.new(text.strip())
-                                    for text in (form.references.data.split(', ') + alias_refs)]))
+                                    for text in (form.references.data.split(', ') + alias_refs)
+                                    if text.strip()]))
         glsa.requested_time = datetime.now()
 
         # Release it!
