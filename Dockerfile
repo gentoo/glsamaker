@@ -6,7 +6,7 @@ RUN git clone https://anongit.gentoo.org/git/data/glsa.git
 
 COPY . /var/lib/glsamaker
 
-RUN pip install .
+RUN --mount=type=cache,target=/root/.cache/pip pip install .
 
 EXPOSE 8080
 
