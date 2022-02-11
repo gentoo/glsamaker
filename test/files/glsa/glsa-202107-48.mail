@@ -1,31 +1,32 @@
 From: glsamaker@gentoo.org
-Date: {{ date }}
-Subject: [ GLSA {{ glsa.glsa_id }} ] {{ glsa.title }}
+Date: Fri, 23 Jul 2021 22:10:35 -0500
+Subject: [ GLSA 202107-48 ] systemd: Multiple vulnerabilities
 Reply-To: security@gentoo.org
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
+Gentoo Linux Security Advisory                           GLSA 202107-48
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                                            https://security.gentoo.org/
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- Severity: {{ glsa.impact_type.capitalize() }}
-    Title: {{ glsa.title }}
-     Date: {{ glsa.announced.strftime('%B %d, %Y') }}
-     Bugs: {% for bug in glsa.get_bugs() %}#{{ bug }}{{", " if not loop.last}}{% endfor %}
-       ID: {{ glsa.glsa_id }}
+ Severity: Normal
+    Title: systemd: Multiple vulnerabilities
+     Date: July 20, 2021
+     Bugs: #789399, #803041
+       ID: 202107-48
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Synopsis
 ========
 
-{{ glsa.synopsis | wordwrap(72) }}
+Multiple vulnerabilities have been found in systemd, the worst of which
+could result in a Denial of Service condition.
 
 Background
 ==========
 
-{{ glsa.background | wordwrap(72) }}
+A system and service manager.
 
 Affected packages
 =================
@@ -33,46 +34,47 @@ Affected packages
     -------------------------------------------------------------------
      Package              /     Vulnerable     /            Unaffected
     -------------------------------------------------------------------
-{{ glsa.generate_mail_table() }}
+  1  sys-apps/systemd           < 248.5                      >= 248.5 
 
 Description
 ===========
 
-{{ glsa.description | wordwrap(72) }}
+Multiple vulnerabilities have been discovered in systemd. Please review
+the CVE identifiers referenced below for details.
 
 Impact
 ======
 
-{{ glsa.impact }}
+Please review the referenced CVE identifiers for details.
 
 Workaround
 ==========
 
-{{ glsa.workaround }}
+There is no known workaround at this time.
 
 Resolution
 ==========
 
-{{ glsa.resolution }}
+All systemd users should upgrade to the latest version:
 
-{{ glsa.resolution_code | indent(2, True) }}
+  # emerge --sync
+  # emerge --ask --oneshot --verbose ">=sys-apps/systemd-248.5"
 
 References
 ==========
 
-{% for ref in glsa.references -%}
-[ {{ loop.index }} ] {{ ref.ref_text }}
-{%- if ref.url %}
-{{ ref.url | indent(6, True) }}
-{%- endif %}
-{% endfor %}
+[ 1 ] CVE-2020-13529
+      https://nvd.nist.gov/vuln/detail/CVE-2020-13529
+[ 2 ] CVE-2021-33910
+      https://nvd.nist.gov/vuln/detail/CVE-2021-33910
+
 Availability
 ============
 
 This GLSA and any updates to it are available for viewing at
 the Gentoo Security Website:
 
- https://security.gentoo.org/glsa/{{ glsa.glsa_id }}
+ https://security.gentoo.org/glsa/202107-48
 
 Concerns?
 =========
@@ -86,7 +88,7 @@ https://bugs.gentoo.org.
 License
 =======
 
-Copyright {{ glsa.submitted_time.year }} Gentoo Foundation, Inc; referenced text
+Copyright 2021 Gentoo Foundation, Inc; referenced text
 belongs to its owner(s).
 
 The contents of this document are licensed under the
