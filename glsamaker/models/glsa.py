@@ -140,24 +140,19 @@ class GLSA(db.Model):
         # in the same <p>
         for line in lines:
             line = line.strip()
-            print(line)
             if line.startswith('#') and not in_code:
-                print('a')
                 ret += ['<code>']
                 ret += ['  ' + line]
                 in_code = True
             elif not line.startswith('#') and in_code:
-                print('b')
                 if line:
                     ret += ['  ' + line]
                 ret += ['</code>']
                 ret += ['']
                 in_code = False
             elif line.startswith('#') and in_code:
-                print('c')
                 ret += ['  ' + line]
             elif line:
-                print('d')
                 ret += ['<p>' + line + '</p>']
                 ret += ['']
 
