@@ -158,7 +158,7 @@ def bugs_aliases(bugs):
     bugs = bgo.getbugs(bugs)
     for bug in bugs:
         if bug.blocks:
-            ret += bugs_aliases(bug.blocks)
+            ret += list(set(bugs_aliases(bug.blocks)))
             app.logger.info("Found {} in blocking bug {}".format(ret, bug.id))
     return sorted(ret + [alias for bug in bugs for alias in bug.alias])
 
