@@ -1,5 +1,3 @@
-from datetime import datetime
-import difflib
 import os
 
 from sqlalchemy import create_engine
@@ -7,6 +5,8 @@ from sqlalchemy import create_engine
 from glsamaker import release
 from glsamaker import main
 from glsamaker.app import app, db
+
+from util import assert_diff
 
 
 app.jinja_loader.searchpath.append('glsamaker/templates')
@@ -36,11 +36,7 @@ def test_generate_xml():
         with app.app_context():
             xml = striplines(release.generate_xml(glsa).splitlines())
             f = os.path.basename(xml_path)
-            for x in difflib.unified_diff(glsa_contents, xml,
-                                          fromfile='{}.test'.format(f),
-                                          tofile=f):
-                print(x)
-            assert glsa_contents == release.generate_xml(glsa)
+            assert assert_diff(glsa_contents, xml)
 
 
 def test_generate_mail():
@@ -53,9 +49,4 @@ def test_generate_mail():
             time = 'Fri, 23 Jul 2021 22:10:35 -0500'
             generated_mail = release.generate_mail(glsa, time).splitlines()
             f = os.path.basename(mail_path)
-            for x in difflib.unified_diff(mail_contents,
-                                          generated_mail,
-                                          fromfile=f,
-                                          tofile='{}.test'.format(f)):
-                print(x)
-            assert mail_contents == generated_mail
+            assert assert_diff(mail_contents, generated_mail)
