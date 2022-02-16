@@ -55,8 +55,6 @@ Resolution
 
 {{ glsa.resolution }}
 
-{{ glsa.resolution_code | indent(2, True) }}
-
 References
 ==========
 

@@ -105,7 +105,6 @@ def xml_to_glsa(xml):
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
     glsa.resolution = get_xml_text(root, 'resolution')
-    glsa.resolution_code = get_xml_text_lines(root, './resolution/code')
 
     for uri in root.find('references'):
         glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))

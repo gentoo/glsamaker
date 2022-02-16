@@ -72,8 +72,6 @@ class GLSAForm(FlaskForm):
     impact_type = SelectField('Impact Type', choices=['normal', 'low', 'high'])
     workaround = TextAreaField('Workaround', validators=[DataRequired()])
     resolution = TextAreaField('Resolution', validators=[DataRequired()])
-    resolution_code = TextAreaField('Resolution Code',
-                                    validators=[DataRequired()])
     references = StringField('References', validators=[])
     release = BooleanField('Release')
     ack = BooleanField('Ack')
@@ -188,7 +186,6 @@ def edit_glsa(glsa_id=None):
                     impact_type=glsa.impact_type,
                     workaround=glsa.workaround,
                     resolution=glsa.resolution,
-                    resolution_code=glsa.resolution_code,
                     references=', '.join(
                         [ref.ref_text for ref in glsa.references]))
 
@@ -208,7 +205,6 @@ def edit_glsa(glsa_id=None):
         glsa.impact_type = form.impact_type.data
         glsa.workaround = form.workaround.data
         glsa.resolution = form.resolution.data
-        glsa.resolution_code = form.resolution_code.data
 
         # There may already be references, but the references we
         # already have might also be bug aliases. Use list() and set()

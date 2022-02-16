@@ -78,7 +78,6 @@ class GLSA(db.Model):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
-    resolution_code = db.Column(db.String())
     references = db.relationship("Reference", secondary=glsa_to_ref)
     # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
@@ -130,6 +129,42 @@ class GLSA(db.Model):
 
     def get_vulnerable(self):
         return [pkg for pkg in self.affected if pkg.range_type == 'vulnerable']
+
+    @property
+    def resolution_xml(self):
+        lines = self.resolution.splitlines()
+        ret = []
+        in_code = False
+
+        # TODO: need to handle multiple lines that should be wrapped
+        # in the same <p>
+        for line in lines:
+            line = line.strip()
+            print(line)
+            if line.startswith('#') and not in_code:
+                print('a')
+                ret += ['<code>']
+                ret += ['  ' + line]
+                in_code = True
+            elif not line.startswith('#') and in_code:
+                print('b')
+                if line:
+                    ret += ['  ' + line]
+                ret += ['</code>']
+                ret += ['']
+                in_code = False
+            elif line.startswith('#') and in_code:
+                print('c')
+                ret += ['  ' + line]
+            elif line:
+                print('d')
+                ret += ['<p>' + line + '</p>']
+                ret += ['']
+
+        if in_code:
+            ret += ['</code>']
+
+        return '\n'.join(ret)
 
     def generate_mail_table(self):
         # TODO: Maybe try to do this in jinja. It worked for ruby in
