@@ -53,7 +53,7 @@ Workaround
 Resolution
 ==========
 
-{{ glsa.resolution }}
+{{ glsa.resolution_text }}
 
 References
 ==========

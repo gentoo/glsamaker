@@ -161,6 +161,20 @@ class GLSA(db.Model):
 
         return '\n'.join(ret)
 
+    @property
+    def resolution_text(self):
+        print(self.resolution)
+        lines = self.resolution.splitlines()
+        ret = []
+
+        for line in lines:
+            line = line.strip()
+            if line.startswith('#'):
+                ret += ['  ' + line]
+            else:
+                ret += [line]
+        return '\n'.join(ret)
+
     def generate_mail_table(self):
         # TODO: Maybe try to do this in jinja. It worked for ruby in
         # glsamakerv2..
