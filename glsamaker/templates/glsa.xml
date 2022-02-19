@@ -38,7 +38,7 @@
 {{ glsa.resolution_xml | safe | indent(12, True) }}
 	</resolution>
 	<references>
-		{%- for ref in glsa.references -%}
+		{%- for ref in glsa.get_references() -%}
 		{% if ref.url %}
 		<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri> {% else %}
 		<uri>{{ ref.ref_text }}</uri>

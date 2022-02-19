@@ -97,11 +97,22 @@ class GLSA(db.Model):
             n = max(ids) + 1
         return '{}-{:02}'.format(date, n)
 
+    def get_references(self):
+        # Join References with glsa_to_ref to find which references
+        # are in the GLSA (`self`), so we can return the list of
+        # references ordered by the reference text.
+        references = Reference.query\
+                     .filter(glsa_to_ref.columns.ref_text == Reference.ref_text,
+                             glsa_to_ref.columns.glsa_id == self.glsa_id)\
+                     .order_by(Reference.ref_text)\
+                     .all()
+        return references
+
+    def get_reference_texts(self):
+        return [ref[0] for ref in self.get_references()]
+
     def get_bugs(self):
         return [bug.bug_id for bug in self.bugs]
-
-    def get_references(self):
-        return [ref.ref_text for ref in self.references]
 
     def get_pkgs(self):
         return set([pkg.pkg for pkg in self.affected])
