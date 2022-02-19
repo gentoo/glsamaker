@@ -7,7 +7,7 @@ from xml.etree import ElementTree
 from glsamaker.app import app, db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
-from glsamaker.models.package import Affected, Package
+from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User, nick_to_uid, create_user
 
@@ -68,6 +68,24 @@ def get_xml_attrib(xml_root, match):
     return None
 
 
+def clean_list(l):
+    # for a list like ['', '', 'a', 'b', '', 'c', '', '']
+    # we return a list like ['a', 'b', '', 'c']
+    ret = []
+    found_first = False
+    for x in l:
+        if not found_first and len(x) != 0:
+            found_first = True
+            ret.append(x)
+        elif found_first and len(ret[-1]) != 0:
+            ret.append(x)
+        elif found_first and len(x) != 0:
+            ret.append(x)
+    while not ret[-1]:
+        ret.pop()
+    return '\n'.join(ret)
+
+
 def xml_to_glsa(xml):
     root = ElementTree.parse(xml).getroot()
     glsa = GLSA()
@@ -104,7 +122,13 @@ def xml_to_glsa(xml):
     glsa.impact_type = get_xml_attrib(root, 'impact')['type'].strip()
     glsa.impact = get_xml_text(root, 'impact')
     glsa.workaround = get_xml_text(root, 'workaround')
-    glsa.resolution = get_xml_text(root, 'resolution')
+
+    resolution = []
+    for x in list(root.findall('resolution')[0].itertext()):
+        for y in x.splitlines():
+            resolution.append(y.strip())
+
+    glsa.resolution = clean_list(resolution)
 
     for uri in root.find('references'):
         glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))
