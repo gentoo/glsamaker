@@ -35,7 +35,7 @@
 		<p>{{ glsa.workaround }}</p>
 	</workaround>
 	<resolution>
-		<p>{{ glsa.resolution_xml }}</p>
+		{{ glsa.resolution_xml | safe }}
 	</resolution>
 	<references>
 		{%- for ref in glsa.references -%}
