@@ -109,7 +109,7 @@ class GLSA(db.Model):
         return references
 
     def get_reference_texts(self):
-        return [ref[0] for ref in self.get_references()]
+        return [ref.ref_text for ref in self.get_references()]
 
     def get_bugs(self):
         return [bug.bug_id for bug in self.bugs]

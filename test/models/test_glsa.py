@@ -96,6 +96,7 @@ All Mozilla Firefox binary users should upgrade to the latest version:
 </code>'''
     assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
 
+
 def test_get_references():
     glsa = GLSA()
     glsa.glsa_id = 'test glsa'
@@ -105,4 +106,4 @@ def test_get_references():
         glsa.references.append(Reference.new(text))
     db.session.merge(glsa)
 
-    assert [ref.ref_text for ref in glsa.get_references()] == sorted(cves)
+    assert glsa.get_reference_texts() == sorted(cves)
