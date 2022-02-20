@@ -32,6 +32,7 @@ def test_generate_xml():
     for glsa_path in glsas:
         xml_path = '{}.xml'.format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
+        db.session.merge(glsa)
         glsa_contents = striplines(file_contents(xml_path))
         with app.app_context():
             xml = striplines(release.generate_xml(glsa).splitlines())

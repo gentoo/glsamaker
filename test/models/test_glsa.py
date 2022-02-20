@@ -1,4 +1,6 @@
+from glsamaker.app import db
 from glsamaker.models.glsa import GLSA
+from glsamaker.models.reference import Reference
 
 from util import assert_diff
 
@@ -93,3 +95,14 @@ All Mozilla Firefox binary users should upgrade to the latest version:
   # emerge --ask --oneshot --verbose "&gt;=www-client/firefox-bin-89.0"
 </code>'''
     assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
+
+def test_get_references():
+    glsa = GLSA()
+    glsa.glsa_id = 'test glsa'
+    cves = ['CVE-2021-4321', 'CVE-2021-1234']
+
+    for text in cves:
+        glsa.references.append(Reference.new(text))
+    db.session.merge(glsa)
+
+    assert [ref.ref_text for ref in glsa.get_references()] == sorted(cves)
