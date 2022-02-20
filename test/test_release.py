@@ -45,6 +45,7 @@ def test_generate_mail():
         xml_path = '{}.xml'.format(glsa_path)
         mail_path = '{}.mail'.format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
+        db.session.merge(glsa)
         mail_contents = [line.strip('\n') for line in file_contents(mail_path)]
         with app.app_context():
             time = 'Fri, 23 Jul 2021 22:10:35 -0500'

@@ -58,7 +58,7 @@ Resolution
 References
 ==========
 
-{% for ref in glsa.references -%}
+{% for ref in glsa.get_references() -%}
 [ {{ loop.index }} ] {{ ref.ref_text }}
 {%- if ref.url %}
 {{ ref.url | indent(6, True) }}
