@@ -2,8 +2,7 @@
 <!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">
 <glsa id="{{ glsa.glsa_id }}">
     <title>{{ glsa.title }}</title>
-    <synopsis>{{ glsa.synopsis | wordwrap(68) }}
-    </synopsis>
+    <synopsis>{{ glsa.synopsis }}</synopsis>
     <product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
     <announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
     <revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
@@ -21,12 +20,10 @@
         {%- endfor %}
     </affected>
     <background>
-        <p>{{ glsa.background | wordwrap(74) }}
-        </p>
+        <p>{{ glsa.background }}</p>
     </background>
     <description>
-        <p>{{ glsa.description | wordwrap(72) }}
-        </p>
+        <p>{{ glsa.description }}</p>
     </description>
     <impact type="{{ glsa.impact_type }}">
         <p>{{ glsa.impact }}</p>
