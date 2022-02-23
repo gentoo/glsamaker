@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">
 <glsa id="{{ glsa.glsa_id }}">
-	<title>{{ glsa.title }}</title>
-	<synopsis>{{ glsa.synopsis | wordwrap(68) }}
-	</synopsis>
-	<product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
-	<announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
-	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
-	{% for bug in glsa.get_bugs() -%}
-	<bug>{{ bug }}</bug>
-	{% endfor -%}
-	<access>{{ glsa.access }}</access>
-	<affected>
-		{%- for pkg in glsa.get_pkgs() %}
-		<package name="{{ pkg }}" auto="yes" arch="{{ glsa.get_affected_arch(pkg) }}">
-			{%- for affected in glsa.get_affected_for_pkg(pkg) %}
-			<{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
-			{%- endfor %}
-		</package>
-		{%- endfor %}
-	</affected>
-	<background>
-		<p>{{ glsa.background | wordwrap(74) }}
-		</p>
-	</background>
-	<description>
-		<p>{{ glsa.description | wordwrap(72) }}
-		</p>
-	</description>
-	<impact type="{{ glsa.impact_type }}">
-		<p>{{ glsa.impact }}</p>
-	</impact>
-	<workaround>
-		<p>{{ glsa.workaround }}</p>
-	</workaround>
-	<resolution>
-{{ glsa.resolution_xml | safe | indent(12, True) }}
-	</resolution>
-	<references>
-		{%- for ref in glsa.get_references() -%}
-		{% if ref.url %}
-		<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
-		<uri>{{ ref.ref_text }}</uri>
-		{%- endif -%}
-		{% endfor %}
-	</references>
-	<metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
-	<metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
+    <title>{{ glsa.title }}</title>
+    <synopsis>{{ glsa.synopsis | wordwrap(68) }}
+    </synopsis>
+    <product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
+    <announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
+    <revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
+    {% for bug in glsa.get_bugs() -%}
+    <bug>{{ bug }}</bug>
+    {% endfor -%}
+    <access>{{ glsa.access }}</access>
+    <affected>
+        {%- for pkg in glsa.get_pkgs() %}
+        <package name="{{ pkg }}" auto="yes" arch="{{ glsa.get_affected_arch(pkg) }}">
+            {%- for affected in glsa.get_affected_for_pkg(pkg) %}
+            <{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
+            {%- endfor %}
+        </package>
+        {%- endfor %}
+    </affected>
+    <background>
+        <p>{{ glsa.background | wordwrap(74) }}
+        </p>
+    </background>
+    <description>
+        <p>{{ glsa.description | wordwrap(72) }}
+        </p>
+    </description>
+    <impact type="{{ glsa.impact_type }}">
+        <p>{{ glsa.impact }}</p>
+    </impact>
+    <workaround>
+        <p>{{ glsa.workaround }}</p>
+    </workaround>
+    <resolution>
+{{ glsa.resolution_xml | safe | indent(8, True) }}
+    </resolution>
+    <references>
+        {%- for ref in glsa.get_references() -%}
+        {% if ref.url %}
+        <uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
+        <uri>{{ ref.ref_text }}</uri>
+        {%- endif -%}
+        {% endfor %}
+    </references>
+    <metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
+    <metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
 </glsa>
