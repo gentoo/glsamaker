@@ -131,7 +131,7 @@ def xml_to_glsa(xml):
     glsa.resolution = clean_list(resolution)
 
     for uri in root.find('references'):
-        glsa.references.append(Reference(uri.text.strip(), uri.attrib['link']))
+        glsa.references.append(Reference(uri.text.strip(), uri.attrib['link'] if 'link' in uri.attrib else None))
 
     requester = get_xml_text(root, './/metadata[@tag="requester"]')
     submitter = get_xml_text(root, './/metadata[@tag="submitter"]')
