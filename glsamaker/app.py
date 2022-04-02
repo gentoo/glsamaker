@@ -2,6 +2,7 @@ from configparser import ConfigParser
 import os
 import sys
 
+from bugzilla import Bugzilla
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
@@ -20,3 +21,5 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://root:root@db/postgres"
 
 db = SQLAlchemy(app)
+
+bgo = Bugzilla('https://bugs.gentoo.org')

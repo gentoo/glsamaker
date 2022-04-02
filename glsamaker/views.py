@@ -5,7 +5,8 @@ import uuid
 from logging.config import dictConfig
 
 from bugzilla import Bugzilla
-from flask import redirect, render_template, request, Flask, Response
+from bugzilla.bug import Bug
+from flask import redirect, render_template, request, url_for, Flask, Response
 from flask_login import LoginManager, UserMixin
 from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
@@ -15,7 +16,8 @@ from wtforms import BooleanField, SelectField, StringField, TextAreaField, Passw
 from wtforms.validators import DataRequired
 import bcrypt
 
-from glsamaker.app import app, db, config
+from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
+from glsamaker.app import app, bgo, config, db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
@@ -41,9 +43,6 @@ dictConfig({
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-bgo = Bugzilla('https://bugs.gentoo.org')
 
 
 # Terrible hack to allow uid_to_nick to be accessible in jinja
@@ -75,6 +74,11 @@ class GLSAForm(FlaskForm):
     references = StringField('References', validators=[])
     release = BooleanField('Release')
     ack = BooleanField('Ack')
+    submit = SubmitField('Submit')
+
+
+class BugForm(FlaskForm):
+    bugs = StringField('Bugs')
     submit = SubmitField('Submit')
 
 
@@ -151,16 +155,6 @@ def parse_atoms(request, range_type):
             ret.append(Affected(pn, version, pkg_range, arch, slot,
                                 range_type))
     return ret
-
-
-def bugs_aliases(bugs):
-    ret = []
-    bugs = bgo.getbugs(bugs)
-    for bug in bugs:
-        if bug.blocks:
-            ret += list(set(bugs_aliases(bug.blocks)))
-            app.logger.info("Found {} in blocking bug {}".format(ret, bug.id))
-    return sorted(ret + [alias for bug in bugs for alias in bug.alias])
 
 
 @app.route('/edit_glsa', methods=['GET', 'POST'])
@@ -252,6 +246,25 @@ def edit_glsa(glsa_id=None):
                                current_user=current_user)
     return render_template('edit_glsa.html', form=form, glsa=glsa,
                            current_user=current_user, new=True)
+
+
+@app.route('/newbugs', methods=['GET', 'POST'])
+@login_required
+def newbugs():
+    form = BugForm()
+    if request.method == 'GET':
+        return render_template('newbugs.html', form=form)
+    elif request.method == 'POST' and form.validate_on_submit():
+        bugs = [int(bug) for bug in form.bugs.data.split(',')]
+        try:
+            glsa = autogenerate_glsa(bgo.getbugs(bugs))
+            glsa.requester = current_user.id
+            db.session.add(glsa)
+            db.session.commit()
+            return redirect('/edit_glsa/{}'.format(glsa.glsa_id))
+        except:
+            # TODO: catch failures from glsa generation
+            raise
 
 
 @app.route('/archive')
