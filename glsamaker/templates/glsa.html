@@ -61,7 +61,7 @@
 	</tr>
 	<tr>
 		<td class="bordered">Bugs</td>
-		<td class="bordered">{{ ', '.join(glsa.get_bugs()) }}</td>
+		<td class="bordered">{{ ', '.join(glsa.get_bugs_links()) | safe }}</td>
 	</tr>
 	<tr>
 		<td class="bordered">Access</td>
