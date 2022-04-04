@@ -115,16 +115,12 @@ class GLSA(db.Model):
         return [bug.bug_id for bug in self.bugs]
 
     def get_bugs_links(self):
-        bugs = self.get_bugs()
-        # There is probably a cleaner way to do this
-        html = '<a href="https://bugs.gentoo.org/'
-        html2 = '" title="Bug '
-        html3 = '" target="_blank" rel="noopener">'
-        html4 = '</a>'
         lst=[]
-        for bug in bugs:
-            output = html + bug + html2 + bug + html3 + bug + html4
-            lst.append(output)
+        link = '<a href="https://bugs.gentoo.org/BUG" title="Bug BUG" target="_blank" rel="noopener">BUG</a>'
+        
+        for bug in self.get_bugs():
+            x = link.replace("BUG", bug)
+            lst.append(x)
         return lst
 
     def get_pkgs(self):
