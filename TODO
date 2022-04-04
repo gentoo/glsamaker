@@ -1,0 +1,7 @@
+[tox.ini]
+
+* add tests for pylint
+
+[pylint]
+
+* add import-error
