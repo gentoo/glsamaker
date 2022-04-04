@@ -11,9 +11,7 @@ from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User, nick_to_uid, create_user
 
-# This "unused" import is necessary so the logging is send to stdout
-# as specified in views.py
-import glsamaker.views
+import glsamaker.views # pylint: disable=unused-import
 
 
 def flatten_paragraphs(paragraphs):

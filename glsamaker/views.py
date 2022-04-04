@@ -1,18 +1,14 @@
 from datetime import datetime, date
-import sys
-import os
 import uuid
 from logging.config import dictConfig
 
-from bugzilla import Bugzilla
-from bugzilla.bug import Bug
-from flask import redirect, render_template, request, url_for, Flask, Response
-from flask_login import LoginManager, UserMixin
+from flask import redirect, render_template, request, Response
+from flask_login import LoginManager
 from flask_login import current_user, login_user, login_required
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
 from sqlalchemy import desc
-from wtforms import BooleanField, SelectField, StringField, TextAreaField, PasswordField, SubmitField, HiddenField, Field
+from wtforms import BooleanField, SelectField, StringField, TextAreaField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 import bcrypt
 

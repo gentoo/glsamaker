@@ -4,9 +4,6 @@ from datetime import datetime
 from flask import render_template
 from git import Repo
 
-from glsamaker.app import app, config
-
-
 def generate_mail(glsa, date):
     return render_template('glsa.mail', glsa=glsa, date=date)
 

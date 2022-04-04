@@ -1,13 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import select
-
 from glsamaker.app import app, db
-from glsamaker.models.bug import Bug
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
-from glsamaker.models.package import Package
-
 
 glsa_to_bug = db.Table('glsa_to_bug',
                        db.Column('glsa_id', db.String(),
@@ -117,7 +112,7 @@ class GLSA(db.Model):
     def get_bugs_links(self):
         lst=[]
         link = '<a href="https://bugs.gentoo.org/BUG" title="Bug BUG" target="_blank" rel="noopener">BUG</a>'
-        
+
         for bug in self.get_bugs():
             x = link.replace("BUG", bug)
             lst.append(x)
