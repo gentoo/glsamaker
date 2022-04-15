@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ glsamakerv4 ]
   pull_request:
-    branches: [ master ]
+    branches: [ glsamakerv4 ]
 
 jobs:
   build:
