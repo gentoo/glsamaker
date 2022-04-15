@@ -2,9 +2,7 @@
 <!DOCTYPE glsa SYSTEM "http://www.gentoo.org/dtd/glsa.dtd">
 <glsa id="202107-55">
   <title>SDL 2: Multiple vulnerabilities</title>
-  <synopsis>Multiple vulnerabilities have been found in libsdl2, the worst of
-    which could result in a Denial of Service condition.
-  </synopsis>
+  <synopsis>Multiple vulnerabilities have been found in libsdl2, the worst of which could result in a Denial of Service condition.</synopsis>
   <product type="ebuild">libsdl2</product>
   <announced>2021-07-24</announced>
   <revised count="1">2021-07-24</revised>
@@ -17,15 +15,10 @@
     </package>
   </affected>
   <background>
-    <p>Simple DirectMedia Layer is a cross-platform development library
-      designed to provide low level access to audio, keyboard, mouse, joystick,
-      and graphics hardware via OpenGL and Direct3D.
-    </p>
+    <p>Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.</p>
   </background>
   <description>
-    <p>Multiple vulnerabilities have been discovered in SDL 2. Please review
-      the CVE identifiers referenced below for details.
-    </p>
+    <p>Multiple vulnerabilities have been discovered in SDL 2. Please review the CVE identifiers referenced below for details.</p>
   </description>
   <impact type="low">
     <p>Please review the referenced CVE identifiers for details.</p>
@@ -38,7 +31,7 @@
     
     <code>
       # emerge --sync
-      # emerge --ask --oneshot --verbose "&gt;=media-libs/libsdl2-2.0.14-r1"
+      # emerge --ask --oneshot --verbose ">=media-libs/libsdl2-2.0.14-r1"
     </code>
   </resolution>
   <references>
