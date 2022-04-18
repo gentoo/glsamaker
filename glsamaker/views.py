@@ -19,7 +19,7 @@ from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User, uid_to_nick
-from glsamaker.release import release_email, release_xml, generate_mail, generate_xml
+from glsamaker.release import release_email, release_xml
 
 dictConfig({
     'version': 1,
@@ -285,7 +285,7 @@ def glsa_mail(glsa_id):
     advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
     if not advisory or not advisory.announced:
         return redirect('/'), 400
-    mail = generate_mail(advisory, date=datetime.now().strftime('%a, %d %b %Y %X'))
+    mail = advisory.generate_mail()
     return Response(mail, mimetype='text/plain',
                     headers={"Content-disposition":
                              "attachment; filename=glsa-{}.mail".format(advisory.glsa_id)})

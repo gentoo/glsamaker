@@ -4,6 +4,8 @@ from glsamaker.app import app, db
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
 
+from flask import render_template
+
 glsa_to_bug = db.Table('glsa_to_bug',
                        db.Column('glsa_id', db.String(),
                                  db.ForeignKey('glsa.glsa_id',
@@ -212,3 +214,12 @@ class GLSA(db.Model):
             ret[i] += '{} {} '.format(unaff.range_types_rev[unaff.pkg_range], unaff.version).rjust(70 - len(ret[i]))
 
         return '\n'.join(ret)
+
+    def generate_xml(self):
+        return render_template('glsa.xml', glsa=self)
+
+    def generate_mail(self, date=None):
+        if date:
+            return render_template('glsa.mail', glsa=self, date=date)
+        else:
+            return render_template('glsa.mail', glsa=self, date=datetime.now().strftime('%a, %d %b %Y %X'))

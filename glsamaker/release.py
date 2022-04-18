@@ -4,9 +4,9 @@ from datetime import datetime
 from flask import render_template
 from git import Repo
 
-def generate_mail(glsa, date):
-    return render_template('glsa.mail', glsa=glsa, date=date)
 
+def generate_mail(glsa, date=None):
+    return glsa.generate_mail(date)
 
 def release_email(glsa):
     server = config['glsamaker']['smtpserver']
@@ -18,12 +18,11 @@ def release_email(glsa):
         smtp.starttls()
         smtp.login(user, password)
         smtp.sendmail(user, [to],
-                      generate_mail(glsa=glsa,
-                                    date=datetime.now().strftime('%a, %d %b %Y %X')))
+                      glsa.generate_mail(date=datetime.now().strftime('%a, %d %b %Y %X')))
 
 
 def generate_xml(glsa):
-    return render_template('glsa.xml', glsa=glsa)
+    return glsa.generate_xml()
 
 
 def release_xml(glsa):
@@ -37,7 +36,7 @@ def release_xml(glsa):
 
     filename = "/var/lib/glsamaker/glsa/glsa-{}.xml".format(glsa.glsa_id)
     with open(filename, 'w+') as f:
-        f.write(generate_xml(glsa))
+        f.write(glsa.generate_xml())
     repo.git.add(filename)
     # TODO: xml linting before commit
     repo.git.commit('-m', 'Add glsa-{}.xml'.format(glsa.glsa_id),
