@@ -1,4 +1,7 @@
-from glsamaker.app import db
+import os
+
+from glsamaker import main
+from glsamaker.app import app, db
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.reference import Reference
 
@@ -98,6 +101,9 @@ All Mozilla Firefox binary users should upgrade to the latest version:
 
 
 def test_get_references():
+    # TODO: the db object should be the same throughout all tests
+    # rather than being created somewhat arbitrarily here
+    db.create_all()
     glsa = GLSA()
     glsa.glsa_id = 'test glsa'
     cves = ['CVE-2021-4321', 'CVE-2021-1234']
@@ -107,3 +113,47 @@ def test_get_references():
     db.session.merge(glsa)
 
     assert glsa.get_reference_texts() == sorted(cves)
+
+
+app.jinja_loader.searchpath.append('glsamaker/templates')
+
+
+glsas = ['test/files/glsa/glsa-202107-48', 'test/files/glsa/glsa-202107-55']
+
+
+def striplines(lines):
+    return [line.strip() for line in lines]
+
+
+def file_contents(path):
+    with open(path) as f:
+        return f.readlines()
+
+
+def test_generate_xml():
+    # TODO: instead of diffing literal strings of XML, we should be
+    # diffing actual xml contents.. somehow. Currently, we're often
+    # testing for inconsequential whitespace differences
+    for glsa_path in glsas:
+        xml_path = '{}.xml'.format(glsa_path)
+        glsa = main.xml_to_glsa(xml_path)
+        db.session.merge(glsa)
+        glsa_contents = striplines(file_contents(xml_path))
+        with app.app_context():
+            xml = striplines(glsa.generate_xml().splitlines())
+            f = os.path.basename(xml_path)
+            assert assert_diff(glsa_contents, xml)
+
+
+def test_generate_mail():
+    for glsa_path in glsas:
+        xml_path = '{}.xml'.format(glsa_path)
+        mail_path = '{}.mail'.format(glsa_path)
+        glsa = main.xml_to_glsa(xml_path)
+        db.session.merge(glsa)
+        mail_contents = [line.strip('\n') for line in file_contents(mail_path)]
+        with app.app_context():
+            time = 'Fri, 23 Jul 2021 22:10:35 -0500'
+            generated_mail = glsa.generate_mail(time).splitlines()
+            f = os.path.basename(mail_path)
+            assert assert_diff(mail_contents, generated_mail)
