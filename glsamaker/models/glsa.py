@@ -6,72 +6,83 @@ from glsamaker.models.user import User
 
 from flask import render_template
 
-glsa_to_bug = db.Table('glsa_to_bug',
-                       db.Column('glsa_id', db.String(),
-                                 db.ForeignKey('glsa.glsa_id',
-                                               onupdate="cascade")),
-                       db.Column('bug_id', db.String(),
-                                 db.ForeignKey('bug.bug_id',
-                                               onupdate="cascade")))
+glsa_to_bug = db.Table(
+    "glsa_to_bug",
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column("bug_id", db.String(), db.ForeignKey("bug.bug_id", onupdate="cascade")),
+)
 
-glsa_to_ref = db.Table('glsa_to_ref',
-                       db.Column('glsa_id', db.String(),
-                                 db.ForeignKey('glsa.glsa_id',
-                                               onupdate="cascade")),
-                       db.Column('ref_text', db.String(),
-                                 db.ForeignKey('reference.ref_text',
-                                               onupdate="cascade")))
+glsa_to_ref = db.Table(
+    "glsa_to_ref",
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column(
+        "ref_text", db.String(), db.ForeignKey("reference.ref_text", onupdate="cascade")
+    ),
+)
 
-glsa_to_affected = db.Table('glsa_to_affected',
-                            db.Column('glsa_id', db.String(),
-                                      db.ForeignKey('glsa.glsa_id',
-                                                    onupdate="cascade")),
-                            db.Column('affected_id', db.Integer(),
-                                      db.ForeignKey('affected.affected_id',
-                                                    onupdate="cascade")))
+glsa_to_affected = db.Table(
+    "glsa_to_affected",
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column(
+        "affected_id",
+        db.Integer(),
+        db.ForeignKey("affected.affected_id", onupdate="cascade"),
+    ),
+)
 
 
 class GLSA(db.Model):
-    __tablename__ = 'glsa'
+    __tablename__ = "glsa"
 
     id = db.Column(db.Integer(), primary_key=True)
     glsa_id = db.Column(db.String(), unique=True)
     draft = db.Column(db.Boolean())
     title = db.Column(db.String())
     synopsis = db.Column(db.String())
-    product_type = db.Column(db.Enum('ebuild', 'infrastructure',
-                                     name='product_types'))
+    product_type = db.Column(db.Enum("ebuild", "infrastructure", name="product_types"))
     product = db.Column(db.String())
     announced = db.Column(db.Date())
     revision_count = db.Column(db.Integer())
     revised_date = db.Column(db.Date())
     bugs = db.relationship("Bug", secondary=glsa_to_bug)
     # TODO: lots of variation here, we should cleanup eventually
-    access = db.Column(db.Enum('unknown', 'local', 'remote',
-                               'local, remote',
-                               'remote, local',
-                               'local and remote',
-                               # glsa-200503-10
-                               'remote and local',
-                               # glsa-200311-0{1,2}
-                               'local / remote',
-                               # glsa-200403-01
-                               'local and remote combination',
-                               # glsa-201001-03, glsa-201011-01
-                               'local remote',
-                               # glsa-200408-18
-                               'remote root',
-                               # glsa-200401-04
-                               'man-in-the-middle',
-                               # glsa-200312-01
-                               '',
-                               name='access_types'))
+    access = db.Column(
+        db.Enum(
+            "unknown",
+            "local",
+            "remote",
+            "local, remote",
+            "remote, local",
+            "local and remote",
+            # glsa-200503-10
+            "remote and local",
+            # glsa-200311-0{1,2}
+            "local / remote",
+            # glsa-200403-01
+            "local and remote combination",
+            # glsa-201001-03, glsa-201011-01
+            "local remote",
+            # glsa-200408-18
+            "remote root",
+            # glsa-200401-04
+            "man-in-the-middle",
+            # glsa-200312-01
+            "",
+            name="access_types",
+        )
+    )
     affected = db.relationship("Affected", secondary=glsa_to_affected)
     background = db.Column(db.String())
     description = db.Column(db.String())
-    impact_type = db.Column(db.Enum('minimal', 'low', 'medium',
-                                    'normal', 'high',
-                                    name='impact_types'))
+    impact_type = db.Column(
+        db.Enum("minimal", "low", "medium", "normal", "high", name="impact_types")
+    )
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
@@ -86,23 +97,26 @@ class GLSA(db.Model):
     @classmethod
     def next_id(cls):
         now = datetime.now()
-        date = '{}{:02}'.format(now.year, now.month)
+        date = "{}{:02}".format(now.year, now.month)
         query = db.session.query(cls).filter(cls.glsa_id.startswith(date)).all()
         n = 1
         if query:
-            ids = [int(x.glsa_id.split('-')[1]) for x in query]
+            ids = [int(x.glsa_id.split("-")[1]) for x in query]
             n = max(ids) + 1
-        return '{}-{:02}'.format(date, n)
+        return "{}-{:02}".format(date, n)
 
     def get_references(self):
         # Join References with glsa_to_ref to find which references
         # are in the GLSA (`self`), so we can return the list of
         # references ordered by the reference text.
-        references = Reference.query\
-                     .filter(glsa_to_ref.columns.ref_text == Reference.ref_text,
-                             glsa_to_ref.columns.glsa_id == self.glsa_id)\
-                     .order_by(Reference.ref_text)\
-                     .all()
+        references = (
+            Reference.query.filter(
+                glsa_to_ref.columns.ref_text == Reference.ref_text,
+                glsa_to_ref.columns.glsa_id == self.glsa_id,
+            )
+            .order_by(Reference.ref_text)
+            .all()
+        )
         return references
 
     def get_reference_texts(self):
@@ -112,7 +126,7 @@ class GLSA(db.Model):
         return [bug.bug_id for bug in self.bugs]
 
     def get_bugs_links(self):
-        lst=[]
+        lst = []
         link = '<a href="https://bugs.gentoo.org/BUG" title="Bug BUG" target="_blank" rel="noopener">BUG</a>'
 
         for bug in self.get_bugs():
@@ -128,7 +142,9 @@ class GLSA(db.Model):
         for pkg in [pkg for pkg in self.affected if pkg.pkg == pn]:
             ret.add(pkg.arch)
         if len(ret) > 1:
-            app.logger.error("Something has gone horribly wrong with GLSA {}!".format(self.id))
+            app.logger.error(
+                "Something has gone horribly wrong with GLSA {}!".format(self.id)
+            )
             app.logger.error("{} has multiple arches: {}".format(pkg, ret))
         return list(ret)[0]
 
@@ -136,16 +152,24 @@ class GLSA(db.Model):
         return [pkg for pkg in self.affected if pkg.pkg == pn]
 
     def get_vulnerable_for_pkg(self, pn):
-        return [pkg for pkg in self.affected if pkg.pkg == pn and pkg.range_type == 'vulnerable']
+        return [
+            pkg
+            for pkg in self.affected
+            if pkg.pkg == pn and pkg.range_type == "vulnerable"
+        ]
 
     def get_unaffected_for_pkg(self, pn):
-        return [pkg for pkg in self.affected if pkg.pkg == pn and pkg.range_type == 'unaffected']
+        return [
+            pkg
+            for pkg in self.affected
+            if pkg.pkg == pn and pkg.range_type == "unaffected"
+        ]
 
     def get_unaffected(self):
-        return [pkg for pkg in self.affected if pkg.range_type == 'unaffected']
+        return [pkg for pkg in self.affected if pkg.range_type == "unaffected"]
 
     def get_vulnerable(self):
-        return [pkg for pkg in self.affected if pkg.range_type == 'vulnerable']
+        return [pkg for pkg in self.affected if pkg.range_type == "vulnerable"]
 
     @property
     def resolution_xml(self):
@@ -157,26 +181,26 @@ class GLSA(db.Model):
         # in the same <p>
         for line in lines:
             line = line.strip()
-            if line.startswith('#') and not in_code:
-                ret += ['<code>']
-                ret += ['  ' + line]
+            if line.startswith("#") and not in_code:
+                ret += ["<code>"]
+                ret += ["  " + line]
                 in_code = True
-            elif not line.startswith('#') and in_code:
+            elif not line.startswith("#") and in_code:
                 if line:
-                    ret += ['  ' + line]
-                ret += ['</code>']
-                ret += ['']
+                    ret += ["  " + line]
+                ret += ["</code>"]
+                ret += [""]
                 in_code = False
-            elif line.startswith('#') and in_code:
-                ret += ['  ' + line]
+            elif line.startswith("#") and in_code:
+                ret += ["  " + line]
             elif line:
-                ret += ['<p>' + line + '</p>']
-                ret += ['']
+                ret += ["<p>" + line + "</p>"]
+                ret += [""]
 
         if in_code:
-            ret += ['</code>']
+            ret += ["</code>"]
 
-        return '\n'.join(ret)
+        return "\n".join(ret)
 
     @property
     def resolution_text(self):
@@ -186,11 +210,11 @@ class GLSA(db.Model):
 
         for line in lines:
             line = line.strip()
-            if line.startswith('#'):
-                ret += ['  ' + line]
+            if line.startswith("#"):
+                ret += ["  " + line]
             else:
                 ret += [line]
-        return '\n'.join(ret)
+        return "\n".join(ret)
 
     def generate_mail_table(self):
         # TODO: Maybe try to do this in jinja. It worked for ruby in
@@ -204,22 +228,27 @@ class GLSA(db.Model):
         idx = 1
 
         for i, pkg in enumerate(self.get_pkgs()):
-            ret += ['']
+            ret += [""]
             vulnerable_ranges = self.get_vulnerable_for_pkg(pkg)
             unaffected_ranges = self.get_unaffected_for_pkg(pkg)
             vuln = vulnerable_ranges.pop()
             unaff = unaffected_ranges.pop()
-            ret[i] += '  {}  {}'.format(idx, pkg).ljust(32, ' ') \
-                + '{} {}'.format(vuln.range_types_rev[vuln.pkg_range], vuln.version)
-            ret[i] += '{} {} '.format(unaff.range_types_rev[unaff.pkg_range], unaff.version).rjust(70 - len(ret[i]))
+            ret[i] += "  {}  {}".format(idx, pkg).ljust(32, " ") + "{} {}".format(
+                vuln.range_types_rev[vuln.pkg_range], vuln.version
+            )
+            ret[i] += "{} {} ".format(
+                unaff.range_types_rev[unaff.pkg_range], unaff.version
+            ).rjust(70 - len(ret[i]))
 
-        return '\n'.join(ret)
+        return "\n".join(ret)
 
     def generate_xml(self):
-        return render_template('glsa.xml', glsa=self)
+        return render_template("glsa.xml", glsa=self)
 
     def generate_mail(self, date=None):
         if date:
-            return render_template('glsa.mail', glsa=self, date=date)
+            return render_template("glsa.mail", glsa=self, date=date)
         else:
-            return render_template('glsa.mail', glsa=self, date=datetime.now().strftime('%a, %d %b %Y %X'))
+            return render_template(
+                "glsa.mail", glsa=self, date=datetime.now().strftime("%a, %d %b %Y %X")
+            )

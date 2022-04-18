@@ -13,7 +13,7 @@ from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 
 
-LEGAL_WHITEBOARDS = [str(x) + str(y) for x in 'ABC~' for y in '01234']
+LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
 
 
 class IllegalBugException(Exception):
@@ -27,18 +27,14 @@ def validate_bugs(bugs: list[BugzillaBug]):
     assignees = [bug.assigned_to for bug in bugs]
 
     # Collect the bugs that are invalid
-    whiteboards = list(filter(lambda bug:
-                              bug.whiteboard[:2] not in LEGAL_WHITEBOARDS,
-                              bugs))
-    products = list(filter(lambda bug:
-                           bug.product != 'Gentoo Security',
-                           bugs))
-    components = list(filter(lambda bug:
-                             bug.component != 'Vulnerabilities',
-                             bugs))
-    assignees = list(filter(lambda bug:
-                            not bug.assigned_to.startswith('security'),
-                            bugs))
+    whiteboards = list(
+        filter(lambda bug: bug.whiteboard[:2] not in LEGAL_WHITEBOARDS, bugs)
+    )
+    products = list(filter(lambda bug: bug.product != "Gentoo Security", bugs))
+    components = list(filter(lambda bug: bug.component != "Vulnerabilities", bugs))
+    assignees = list(
+        filter(lambda bug: not bug.assigned_to.startswith("security"), bugs)
+    )
 
     if len(whiteboards) != 0:
         raise IllegalBugException([bug.id for bug in whiteboards])
@@ -55,13 +51,14 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
     for bug in bugs:
         summaries = bracex.expand(bug.summary)
         for summary in summaries:
-            package = summary.split(':')[0]
+            package = summary.split(":")[0]
             try:
                 atom = atom_mod.atom(package)
                 unversioned_atom = str(atom.unversioned_atom)
                 if unversioned_atom in max_versions:
-                    max_versions[unversioned_atom] = \
-                        max(atom.version, max_versions[unversioned_atom])
+                    max_versions[unversioned_atom] = max(
+                        atom.version, max_versions[unversioned_atom]
+                    )
                 else:
                     max_versions[unversioned_atom] = atom.version
             except InvalidCPV:
@@ -72,8 +69,7 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
                 app.logger.info("Summaries: " + summaries)
                 app.logger.info("Summary: " + summary)
                 app.logger.info("Package: " + package)
-    return [atom_mod.atom('<' + pkg + '-' + max_versions[pkg])
-            for pkg in max_versions]
+    return [atom_mod.atom("<" + pkg + "-" + max_versions[pkg]) for pkg in max_versions]
 
 
 def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
@@ -81,14 +77,27 @@ def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
     # This isn't able to figure out multiple branches, it will have to
     # be done manually.
     for atom in atoms:
-        ret.append(Affected(str(atom.unversioned_atom),
-                            atom.version,
-                            Affected.range_types[atom.op],
-                            '*', atom.slot, 'vulnerable'))
-        if atom.op == '<':
-            ret.append(Affected(str(atom.unversioned_atom),
-                                atom.version, Affected.range_types['>='],
-                                '*', atom.slot, 'unaffected'))
+        ret.append(
+            Affected(
+                str(atom.unversioned_atom),
+                atom.version,
+                Affected.range_types[atom.op],
+                "*",
+                atom.slot,
+                "vulnerable",
+            )
+        )
+        if atom.op == "<":
+            ret.append(
+                Affected(
+                    str(atom.unversioned_atom),
+                    atom.version,
+                    Affected.range_types[">="],
+                    "*",
+                    atom.slot,
+                    "unaffected",
+                )
+            )
     return ret
 
 
@@ -105,14 +114,15 @@ def bugs_aliases(bugs):
 # Would be nicer to make a type of the enum this is used for, rather
 # than the return type being just str
 def glsa_impact(bugs: list[BugzillaBug]) -> str:
-    worst = '{}{}'.format(
+    worst = "{}{}".format(
         min([bug.whiteboard[0] for bug in bugs]),
-        min([bug.whiteboard[1] for bug in bugs]))
-    if worst[1] == '0' or worst[1] == '1' or worst == 'A2':
-        return 'high'
-    elif worst in ['A4', 'B3', 'B4', 'C3']:
-        return 'low'
-    return 'normal'
+        min([bug.whiteboard[1] for bug in bugs]),
+    )
+    if worst[1] == "0" or worst[1] == "1" or worst == "A2":
+        return "high"
+    elif worst in ["A4", "B3", "B4", "C3"]:
+        return "low"
+    return "normal"
 
 
 def previous_glsa(pkg: str) -> GLSA:
@@ -123,20 +133,21 @@ def previous_glsa(pkg: str) -> GLSA:
     # If there's none, we've probably never GLSA'd that package before
     if len(affected) == 0:
         return None
-    return GLSA.query.filter(
-        GLSA.affected.contains(affected[-1])
-    ).order_by(GLSA.id.desc()).first()
+    return (
+        GLSA.query.filter(GLSA.affected.contains(affected[-1]))
+        .order_by(GLSA.id.desc())
+        .first()
+    )
 
 
 def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
-    app.logger.info('Autogenerating GLSA from bugs: '
-                    + str([bug.id for bug in bugs]))
+    app.logger.info("Autogenerating GLSA from bugs: " + str([bug.id for bug in bugs]))
     validate_bugs(bugs)
     glsa = GLSA()
     glsa.glsa_id = str(uuid.uuid4())
     glsa.draft = True
     glsa.requested_time = datetime.now()
-    glsa.product_type = 'ebuild'
+    glsa.product_type = "ebuild"
 
     packages = get_max_versions(bugs)
     glsa.bugs = [Bug.new(str(bug.id)) for bug in bugs]
@@ -155,12 +166,12 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
         glsa.product = last.product
         glsa.background = last.background
 
-    proper_name = last.title.split(':')[0]
-    glsa.title = proper_name + ': '
+    proper_name = last.title.split(":")[0]
+    glsa.title = proper_name + ": "
 
-    if len(glsa.bugs) > 1 or \
-       any(['multiple vulnerabilities' in bug.summary.lower()
-            for bug in glsa.bugs]):
-        glsa.title += 'Multiple Vulnerabilities'
+    if len(glsa.bugs) > 1 or any(
+        ["multiple vulnerabilities" in bug.summary.lower() for bug in glsa.bugs]
+    ):
+        glsa.title += "Multiple Vulnerabilities"
 
     return glsa

@@ -2,7 +2,7 @@ from glsamaker.app import db
 
 
 class Package(db.Model):
-    __tablename__ = 'package'
+    __tablename__ = "package"
 
     pkg = db.Column(db.String(), primary_key=True)
 
@@ -15,24 +15,27 @@ class Package(db.Model):
 
 
 class Affected(db.Model):
-    __tablename__ = 'affected'
+    __tablename__ = "affected"
 
-    range_types = {'=': 'eq',
-                   '>=': 'ge',
-                   '<=': 'le',
-                   '>': 'gt',
-                   '<': 'lt',
-                   # ??
-                   'rge': '',
-                   'rgt': '',
-                   'rle': ''}
+    range_types = {
+        "=": "eq",
+        ">=": "ge",
+        "<=": "le",
+        ">": "gt",
+        "<": "lt",
+        # ??
+        "rge": "",
+        "rgt": "",
+        "rle": "",
+    }
     range_types_rev = {v: k for k, v in range_types.items()}
 
     affected_id = db.Column(db.Integer(), primary_key=True)
-    pkg = db.Column(db.ForeignKey('package.pkg'))
+    pkg = db.Column(db.ForeignKey("package.pkg"))
     # Less than, greater than, greater than-equal to, etc.
-    pkg_range = db.Column(db.Enum('eq', 'ge', 'gt', 'le', 'lt', 'rge',
-                                  'rgt', 'rle', name='atom_ranges'))
+    pkg_range = db.Column(
+        db.Enum("eq", "ge", "gt", "le", "lt", "rge", "rgt", "rle", name="atom_ranges")
+    )
     version = db.Column(db.String())
     arch = db.Column(db.String())
     slot = db.Column(db.String())
@@ -40,8 +43,7 @@ class Affected(db.Model):
     # vulnerable, so this var has a confusing name but it just
     # indicates whether this package specification indicates an
     # unaffected range or vulnerable range
-    range_type = db.Column(db.Enum('unaffected', 'vulnerable',
-                           name='range_types'))
+    range_type = db.Column(db.Enum("unaffected", "vulnerable", name="range_types"))
 
     def __init__(self, pkg, version, pkg_range, arch, slot, range_type):
         Package.maybe_add_pkg(pkg)
@@ -55,9 +57,9 @@ class Affected(db.Model):
     def versioned_atom(self):
         atom = self.range_types_rev[self.pkg_range]
         atom += self.pkg
-        atom += '-' + self.version
+        atom += "-" + self.version
 
-        if self.slot and self.slot != '*':
-            atom += ':' + self.slot
+        if self.slot and self.slot != "*":
+            atom += ":" + self.slot
 
         return atom

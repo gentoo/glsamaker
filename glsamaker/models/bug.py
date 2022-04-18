@@ -2,7 +2,7 @@ from glsamaker.app import db
 
 
 class Bug(db.Model):
-    __tablename__ = 'bug'
+    __tablename__ = "bug"
 
     bug_id = db.Column(db.String(), primary_key=True)
 

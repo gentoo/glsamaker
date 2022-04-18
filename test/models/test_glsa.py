@@ -15,12 +15,12 @@ def test_resolution_xml():
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=media-libs/libsdl2-2.0.14-r1"'''
 
-    expected = '''<p>All SDL 2 users should upgrade to the latest version:</p>
+    expected = """<p>All SDL 2 users should upgrade to the latest version:</p>
 
 <code>
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=media-libs/libsdl2-2.0.14-r1"
-</code>'''
+</code>"""
 
     assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
 
@@ -34,7 +34,7 @@ All Google Chrome users should upgrade to the latest version:
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=www-client/google-chrome-91.0.4472.164"'''
 
-    expected = '''<p>All Chromium users should upgrade to the latest version:</p>
+    expected = """<p>All Chromium users should upgrade to the latest version:</p>
 
 <code>
   # emerge --sync
@@ -46,7 +46,7 @@ All Google Chrome users should upgrade to the latest version:
 <code>
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=www-client/google-chrome-91.0.4472.164"
-</code>'''
+</code>"""
 
     assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
 
@@ -70,7 +70,7 @@ All Mozilla Firefox binary users should upgrade to the latest version:
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=www-client/firefox-bin-89.0"'''
 
-    expected = '''<p>All Mozilla Firefox ESR users should upgrade to the latest version:</p>
+    expected = """<p>All Mozilla Firefox ESR users should upgrade to the latest version:</p>
 
 <code>
   # emerge --sync
@@ -96,7 +96,7 @@ All Mozilla Firefox binary users should upgrade to the latest version:
 <code>
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=www-client/firefox-bin-89.0"
-</code>'''
+</code>"""
     assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
 
 
@@ -105,8 +105,8 @@ def test_get_references():
     # rather than being created somewhat arbitrarily here
     db.create_all()
     glsa = GLSA()
-    glsa.glsa_id = 'test glsa'
-    cves = ['CVE-2021-4321', 'CVE-2021-1234']
+    glsa.glsa_id = "test glsa"
+    cves = ["CVE-2021-4321", "CVE-2021-1234"]
 
     for text in cves:
         glsa.references.append(Reference.new(text))
@@ -115,10 +115,10 @@ def test_get_references():
     assert glsa.get_reference_texts() == sorted(cves)
 
 
-app.jinja_loader.searchpath.append('glsamaker/templates')
+app.jinja_loader.searchpath.append("glsamaker/templates")
 
 
-glsas = ['test/files/glsa/glsa-202107-48', 'test/files/glsa/glsa-202107-55']
+glsas = ["test/files/glsa/glsa-202107-48", "test/files/glsa/glsa-202107-55"]
 
 
 def striplines(lines):
@@ -135,7 +135,7 @@ def test_generate_xml():
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
     for glsa_path in glsas:
-        xml_path = '{}.xml'.format(glsa_path)
+        xml_path = "{}.xml".format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
         glsa_contents = striplines(file_contents(xml_path))
@@ -147,13 +147,13 @@ def test_generate_xml():
 
 def test_generate_mail():
     for glsa_path in glsas:
-        xml_path = '{}.xml'.format(glsa_path)
-        mail_path = '{}.mail'.format(glsa_path)
+        xml_path = "{}.xml".format(glsa_path)
+        mail_path = "{}.mail".format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
-        mail_contents = [line.strip('\n') for line in file_contents(mail_path)]
+        mail_contents = [line.strip("\n") for line in file_contents(mail_path)]
         with app.app_context():
-            time = 'Fri, 23 Jul 2021 22:10:35 -0500'
+            time = "Fri, 23 Jul 2021 22:10:35 -0500"
             generated_mail = glsa.generate_mail(time).splitlines()
             f = os.path.basename(mail_path)
             assert assert_diff(mail_contents, generated_mail)
