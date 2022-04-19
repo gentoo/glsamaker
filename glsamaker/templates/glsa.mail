@@ -11,7 +11,11 @@ Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
 
  Severity: {{ glsa.impact_type.capitalize() }}
     Title: {{ glsa.title }}
+{%- if glsa.announced %}
      Date: {{ glsa.announced.strftime('%B %d, %Y') }}
+{%- else -%}
+     Date: UNRELEASED
+{%- endif %}
      Bugs: {% for bug in glsa.get_bugs() %}#{{ bug }}{{", " if not loop.last}}{% endfor %}
        ID: {{ glsa.glsa_id }}
 
@@ -83,8 +87,11 @@ https://bugs.gentoo.org.
 
 License
 =======
-
+{% if glsa.submitted_time %}
 Copyright {{ glsa.submitted_time.year }} Gentoo Foundation, Inc; referenced text
+{%- else -%}
+Copyright YEAR Gentoo Foundation, Inc; referenced text
+{%- endif %}
 belongs to its owner(s).
 
 The contents of this document are licensed under the

@@ -4,8 +4,16 @@
     <title>{{ glsa.title }}</title>
     <synopsis>{{ glsa.synopsis }}</synopsis>
     <product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
-    <announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
-    <revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
+    {%- if glsa.announced %}
+	<announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
+	{%- else -%}
+	<announced></announced>
+	{%- endif %}
+    {%- if glsa.revised_date %}
+	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
+	{%- else -%}
+	<revised count="{{ glsa.revision_count }}"></revised>
+	{%- endif %}
     {% for bug in glsa.get_bugs() -%}
     <bug>{{ bug }}</bug>
     {% endfor -%}
@@ -43,5 +51,9 @@
         {% endfor %}
     </references>
     <metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
+	{% if glsa.submitted_time -%}
     <metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
+	{%- else -%}
+    <metadata tag="submitter" timestamp="">{{ uid_to_nick(glsa.submitter) }}</metadata>
+	{%- endif %}
 </glsa>

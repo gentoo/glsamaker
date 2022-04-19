@@ -124,4 +124,8 @@
 		<td class="bordered">{{ glsa.submitted_time }}</td>
 	</tr>
 </table>
+{% if glsa.draft %}
+<p style="white-space: pre-wrap">{{ glsa.generate_xml() }}</p>
+<p style="white-space: pre-wrap">{{ glsa.generate_mail() }}</p>
+{% endif %}
 {% endblock %}
