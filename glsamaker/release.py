@@ -1,12 +1,7 @@
 from smtplib import SMTP
 from datetime import datetime
 
-from flask import render_template
 from git import Repo
-
-
-def generate_mail(glsa, date=None):
-    return glsa.generate_mail(date)
 
 
 def release_email(glsa):
@@ -23,10 +18,6 @@ def release_email(glsa):
             [to],
             glsa.generate_mail(date=datetime.now().strftime("%a, %d %b %Y %X")),
         )
-
-
-def generate_xml(glsa):
-    return glsa.generate_xml()
 
 
 def release_xml(glsa):

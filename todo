@@ -1,0 +1,11 @@
+Reorganize edit glsa field order (consult with sam)
+
+Error state of trying to get xml or mail downloaded from an unreleased glsa is bad
+
+Make necessity of ack configurable
+
+Archive needs to be... better
+
+GLSA page errors on 404, glsa is undefined when rendering the template
+
+releasing/acking shouldn't require editing the whole thing
