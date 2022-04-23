@@ -50,7 +50,11 @@
         {%- endif -%}
         {% endfor %}
     </references>
+	{% if glsa.requested_time -%}
     <metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
+	{%- else -%}
+	<metadata tag="requester" timestamp="">{{ uid_to_nick(glsa.requester) }}</metadata>
+	{%- endif %}
 	{% if glsa.submitted_time -%}
     <metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
 	{%- else -%}

@@ -1,4 +1,4 @@
-From: glsamaker@gentoo.org
+From: {{ smtpto }}
 Date: {{ date }}
 Subject: [ GLSA {{ glsa.glsa_id }} ] {{ glsa.title }}
 Reply-To: security@gentoo.org

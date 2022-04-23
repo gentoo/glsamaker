@@ -154,6 +154,8 @@ def test_generate_mail():
         mail_contents = [line.strip("\n") for line in file_contents(mail_path)]
         with app.app_context():
             time = "Fri, 23 Jul 2021 22:10:35 -0500"
-            generated_mail = glsa.generate_mail(time).splitlines()
+            generated_mail = glsa.generate_mail(
+                date=time, smtpto="glsamaker@gentoo.org"
+            ).splitlines()
             f = os.path.basename(mail_path)
             assert assert_diff(mail_contents, generated_mail)

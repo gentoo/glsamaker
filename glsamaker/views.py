@@ -26,7 +26,6 @@ from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User, uid_to_nick
-from glsamaker.release import release_email, release_xml
 
 dictConfig(
     {
@@ -232,19 +231,7 @@ def edit_glsa(glsa_id=None):
             # The first revision is made on the date the GLSA is announced.
             glsa.revised_date = glsa.announced
 
-            app.logger.info(config["glsamaker"])
-            app.logger.info(config["glsamaker"]["autorelease"])
-            if (
-                "glsamaker" in config
-                and "autorelease" in config["glsamaker"]
-                and config["glsamaker"]["autorelease"] == "yes"
-            ):
-                release_email(glsa)
-                release_xml(glsa)
-            else:
-                app.logger.info(
-                    "Autorelease disabled, not automatically adding XML or sending email"
-                )
+            glsa.release()
             db.session.commit()
             return redirect("/glsa/" + glsa.glsa_id)
         elif form.ack.data:
@@ -325,7 +312,7 @@ def glsa_xml(glsa_id):
     if not advisory or not advisory.announced:
         return redirect("/"), 400
     return Response(
-        generate_xml(advisory),
+        advisory.generate_xml(),
         mimetype="text/plain",
         headers={
             "Content-disposition": "attachment; filename=glsa-{}.xml".format(

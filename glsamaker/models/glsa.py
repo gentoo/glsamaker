@@ -1,10 +1,13 @@
 from datetime import datetime
+from smtplib import SMTP
 
-from glsamaker.app import app, db
+from glsamaker.app import app, config, db
+from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
 
 from flask import render_template
+
 
 glsa_to_bug = db.Table(
     "glsa_to_bug",
@@ -245,10 +248,41 @@ class GLSA(db.Model):
     def generate_xml(self):
         return render_template("glsa.xml", glsa=self)
 
-    def generate_mail(self, date=None):
+    def generate_mail(self, date=None, smtpto=None):
         if date:
-            return render_template("glsa.mail", glsa=self, date=date)
+            return render_template("glsa.mail", glsa=self, date=date, smtpto=smtpto)
         else:
             return render_template(
-                "glsa.mail", glsa=self, date=datetime.now().strftime("%a, %d %b %Y %X")
+                "glsa.mail",
+                glsa=self,
+                date=datetime.now().strftime("%a, %d %b %Y %X"),
+                smtpto=smtpto,
             )
+
+    def release_email(self):
+        server = config["glsamaker"]["smtpserver"]
+        user = config["glsamaker"]["smtpuser"]
+        password = config["glsamaker"]["smtppass"]
+        to = config["glsamaker"]["smtpto"]
+        # TODO: Should theoretically be more configurable
+        with SMTP(server, port=587) as smtp:
+            smtp.starttls()
+            smtp.login(user, password)
+            smtp.sendmail(
+                user,
+                [to],
+                self.generate_mail(
+                    date=datetime.now().strftime("%a, %d %b %Y %X"), smtpto=to
+                ),
+            )
+
+    def release(self):
+        glsarepo = GLSARepo(
+            "/var/lib/glsamaker/glsa",
+            config["glsamaker"]["gpg_pass"],
+            config["glsamaker"]["gpg_home"],
+            config["glsamaker"]["ssh_key"],
+        )
+        glsarepo.commit(self)
+        glsarepo.push()
+        self.release_email()
