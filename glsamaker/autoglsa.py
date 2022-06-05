@@ -52,6 +52,11 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
         summaries = bracex.expand(bug.summary)
         for summary in summaries:
             package = summary.split(":")[0]
+
+            # It's common for people to do things like
+            # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
+            # '<foo/bar-1.2', '<foo/bar 2.2', which is invalid
+            package = package.replace(" ", "")
             try:
                 atom = atom_mod.atom(package)
                 unversioned_atom = str(atom.unversioned_atom)
@@ -165,12 +170,14 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
     if last:
         glsa.product = last.product
         glsa.background = last.background
-
-    proper_name = last.title.split(":")[0]
-    glsa.title = proper_name + ": "
+        proper_name = last.title.split(":")[0]
+        glsa.title = proper_name + ": "
+    else:
+        glsa.title = ", ".join([package.package for package in packages])
+        glsa.title += ": "
 
     if len(glsa.bugs) > 1 or any(
-        ["multiple vulnerabilities" in bug.summary.lower() for bug in glsa.bugs]
+        ["multiple vulnerabilities" in bug.summary.lower() for bug in bugs]
     ):
         glsa.title += "Multiple Vulnerabilities"
 

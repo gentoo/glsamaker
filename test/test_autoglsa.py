@@ -26,6 +26,10 @@ from glsamaker.autoglsa import glsa_impact, get_max_versions
             ],
             [atom_mod.atom("<www-servers/apache-2.4.52")],
         ),
+        pytest.param(
+            ["<dev-libs/nss-{3.68.4, 3.79}: Multiple vulnerabilities"],
+            [atom_mod.atom("<dev-libs/nss-3.79")],
+        ),
     ],
 )
 def test_get_max_versions(a, expected):
