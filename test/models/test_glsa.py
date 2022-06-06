@@ -1,11 +1,14 @@
 import os
+import tempfile
 
 from glsamaker import main
 from glsamaker.app import app, db
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.reference import Reference
 
-from util import assert_diff
+from util import assert_diff, gpghome, GPG_TEST_PASSPHRASE, SMTPUSER
+
+import gnupg
 
 
 def test_resolution_xml():
@@ -154,8 +157,38 @@ def test_generate_mail():
         mail_contents = [line.strip("\n") for line in file_contents(mail_path)]
         with app.app_context():
             time = "Fri, 23 Jul 2021 22:10:35 -0500"
-            generated_mail = glsa.generate_mail(
-                date=time, smtpto="glsamaker@gentoo.org"
-            ).splitlines()
+            generated_mail = (
+                glsa.generate_mail(
+                    date=time, smtpuser=SMTPUSER, replyto="security@gentoo.org"
+                )
+                .as_message()
+                .as_string()
+                .splitlines()
+            )
             f = os.path.basename(mail_path)
             assert assert_diff(mail_contents, generated_mail)
+
+
+# https://gist.github.com/angelsenra/60397a72f29e58a7a4c27ed80c6c62d9
+def test_generate_mail_signed(gpghome):
+    with app.app_context():
+        # Doesn't matter which GLSA we use here, we only need
+        # something that will generate the mail properly as we're not
+        # testing just how properly it's generated.
+        glsa = main.xml_to_glsa(f"{glsas[0]}.xml")
+        generated_mail = glsa.generate_mail(
+            smtpuser=SMTPUSER,
+            replyto="security@gentoo.org",
+            gpg_home=gpghome,
+            gpg_pass=GPG_TEST_PASSPHRASE,
+        ).as_message()
+
+    content, signature = generated_mail.get_payload()
+    gpg = gnupg.GPG(gnupghome=gpghome)
+
+    with tempfile.NamedTemporaryFile() as sig_tmpfile:
+        sig_tmpfile.write(signature.get_payload().encode())
+        sig_tmpfile.seek(0)
+        assert gpg.verify_data(
+            sig_filename=sig_tmpfile.name, data=content.as_string().encode()
+        )

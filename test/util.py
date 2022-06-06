@@ -4,13 +4,13 @@ import pytest
 import tempfile
 
 from glsamaker.app import db
-from glsamaker.glsarepo import GLSARepo
 
 import git
 import gnupg
 
 
 GPG_TEST_PASSPHRASE = "secret"
+SMTPUSER = "glsamaker@gentoo.org"
 
 
 def assert_diff(src: list[str], target: list[str]):
@@ -23,13 +23,18 @@ def assert_diff(src: list[str], target: list[str]):
 def gpghome() -> str:
     with tempfile.TemporaryDirectory() as d:
         # Start a gpg-agent with the args we want, else it will get
-        # started at gen_key with args of its choosing
+        # started at gen_key with args of its choosing.
+        # It will exit once out of the with block, because gpg-agent
+        # exits once its homedir disappears.
         os.system(f"gpg-agent --daemon --allow-preset-passphrase --homedir={d}")
         gpg = gnupg.GPG(gnupghome=d)
         gpg.encoding = "utf-8"
         gpg.gen_key(
             gpg.gen_key_input(
-                key_type="RSA", key_length=2048, passphrase=GPG_TEST_PASSPHRASE
+                key_type="RSA",
+                key_length=2048,
+                name_email=SMTPUSER,
+                passphrase=GPG_TEST_PASSPHRASE,
             )
         )
         yield d

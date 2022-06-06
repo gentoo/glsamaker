@@ -126,6 +126,6 @@
 </table>
 {% if glsa.draft %}
 <p style="white-space: pre-wrap">{{ glsa.generate_xml() }}</p>
-<p style="white-space: pre-wrap">{{ glsa.generate_mail() }}</p>
+<p style="white-space: pre-wrap">{{ glsa.generate_mail_text() }}</p>
 {% endif %}
 {% endblock %}

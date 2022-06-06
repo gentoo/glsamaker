@@ -1,8 +1,3 @@
-From: {{ smtpto }}
-Date: {{ date }}
-Subject: [ GLSA {{ glsa.glsa_id }} ] {{ glsa.title }}
-Reply-To: security@gentoo.org
-
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

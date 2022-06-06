@@ -1,11 +1,11 @@
 from datetime import datetime
-from smtplib import SMTP
 
 from glsamaker.app import app, config, db
 from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
 
+from envelope import Envelope
 from flask import render_template
 
 
@@ -248,33 +248,57 @@ class GLSA(db.Model):
     def generate_xml(self):
         return render_template("glsa.xml", glsa=self)
 
-    def generate_mail(self, date=None, smtpto=None):
-        if date:
-            return render_template("glsa.mail", glsa=self, date=date, smtpto=smtpto)
-        else:
-            return render_template(
-                "glsa.mail",
-                glsa=self,
-                date=datetime.now().strftime("%a, %d %b %Y %X"),
-                smtpto=smtpto,
-            )
+    def generate_mail_text(self):
+        return render_template("glsa.mail", glsa=self)
 
-    def release_email(self):
+    def generate_mail(
+        self,
+        date=None,
+        smtpuser=None,
+        replyto=None,
+        smtpto=None,
+        gpg_home=None,
+        gpg_pass=None,
+    ) -> Envelope:
+        rendered = self.generate_mail_text()
+
+        message = (
+            Envelope(rendered)
+            .subject(f"[ GLSA {self.glsa_id} ] {self.title}")
+            .reply_to(replyto or smtpuser)
+        )
+
+        if smtpuser:
+            message = message.from_(smtpuser)
+        if smtpto:
+            message = message.to(smtpto)
+        if date:
+            message = message.date(date)
+        if gpg_home and gpg_pass:
+            # gnugp is not a typo, envelope's argument name is just
+            # mispelled.
+            message = message.gpg(gnugp_home=gpg_home).signature(passphrase=gpg_pass)
+        return message
+
+    def release_email(self) -> bool:
         server = config["glsamaker"]["smtpserver"]
         user = config["glsamaker"]["smtpuser"]
-        password = config["glsamaker"]["smtppass"]
-        to = config["glsamaker"]["smtpto"]
-        # TODO: Should theoretically be more configurable
-        with SMTP(server, port=587) as smtp:
-            smtp.starttls()
-            smtp.login(user, password)
-            smtp.sendmail(
-                user,
-                [to],
-                self.generate_mail(
-                    date=datetime.now().strftime("%a, %d %b %Y %X"), smtpto=to
-                ),
-            )
+        smtppass = config["glsamaker"]["smtppass"]
+        smtpuser = config["glsamaker"]["smtpuser"]
+        smtpto = config["glsamaker"]["smtpto"]
+        replyto = config["glsamaker"]["replyto"]
+        gpg_home = config["glsamaker"]["gpg_home"]
+        gpg_pass = config["glsamaker"]["gpg_pass"]
+        mail = self.generate_mail(
+            date=datetime.now().strftime("%a, %d %b %Y %X"),
+            smtpuser=smtpuser,
+            replyto=replyto,
+            smtpto=smtpto,
+            gpg_home=gpg_home,
+            gpg_pass=gpg_pass,
+        )
+        ret = mail.smtp(server, 587, user, smtppass, "starttls").send()
+        return bool(ret)
 
     def release(self):
         glsarepo = GLSARepo(
@@ -285,4 +309,6 @@ class GLSA(db.Model):
         )
         glsarepo.commit(self)
         glsarepo.push()
-        self.release_email()
+        mail_success = self.release_email()
+        if not mail_success:
+            app.logger.info(f"Mail failure for GLSA {self.glsa_id}")
