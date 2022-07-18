@@ -18,8 +18,11 @@ Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
 
 Synopsis
 ========
-
+{% if glsa.synopsis %}
 {{ glsa.synopsis | wordwrap(72) }}
+{%- else -%}
+EMPTY SYNOPSIS
+{%- endif %}
 
 Background
 ==========
