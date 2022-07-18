@@ -26,8 +26,11 @@ EMPTY SYNOPSIS
 
 Background
 ==========
-
+{% if glsa.background %}
 {{ glsa.background | wordwrap(72) }}
+{%- else -%}
+EMPTY BACKGROUND
+{%- endif %}
 
 Affected packages
 =================
@@ -39,23 +42,35 @@ Affected packages
 
 Description
 ===========
-
+{% if glsa.description %}
 {{ glsa.description | wordwrap(72) }}
+{%- else -%}
+EMPTY DESCRIPTION
+{%- endif %}
 
 Impact
 ======
-
+{% if glsa.impact %}
 {{ glsa.impact }}
+{%- else -%}
+EMPTY IMPACT
+{%- endif %}
 
 Workaround
 ==========
-
+{% if glsa.workaround %}
 {{ glsa.workaround }}
+{%- else -%}
+EMPTY WORKAROUND
+{%- endif %}
 
 Resolution
 ==========
-
+{% if glsa.resolution_text%}
 {{ glsa.resolution_text }}
+{%- else -%}
+EMPTY RESOLUTION
+{%- endif %}
 
 References
 ==========
