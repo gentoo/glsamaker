@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./etc:/etc/glsamaker
+      - ./glsa:/var/lib/glsamaker/glsa
     ports:
       - 8080:8080
     depends_on:
