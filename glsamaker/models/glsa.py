@@ -297,7 +297,12 @@ class GLSA(db.Model):
             gpg_home=gpg_home,
             gpg_pass=gpg_pass,
         )
-        ret = mail.smtp(server, 587, user, smtppass, "starttls").send()
+
+        if not any(server, user, smtppass):
+            ret = mail.smtp("localhost", 25).send()
+        else:
+            ret = mail.smtp(server, 587, user, smtppass, "starttls").send()
+
         return bool(ret)
 
     def release(self):
