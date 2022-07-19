@@ -144,7 +144,6 @@ def test_generate_xml():
         glsa_contents = striplines(file_contents(xml_path))
         with app.app_context():
             xml = striplines(glsa.generate_xml().splitlines())
-            f = os.path.basename(xml_path)
             assert assert_diff(glsa_contents, xml)
 
 
@@ -165,7 +164,6 @@ def test_generate_mail():
                 .as_string()
                 .splitlines()
             )
-            f = os.path.basename(mail_path)
             assert assert_diff(mail_contents, generated_mail)
 
 
