@@ -10,6 +10,9 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(32)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+app.jinja_env.lstrip_blocks = True
+app.jinja_env.trim_blocks = True
+
 config = ConfigParser()
 config.read("/etc/glsamaker/glsamaker.conf")
 

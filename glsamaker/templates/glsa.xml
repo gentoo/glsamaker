@@ -4,28 +4,28 @@
     <title>{{ glsa.title }}</title>
     <synopsis>{{ glsa.synopsis }}</synopsis>
     <product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
-    {%- if glsa.announced %}
+    {% if glsa.announced %}
 	<announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
-	{%- else -%}
+	{% else %}
 	<announced></announced>
-	{%- endif %}
-    {%- if glsa.revised_date %}
+	{% endif %}
+    {% if glsa.revised_date %}
 	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
-	{%- else -%}
+	{% else %}
 	<revised count="{{ glsa.revision_count }}"></revised>
-	{%- endif %}
-    {% for bug in glsa.get_bugs() -%}
+	{% endif %}
+    {% for bug in glsa.get_bugs() %}
     <bug>{{ bug }}</bug>
     {% endfor -%}
     <access>{{ glsa.access }}</access>
     <affected>
-        {%- for pkg in glsa.get_pkgs() %}
+        {% for pkg in glsa.get_pkgs() %}
         <package name="{{ pkg }}" auto="yes" arch="{{ glsa.get_affected_arch(pkg) }}">
-            {%- for affected in glsa.get_affected_for_pkg(pkg) %}
+            {% for affected in glsa.get_affected_for_pkg(pkg) %}
             <{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
-            {%- endfor %}
+            {% endfor %}
         </package>
-        {%- endfor %}
+        {% endfor %}
     </affected>
     <background>
         <p>{{ glsa.background }}</p>
@@ -40,24 +40,25 @@
         <p>{{ glsa.workaround }}</p>
     </workaround>
     <resolution>
-{{ glsa.resolution_xml | safe | indent(8, True) }}
+		{{ glsa.resolution_xml | safe }}
     </resolution>
     <references>
-        {%- for ref in glsa.get_references() -%}
-        {% if ref.url %}
-        <uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
-        <uri>{{ ref.ref_text }}</uri>
-        {%- endif -%}
+        {% for ref in glsa.get_references() %}
+			{% if ref.url %}
+			<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
+			<uri>{{ ref.ref_text }}</uri>
+			{% endif %}
+
         {% endfor %}
     </references>
-	{% if glsa.requested_time -%}
+	{% if glsa.requested_time %}
     <metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
-	{%- else -%}
+	{% else %}
 	<metadata tag="requester" timestamp="">{{ uid_to_nick(glsa.requester) }}</metadata>
-	{%- endif %}
-	{% if glsa.submitted_time -%}
+	{% endif %}
+	{% if glsa.submitted_time %}
     <metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
-	{%- else -%}
+	{% else %}
     <metadata tag="submitter" timestamp="">{{ uid_to_nick(glsa.submitter) }}</metadata>
-	{%- endif %}
+	{% endif %}
 </glsa>

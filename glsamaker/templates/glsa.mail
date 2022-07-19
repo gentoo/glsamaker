@@ -6,31 +6,34 @@ Gentoo Linux Security Advisory                           GLSA {{ glsa.glsa_id }}
 
  Severity: {{ glsa.impact_type.capitalize() }}
     Title: {{ glsa.title }}
-{%- if glsa.announced %}
+{% if glsa.announced %}
      Date: {{ glsa.announced.strftime('%B %d, %Y') }}
-{%- else -%}
+{% else %}
      Date: UNRELEASED
-{%- endif %}
-     Bugs: {% for bug in glsa.get_bugs() %}#{{ bug }}{{", " if not loop.last}}{% endfor %}
+{% endif %}
+     Bugs: {% for bug in glsa.get_bugs() %}#{{ bug }}{{ ", " if not loop.last }}{% endfor %}
+
        ID: {{ glsa.glsa_id }}
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Synopsis
 ========
+
 {% if glsa.synopsis %}
 {{ glsa.synopsis | wordwrap(72) }}
-{%- else -%}
+{% else %}
 EMPTY SYNOPSIS
-{%- endif %}
+{% endif %}
 
 Background
 ==========
+
 {% if glsa.background %}
 {{ glsa.background | wordwrap(72) }}
-{%- else -%}
+{% else %}
 EMPTY BACKGROUND
-{%- endif %}
+{% endif %}
 
 Affected packages
 =================
@@ -42,45 +45,50 @@ Affected packages
 
 Description
 ===========
+
 {% if glsa.description %}
 {{ glsa.description | wordwrap(72) }}
-{%- else -%}
+{% else %}
 EMPTY DESCRIPTION
-{%- endif %}
+{% endif %}
 
 Impact
 ======
+
 {% if glsa.impact %}
 {{ glsa.impact }}
-{%- else -%}
+{% else %}
 EMPTY IMPACT
-{%- endif %}
+{% endif %}
 
 Workaround
 ==========
+
 {% if glsa.workaround %}
 {{ glsa.workaround }}
-{%- else -%}
+{% else %}
 EMPTY WORKAROUND
-{%- endif %}
+{% endif %}
 
 Resolution
 ==========
-{% if glsa.resolution_text%}
+
+{% if glsa.resolution_text %}
 {{ glsa.resolution_text }}
-{%- else -%}
+{% else %}
 EMPTY RESOLUTION
-{%- endif %}
+{% endif %}
 
 References
 ==========
 
-{% for ref in glsa.get_references() -%}
+{% for ref in glsa.get_references() %}
 [ {{ loop.index }} ] {{ ref.ref_text }}
-{%- if ref.url %}
+{% if ref.url %}
 {{ ref.url | indent(6, True) }}
-{%- endif %}
+{% endif %}
 {% endfor %}
+
 Availability
 ============
 
@@ -100,11 +108,12 @@ https://bugs.gentoo.org.
 
 License
 =======
+
 {% if glsa.submitted_time %}
 Copyright {{ glsa.submitted_time.year }} Gentoo Foundation, Inc; referenced text
-{%- else -%}
+{% else %}
 Copyright YEAR Gentoo Foundation, Inc; referenced text
-{%- endif %}
+{% endif %}
 belongs to its owner(s).
 
 The contents of this document are licensed under the

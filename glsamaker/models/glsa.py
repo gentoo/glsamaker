@@ -266,6 +266,10 @@ class GLSA(db.Model):
             Envelope(rendered)
             .subject(f"[ GLSA {self.glsa_id} ] {self.title}")
             .reply_to(replyto or smtpuser)
+            # TODO: Without this, and with jinja's trim_blocks,
+            # Envelope will changing the encoding of the mail and
+            # switch "=" for "=3D"
+            .header("Content-Type", 'text/plain; charset="utf-8"')
         )
 
         if smtpuser:

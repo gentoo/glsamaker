@@ -1,6 +1,4 @@
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
 Subject: [ GLSA 202107-48 ] systemd: Multiple vulnerabilities
 From: glsamaker@gentoo.org
 Reply-To: security@gentoo.org
