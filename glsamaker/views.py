@@ -187,21 +187,21 @@ def edit_glsa(glsa_id=None):
     )
 
     if form.validate_on_submit() and request.method == "POST":
-        glsa.title = form.title.data
-        glsa.synopsis = form.synopsis.data
-        glsa.product_type = form.product_type.data
+        glsa.title = form.title.data.strip()
+        glsa.synopsis = form.synopsis.data.strip()
+        glsa.product_type = form.product_type.data.strip()
         glsa.bugs = [Bug.new(bug.strip()) for bug in form.bugs.data.split(",")]
-        glsa.access = form.access.data
+        glsa.access = form.access.data.strip()
         glsa.affected = parse_atoms(request, "unaffected") + parse_atoms(
             request, "vulnerable"
         )
         glsa.product = ",".join(sorted([cpn.split("/")[1] for cpn in glsa.get_pkgs()]))
-        glsa.background = form.background.data
-        glsa.description = form.description.data
-        glsa.impact = form.impact.data
-        glsa.impact_type = form.impact_type.data
-        glsa.workaround = form.workaround.data
-        glsa.resolution = form.resolution.data
+        glsa.background = form.background.data.strip()
+        glsa.description = form.description.data.strip()
+        glsa.impact = form.impact.data.strip()
+        glsa.impact_type = form.impact_type.data.strip()
+        glsa.workaround = form.workaround.data.strip()
+        glsa.resolution = form.resolution.data.strip()
 
         # There may already be references, but the references we
         # already have might also be bug aliases. Use list() and set()
