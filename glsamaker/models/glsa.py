@@ -203,7 +203,7 @@ class GLSA(db.Model):
         if in_code:
             ret += ["</code>"]
 
-        return "\n".join(ret)
+        return ret
 
     @property
     def resolution_text(self):

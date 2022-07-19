@@ -5,18 +5,18 @@
     <synopsis>{{ glsa.synopsis }}</synopsis>
     <product type="{{ glsa.product_type }}">{{ glsa.product }}</product>
     {% if glsa.announced %}
-	<announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
-	{% else %}
-	<announced></announced>
-	{% endif %}
+    <announced>{{ glsa.announced.strftime("%Y-%m-%d") }}</announced>
+    {% else %}
+    <announced></announced>
+    {% endif %}
     {% if glsa.revised_date %}
-	<revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
-	{% else %}
-	<revised count="{{ glsa.revision_count }}"></revised>
-	{% endif %}
+    <revised count="{{ glsa.revision_count }}">{{ glsa.revised_date.strftime("%Y-%m-%d") }}</revised>
+    {% else %}
+    <revised count="{{ glsa.revision_count }}"></revised>
+    {% endif %}
     {% for bug in glsa.get_bugs() %}
     <bug>{{ bug }}</bug>
-    {% endfor -%}
+    {% endfor %}
     <access>{{ glsa.access }}</access>
     <affected>
         {% for pkg in glsa.get_pkgs() %}
@@ -40,25 +40,27 @@
         <p>{{ glsa.workaround }}</p>
     </workaround>
     <resolution>
-		{{ glsa.resolution_xml | safe }}
+        {% for line in glsa.resolution_xml %}
+        {{ line | safe }}
+		{% endfor %}
     </resolution>
     <references>
         {% for ref in glsa.get_references() %}
-			{% if ref.url %}
-			<uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
-			<uri>{{ ref.ref_text }}</uri>
-			{% endif %}
+        {% if ref.url %}
+        <uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
+        <uri>{{ ref.ref_text }}</uri>
+        {% endif %}
 
         {% endfor %}
     </references>
-	{% if glsa.requested_time %}
+    {% if glsa.requested_time %}
     <metadata tag="requester" timestamp="{{ glsa.requested_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.requester) }}</metadata>
-	{% else %}
-	<metadata tag="requester" timestamp="">{{ uid_to_nick(glsa.requester) }}</metadata>
-	{% endif %}
-	{% if glsa.submitted_time %}
+    {% else %}
+    <metadata tag="requester" timestamp="">{{ uid_to_nick(glsa.requester) }}</metadata>
+    {% endif %}
+    {% if glsa.submitted_time %}
     <metadata tag="submitter" timestamp="{{ glsa.submitted_time.isoformat() + 'Z' }}">{{ uid_to_nick(glsa.submitter) }}</metadata>
-	{% else %}
+    {% else %}
     <metadata tag="submitter" timestamp="">{{ uid_to_nick(glsa.submitter) }}</metadata>
-	{% endif %}
+    {% endif %}
 </glsa>
