@@ -15,6 +15,8 @@ class GLSARepo:
         self.ssh_key = ssh_key
         self.signing_key = signing_key
 
+        os.environ["GNUPGHOME"] = self.gpghome
+
         self.repo.config_writer().set_value("user", "name", "GLSAMaker").release()
         self.repo.config_writer().set_value("user", "email", self.smtpuser).release()
         self.repo.config_writer().set_value("push", "gpgSign", "true").release()
@@ -41,7 +43,6 @@ class GLSARepo:
         self.repo.git.add(filename)
         fingerprint, keygrip = self.get_key()
         # TODO: xml linting before commit
-        os.environ["GNUPGHOME"] = self.gpghome
         os.system(
             f"gpg-agent --daemon --allow-preset-passphrase --homedir={self.gpghome}"
         )
@@ -56,7 +57,6 @@ class GLSARepo:
             f"--gpg-sign={fingerprint}",
             "--signoff",
         )
-        del os.environ["GNUPGHOME"]
 
     def push(self):
         # TODO: we should handle StrictHostKeyChecking better
