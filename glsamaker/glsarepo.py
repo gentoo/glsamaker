@@ -17,6 +17,7 @@ class GLSARepo:
 
         self.repo.config_writer().set_value("user", "name", "GLSAMaker").release()
         self.repo.config_writer().set_value("user", "email", self.smtpuser).release()
+        self.repo.config_writer().set_value("push", "gpgSign", "true").release()
 
     def get_key(self) -> Tuple[str, str]:
         gpg = gnupg.GPG(gnupghome=self.gpghome)
