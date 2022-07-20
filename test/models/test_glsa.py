@@ -25,7 +25,7 @@ def test_resolution_xml():
   # emerge --ask --oneshot --verbose "&gt;=media-libs/libsdl2-2.0.14-r1"
 </code>"""
 
-    assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
+    assert assert_diff(expected.splitlines(), glsa.resolution_xml)
 
     glsa.resolution = '''All Chromium users should upgrade to the latest version:
 
@@ -51,7 +51,7 @@ All Google Chrome users should upgrade to the latest version:
   # emerge --ask --oneshot --verbose "&gt;=www-client/google-chrome-91.0.4472.164"
 </code>"""
 
-    assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
+    assert assert_diff(expected.splitlines(), glsa.resolution_xml)
 
     glsa.resolution = '''All Mozilla Firefox ESR users should upgrade to the latest version:
 
@@ -100,7 +100,7 @@ All Mozilla Firefox binary users should upgrade to the latest version:
   # emerge --sync
   # emerge --ask --oneshot --verbose "&gt;=www-client/firefox-bin-89.0"
 </code>"""
-    assert assert_diff(expected.splitlines(), glsa.resolution_xml.splitlines())
+    assert assert_diff(expected.splitlines(), glsa.resolution_xml)
 
 
 def test_get_references():
