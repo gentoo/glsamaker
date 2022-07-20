@@ -315,6 +315,7 @@ class GLSA(db.Model):
             config["glsamaker"]["gpg_pass"],
             config["glsamaker"]["gpg_home"],
             config["glsamaker"]["ssh_key"],
+            config["glsamaker"]["signing_key"],
         )
         glsarepo.commit(self)
         glsarepo.push()

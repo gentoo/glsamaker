@@ -29,13 +29,18 @@ def gpghome() -> str:
         os.system(f"gpg-agent --daemon --allow-preset-passphrase --homedir={d}")
         gpg = gnupg.GPG(gnupghome=d)
         gpg.encoding = "utf-8"
-        gpg.gen_key(
+        key = gpg.gen_key(
             gpg.gen_key_input(
                 key_type="RSA",
                 key_length=2048,
                 name_email=SMTPUSER,
                 passphrase=GPG_TEST_PASSPHRASE,
             )
+        )
+        gpg.add_subkey(
+            master_key=key.fingerprint,
+            master_passphrase=GPG_TEST_PASSPHRASE,
+            usage="sign",
         )
         yield d
 

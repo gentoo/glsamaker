@@ -1,31 +1,44 @@
 import os
+from typing import Tuple
 
 from git import Repo
 import gnupg
 
 
 class GLSARepo:
-    def __init__(self, path, password, gpghome, ssh_key):
+    def __init__(self, path, password, gpghome, signing_key=None, ssh_key=None):
         self.repo_path = path
         self.repo = Repo.init(path)
         self.gpghome = gpghome
         self.smtpuser = "glsamaker@gentoo.org"
         self.password = password
         self.ssh_key = ssh_key
+        self.signing_key = signing_key
 
         self.repo.config_writer().set_value("user", "name", "GLSAMaker").release()
         self.repo.config_writer().set_value("user", "email", self.smtpuser).release()
 
-    def get_key(self) -> str:
+    def get_key(self) -> Tuple[str, str]:
         gpg = gnupg.GPG(gnupghome=self.gpghome)
-        return gpg.list_keys()[0]
+
+        primary_key = gpg.list_keys()[0]
+        keygrip = primary_key["keygrip"]
+
+        if self.signing_key:
+            return (self.signing_key, keygrip)
+
+        signing_subkeys = [
+            subkey for subkey in primary_key["subkeys"] if "s" in subkey[1]
+        ]
+
+        return (signing_subkeys[0][0], keygrip)
 
     def commit(self, glsa):
         filename = os.path.join(self.repo_path, "glsa-{}.xml".format(glsa.glsa_id))
         with open(filename, "w+") as f:
             f.write(glsa.generate_xml())
         self.repo.git.add(filename)
-        key = self.get_key()
+        fingerprint, keygrip = self.get_key()
         # TODO: xml linting before commit
         os.environ["GNUPGHOME"] = self.gpghome
         os.system(
@@ -33,13 +46,13 @@ class GLSARepo:
         )
         os.system(
             "gpg-connect-agent 'PRESET_PASSPHRASE {} -1 {}'".format(
-                key["keygrip"], self.password.encode("utf-8").hex()
+                keygrip, self.password.encode("utf-8").hex()
             )
         )
         self.repo.git.commit(
             "--message",
             "Add glsa-{}.xml".format(glsa.glsa_id),
-            f"--gpg-sign={key['fingerprint']}",
+            f"--gpg-sign={fingerprint}",
             "--signoff",
         )
         del os.environ["GNUPGHOME"]
