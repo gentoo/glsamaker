@@ -2,6 +2,7 @@ import os
 from typing import Tuple
 
 from git import Repo
+from git.exc import GitCommandError
 import gnupg
 
 
@@ -41,22 +42,33 @@ class GLSARepo:
         with open(filename, "w+") as f:
             f.write(glsa.generate_xml())
         self.repo.git.add(filename)
-        fingerprint, keygrip = self.get_key()
         # TODO: xml linting before commit
         os.system(
             f"gpg-agent --daemon --allow-preset-passphrase --homedir={self.gpghome}"
         )
+
+        # This needs to be done after starting the agent, else the gpg
+        # calls will start their own agent
+        fingerprint, keygrip = self.get_key()
+
         os.system(
             "gpg-connect-agent 'PRESET_PASSPHRASE {} -1 {}'".format(
                 keygrip, self.password.encode("utf-8").hex()
             )
         )
-        self.repo.git.commit(
-            "--message",
-            "Add glsa-{}.xml".format(glsa.glsa_id),
-            f"--gpg-sign={fingerprint}",
-            "--signoff",
-        )
+        try:
+            self.repo.git.commit(
+                "--message",
+                "Add glsa-{}.xml".format(glsa.glsa_id),
+                f"--gpg-sign={fingerprint}",
+                "--signoff",
+            )
+        except GitCommandError:
+            # If anything went wrong while committing, blow away our
+            # changes
+            self.repo.git.reset(filename)
+            os.remove(filename)
+            raise
 
     def push(self):
         # TODO: we should handle StrictHostKeyChecking better

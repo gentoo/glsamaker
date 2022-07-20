@@ -3,6 +3,7 @@ from glsamaker.models.glsa import GLSA
 from glsamaker.glsarepo import GLSARepo
 from util import GPG_TEST_PASSPHRASE, database, gitrepo, gpghome
 
+from git.exc import GitCommandError
 import gnupg
 
 
@@ -37,3 +38,20 @@ def test_commit_with_subkey(gitrepo, gpghome, database):
         glsa.glsa_id = 1
         repo.commit(glsa)
     validate_commit(repo)
+
+
+def test_commit_failure(gitrepo, gpghome, database):
+    repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome, signing_key="doesn't exist")
+
+    glsa = GLSA()
+    with app.app_context():
+        glsa.glsa_id = 1
+        try:
+            repo.commit(glsa)
+        except GitCommandError:
+            assert len(repo.repo.untracked_files) == 0
+            assert not repo.repo.is_dirty()
+        else:
+            # The git command should've failed since signing_key is
+            # garbage
+            assert False
