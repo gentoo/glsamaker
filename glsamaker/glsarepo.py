@@ -24,18 +24,21 @@ class GLSARepo:
 
     def get_key(self) -> Tuple[str, str]:
         gpg = gnupg.GPG(gnupghome=self.gpghome)
-
         primary_key = gpg.list_keys()[0]
-        keygrip = primary_key["keygrip"]
-
-        if self.signing_key:
-            return (self.signing_key, keygrip)
 
         signing_subkeys = [
             subkey for subkey in primary_key["subkeys"] if "s" in subkey[1]
         ]
 
-        return (signing_subkeys[0][0], keygrip)
+        if self.signing_key:
+            for subkey in signing_subkeys:
+                if subkey[0] == self.signing_key or subkey[2] == self.signing_key:
+                    return (self.signing_key, subkey[3])
+            # If we make it here, we didn't find the subkey we were
+            # looking for.
+            return ('', '')
+
+        return (signing_subkeys[0][0], signing_subkeys[0][3])
 
     def commit(self, glsa):
         filename = os.path.join(self.repo_path, "glsa-{}.xml".format(glsa.glsa_id))
@@ -52,7 +55,7 @@ class GLSARepo:
         fingerprint, keygrip = self.get_key()
 
         os.system(
-            "gpg-connect-agent 'PRESET_PASSPHRASE {} -1 {}'".format(
+            "gpg-connect-agent 'PRESET_PASSPHRASE {} -1 {}' /bye".format(
                 keygrip, self.password.encode("utf-8").hex()
             )
         )

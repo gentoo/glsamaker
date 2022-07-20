@@ -28,6 +28,17 @@ def test_commit(gitrepo, gpghome, database):
     validate_commit(repo)
 
 
+def test_commit_without_subkey(gitrepo, gpghome, database):
+    gpg = gnupg.GPG(gnupghome=gpghome)
+    repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome)
+
+    glsa = GLSA()
+    with app.app_context():
+        glsa.glsa_id = 1
+        repo.commit(glsa)
+    validate_commit(repo)
+
+
 def test_commit_with_subkey(gitrepo, gpghome, database):
     gpg = gnupg.GPG(gnupghome=gpghome)
     subkey_fprint = list(gpg.list_keys()[0]["subkey_info"].keys())[0]
