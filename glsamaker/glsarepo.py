@@ -36,7 +36,7 @@ class GLSARepo:
                     return (self.signing_key, subkey[3])
             # If we make it here, we didn't find the subkey we were
             # looking for.
-            return ('', '')
+            return ("", "")
 
         return (signing_subkeys[0][0], signing_subkeys[0][3])
 
