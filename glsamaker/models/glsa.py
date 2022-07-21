@@ -285,9 +285,21 @@ class GLSA(db.Model):
         return message
 
     def release_email(self) -> bool:
-        server = config["glsamaker"]["smtpserver"]
-        user = config["glsamaker"]["smtpuser"]
-        smtppass = config["glsamaker"]["smtppass"]
+        server = (
+            config["glsamaker"]["smtpserver"]
+            if "smtpserver" in config["glsamaker"]
+            else None
+        )
+        user = (
+            config["glsamaker"]["smtpuser"]
+            if "smtpuser" in config["glsamaker"]
+            else None
+        )
+        smtppass = (
+            config["glsamaker"]["smtppass"]
+            if "smtppass" in config["glsamaker"]
+            else None
+        )
         smtpuser = config["glsamaker"]["smtpuser"]
         smtpto = config["glsamaker"]["smtpto"]
         replyto = config["glsamaker"]["replyto"]
@@ -302,7 +314,7 @@ class GLSA(db.Model):
             gpg_pass=gpg_pass,
         )
 
-        if not any(server, user, smtppass):
+        if not any([server, user, smtppass]):
             ret = mail.smtp("localhost", 25).send()
         else:
             ret = mail.smtp(server, 587, user, smtppass, "starttls").send()
