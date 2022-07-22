@@ -286,7 +286,7 @@ class GLSA(db.Model):
             message = message.gpg(gnugp_home=gpg_home).signature(passphrase=gpg_pass)
         return message
 
-    def release_email(self) -> bool:
+    def release_email(self) -> None:
         server = (
             config["glsamaker"]["smtpserver"]
             if "smtpserver" in config["glsamaker"]
@@ -321,12 +321,14 @@ class GLSA(db.Model):
         else:
             sent = mail.smtp(server, 587, user, smtppass, "starttls").send()
 
-        app.logger.info("Sent mail for {self.glsa_id}")
+        if bool(sent):
+            app.logger.info("Sent mail for {self.glsa_id}")
+        else:
+            app.logger.info("Failed sending mail for {self.glsa_id}")
+
         app.logger.info("Message-ID: {sent.as_message()['Message-ID']}")
 
-        return bool(sent)
-
-    def release(self):
+    def release(self) -> None:
         glsarepo = GLSARepo(
             "/var/lib/glsamaker/glsa",
             config["glsamaker"]["gpg_pass"],
@@ -338,6 +340,4 @@ class GLSA(db.Model):
             glsarepo.commit(self)
             self.commit = True
         glsarepo.push()
-        mail_success = self.release_email()
-        if not mail_success:
-            app.logger.info(f"Mail failure for GLSA {self.glsa_id}")
+        self.release_email()
