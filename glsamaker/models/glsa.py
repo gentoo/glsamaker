@@ -317,11 +317,14 @@ class GLSA(db.Model):
         )
 
         if not any([server, user, smtppass]):
-            ret = mail.smtp("localhost", 25).send()
+            sent = mail.smtp("localhost", 25).send()
         else:
-            ret = mail.smtp(server, 587, user, smtppass, "starttls").send()
+            sent = mail.smtp(server, 587, user, smtppass, "starttls").send()
 
-        return bool(ret)
+        app.logger.info("Sent mail for {self.glsa_id}")
+        app.logger.info("Message-ID: {sent.as_message()['Message-ID']}")
+
+        return bool(sent)
 
     def release(self):
         glsarepo = GLSARepo(
