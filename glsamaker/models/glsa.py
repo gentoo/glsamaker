@@ -97,6 +97,8 @@ class GLSA(db.Model):
     requested_time = db.Column(db.DateTime())
     submitted_time = db.Column(db.DateTime())
 
+    committed = db.Column(db.Boolean())
+
     @classmethod
     def next_id(cls):
         now = datetime.now()
@@ -329,7 +331,9 @@ class GLSA(db.Model):
             ssh_key=config["glsamaker"]["ssh_key"],
             signing_key=config["glsamaker"]["signing_key"],
         )
-        glsarepo.commit(self)
+        if not self.commit:
+            glsarepo.commit(self)
+            self.commit = True
         glsarepo.push()
         mail_success = self.release_email()
         if not mail_success:
