@@ -291,7 +291,7 @@ class GLSA(db.Model):
             if "smtpserver" in config["glsamaker"]
             else None
         )
-        user = (
+        smtpuser = (
             config["glsamaker"]["smtpuser"]
             if "smtpuser" in config["glsamaker"]
             else None
@@ -301,7 +301,6 @@ class GLSA(db.Model):
             if "smtppass" in config["glsamaker"]
             else None
         )
-        smtpuser = config["glsamaker"]["smtpuser"]
         smtpto = config["glsamaker"]["smtpto"]
         replyto = config["glsamaker"]["replyto"]
         gpg_home = config["glsamaker"]["gpg_home"]
