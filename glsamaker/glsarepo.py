@@ -1,6 +1,8 @@
 import os
 from typing import Tuple
 
+from glsamaker.app import app
+
 from git import Repo
 from git.exc import GitCommandError
 import gnupg
@@ -30,12 +32,30 @@ class GLSARepo:
             subkey for subkey in primary_key["subkeys"] if "s" in subkey[1]
         ]
 
+        if not signing_subkeys:
+            app.logger.info(
+                "Didn't find any signing subkeys! This is normal if your signing key is the primary key."
+            )
+
         if self.signing_key:
+            # Signing key is the primary key
+            if self.signing_key.endswith(primary_key["keyid"]):
+                return (self.signing_key, primary_key["keygrip"])
+
+            # Signing key is a subkey
             for subkey in signing_subkeys:
-                if subkey[0] == self.signing_key or subkey[2] == self.signing_key:
+                # Subkey array is of the format:
+                # [shortid, capabilities, longid, keygrip]
+                # So we want to check if the signing_key is either of
+                # the ID indices, and if so, return the keygrip
+                if self.signing_key in (subkey[0], subkey[2]):
                     return (self.signing_key, subkey[3])
+
             # If we make it here, we didn't find the subkey we were
             # looking for.
+            app.logger.info(
+                "The specified signing key doesn't seem to be in the keyring!"
+            )
             return ("", "")
 
         return (signing_subkeys[0][0], signing_subkeys[0][3])
@@ -45,6 +65,7 @@ class GLSARepo:
         with open(filename, "w+") as f:
             f.write(glsa.generate_xml())
         self.repo.git.add(filename)
+
         # TODO: xml linting before commit
         os.system(
             f"gpg-agent --daemon --allow-preset-passphrase --homedir={self.gpghome}"
@@ -59,6 +80,7 @@ class GLSARepo:
                 keygrip, self.password.encode("utf-8").hex()
             )
         )
+
         try:
             self.repo.git.commit(
                 "--message",
