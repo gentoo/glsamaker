@@ -25,6 +25,9 @@
 <form method="get" action="/glsa/{{ glsa.glsa_id }}/mail">
 	<button type="submit">Download mailable text</button>
 </form>
+<form method="get" action="/glsa/{{ glsa.glsa_id }}/sendmail"}
+	<button type="submit">Send email</button>
+</form>
 {% endif %}
 <table class="bordered">
 	<tr>

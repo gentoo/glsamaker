@@ -320,3 +320,13 @@ def glsa_xml(glsa_id):
             )
         },
     )
+
+
+@app.route("/glsa/<glsa_id>/xml")
+@login_required
+def glsa_send_mail(glsa_id):
+    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    if not advisory or not advisory.announced:
+        return redirect("/"), 400
+    advisory.release_email()
+    return redirect("/")
