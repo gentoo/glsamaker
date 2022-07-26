@@ -314,10 +314,10 @@ class GLSA(db.Model):
             gpg_pass=gpg_pass,
         )
 
-        if not any([server, user, smtppass]):
+        if not any([server, smtpuser, smtppass]):
             sent = mail.smtp("localhost", 25).send()
         else:
-            sent = mail.smtp(server, 587, user, smtppass, "starttls").send()
+            sent = mail.smtp(server, 587, smtpuser, smtppass, "starttls").send()
 
         if bool(sent):
             app.logger.info(f"Sent mail for {self.glsa_id}")
