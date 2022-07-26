@@ -336,8 +336,8 @@ class GLSA(db.Model):
             ssh_key=config["glsamaker"]["ssh_key"],
             signing_key=config["glsamaker"]["signing_key"],
         )
-        if not self.commited:
+        if not self.committed:
             glsarepo.commit(self)
-            self.commit = True
+            self.committed = True
         glsarepo.push()
         self.release_email()
