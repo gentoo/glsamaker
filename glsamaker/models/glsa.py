@@ -322,11 +322,11 @@ class GLSA(db.Model):
             sent = mail.smtp(server, 587, user, smtppass, "starttls").send()
 
         if bool(sent):
-            app.logger.info("Sent mail for {self.glsa_id}")
+            app.logger.info(f"Sent mail for {self.glsa_id}")
         else:
-            app.logger.info("Failed sending mail for {self.glsa_id}")
+            app.logger.info(f"Failed sending mail for {self.glsa_id}")
 
-        app.logger.info("Message-ID: {sent.as_message()['Message-ID']}")
+        app.logger.info(f"Message-ID: {sent.as_message()['Message-ID']}")
 
     def release(self) -> None:
         glsarepo = GLSARepo(
