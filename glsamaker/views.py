@@ -322,7 +322,7 @@ def glsa_xml(glsa_id):
     )
 
 
-@app.route("/glsa/<glsa_id>/xml")
+@app.route("/glsa/<glsa_id>/sendmail")
 @login_required
 def glsa_send_mail(glsa_id):
     advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
