@@ -314,8 +314,8 @@ class GLSA(db.Model):
             gpg_pass=gpg_pass,
         )
 
-        if not any([server, smtpuser, smtppass]):
-            sent = mail.smtp("localhost", 25).send()
+        if not any([smtpuser, smtppass]):
+            sent = mail.smtp(server).send()
         else:
             sent = mail.smtp(server, 587, smtpuser, smtppass, "starttls").send()
 
