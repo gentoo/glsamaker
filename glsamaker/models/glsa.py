@@ -209,7 +209,6 @@ class GLSA(db.Model):
 
     @property
     def resolution_text(self):
-        print(self.resolution)
         lines = self.resolution.splitlines()
         ret = []
 
