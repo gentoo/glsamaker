@@ -22,7 +22,6 @@ class GLSARepo:
 
         self.repo.config_writer().set_value("user", "name", "GLSAMaker").release()
         self.repo.config_writer().set_value("user", "email", self.smtpuser).release()
-        self.repo.config_writer().set_value("push", "gpgSign", "true").release()
 
     def get_key(self) -> Tuple[str, str]:
         gpg = gnupg.GPG(gnupghome=self.gpghome)
@@ -99,4 +98,4 @@ class GLSARepo:
         # TODO: we should handle StrictHostKeyChecking better
         ssh_command = "ssh -i {} -o StrictHostKeyChecking=no".format(self.ssh_key)
         with self.repo.git.custom_environment(GIT_SSH_COMMAND=ssh_command):
-            self.repo.remotes.origin.push()
+            self.repo.remotes.origin.push(signed=True)
