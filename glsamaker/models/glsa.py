@@ -260,6 +260,7 @@ class GLSA(db.Model):
         smtpto=None,
         gpg_home=None,
         gpg_pass=None,
+        signing_key=None,
     ) -> Envelope:
         rendered = self.generate_mail_text()
 
@@ -273,16 +274,15 @@ class GLSA(db.Model):
             .header("Content-Type", 'text/plain; charset="utf-8"')
         )
 
-        if smtpuser:
-            message = message.from_(smtpuser)
+        message = message.from_(smtpuser)
         if smtpto:
             message = message.to(smtpto)
         if date:
             message = message.date(date)
-        if gpg_home and gpg_pass:
+        if gpg_home and gpg_pass and signing_key:
             # gnugp is not a typo, envelope's argument name is just
             # mispelled.
-            message = message.gpg(gnugp_home=gpg_home).signature(passphrase=gpg_pass)
+            message = message.gpg(gnugp_home=gpg_home).signature(passphrase=gpg_pass, key=signing_key)
         return message
 
     def release_email(self) -> None:
@@ -305,6 +305,7 @@ class GLSA(db.Model):
         replyto = config["glsamaker"]["replyto"]
         gpg_home = config["glsamaker"]["gpg_home"]
         gpg_pass = config["glsamaker"]["gpg_pass"]
+        signing_key = config["glsamaker"]["signing_key"]
         mail = self.generate_mail(
             date=datetime.now().strftime("%a, %d %b %Y %X"),
             smtpuser=smtpuser,
@@ -312,11 +313,13 @@ class GLSA(db.Model):
             smtpto=smtpto,
             gpg_home=gpg_home,
             gpg_pass=gpg_pass,
+            signing_key=signing_key,
         )
 
-        if not any([smtpuser, smtppass]):
             sent = mail.smtp(server).send()
+        if not smtppass:
         else:
+            app.logger.info(f"sending mail to {server}")
             sent = mail.smtp(server, 587, smtpuser, smtppass, "starttls").send()
 
         if bool(sent):
