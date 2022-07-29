@@ -169,6 +169,8 @@ def test_generate_mail():
 
 # https://gist.github.com/angelsenra/60397a72f29e58a7a4c27ed80c6c62d9
 def test_generate_mail_signed(gpghome):
+    gpg = gnupg.GPG(gnupghome=gpghome)
+    subkey_fprint = list(gpg.list_keys()[0]["subkey_info"].keys())[0]
     with app.app_context():
         # Doesn't matter which GLSA we use here, we only need
         # something that will generate the mail properly as we're not
@@ -179,10 +181,10 @@ def test_generate_mail_signed(gpghome):
             replyto="security@gentoo.org",
             gpg_home=gpghome,
             gpg_pass=GPG_TEST_PASSPHRASE,
+            signing_key=subkey_fprint,
         ).as_message()
 
     content, signature = generated_mail.get_payload()
-    gpg = gnupg.GPG(gnupghome=gpghome)
 
     with tempfile.NamedTemporaryFile() as sig_tmpfile:
         sig_tmpfile.write(signature.get_payload().encode())
