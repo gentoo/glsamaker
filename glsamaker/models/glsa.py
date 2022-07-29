@@ -282,7 +282,9 @@ class GLSA(db.Model):
         if gpg_home and gpg_pass and signing_key:
             # gnugp is not a typo, envelope's argument name is just
             # mispelled.
-            message = message.gpg(gnugp_home=gpg_home).signature(passphrase=gpg_pass, key=signing_key)
+            message = message.gpg(gnugp_home=gpg_home).signature(
+                passphrase=gpg_pass, key=signing_key
+            )
         return message
 
     def release_email(self) -> None:
@@ -316,8 +318,11 @@ class GLSA(db.Model):
             signing_key=signing_key,
         )
 
-            sent = mail.smtp(server).send()
         if not smtppass:
+            app.logger.info(f"sending mail unauthed to {server}")
+            mail = mail.smtp(host=server)
+            mail._smtp.instance = mail._smtp.connect()
+            sent = mail.send()
         else:
             app.logger.info(f"sending mail to {server}")
             sent = mail.smtp(server, 587, smtpuser, smtppass, "starttls").send()
