@@ -80,10 +80,16 @@ class GLSARepo:
             )
         )
 
+        message = [f"[{glsa.glsa_id}] {glsa.title}"]
+        message += [""]
+
+        for bug in sorted(glsa.get_bugs()):
+            message += [f"Bug: https://bugs.gentoo.org/{bug}"]
+
         try:
             self.repo.git.commit(
                 "--message",
-                "Add glsa-{}.xml".format(glsa.glsa_id),
+                "\n".join(message),
                 f"--gpg-sign={fingerprint}",
                 "--signoff",
             )

@@ -1,4 +1,5 @@
 from glsamaker.app import app
+from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.glsarepo import GLSARepo
 from util import GPG_TEST_PASSPHRASE, database, gitrepo, gpghome
@@ -8,11 +9,12 @@ import gnupg
 
 
 def validate_commit(repo):
-    assert "Add glsa-1.xml" in repo.repo.head.commit.summary
+    assert "[1] Foo Bar: Multiple vulnerabilities" in repo.repo.head.commit.summary
     assert (
         "Signed-off-by: GLSAMaker <glsamaker@gentoo.org>"
         in repo.repo.head.commit.message
     )
+
     # TODO: Need to check the file was actually created, and verify
     # the commit. Gitpython doesn't support commit verification, and
     # doesn't seem to have a way to query diff information for the
@@ -24,6 +26,7 @@ def test_commit(gitrepo, gpghome, database):
     glsa = GLSA()
     with app.app_context():
         glsa.glsa_id = 1
+        glsa.title = "Foo Bar: Multiple vulnerabilities"
         repo.commit(glsa)
     validate_commit(repo)
 
@@ -35,6 +38,7 @@ def test_commit_without_subkey(gitrepo, gpghome, database):
     glsa = GLSA()
     with app.app_context():
         glsa.glsa_id = 1
+        glsa.title = "Foo Bar: Multiple vulnerabilities"
         repo.commit(glsa)
     validate_commit(repo)
 
@@ -47,6 +51,7 @@ def test_commit_with_subkey(gitrepo, gpghome, database):
     glsa = GLSA()
     with app.app_context():
         glsa.glsa_id = 1
+        glsa.title = "Foo Bar: Multiple vulnerabilities"
         repo.commit(glsa)
     validate_commit(repo)
 
@@ -57,6 +62,7 @@ def test_commit_failure(gitrepo, gpghome, database):
     glsa = GLSA()
     with app.app_context():
         glsa.glsa_id = 1
+        glsa.title = "Foo Bar: Multiple vulnerabilities"
         try:
             repo.commit(glsa)
         except GitCommandError:
@@ -66,3 +72,23 @@ def test_commit_failure(gitrepo, gpghome, database):
             # The git command should've failed since signing_key is
             # garbage
             assert False
+
+
+def test_commit_bugs(gitrepo, gpghome, database):
+    repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome)
+
+    glsa = GLSA()
+    with app.app_context():
+        glsa.glsa_id = 1
+        glsa.title = "Foo Bar: Multiple vulnerabilities"
+        glsa.bugs = [Bug("654321"), Bug("123456")]
+        repo.commit(glsa)
+
+    expected = """[1] Foo Bar: Multiple vulnerabilities
+
+Bug: https://bugs.gentoo.org/123456
+Bug: https://bugs.gentoo.org/654321
+Signed-off-by: GLSAMaker <glsamaker@gentoo.org>
+"""
+
+    assert expected == repo.repo.head.commit.message
