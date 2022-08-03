@@ -150,7 +150,7 @@ def parse_atoms(request, range_type):
             pn = str(package.unversioned_atom)
             # Silly hack to get the range type chars at the front of
             # the string
-            pkg_range = Affected.range_types[pkg.replace(package.cpvstr, "")]
+            pkg_range = Affected.range_types[package.op]
             version = package.fullver
             slot = package.slot or "*"
             ret.append(Affected(pn, version, pkg_range, arch, slot, range_type))
