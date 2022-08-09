@@ -141,7 +141,6 @@
         <uri link="https://nvd.nist.gov/vuln/detail/CVE-2022-36319">CVE-2022-36319</uri>
         <uri link="https://nvd.nist.gov/vuln/detail/CVE-2022-36320">CVE-2022-36320</uri>
         <uri>MFSA-2022-14</uri>
-
     </references>
     <metadata tag="requester" timestamp="2022-08-04T03:28:34.578250Z">ajak</metadata>
     <metadata tag="submitter" timestamp="2022-08-04T03:28:34.578250Z">ajak</metadata>

@@ -51,10 +51,10 @@
     <references>
         {% for ref in glsa.get_references() %}
         {% if ref.url %}
-        <uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>{% else %}
+        <uri link="{{ ref.url }}">{{ ref.ref_text }}</uri>
+        {% else %}
         <uri>{{ ref.ref_text }}</uri>
         {% endif %}
-
         {% endfor %}
     </references>
     {% if glsa.requested_time %}
