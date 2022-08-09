@@ -122,7 +122,7 @@ class GLSA(db.Model):
             .order_by(Reference.ref_text)
             .all()
         )
-        return references
+        return sorted(references)
 
     def get_reference_texts(self):
         return [ref.ref_text for ref in self.get_references()]

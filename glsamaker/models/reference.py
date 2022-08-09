@@ -24,3 +24,17 @@ class Reference(db.Model):
         if row:
             return row
         return Reference(ref, url)
+
+    def __lt__(self, other) -> bool:
+        parts = self.ref_text.split("-")
+        other_parts = other.ref_text.split("-")
+
+        if len(parts) != len(other_parts):
+            return False
+
+        for part, other_part in zip(parts, other_parts):
+            if part != other_part:
+                try:
+                    return int(part) < int(other_part)
+                except ValueError:
+                    return False
