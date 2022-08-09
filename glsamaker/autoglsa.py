@@ -4,6 +4,7 @@ import uuid
 import bracex
 from bugzilla.bug import Bug as BugzillaBug
 from pkgcore.ebuild import atom as atom_mod
+from pkgcore.ebuild.atom import atom as Atom
 from pkgcore.ebuild.errors import InvalidCPV
 
 from glsamaker.app import app, bgo
@@ -46,7 +47,7 @@ def validate_bugs(bugs: list[BugzillaBug]):
         raise IllegalBugException([bug.id for bug in assignees])
 
 
-def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
+def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
     max_versions = {}
     for bug in bugs:
         summaries = bracex.expand(bug.summary)
@@ -58,14 +59,20 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
             # '<foo/bar-1.2', '<foo/bar 2.2', which is invalid
             package = package.replace(" ", "")
             try:
+                # Hack to ensure atoms beginning with = are treated
+                # the way we want them to be. = matters for bug
+                # targeting, but generally not for GLSAs, since we
+                # generally want people to upgrade unconditionally.
+                # See also the apache test for this.
+                package = package.replace("=", "<")
                 atom = atom_mod.atom(package)
                 unversioned_atom = str(atom.unversioned_atom)
                 if unversioned_atom in max_versions:
                     max_versions[unversioned_atom] = max(
-                        atom.version, max_versions[unversioned_atom]
+                        atom, max_versions[unversioned_atom]
                     )
                 else:
-                    max_versions[unversioned_atom] = atom.version
+                    max_versions[unversioned_atom] = atom
             except InvalidCPV:
                 # Not fatal if a summary is screwed up enough to fail
                 # out here, we'll be able to figure things out when we
@@ -74,7 +81,7 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[str]:
                 app.logger.info("Summaries: " + summaries)
                 app.logger.info("Summary: " + summary)
                 app.logger.info("Package: " + package)
-    return [atom_mod.atom("<" + pkg + "-" + max_versions[pkg]) for pkg in max_versions]
+    return list(max_versions.values())
 
 
 def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:

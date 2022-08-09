@@ -30,13 +30,25 @@ from glsamaker.autoglsa import glsa_impact, get_max_versions
             ["<dev-libs/nss-{3.68.4, 3.79}: Multiple vulnerabilities"],
             [atom_mod.atom("<dev-libs/nss-3.79")],
         ),
+        pytest.param(
+            [
+                "<mail-client/thunderbird{-bin,}-91.12.0: multiple vulnerabilities",
+                "<mail-client/thunderbird{-bin,}-91.9.1: multiple vulnerabilities",
+            ],
+            [
+                atom_mod.atom("<mail-client/thunderbird-91.12.0"),
+                atom_mod.atom("<mail-client/thunderbird-bin-91.12.0"),
+            ],
+        ),
     ],
 )
 def test_get_max_versions(a, expected):
     bugs = [Mock() for x in range(len(a))]
     for i in range(len(a)):
         bugs[i].summary = a[i]
-    assert get_max_versions(bugs) == expected
+    # Don't care about the ordering of the return here, so sort just
+    # to ensure similarity
+    assert sorted(get_max_versions(bugs)) == sorted(expected)
 
 
 @pytest.mark.parametrize(
