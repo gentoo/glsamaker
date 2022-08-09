@@ -152,7 +152,7 @@ def parse_atoms(request, range_type):
             # the string
             pkg_range = Affected.range_types[package.op]
             version = package.fullver
-            slot = package.slot or "*"
+            slot = package.slot or "0"
             ret.append(Affected(pn, version, pkg_range, arch, slot, range_type))
     return ret
 
