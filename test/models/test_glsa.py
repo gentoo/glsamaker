@@ -121,7 +121,11 @@ def test_get_references():
 app.jinja_loader.searchpath.append("glsamaker/templates")
 
 
-glsas = ["test/files/glsa/glsa-202107-48", "test/files/glsa/glsa-202107-55"]
+glsas = [
+    "test/files/glsa/glsa-202107-48",
+    "test/files/glsa/glsa-202107-55",
+    "test/files/glsa/glsa-slotted-firefox",
+]
 
 
 def striplines(lines):

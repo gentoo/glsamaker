@@ -140,7 +140,7 @@ class GLSA(db.Model):
         return lst
 
     def get_pkgs(self):
-        return set([pkg.pkg for pkg in self.affected])
+        return list(set([pkg.pkg for pkg in self.affected]))
 
     def get_affected_arch(self, pn):
         ret = set()
@@ -154,27 +154,13 @@ class GLSA(db.Model):
         return list(ret)[0]
 
     def get_affected_for_pkg(self, pn):
-        return [pkg for pkg in self.affected if pkg.pkg == pn]
-
-    def get_vulnerable_for_pkg(self, pn):
-        return [
-            pkg
-            for pkg in self.affected
-            if pkg.pkg == pn and pkg.range_type == "vulnerable"
-        ]
-
-    def get_unaffected_for_pkg(self, pn):
-        return [
-            pkg
-            for pkg in self.affected
-            if pkg.pkg == pn and pkg.range_type == "unaffected"
-        ]
+        return list(filter(lambda x: x.pkg == pn, self.affected))
 
     def get_unaffected(self):
-        return [pkg for pkg in self.affected if pkg.range_type == "unaffected"]
+        return list(filter(lambda x: x.range_type == "unaffected", self.affected))
 
     def get_vulnerable(self):
-        return [pkg for pkg in self.affected if pkg.range_type == "vulnerable"]
+        return list(filter(lambda x: x.range_type == "vulnerable", self.affected))
 
     @property
     def resolution_xml(self):
@@ -220,7 +206,7 @@ class GLSA(db.Model):
                 ret += [line]
         return "\n".join(ret)
 
-    def generate_mail_table(self):
+    def generate_mail_table(self) -> str:
         # TODO: Maybe try to do this in jinja. It worked for ruby in
         # glsamakerv2..
         # Probably needs to reorganize this in the db properly, so
@@ -228,23 +214,94 @@ class GLSA(db.Model):
         # than glsa -> affected package ranges
 
         ret = []
-        current_pkg = None
-        idx = 1
+        line_idx = 0
+        pkg_idx = 0
 
-        for i, pkg in enumerate(self.get_pkgs()):
-            ret += [""]
-            vulnerable_ranges = self.get_vulnerable_for_pkg(pkg)
-            unaffected_ranges = self.get_unaffected_for_pkg(pkg)
-            vuln = vulnerable_ranges.pop()
-            unaff = unaffected_ranges.pop()
-            ret[i] += "  {}  {}".format(idx, pkg).ljust(32, " ") + "{} {}".format(
-                vuln.range_types_rev[vuln.pkg_range], vuln.version
+        # For each unique package...
+        for pkg in sorted(self.get_pkgs()):
+            pkg_idx += 1
+            ret += ["  {}  {}".format(pkg_idx, pkg)]
+            packages = list(filter(lambda x: x.pkg == pkg, self.affected))
+            vulnerable_pkgs = list(
+                filter(lambda x: x.range_type == "vulnerable", packages)
             )
-            ret[i] += "{} {} ".format(
-                unaff.range_types_rev[unaff.pkg_range], unaff.version
-            ).rjust(70 - len(ret[i]))
+            unaffected_pkgs = list(
+                filter(lambda x: x.range_type == "unaffected", packages)
+            )
 
-        return "\n".join(ret)
+            # Find each of this package's slots...
+            slots = sorted(list({x.slot for x in self.affected if x.slot}))
+            if slots:
+                # If there are slots to deal with, find the
+                # vulnerable/unaffected range indicators for each slot
+                # and output them
+                for slot in slots:
+                    vulnerable = list(filter(lambda x: x.slot == slot, vulnerable_pkgs))
+                    unaffected = list(filter(lambda x: x.slot == slot, unaffected_pkgs))
+
+                    for vuln, unaff in zip(vulnerable, unaffected):
+                        chunk = "{} {}:{}".format(
+                            vuln.range_types_rev[vuln.pkg_range],
+                            vuln.version,
+                            vuln.slot,
+                        )
+
+                        ret[line_idx] += chunk.rjust(
+                            32 + len(chunk) - len(ret[line_idx])
+                        )
+
+                        chunk = "{} {}:{}".format(
+                            unaff.range_types_rev[unaff.pkg_range],
+                            unaff.version,
+                            unaff.slot,
+                        )
+
+                        ret[line_idx] += chunk.rjust(69 - len(ret[line_idx]))
+
+                        if pkg in ret[line_idx]:
+                            # If we don't conditionally add the new
+                            # list element (which gets converted into
+                            # a newline on return), we get line_idx
+                            # being out of sync with the length of ret
+                            ret += [""]
+
+                        line_idx += 1
+            else:
+                # If there aren't slots to deal with, just output the
+                # ranges without dealing with slots
+                vulnerable = list(
+                    filter(
+                        lambda x: x.range_type == "vulnerable" and x.pkg == pkg,
+                        self.affected,
+                    )
+                )
+                unaffected = list(
+                    filter(
+                        lambda x: x.range_type == "unaffected" and x.pkg == pkg,
+                        self.affected,
+                    )
+                )
+
+                vuln = vulnerable.pop()
+                unaff = unaffected.pop()
+
+                # Add to the line in chunks for readability
+                chunk = "{} {}".format(
+                    vuln.range_types_rev[vuln.pkg_range], vuln.version
+                )
+
+                # Magic number is the offset from the beginning
+                ret[line_idx] += chunk.rjust(32 + len(chunk) - len(ret[line_idx]))
+
+                chunk = "{} {}".format(
+                    unaff.range_types_rev[unaff.pkg_range], unaff.version
+                )
+
+                ret[line_idx] += chunk.rjust(69 - len(ret[line_idx]))
+
+                line_idx += 1
+
+        return "\n".join(ret).rstrip()
 
     def generate_xml(self):
         return render_template("glsa.xml", glsa=self)

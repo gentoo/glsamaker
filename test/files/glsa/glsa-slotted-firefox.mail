@@ -1,0 +1,252 @@
+Content-Type: text/plain; charset="utf-8"
+Subject: [ GLSA firefox-slotted ] Mozilla Firefox: Multiple Vulnerabilities
+From: glsamaker@gentoo.org
+Reply-To: security@gentoo.org
+Date: Fri, 23 Jul 2021 22:10:35 -0500
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Gentoo Linux Security Advisory                           GLSA firefox-slotted
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                                           https://security.gentoo.org/
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ Severity: High
+    Title: Mozilla Firefox: Multiple Vulnerabilities
+     Date: August 06, 2022
+     Bugs: #834631, #834804, #836866, #842438, #846593, #849044, #857045, #861515
+       ID: firefox-slotted
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Synopsis
+========
+
+Multiple vulnerabilities have been found in Mozilla Firefox, the worst
+of which could result in the arbitrary execution of code.
+
+Background
+==========
+
+Mozilla Firefox is a popular open-source web browser from the Mozilla
+project.
+
+Affected packages
+=================
+
+    -------------------------------------------------------------------
+     Package              /     Vulnerable     /            Unaffected
+    -------------------------------------------------------------------
+  1  www-client/firefox         < 91.12.0:esr          >= 91.12.0:esr
+                                < 103.0:rapid          >= 103.0:rapid
+  2  www-client/firefox-bin     < 91.12.0:esr          >= 91.12.0:esr
+                                < 103.0:rapid          >= 103.0:rapid
+
+Description
+===========
+
+Multiple vulnerabilities have been discovered in Mozilla Firefox. Please
+review the CVE identifiers referenced below for details.
+
+Impact
+======
+
+Please review the referenced CVE identifiers for details.
+
+Workaround
+==========
+
+There is no known workaround at this time.
+
+Resolution
+==========
+
+All Mozilla Firefox ESR users should upgrade to the latest version:
+
+  # emerge --sync
+  # emerge --ask --oneshot --verbose ">=www-client/firefox-91.12.0:esr"
+
+All Mozilla Firefox ESR binary users should upgrade to the latest version:
+
+  # emerge --sync
+  # emerge --ask --oneshot --verbose ">=www-client/firefox-bin-91.12.0:esr"
+
+All Mozilla Firefox users should upgrade to the latest version:
+
+  # emerge --sync
+  # emerge --ask --oneshot --verbose ">=www-client/firefox-103.0:rapid"
+
+All Mozilla Firefox binary users should upgrade to the latest version:
+
+  # emerge --sync
+  # emerge --ask --oneshot --verbose ">=www-client/firefox-bin-103.0:rapid"
+
+References
+==========
+
+[ 1 ] CVE-2022-0843
+      https://nvd.nist.gov/vuln/detail/CVE-2022-0843
+[ 2 ] CVE-2022-1196
+      https://nvd.nist.gov/vuln/detail/CVE-2022-1196
+[ 3 ] CVE-2022-1529
+      https://nvd.nist.gov/vuln/detail/CVE-2022-1529
+[ 4 ] CVE-2022-1802
+      https://nvd.nist.gov/vuln/detail/CVE-2022-1802
+[ 5 ] CVE-2022-1919
+      https://nvd.nist.gov/vuln/detail/CVE-2022-1919
+[ 6 ] CVE-2022-2200
+      https://nvd.nist.gov/vuln/detail/CVE-2022-2200
+[ 7 ] CVE-2022-24713
+      https://nvd.nist.gov/vuln/detail/CVE-2022-24713
+[ 8 ] CVE-2022-2505
+      https://nvd.nist.gov/vuln/detail/CVE-2022-2505
+[ 9 ] CVE-2022-26381
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26381
+[ 10 ] CVE-2022-26382
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26382
+[ 11 ] CVE-2022-26383
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26383
+[ 12 ] CVE-2022-26384
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26384
+[ 13 ] CVE-2022-26385
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26385
+[ 14 ] CVE-2022-26386
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26386
+[ 15 ] CVE-2022-26387
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26387
+[ 16 ] CVE-2022-26485
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26485
+[ 17 ] CVE-2022-26486
+      https://nvd.nist.gov/vuln/detail/CVE-2022-26486
+[ 18 ] CVE-2022-28281
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28281
+[ 19 ] CVE-2022-28282
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28282
+[ 20 ] CVE-2022-28283
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28283
+[ 21 ] CVE-2022-28284
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28284
+[ 22 ] CVE-2022-28285
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28285
+[ 23 ] CVE-2022-28286
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28286
+[ 24 ] CVE-2022-28287
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28287
+[ 25 ] CVE-2022-28288
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28288
+[ 26 ] CVE-2022-28289
+      https://nvd.nist.gov/vuln/detail/CVE-2022-28289
+[ 27 ] CVE-2022-29909
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29909
+[ 28 ] CVE-2022-29910
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29910
+[ 29 ] CVE-2022-29911
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29911
+[ 30 ] CVE-2022-29912
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29912
+[ 31 ] CVE-2022-29914
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29914
+[ 32 ] CVE-2022-29915
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29915
+[ 33 ] CVE-2022-29916
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29916
+[ 34 ] CVE-2022-29917
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29917
+[ 35 ] CVE-2022-29918
+      https://nvd.nist.gov/vuln/detail/CVE-2022-29918
+[ 36 ] CVE-2022-31736
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31736
+[ 37 ] CVE-2022-31737
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31737
+[ 38 ] CVE-2022-31738
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31738
+[ 39 ] CVE-2022-31740
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31740
+[ 40 ] CVE-2022-31741
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31741
+[ 41 ] CVE-2022-31742
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31742
+[ 42 ] CVE-2022-31743
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31743
+[ 43 ] CVE-2022-31744
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31744
+[ 44 ] CVE-2022-31745
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31745
+[ 45 ] CVE-2022-31747
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31747
+[ 46 ] CVE-2022-31748
+      https://nvd.nist.gov/vuln/detail/CVE-2022-31748
+[ 47 ] CVE-2022-34468
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34468
+[ 48 ] CVE-2022-34469
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34469
+[ 49 ] CVE-2022-34470
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34470
+[ 50 ] CVE-2022-34471
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34471
+[ 51 ] CVE-2022-34472
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34472
+[ 52 ] CVE-2022-34473
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34473
+[ 53 ] CVE-2022-34474
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34474
+[ 54 ] CVE-2022-34475
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34475
+[ 55 ] CVE-2022-34476
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34476
+[ 56 ] CVE-2022-34477
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34477
+[ 57 ] CVE-2022-34478
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34478
+[ 58 ] CVE-2022-34479
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34479
+[ 59 ] CVE-2022-34480
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34480
+[ 60 ] CVE-2022-34481
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34481
+[ 61 ] CVE-2022-34482
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34482
+[ 62 ] CVE-2022-34483
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34483
+[ 63 ] CVE-2022-34484
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34484
+[ 64 ] CVE-2022-34485
+      https://nvd.nist.gov/vuln/detail/CVE-2022-34485
+[ 65 ] CVE-2022-36315
+      https://nvd.nist.gov/vuln/detail/CVE-2022-36315
+[ 66 ] CVE-2022-36316
+      https://nvd.nist.gov/vuln/detail/CVE-2022-36316
+[ 67 ] CVE-2022-36318
+      https://nvd.nist.gov/vuln/detail/CVE-2022-36318
+[ 68 ] CVE-2022-36319
+      https://nvd.nist.gov/vuln/detail/CVE-2022-36319
+[ 69 ] CVE-2022-36320
+      https://nvd.nist.gov/vuln/detail/CVE-2022-36320
+[ 70 ] MFSA-2022-14
+
+Availability
+============
+
+This GLSA and any updates to it are available for viewing at
+the Gentoo Security Website:
+
+ https://security.gentoo.org/glsa/firefox-slotted
+
+Concerns?
+=========
+
+Security is a primary focus of Gentoo Linux and ensuring the
+confidentiality and security of our users' machines is of utmost
+importance to us. Any security concerns should be addressed to
+security@gentoo.org or alternatively, you may file a bug at
+https://bugs.gentoo.org.
+
+License
+=======
+
+Copyright 2022 Gentoo Foundation, Inc; referenced text
+belongs to its owner(s).
+
+The contents of this document are licensed under the
+Creative Commons - Attribution / Share Alike license.
+
+https://creativecommons.org/licenses/by-sa/2.5
