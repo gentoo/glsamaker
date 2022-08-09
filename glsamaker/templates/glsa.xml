@@ -22,11 +22,11 @@
         {% for pkg in glsa.get_pkgs() %}
         <package name="{{ pkg }}" auto="yes" arch="{{ glsa.get_affected_arch(pkg) }}">
             {% for affected in glsa.get_affected_for_pkg(pkg) %}
-			{% if not affected.slot or affected.slot == "0" %}
-				<{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
-			{% else %}
-				<{{ affected.range_type }} range="{{ affected.pkg_range }}" slot="{{ affected.slot }}">{{ affected.version }}</{{ affected.range_type}}>
-			{% endif %}
+            {% if not affected.slot or affected.slot == "0" %}
+            <{{ affected.range_type }} range="{{ affected.pkg_range }}">{{ affected.version }}</{{ affected.range_type}}>
+            {% else %}
+            <{{ affected.range_type }} range="{{ affected.pkg_range }}" slot="{{ affected.slot }}">{{ affected.version }}</{{ affected.range_type}}>
+            {% endif %}
             {% endfor %}
         </package>
         {% endfor %}
