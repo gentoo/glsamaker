@@ -82,7 +82,7 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
                 # out here, we'll be able to figure things out when we
                 # edit the GLSA.
                 app.logger.info("Encountered an autoglsa failure on bug: " + bug.id)
-                app.logger.info("Summaries: " + summaries)
+                app.logger.info("Summaries: " + str(summaries))
                 app.logger.info("Summary: " + summary)
                 app.logger.info("Package: " + package)
     return list(max_versions.values())
