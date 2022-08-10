@@ -1,9 +1,9 @@
-import pytest
 from unittest.mock import Mock
 
+import pytest
 from pkgcore.ebuild import atom as atom_mod
 
-from glsamaker.autoglsa import glsa_impact, get_max_versions
+from glsamaker.autoglsa import get_max_versions, glsa_impact
 
 
 @pytest.mark.parametrize(

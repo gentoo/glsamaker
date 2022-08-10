@@ -1,11 +1,11 @@
 import os
 from typing import Tuple
 
-from glsamaker.app import app
-
+import gnupg
 from git import Repo
 from git.exc import GitCommandError
-import gnupg
+
+from glsamaker.app import app
 
 
 class GLSARepo:

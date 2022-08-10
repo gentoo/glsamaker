@@ -1,6 +1,6 @@
+import uuid
 from datetime import datetime
 from typing import Dict
-import uuid
 
 import bracex
 from bugzilla.bug import Bug as BugzillaBug
@@ -13,7 +13,6 @@ from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
-
 
 LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
 

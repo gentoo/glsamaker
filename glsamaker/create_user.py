@@ -5,7 +5,6 @@ import sys
 import bcrypt
 from sqlalchemy import create_engine
 
-
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         db = create_engine("postgresql://root:root@db/postgres")

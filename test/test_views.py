@@ -1,11 +1,6 @@
-from glsamaker.views import parse_atoms
-
-# parse_atoms breaks on atom of >=www-client/firefox-bin-91.12.0:esr at
-# pkg_range = Affected.range_types[pkg.replace(package.cpvstr, "")]
-
-# just use pkg.op instead
-
 from unittest.mock import MagicMock
+
+from glsamaker.views import parse_atoms
 
 
 def test_parse_atoms():

@@ -1,10 +1,10 @@
-from configparser import ConfigParser
 import os
 import sys
+from configparser import ConfigParser
 
 from bugzilla import Bugzilla
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(32)

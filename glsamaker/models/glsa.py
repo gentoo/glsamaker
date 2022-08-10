@@ -1,13 +1,12 @@
 from datetime import datetime
 
+from envelope import Envelope
+from flask import render_template
+
 from glsamaker.app import app, config, db
 from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
-
-from envelope import Envelope
-from flask import render_template
-
 
 glsa_to_bug = db.Table(
     "glsa_to_bug",

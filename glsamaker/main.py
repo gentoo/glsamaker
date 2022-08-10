@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
 import os
+from datetime import datetime
 from xml.etree import ElementTree
 
+import glsamaker.views  # pylint: disable=unused-import
 from glsamaker.app import app, db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
-from glsamaker.models.user import User, nick_to_uid, create_user
-
-import glsamaker.views  # pylint: disable=unused-import
+from glsamaker.models.user import User, create_user, nick_to_uid
 
 
 def flatten_paragraphs(paragraphs):

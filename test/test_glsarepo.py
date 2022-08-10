@@ -1,11 +1,11 @@
-from glsamaker.app import app
-from glsamaker.models.bug import Bug
-from glsamaker.models.glsa import GLSA
-from glsamaker.glsarepo import GLSARepo
+import gnupg
+from git.exc import GitCommandError
 from util import GPG_TEST_PASSPHRASE, database, gitrepo, gpghome
 
-from git.exc import GitCommandError
-import gnupg
+from glsamaker.app import app
+from glsamaker.glsarepo import GLSARepo
+from glsamaker.models.bug import Bug
+from glsamaker.models.glsa import GLSA
 
 
 def validate_commit(repo):

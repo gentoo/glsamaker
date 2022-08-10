@@ -1,26 +1,25 @@
-from datetime import datetime, date
 import uuid
+from datetime import date, datetime
 from logging.config import dictConfig
 
-from flask import redirect, render_template, request, Response
-from flask_login import LoginManager
-from flask_login import current_user, login_user, login_required
+import bcrypt
+from flask import Response, redirect, render_template, request
+from flask_login import LoginManager, current_user, login_required, login_user
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
 from sqlalchemy import desc
 from wtforms import (
     BooleanField,
+    PasswordField,
     SelectField,
     StringField,
-    TextAreaField,
-    PasswordField,
     SubmitField,
+    TextAreaField,
 )
 from wtforms.validators import DataRequired
-import bcrypt
 
-from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
 from glsamaker.app import app, bgo, config, db
+from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected

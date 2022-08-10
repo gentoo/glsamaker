@@ -1,14 +1,13 @@
 import os
 import tempfile
 
+import gnupg
+from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff, gpghome
+
 from glsamaker import main
 from glsamaker.app import app, db
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.reference import Reference
-
-from util import assert_diff, gpghome, GPG_TEST_PASSPHRASE, SMTPUSER
-
-import gnupg
 
 
 def test_resolution_xml():
