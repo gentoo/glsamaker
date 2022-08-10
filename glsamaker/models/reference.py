@@ -38,3 +38,4 @@ class Reference(db.Model):
                     return int(part) < int(other_part)
                 except ValueError:
                     return False
+        return False
