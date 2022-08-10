@@ -13,9 +13,15 @@ class Reference(db.Model):
             self.url = url
         else:
             if ref_text.startswith("CVE"):
-                self.url = "https://nvd.nist.gov/vuln/detail/" + self.ref_text
+                self.url = f"https://nvd.nist.gov/vuln/detail/{self.ref_text}"
             elif ref_text.startswith("WSA"):
-                self.url = "https://webkitgtk.org/security/" + self.ref_text + ".html"
+                self.url = f"https://webkitgtk.org/security/{self.ref_text}.html"
+            elif ref_text.startswith("GStreamer"):
+                self.url = "https://gstreamer.freedesktop.org/security/"
+                ref = ref_text.replace("GStreamer-", "")
+                self.url += f"{ref.lower()}.html"
+            elif ref_text.startswith("YSA"):
+                self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
 
     # TODO: see bug.py's new TODO
     @classmethod
