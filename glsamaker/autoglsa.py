@@ -21,6 +21,10 @@ class IllegalBugException(Exception):
     pass
 
 
+class FirstGlsaException(Exception):
+    pass
+
+
 def validate_bugs(bugs: list[BugzillaBug]):
     whiteboards = [bug.whiteboard for bug in bugs]
     products = [bug.product for bug in bugs]
@@ -144,7 +148,7 @@ def previous_glsa(pkg: str) -> GLSA:
 
     # If there's none, we've probably never GLSA'd that package before
     if len(affected) == 0:
-        return None
+        raise FirstGlsaException
     return (
         GLSA.query.filter(GLSA.affected.contains(affected[-1]))
         .order_by(GLSA.id.desc())
@@ -172,14 +176,14 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
 
     # These are somewhat more speculative than the previous
     app.logger.info(packages)
-    last = previous_glsa(str(packages[0].unversioned_atom))
 
-    if last:
+    try:
+        last = previous_glsa(str(packages[0].unversioned_atom))
         glsa.product = last.product
         glsa.background = last.background
         proper_name = last.title.split(":")[0]
         glsa.title = proper_name + ": "
-    else:
+    except FirstGlsaException:
         glsa.title = ", ".join([package.package for package in packages])
         glsa.title += ": "
 
