@@ -9,7 +9,9 @@ import gnupg
 
 
 def validate_commit(repo):
-    assert "[1] Foo Bar: Multiple vulnerabilities" in repo.repo.head.commit.summary
+    assert (
+        "[ GLSA 1 ] Foo Bar: Multiple vulnerabilities" in repo.repo.head.commit.summary
+    )
     assert (
         "Signed-off-by: GLSAMaker <glsamaker@gentoo.org>"
         in repo.repo.head.commit.message
@@ -84,7 +86,7 @@ def test_commit_bugs(gitrepo, gpghome, database):
         glsa.bugs = [Bug("654321"), Bug("123456")]
         repo.commit(glsa)
 
-    expected = """[1] Foo Bar: Multiple vulnerabilities
+    expected = """[ GLSA 1 ] Foo Bar: Multiple vulnerabilities
 
 Bug: https://bugs.gentoo.org/123456
 Bug: https://bugs.gentoo.org/654321

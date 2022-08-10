@@ -80,7 +80,7 @@ class GLSARepo:
             )
         )
 
-        message = [f"[{glsa.glsa_id}] {glsa.title}"]
+        message = [f"[ GLSA {glsa.glsa_id} ] {glsa.title}"]
         message += [""]
 
         for bug in sorted(glsa.get_bugs()):
