@@ -140,7 +140,7 @@ class GLSA(db.Model):
         return lst
 
     def get_pkgs(self):
-        return list(set([pkg.pkg for pkg in self.affected]))
+        return sorted(list(set([pkg.pkg for pkg in self.affected])))
 
     def get_affected_arch(self, pn):
         ret = set()
