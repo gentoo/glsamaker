@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict
 import uuid
 
 import bracex
@@ -52,7 +53,7 @@ def validate_bugs(bugs: list[BugzillaBug]):
 
 
 def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
-    max_versions = {}
+    max_versions: Dict[str, Atom] = {}
     for bug in bugs:
         summaries = bracex.expand(bug.summary)
         for summary in summaries:
