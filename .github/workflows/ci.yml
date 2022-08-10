@@ -1,10 +1,11 @@
+---
 name: CI
 
 on:
   push:
-    branches: [ glsamakerv4 ]
+    branches: [glsamakerv4]
   pull_request:
-    branches: [ glsamakerv4 ]
+    branches: [glsamakerv4]
 
 jobs:
   build:
@@ -12,7 +13,6 @@ jobs:
     strategy:
       matrix:
         python-version:
-        - '3.9'
         - '3.10'
 
     steps:
