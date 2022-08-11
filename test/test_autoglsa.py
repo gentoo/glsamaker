@@ -40,6 +40,19 @@ from glsamaker.autoglsa import get_max_versions, glsa_impact
                 atom_mod.atom("<mail-client/thunderbird-bin-91.12.0"),
             ],
         ),
+        pytest.param(
+            [
+                # Somewhat contrived example (in that it's made up) to
+                # produce the what should be the most logically
+                # complex thing we have to parse
+                "<www-client/{chromium, microsoft-edge}-103.0.5060.134 <www-client/google-chrome-103.0.5060.134: Multiple vulnerabilities",
+            ],
+            [
+                atom_mod.atom("<www-client/chromium-103.0.5060.134"),
+                atom_mod.atom("<www-client/microsoft-edge-103.0.5060.134"),
+                atom_mod.atom("<www-client/google-chrome-103.0.5060.134"),
+            ],
+        ),
     ],
 )
 def test_get_max_versions(a, expected):

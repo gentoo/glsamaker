@@ -1,3 +1,5 @@
+import itertools
+import re
 import uuid
 from datetime import datetime
 from typing import Dict
@@ -54,21 +56,34 @@ def validate_bugs(bugs: list[BugzillaBug]):
 def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
     max_versions: Dict[str, Atom] = {}
     for bug in bugs:
-        summaries = bracex.expand(bug.summary)
-        for summary in summaries:
-            package = summary.split(":")[0]
+        # It's common for people to do things like
+        # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
+        # '<foo/bar-1.2', '<foo/bar- 2.2', which is invalid
+        # This converts it into '<foo/bar-{1.2,2.2}: blah blah' instead.
+        summary = re.sub("({.*) (.*})", r"\1\2", bug.summary)
 
-            # It's common for people to do things like
-            # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
-            # '<foo/bar-1.2', '<foo/bar 2.2', which is invalid
-            package = package.replace(" ", "")
+        # Get the part of the summary with the affected packages,
+        # before the :
+        summary = summary.split(":")[0]
+
+        # Expand '<foo/bar-{1.2,2.2}' into
+        # ['<foo/bar-1.2', '<foo/bar-2.2']
+        summaries = bracex.expand(summary)
+
+        # Finally, account for the summaries that start out like
+        # '<foo/bar-1.2 <foo/baz-1.3' by splitting each summary in
+        # summaries then flattening the resulting list, giving us a
+        # clean list of each of the packages in the summary
+        summaries = list(itertools.chain(*[x.split() for x in summaries]))
+
+        for summary in summaries:
             try:
                 # Hack to ensure atoms beginning with = are treated
                 # the way we want them to be. = matters for bug
                 # targeting, but generally not for GLSAs, since we
                 # generally want people to upgrade unconditionally.
                 # See also the apache test for this.
-                package = package.replace("=", "<")
+                package = summary.replace("=", "<")
                 atom = atom_mod.atom(package)
                 unversioned_atom = str(atom.unversioned_atom)
                 if unversioned_atom in max_versions:
