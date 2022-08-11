@@ -18,6 +18,15 @@ from glsamaker.models.reference import Reference
 
 LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
 
+MULTI_DESCRIPTION = (
+    "Multiple vulnerabilities have been discovered in {}."
+    "Please review the CVE identifiers referenced below for details."
+)
+RESOLUTION = """All {} users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose \"{}\""""
+
 
 class IllegalBugException(Exception):
     pass
@@ -186,25 +195,29 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
     glsa.references = [Reference.new(alias) for alias in aliases]
     glsa.affected = generate_affected(packages)
     glsa.impact_type = glsa_impact(bugs)
-    glsa.impact = "Please review the referenced CVE identifiers for details."
     glsa.workaround = "There is no known workaround at this time."
 
-    # These are somewhat more speculative than the previous
-    app.logger.info(packages)
+    multiple = len(glsa.bugs) > 1 or any(
+        ["multiple vulnerabilities" in bug.summary.lower() for bug in bugs]
+    )
 
     try:
+        # These are somewhat more speculative than the previous
         last = previous_glsa(str(packages[0].unversioned_atom))
         glsa.product = last.product
         glsa.background = last.background
         proper_name = last.title.split(":")[0]
         glsa.title = proper_name + ": "
+        glsa.description = MULTI_DESCRIPTION.format(proper_name)
+
+        for x in glsa.get_unaffected():
+            glsa.resolution = RESOLUTION.format(proper_name, x)
     except FirstGlsaException:
         glsa.title = ", ".join([package.package for package in packages])
         glsa.title += ": "
 
-    if len(glsa.bugs) > 1 or any(
-        ["multiple vulnerabilities" in bug.summary.lower() for bug in bugs]
-    ):
+    if multiple:
         glsa.title += "Multiple Vulnerabilities"
+        glsa.impact = "Please review the referenced CVE identifiers for details."
 
     return glsa
