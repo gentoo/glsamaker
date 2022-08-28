@@ -22,12 +22,12 @@ MULTI_DESCRIPTION = (
     "Multiple vulnerabilities have been discovered in {}. "
     "Please review the CVE identifiers referenced below for details."
 )
-RESOLUTION = (
-    "All {} users should upgrade to the latest version:"
-    ""
-    "# emerge --sync"
-    '# emerge --ask --oneshot --verbose "{}"'
-)
+RESOLUTION = """
+All {} users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose "{}"
+"""
 IMPACT = "Please review the referenced CVE identifiers for details."
 
 

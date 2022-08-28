@@ -110,9 +110,12 @@ def test_autogenerate_glsa(database):
         ]
         output = generate_resolution(glsa, "Mozilla Firefox")
 
-    assert output == (
-        "All Mozilla Firefox users should upgrade to the latest version:"
-        ""
-        "# emerge --sync"
-        '# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"'
+    assert (
+        output
+        == """
+All Mozilla Firefox users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
+"""
     )
