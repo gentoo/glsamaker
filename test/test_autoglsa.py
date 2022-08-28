@@ -2,8 +2,12 @@ from unittest.mock import Mock
 
 import pytest
 from pkgcore.ebuild import atom as atom_mod
+from util import database
 
-from glsamaker.autoglsa import get_max_versions, glsa_impact
+from glsamaker.app import app
+from glsamaker.autoglsa import generate_resolution, get_max_versions, glsa_impact
+from glsamaker.models.glsa import GLSA
+from glsamaker.models.package import Affected
 
 
 @pytest.mark.parametrize(
@@ -87,3 +91,28 @@ def test_glsa_impact(a, expected):
     mock = Mock()
     mock.whiteboard = a
     assert glsa_impact([mock]) == expected
+
+
+def test_autogenerate_glsa(database):
+    glsa = GLSA()
+    glsa.glsa_id = "1"
+
+    with app.app_context():
+        glsa.affected = [
+            Affected(
+                "www-client/firefox",
+                "104.0",
+                Affected.range_types[">="],
+                "*",
+                "rapid",
+                "unaffected",
+            )
+        ]
+        output = generate_resolution(glsa, "Mozilla Firefox")
+
+    assert output == (
+        "All Mozilla Firefox users should upgrade to the latest version:"
+        ""
+        "# emerge --sync"
+        '# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"'
+    )

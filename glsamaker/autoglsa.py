@@ -19,13 +19,16 @@ from glsamaker.models.reference import Reference
 LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
 
 MULTI_DESCRIPTION = (
-    "Multiple vulnerabilities have been discovered in {}."
+    "Multiple vulnerabilities have been discovered in {}. "
     "Please review the CVE identifiers referenced below for details."
 )
-RESOLUTION = """All {} users should upgrade to the latest version:
-
-# emerge --sync
-# emerge --ask --oneshot --verbose \"{}\""""
+RESOLUTION = (
+    "All {} users should upgrade to the latest version:"
+    ""
+    "# emerge --sync"
+    '# emerge --ask --oneshot --verbose "{}"'
+)
+IMPACT = "Please review the referenced CVE identifiers for details."
 
 
 class IllegalBugException(Exception):
@@ -180,6 +183,13 @@ def previous_glsa(pkg: str) -> GLSA:
     )
 
 
+def generate_resolution(glsa: GLSA, proper_name: str) -> str:
+    resolution = ""
+    for x in glsa.get_unaffected():
+        resolution += RESOLUTION.format(proper_name, x.versioned_atom())
+    return resolution
+
+
 def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
     app.logger.info("Autogenerating GLSA from bugs: " + str([bug.id for bug in bugs]))
     validate_bugs(bugs)
@@ -210,14 +220,13 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
         glsa.title = proper_name + ": "
         glsa.description = MULTI_DESCRIPTION.format(proper_name)
 
-        for x in glsa.get_unaffected():
-            glsa.resolution = RESOLUTION.format(proper_name, x)
+        glsa.resolution = generate_resolution(glsa, proper_name)
     except FirstGlsaException:
         glsa.title = ", ".join([package.package for package in packages])
         glsa.title += ": "
 
     if multiple:
         glsa.title += "Multiple Vulnerabilities"
-        glsa.impact = "Please review the referenced CVE identifiers for details."
+        glsa.impact = IMPACT
 
     return glsa
