@@ -57,6 +57,16 @@ from glsamaker.models.package import Affected
                 atom_mod.atom("<www-client/google-chrome-103.0.5060.134"),
             ],
         ),
+        pytest.param(
+            [
+                "<dev-java/openjdk{,-jre-bin,-bin}-{8.312_p07, 11.0.13_p8}: multiple vulnerabilities (CVE-2021-{2341,2369,2388,2432})"
+            ],
+            [
+                atom_mod.atom("<dev-java/openjdk-11.0.13_p8"),
+                atom_mod.atom("<dev-java/openjdk-jre-bin-11.0.13_p8"),
+                atom_mod.atom("<dev-java/openjdk-bin-11.0.13_p8"),
+            ],
+        ),
     ],
 )
 def test_get_max_versions(a, expected):

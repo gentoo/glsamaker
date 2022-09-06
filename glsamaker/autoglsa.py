@@ -74,6 +74,12 @@ def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
         # This converts it into '<foo/bar-{1.2,2.2}: blah blah' instead.
         summary = re.sub("({.*) (.*})", r"\1\2", bug.summary)
 
+        # The previous regex substitution doesn't quite get all of the
+        # cases of a space between brackets when commas are involved,
+        # so just sledgehammer the extra space away. Probably a way to
+        # do it with re.sub.
+        summary = summary.replace(", ", ",")
+
         # Get the part of the summary with the affected packages,
         # before the :
         summary = summary.split(":")[0]
