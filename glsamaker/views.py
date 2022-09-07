@@ -135,6 +135,23 @@ def drafts():
     return render_template("drafts.html", glsas=glsas)
 
 
+def atom_to_affected(pkg: atom, arch, range_type: str) -> Affected:
+    package = atom(pkg)
+
+    pn = str(package.unversioned_atom)
+    slot = package.slot
+
+    if package.op:
+        # Silly hack to get the range type chars at the front of
+        # the string
+        pkg_range = Affected.range_types[package.op]
+        version = package.fullver
+
+        return Affected(pn, version, pkg_range, arch, slot, range_type)
+    else:
+        return Affected(pn, None, None, arch, slot, range_type)
+
+
 def parse_atoms(request, range_type):
     ret = []
     # TODO: these need to be properly in the flask form for proper
@@ -145,14 +162,7 @@ def parse_atoms(request, range_type):
         pkg = pkg.strip()
         arch = arch.strip()
         if pkg != "" and arch != "":
-            package = atom(pkg)
-            pn = str(package.unversioned_atom)
-            # Silly hack to get the range type chars at the front of
-            # the string
-            pkg_range = Affected.range_types[package.op]
-            version = package.fullver
-            slot = package.slot
-            ret.append(Affected(pn, version, pkg_range, arch, slot, range_type))
+            ret.append(atom_to_affected(pkg, arch, range_type))
     return ret
 
 
