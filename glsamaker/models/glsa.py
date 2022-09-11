@@ -190,6 +190,9 @@ class GLSA(db.Model):
         if in_code:
             ret += ["</code>"]
 
+        # Get rid of trailing empty list member
+        if not ret[-1]:
+            ret.pop()
         return ret
 
     @property
@@ -282,21 +285,36 @@ class GLSA(db.Model):
                 )
 
                 vuln = vulnerable.pop()
-                unaff = unaffected.pop()
+
+                if len(unaffected) > 0:
+                    unaff = unaffected.pop()
+                else:
+                    unaff = []
 
                 # Add to the line in chunks for readability
                 chunk = "{} {}".format(
                     vuln.range_types_rev[vuln.pkg_range], vuln.version
                 )
 
-                # Magic number is the offset from the beginning
-                ret[line_idx] += chunk.rjust(32 + len(chunk) - len(ret[line_idx]))
+                offset = 32
 
-                chunk = "{} {}".format(
-                    unaff.range_types_rev[unaff.pkg_range], unaff.version
-                )
+                if len(ret[line_idx]) >= offset:
+                    # If the line is so long that it leaves no spacing
+                    # between it and the next chunk, break the line
+                    # and add some extra spacing
+                    offset += 2
 
-                ret[line_idx] += chunk.rjust(69 - len(ret[line_idx]))
+                ret[line_idx] += chunk.rjust(offset + len(chunk) - len(ret[line_idx]))
+
+                offset = 69
+
+                if unaff:
+                    chunk = "{} {}".format(
+                        unaff.range_types_rev[unaff.pkg_range], unaff.version
+                    )
+                else:
+                    chunk = "Vulnerable!"
+                ret[line_idx] += chunk.rjust(offset - len(ret[line_idx]))
 
                 line_idx += 1
 
