@@ -55,11 +55,13 @@ class Affected(db.Model):
         self.range_type = range_type
 
     def versioned_atom(self):
-        atom = self.range_types_rev[self.pkg_range]
-        atom += self.pkg
-        atom += "-" + self.version
+        if self.pkg_range and self.version and self.slot:
+            atom = self.range_types_rev[self.pkg_range]
+            atom += self.pkg
+            atom += "-" + self.version
 
-        if self.slot and self.slot != "*":
-            atom += ":" + self.slot
+            if self.slot and self.slot != "*":
+                atom += ":" + self.slot
 
-        return atom
+            return atom
+        return self.pkg
