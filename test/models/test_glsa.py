@@ -7,6 +7,7 @@ from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff, gpghome
 from glsamaker import main
 from glsamaker.app import app, db
 from glsamaker.models.glsa import GLSA
+from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 
 
@@ -196,3 +197,14 @@ def test_generate_mail_signed(gpghome):
         assert gpg.verify_data(
             sig_filename=sig_tmpfile.name, data=content.as_string().encode()
         )
+
+
+def test_generate_mail_table():
+    glsa = GLSA()
+    glsa.affected.append(
+        Affected("dev-java/oracle-jre-bin", None, None, "*", None, "vulnerable")
+    )
+
+    # the atom has no version, and we don't want this to throw an
+    # exception
+    glsa.generate_mail_table()

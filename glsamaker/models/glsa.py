@@ -1,3 +1,4 @@
+import traceback
 from datetime import datetime
 
 from envelope import Envelope
@@ -208,7 +209,7 @@ class GLSA(db.Model):
                 ret += [line]
         return "\n".join(ret)
 
-    def generate_mail_table(self) -> str:
+    def _generate_mail_table(self) -> str:
         # TODO: Maybe try to do this in jinja. It worked for ruby in
         # glsamakerv2..
         # Probably needs to reorganize this in the db properly, so
@@ -319,6 +320,14 @@ class GLSA(db.Model):
                 line_idx += 1
 
         return "\n".join(ret).rstrip()
+
+    def generate_mail_table(self) -> str:
+        try:
+            return self._generate_mail_table()
+        except:
+            bt = traceback.format_exc()
+            app.logger.info(bt)
+            return bt
 
     def generate_xml(self):
         return render_template("glsa.xml", glsa=self)
