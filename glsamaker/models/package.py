@@ -48,14 +48,14 @@ class Affected(db.Model):
     def __init__(self, pkg, version, pkg_range, arch, slot, range_type):
         Package.maybe_add_pkg(pkg)
         self.pkg = pkg
-        self.pkg_range = pkg_range
         self.version = version
+        self.pkg_range = pkg_range
         self.arch = arch
         self.slot = slot
         self.range_type = range_type
 
     def versioned_atom(self):
-        if self.pkg_range and self.version and self.slot:
+        if self.pkg_range and self.version:
             atom = self.range_types_rev[self.pkg_range]
             atom += self.pkg
             atom += "-" + self.version
@@ -64,4 +64,4 @@ class Affected(db.Model):
                 atom += ":" + self.slot
 
             return atom
-        return self.pkg
+        return str(self.pkg)
