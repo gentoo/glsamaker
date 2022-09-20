@@ -14,13 +14,14 @@ class TestAffected:
                 "<dev-java/oracle-jre-bin-1.8.0.202",
                 "<dev-java/oracle-jre-bin-1.8.0.202",
             ),
+            ("<sys-boot/grub-2.06-r3", "<sys-boot/grub-2.06-r3"),
         ],
     )
     def test_versioned_atom(self, a, b):
         a = atom_mod.atom(a)
         atom = Affected(
             str(a.unversioned_atom),
-            a.version,
+            a.fullver,
             # 'if' to properly handle unversioned atoms
             Affected.range_types[a.op] if a.op else None,
             "*",  # we're testing versioning, so use all arches
