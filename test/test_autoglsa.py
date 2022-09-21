@@ -67,6 +67,12 @@ from glsamaker.models.package import Affected
                 atom_mod.atom("<dev-java/openjdk-bin-11.0.13_p8"),
             ],
         ),
+        pytest.param(
+            ["<sys-boot/grub-2.06-r3: creates config file world-readable"],
+            [
+                atom_mod.atom("<sys-boot/grub-2.06-r3"),
+            ],
+        ),
     ],
 )
 def test_get_max_versions(a, expected):

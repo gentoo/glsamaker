@@ -129,7 +129,7 @@ def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
         ret.append(
             Affected(
                 str(atom.unversioned_atom),
-                atom.version,
+                atom.fullver,
                 Affected.range_types[atom.op],
                 "*",
                 atom.slot,
@@ -140,7 +140,7 @@ def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
             ret.append(
                 Affected(
                     str(atom.unversioned_atom),
-                    atom.version,
+                    atom.fullver,
                     Affected.range_types[">="],
                     "*",
                     atom.slot,
