@@ -1,7 +1,7 @@
-from glsamaker.app import db
+from glsamaker.app import Model, db
 
 
-class Reference(db.Model):
+class Reference(Model):
     __tablename__ = "reference"
 
     ref_text = db.Column(db.String(), primary_key=True)

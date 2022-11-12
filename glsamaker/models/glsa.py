@@ -4,7 +4,7 @@ from datetime import datetime
 from envelope import Envelope
 from flask import render_template
 
-from glsamaker.app import app, config, db
+from glsamaker.app import Model, app, config, db
 from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
@@ -40,7 +40,7 @@ glsa_to_affected = db.Table(
 )
 
 
-class GLSA(db.Model):
+class GLSA(Model):
     __tablename__ = "glsa"
 
     id = db.Column(db.Integer(), primary_key=True)

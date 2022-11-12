@@ -1,9 +1,9 @@
 from flask_login import UserMixin
 
-from glsamaker.app import app, db
+from glsamaker.app import Model, app, db
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)

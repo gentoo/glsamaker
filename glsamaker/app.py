@@ -4,7 +4,7 @@ from configparser import ConfigParser
 
 from bugzilla import Bugzilla
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import DefaultMeta, SQLAlchemy
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(32)
@@ -24,5 +24,7 @@ else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://root:root@db/postgres"
 
 db = SQLAlchemy(app)
+
+Model: DefaultMeta = db.Model
 
 bgo = Bugzilla("https://bugs.gentoo.org")
