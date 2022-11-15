@@ -1,7 +1,4 @@
 import difflib
-import os
-import tempfile
-from typing import Generator
 
 import git
 import gnupg
