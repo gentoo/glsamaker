@@ -147,9 +147,8 @@ def test_generate_xml():
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
         glsa_contents = striplines(file_contents(xml_path))
-        with app.app_context():
-            xml = striplines(glsa.generate_xml().splitlines())
-            assert assert_diff(glsa_contents, xml)
+        xml = striplines(glsa.generate_xml().splitlines())
+        assert assert_diff(glsa_contents, xml)
 
 
 def test_generate_mail():
@@ -159,17 +158,20 @@ def test_generate_mail():
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
         mail_contents = [line.strip("\n") for line in file_contents(mail_path)]
-        with app.app_context():
-            time = "Fri, 23 Jul 2021 22:10:35 -0500"
-            generated_mail = (
-                glsa.generate_mail(
-                    date=time, smtpuser=SMTPUSER, replyto="security@gentoo.org"
-                )
-                .as_message()
-                .as_string()
-                .splitlines()
+        time = "Fri, 23 Jul 2021 22:10:35 -0500"
+        generated_mail = (
+            glsa.generate_mail(
+                date=time, smtpuser=SMTPUSER, replyto="security@gentoo.org"
             )
+            .as_message()
+            .as_string()
+            .splitlines()
+        )
+        try:
             assert assert_diff(mail_contents, generated_mail)
+        except:
+            print(glsa_path)
+            raise
 
 
 # https://gist.github.com/angelsenra/60397a72f29e58a7a4c27ed80c6c62d9

@@ -47,6 +47,12 @@ def gitrepo():
         yield directory
 
 
+@pytest.fixture(autouse=True)
+def app_fixture():
+    with app.app_context():
+        yield
+
+
 @pytest.fixture
 def database():
     db.create_all()
