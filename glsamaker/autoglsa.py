@@ -27,7 +27,7 @@ All {} users should upgrade to the latest version:
 
 # emerge --sync
 # emerge --ask --oneshot --verbose "{}"
-"""
+""".strip()
 IMPACT = "Please review the referenced CVE identifiers for details."
 
 
