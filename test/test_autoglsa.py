@@ -2,7 +2,6 @@ from unittest.mock import Mock
 
 import pytest
 from pkgcore.ebuild import atom as atom_mod
-from util import database
 
 from glsamaker.app import app
 from glsamaker.autoglsa import generate_resolution, get_max_versions, glsa_impact

@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import gnupg
-from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff, gpghome
+from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff
 
 from glsamaker import main
 from glsamaker.app import app, db

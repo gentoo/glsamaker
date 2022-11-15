@@ -1,6 +1,6 @@
 import gnupg
 from git.exc import GitCommandError
-from util import GPG_TEST_PASSPHRASE, database, gitrepo, gpghome
+from util import GPG_TEST_PASSPHRASE
 
 from glsamaker.app import app
 from glsamaker.glsarepo import GLSARepo
