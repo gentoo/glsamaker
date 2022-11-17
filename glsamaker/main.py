@@ -180,6 +180,7 @@ def populate_glsa_db():
 
 
 if __name__ == "__main__":
-    db.create_all()
-    populate_glsa_db()
-    app.run(host="0.0.0.0", port=8080)
+    with app.app_context():
+        db.create_all()
+        populate_glsa_db()
+        app.run(host="0.0.0.0", port=8080)
