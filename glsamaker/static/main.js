@@ -8,6 +8,7 @@ function newrow(which) {
 	var arch = document.createElement('input');
 	var remove = document.createElement('button');
 	atom.setAttribute('name', which + '[]');
+	atom.setAttribute('size', 40);
 	arch.setAttribute('name', which + '_arch[]');
 	remove.setAttribute('type', 'button');
 	remove.setAttribute('onclick', 'deleterow(this)');
