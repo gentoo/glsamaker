@@ -7,7 +7,7 @@ from flask import Response, redirect, render_template, request
 from flask_login import LoginManager, current_user, login_required, login_user
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
-from sqlalchemy import desc
+from sqlalchemy import asc
 from wtforms import (
     BooleanField,
     PasswordField,
@@ -131,7 +131,7 @@ def login():
 @app.route("/drafts")
 @login_required
 def drafts():
-    glsas = GLSA.query.filter_by(draft=True).order_by(desc(GLSA.submitted_time))
+    glsas = GLSA.query.filter_by(draft=True).order_by(asc(GLSA.requested_time))
     return render_template("drafts.html", glsas=glsas)
 
 
