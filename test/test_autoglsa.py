@@ -72,6 +72,20 @@ from glsamaker.models.package import Affected
                 atom_mod.atom("<sys-boot/grub-2.06-r3"),
             ],
         ),
+        pytest.param(
+            [
+                "<dev-lang/python-{2.7.18_p11,3.6.13_p5,3.7.10_p6,3.8.10_p2,3.9.5_p2,3.10.0_beta2} <dev-python/pypy-7.3.4_p1, <dev-python/pypy3-{7.3.4_p2,7.3.5_rc3_p1}"
+            ],
+            [
+                # TODO: This isn't quite what we want for GLSA
+                # targeting, but this covers another summary -> atom
+                # edge case
+                atom_mod.atom("<dev-lang/python-3.10.0_beta2"),
+                atom_mod.atom("<dev-python/pypy-7.3.4_p1"),
+                atom_mod.atom("<dev-python/pypy3-7.3.5_p1"),
+            ],
+            marks=pytest.mark.xfail,
+        ),
     ],
 )
 def test_get_max_versions(a, expected):
