@@ -7,7 +7,8 @@ import gnupg
 import pytest
 from util import GPG_TEST_PASSPHRASE, SMTPUSER
 
-from glsamaker.app import app, db
+from glsamaker.app import app as glsamakerapp
+from glsamaker.app import db
 
 
 @pytest.fixture
@@ -47,9 +48,11 @@ def gitrepo():
 
 
 @pytest.fixture(autouse=True)
-def app_fixture():
-    with app.app_context():
-        yield
+def app():
+    glsamakerapp.config.update({"SQLALCHEMY_DATABASE_URI": "sqlite://"})
+
+    with glsamakerapp.app_context():
+        yield glsamakerapp
 
 
 @pytest.fixture
