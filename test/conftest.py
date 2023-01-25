@@ -56,5 +56,10 @@ def app():
 
 
 @pytest.fixture
+def client(app):
+    return app.test_client()
+
+
+@pytest.fixture
 def database():
     db.create_all()
