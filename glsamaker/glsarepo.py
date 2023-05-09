@@ -2,10 +2,9 @@ import os
 from typing import Tuple
 
 import gnupg
+from flask import current_app as app
 from git import Repo
 from git.exc import GitCommandError
-
-from glsamaker.app import app
 
 
 class GLSARepo:

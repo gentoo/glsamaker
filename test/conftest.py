@@ -7,8 +7,9 @@ import gnupg
 import pytest
 from util import GPG_TEST_PASSPHRASE, SMTPUSER
 
-from glsamaker.app import app as glsamakerapp
-from glsamaker.app import db
+from glsamaker.app import create_app
+from glsamaker.extensions import base
+from glsamaker.extensions import db as _db
 
 
 @pytest.fixture
@@ -49,10 +50,11 @@ def gitrepo():
 
 @pytest.fixture(autouse=True)
 def app():
-    glsamakerapp.config.update({"SQLALCHEMY_DATABASE_URI": "sqlite://"})
+    _app = create_app("sqlite://")
 
-    with glsamakerapp.app_context():
-        yield glsamakerapp
+    _app.jinja_loader.searchpath.append("glsamaker/templates")
+    with _app.app_context():
+        yield _app
 
 
 @pytest.fixture
@@ -60,6 +62,9 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture
-def database():
-    db.create_all()
+@pytest.fixture(autouse=True)
+def db(app):
+    _db.init_app(app)
+    with app.app_context():
+        base.metadata.create_all(_db.engine)
+    yield _db

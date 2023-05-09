@@ -3,7 +3,6 @@ from unittest.mock import Mock
 import pytest
 from pkgcore.ebuild import atom as atom_mod
 
-from glsamaker.app import app
 from glsamaker.autoglsa import generate_resolution, get_max_versions, glsa_impact
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
@@ -122,7 +121,7 @@ def test_glsa_impact(a, expected):
     assert glsa_impact([mock]) == expected
 
 
-def test_autogenerate_glsa(database):
+def test_autogenerate_glsa(app, db):
     glsa = GLSA()
     glsa.glsa_id = "1"
 

@@ -1,7 +1,7 @@
-from glsamaker.app import Model, db
+from glsamaker.extensions import base, db
 
 
-class Reference(Model):
+class Reference(base):
     __tablename__ = "reference"
 
     ref_text = db.Column(db.String(), primary_key=True)
@@ -26,7 +26,7 @@ class Reference(Model):
     # TODO: see bug.py's new TODO
     @classmethod
     def new(cls, ref, url=None):
-        row = cls.query.filter_by(ref_text=ref).first()
+        row = db.session.query(cls).filter_by(ref_text=ref).first()
         if row:
             return row
         return Reference(ref, url)

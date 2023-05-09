@@ -2,7 +2,6 @@ import gnupg
 from git.exc import GitCommandError
 from util import GPG_TEST_PASSPHRASE
 
-from glsamaker.app import app
 from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
@@ -23,7 +22,7 @@ def validate_commit(repo):
     # first commit of a repo.
 
 
-def test_commit(gitrepo, gpghome, database):
+def test_commit(app, gitrepo, gpghome, db):
     repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome)
     glsa = GLSA()
     with app.app_context():
@@ -33,7 +32,7 @@ def test_commit(gitrepo, gpghome, database):
     validate_commit(repo)
 
 
-def test_commit_without_subkey(gitrepo, gpghome, database):
+def test_commit_without_subkey(app, gitrepo, gpghome, db):
     gpg = gnupg.GPG(gnupghome=gpghome)
     repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome)
 
@@ -45,7 +44,7 @@ def test_commit_without_subkey(gitrepo, gpghome, database):
     validate_commit(repo)
 
 
-def test_commit_with_subkey(gitrepo, gpghome, database):
+def test_commit_with_subkey(app, gitrepo, gpghome, db):
     gpg = gnupg.GPG(gnupghome=gpghome)
     subkey_fprint = list(gpg.list_keys()[0]["subkey_info"].keys())[0]
     repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome, signing_key=subkey_fprint)
@@ -58,7 +57,7 @@ def test_commit_with_subkey(gitrepo, gpghome, database):
     validate_commit(repo)
 
 
-def test_commit_failure(gitrepo, gpghome, database):
+def test_commit_failure(app, gitrepo, gpghome, db):
     repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome, signing_key="doesn't exist")
 
     glsa = GLSA()
@@ -76,7 +75,7 @@ def test_commit_failure(gitrepo, gpghome, database):
             assert False
 
 
-def test_commit_bugs(gitrepo, gpghome, database):
+def test_commit_bugs(app, db, gitrepo, gpghome):
     repo = GLSARepo(gitrepo, GPG_TEST_PASSPHRASE, gpghome)
 
     glsa = GLSA()

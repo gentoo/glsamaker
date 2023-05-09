@@ -1,7 +1,7 @@
-from glsamaker.app import Model, db
+from glsamaker.extensions import base, db
 
 
-class Package(Model):
+class Package(base):
     __tablename__ = "package"
 
     pkg = db.Column(db.String(), primary_key=True)
@@ -14,7 +14,7 @@ class Package(Model):
         db.session.merge(Package(pkg))
 
 
-class Affected(Model):
+class Affected(base):
     __tablename__ = "affected"
 
     range_types = {

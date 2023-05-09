@@ -4,8 +4,10 @@ import os
 from datetime import datetime
 from xml.etree import ElementTree
 
-import glsamaker.views  # pylint: disable=unused-import
-from glsamaker.app import app, db
+from flask import current_app as app
+
+from glsamaker.app import create_app
+from glsamaker.extensions import base, db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
@@ -137,10 +139,10 @@ def xml_to_glsa(xml):
     requester = get_xml_text(root, './/metadata[@tag="requester"]')
     submitter = get_xml_text(root, './/metadata[@tag="submitter"]')
 
-    if not User.query.filter(User.nick == requester).first():
+    if not db.session.query(User).filter(User.nick == requester).first():
         create_user(requester)
 
-    if not User.query.filter(User.nick == submitter).first():
+    if not db.session.query(User).filter(User.nick == submitter).first():
         create_user(submitter)
 
     glsa.requester = nick_to_uid(requester)
@@ -170,7 +172,7 @@ def populate_glsa_db():
         # yyyymm-xx, so we need to transform the filename into this
         # format before checking the db for its existence
         glsa = os.path.splitext(xml)[0].replace("glsa-", "")
-        if not GLSA.query.filter(GLSA.glsa_id == glsa).first():
+        if not db.session.query(GLSA).filter(GLSA.glsa_id == glsa).first():
             app.logger.debug("Ingesting {}".format(xml))
             with open(os.path.join("glsa", xml), "r") as xml:
                 glsa = xml_to_glsa(xml)
@@ -180,7 +182,9 @@ def populate_glsa_db():
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
+    _app = create_app("postgresql://root:root@db/postgres")
+    with _app.app_context():
+        db.init_app(_app)
+        base.metadata.create_all(db.engine)
         populate_glsa_db()
-        app.run(host="0.0.0.0", port=8080)
+        _app.run(host="0.0.0.0", port=8080)

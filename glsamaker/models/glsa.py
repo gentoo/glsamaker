@@ -2,45 +2,17 @@ import traceback
 from datetime import datetime
 
 from envelope import Envelope
+from flask import current_app as app
 from flask import render_template
 
-from glsamaker.app import Model, app, config, db
+from glsamaker.app import config
+from glsamaker.extensions import base, db
 from glsamaker.glsarepo import GLSARepo
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
 
-glsa_to_bug = db.Table(
-    "glsa_to_bug",
-    db.Column(
-        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
-    ),
-    db.Column("bug_id", db.String(), db.ForeignKey("bug.bug_id", onupdate="cascade")),
-)
 
-glsa_to_ref = db.Table(
-    "glsa_to_ref",
-    db.Column(
-        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
-    ),
-    db.Column(
-        "ref_text", db.String(), db.ForeignKey("reference.ref_text", onupdate="cascade")
-    ),
-)
-
-glsa_to_affected = db.Table(
-    "glsa_to_affected",
-    db.Column(
-        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
-    ),
-    db.Column(
-        "affected_id",
-        db.Integer(),
-        db.ForeignKey("affected.affected_id", onupdate="cascade"),
-    ),
-)
-
-
-class GLSA(Model):
+class GLSA(base):
     __tablename__ = "glsa"
 
     id = db.Column(db.Integer(), primary_key=True)
@@ -53,7 +25,7 @@ class GLSA(Model):
     announced = db.Column(db.Date())
     revision_count = db.Column(db.Integer())
     revised_date = db.Column(db.Date())
-    bugs = db.relationship("Bug", secondary=glsa_to_bug)
+    bugs = db.relationship("Bug", secondary="glsa_to_bug")
     # TODO: lots of variation here, we should cleanup eventually
     access = db.Column(
         db.Enum(
@@ -80,7 +52,7 @@ class GLSA(Model):
             name="access_types",
         )
     )
-    affected = db.relationship("Affected", secondary=glsa_to_affected)
+    affected = db.relationship("Affected", secondary="glsa_to_affected")
     background = db.Column(db.String())
     description = db.Column(db.String())
     impact_type = db.Column(
@@ -89,7 +61,7 @@ class GLSA(Model):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
-    references = db.relationship("Reference", secondary=glsa_to_ref)
+    references = db.relationship("Reference", secondary="glsa_to_ref")
     # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     submitter = db.Column(db.Integer, db.ForeignKey(User.id))
@@ -115,7 +87,8 @@ class GLSA(Model):
         # are in the GLSA (`self`), so we can return the list of
         # references ordered by the reference text.
         references = (
-            Reference.query.filter(
+            db.session.query(Reference)
+            .filter(
                 glsa_to_ref.columns.ref_text == Reference.ref_text,
                 glsa_to_ref.columns.glsa_id == self.glsa_id,
             )
@@ -430,3 +403,37 @@ class GLSA(Model):
             self.committed = True
         glsarepo.push()
         self.release_email()
+
+
+glsa_to_bug = db.Table(
+    "glsa_to_bug",
+    base.metadata,
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column("bug_id", db.String(), db.ForeignKey("bug.bug_id", onupdate="cascade")),
+)
+
+glsa_to_ref = db.Table(
+    "glsa_to_ref",
+    base.metadata,
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column(
+        "ref_text", db.String(), db.ForeignKey("reference.ref_text", onupdate="cascade")
+    ),
+)
+
+glsa_to_affected = db.Table(
+    "glsa_to_affected",
+    base.metadata,
+    db.Column(
+        "glsa_id", db.String(), db.ForeignKey("glsa.glsa_id", onupdate="cascade")
+    ),
+    db.Column(
+        "affected_id",
+        db.Integer(),
+        db.ForeignKey("affected.affected_id", onupdate="cascade"),
+    ),
+)

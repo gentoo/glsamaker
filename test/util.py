@@ -1,11 +1,5 @@
 import difflib
 
-import git
-import gnupg
-import pytest
-
-from glsamaker.app import app, db
-
 GPG_TEST_PASSPHRASE = "secret"
 SMTPUSER = "glsamaker@gentoo.org"
 

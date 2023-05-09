@@ -4,7 +4,6 @@ import gnupg
 from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff
 
 from glsamaker import main
-from glsamaker.app import app, db
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
@@ -102,7 +101,7 @@ All Mozilla Firefox binary users should upgrade to the latest version:
     assert assert_diff(expected.splitlines(), glsa.resolution_xml)
 
 
-def test_get_references():
+def test_get_references(db):
     # TODO: the db object should be the same throughout all tests
     # rather than being created somewhat arbitrarily here
     db.create_all()
@@ -115,9 +114,6 @@ def test_get_references():
     db.session.merge(glsa)
 
     assert glsa.get_reference_texts() == sorted(cves)
-
-
-app.jinja_loader.searchpath.append("glsamaker/templates")
 
 
 glsas = [
@@ -137,7 +133,7 @@ def file_contents(path):
         return f.readlines()
 
 
-def test_generate_xml():
+def test_generate_xml(db):
     # TODO: instead of diffing literal strings of XML, we should be
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
@@ -150,7 +146,7 @@ def test_generate_xml():
         assert assert_diff(glsa_contents, xml)
 
 
-def test_generate_mail():
+def test_generate_mail(db):
     for glsa_path in glsas:
         xml_path = "{}.xml".format(glsa_path)
         mail_path = "{}.mail".format(glsa_path)
@@ -174,7 +170,7 @@ def test_generate_mail():
 
 
 # https://gist.github.com/angelsenra/60397a72f29e58a7a4c27ed80c6c62d9
-def test_generate_mail_signed(gpghome):
+def test_generate_mail_signed(app, gpghome):
     gpg = gnupg.GPG(gnupghome=gpghome)
     subkey_fprint = list(gpg.list_keys()[0]["subkey_info"].keys())[0]
     with app.app_context():

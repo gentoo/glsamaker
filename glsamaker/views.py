@@ -3,8 +3,10 @@ from datetime import date, datetime
 from logging.config import dictConfig
 
 import bcrypt
-from flask import Response, redirect, render_template, request
-from flask_login import LoginManager, current_user, login_required, login_user
+from flask import Blueprint, Response
+from flask import current_app as app
+from flask import redirect, render_template, request
+from flask_login import current_user, login_required, login_user
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
 from sqlalchemy import asc
@@ -18,13 +20,15 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
-from glsamaker.app import app, bgo, config, db
 from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
+from glsamaker.extensions import db, login_manager
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
-from glsamaker.models.user import User, uid_to_nick
+from glsamaker.models.user import User
+
+blueprint = Blueprint("public", __name__, static_folder="../static")
 
 dictConfig(
     {
@@ -44,14 +48,6 @@ dictConfig(
         "root": {"level": "INFO", "handlers": ["wsgi"]},
     }
 )
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-# Terrible hack to allow uid_to_nick to be accessible in jinja
-# templates so we can use it in places like archive.html
-app.jinja_env.globals.update(uid_to_nick=uid_to_nick)
 
 
 class LoginForm(FlaskForm):
@@ -86,7 +82,7 @@ class BugForm(FlaskForm):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.filter_by(id=user_id).first()
+    return db.session.query(User).filter_by(id=user_id).first()
 
 
 @login_manager.unauthorized_handler
@@ -94,13 +90,13 @@ def unauthorized():
     return redirect("/login")
 
 
-@app.route("/login", methods=["GET", "POST"])
+@blueprint.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        user = User.query.filter_by(nick=username).first()
+        user = db.session.query(User).filter_by(nick=username).first()
         if user and user.password:
             if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
                 # Success, so login user and redirect to homepage
@@ -127,11 +123,13 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route("/")
-@app.route("/drafts")
+@blueprint.route("/")
+@blueprint.route("/drafts")
 @login_required
 def drafts():
-    glsas = GLSA.query.filter_by(draft=True).order_by(asc(GLSA.requested_time))
+    glsas = (
+        db.session.query(GLSA).filter_by(draft=True).order_by(asc(GLSA.requested_time))
+    )
     return render_template("drafts.html", glsas=glsas)
 
 
@@ -166,8 +164,8 @@ def parse_atoms(request, range_type):
     return ret
 
 
-@app.route("/edit_glsa", methods=["GET", "POST"])
-@app.route("/edit_glsa/<glsa_id>", methods=["GET", "POST"])
+@blueprint.route("/edit_glsa", methods=["GET", "POST"])
+@blueprint.route("/edit_glsa/<glsa_id>", methods=["GET", "POST"])
 @login_required
 def edit_glsa(glsa_id=None):
     if not glsa_id:
@@ -175,7 +173,7 @@ def edit_glsa(glsa_id=None):
         glsa.glsa_id = str(uuid.uuid4())
         glsa.requester = current_user.id
     else:
-        glsa = GLSA.query.filter_by(glsa_id=glsa_id).first()
+        glsa = db.session.query(GLSA).filter_by(glsa_id=glsa_id).first()
         # No editing released advisories for now
         if not glsa.draft:
             return redirect("/drafts"), 400
@@ -260,7 +258,7 @@ def edit_glsa(glsa_id=None):
     )
 
 
-@app.route("/newbugs", methods=["GET", "POST"])
+@blueprint.route("/newbugs", methods=["GET", "POST"])
 @login_required
 def newbugs():
     form = BugForm()
@@ -279,27 +277,27 @@ def newbugs():
             raise
 
 
-@app.route("/archive")
+@blueprint.route("/archive")
 @login_required
 def archive():
     # TODO: paginate
-    glsas = GLSA.query.filter_by(draft=False).order_by(GLSA.glsa_id).all()
+    glsas = db.session.query(GLSA).filter_by(draft=False).order_by(GLSA.glsa_id).all()
     return render_template("archive.html", glsas=glsas)
 
 
-@app.route("/glsa/<glsa_id>")
+@blueprint.route("/glsa/<glsa_id>")
 @login_required
 def show_glsa(glsa_id):
-    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    advisory = db.session.query(GLSA).filter_by(glsa_id=glsa_id).first()
     if not advisory:
         return render_template("glsa.html"), 404
     return render_template("glsa.html", glsa=advisory)
 
 
-@app.route("/glsa/<glsa_id>/mail")
+@blueprint.route("/glsa/<glsa_id>/mail")
 @login_required
 def glsa_mail(glsa_id):
-    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    advisory = db.session.query(GLSA).filter_by(glsa_id=glsa_id).first()
     if not advisory or not advisory.announced:
         return redirect("/"), 400
     mail = advisory.generate_mail()
@@ -314,10 +312,10 @@ def glsa_mail(glsa_id):
     )
 
 
-@app.route("/glsa/<glsa_id>/xml")
+@blueprint.route("/glsa/<glsa_id>/xml")
 @login_required
 def glsa_xml(glsa_id):
-    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    advisory = db.session.query(GLSA).filter_by(glsa_id=glsa_id).first()
     if not advisory or not advisory.announced:
         return redirect("/"), 400
     return Response(
@@ -331,10 +329,10 @@ def glsa_xml(glsa_id):
     )
 
 
-@app.route("/glsa/<glsa_id>/sendmail")
+@blueprint.route("/glsa/<glsa_id>/sendmail")
 @login_required
 def glsa_send_mail(glsa_id):
-    advisory = GLSA.query.filter_by(glsa_id=glsa_id).first()
+    advisory = db.session.query(GLSA).filter_by(glsa_id=glsa_id).first()
     if not advisory or not advisory.announced:
         return redirect("/"), 400
     advisory.release_email()

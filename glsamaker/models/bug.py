@@ -1,7 +1,7 @@
-from glsamaker.app import Model, db
+from glsamaker.extensions import base, db
 
 
-class Bug(Model):
+class Bug(base):
     __tablename__ = "bug"
 
     bug_id = db.Column(db.String(), primary_key=True)
@@ -13,7 +13,7 @@ class Bug(Model):
     # __new__ so that a class method doesn't have to be called?
     @classmethod
     def new(cls, bug):
-        row = Bug.query.filter_by(bug_id=bug).first()
+        row = db.session.query(Bug).filter_by(bug_id=bug).first()
         if row:
             return row
         return Bug(bug)

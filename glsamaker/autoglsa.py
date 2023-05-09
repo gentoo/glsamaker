@@ -6,11 +6,13 @@ from typing import Dict
 
 import bracex
 from bugzilla.bug import Bug as BugzillaBug
+from flask import current_app as app
 from pkgcore.ebuild import atom as atom_mod
 from pkgcore.ebuild.atom import atom as Atom
 from pkgcore.ebuild.errors import InvalidCPV
 
-from glsamaker.app import app, bgo
+from glsamaker.app import bgo
+from glsamaker.extensions import db
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
@@ -177,13 +179,14 @@ def glsa_impact(bugs: list[BugzillaBug]) -> str:
 def previous_glsa(pkg: str) -> GLSA:
     # Query the Affected table for rows with the package we're looking
     # for
-    affected = Affected.query.filter(Affected.pkg == pkg).all()
+    affected = db.session.query(Affected).filter(Affected.pkg == pkg).all()
 
     # If there's none, we've probably never GLSA'd that package before
     if len(affected) == 0:
         raise FirstGlsaException
     return (
-        GLSA.query.filter(GLSA.affected.contains(affected[-1]))
+        db.session.query(GLSA)
+        .filter(GLSA.affected.contains(affected[-1]))
         .order_by(GLSA.id.desc())
         .first()
     )
