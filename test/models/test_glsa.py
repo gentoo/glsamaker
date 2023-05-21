@@ -133,7 +133,7 @@ def file_contents(path):
         return f.readlines()
 
 
-def test_generate_xml(db):
+def test_regenerate_xml(db):
     # TODO: instead of diffing literal strings of XML, we should be
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
@@ -146,7 +146,7 @@ def test_generate_xml(db):
         assert assert_diff(glsa_contents, xml)
 
 
-def test_generate_mail(db):
+def test_generate_mail_from_xml(db):
     for glsa_path in glsas:
         xml_path = "{}.xml".format(glsa_path)
         mail_path = "{}.mail".format(glsa_path)
@@ -197,12 +197,27 @@ def test_generate_mail_signed(app, db, gpghome):
         )
 
 
-def test_generate_mail_table():
+def test_generate_mail_table(db):
+    # glsa-202305-15
     glsa = GLSA()
-    glsa.affected.append(
-        Affected("dev-java/oracle-jre-bin", None, None, "*", None, "vulnerable")
-    )
+    glsa.affected = [
+        Affected("sys-apps/systemd", "251.3", "lt", "*", "0", "vulnerable"),
+        Affected("sys-apps/systemd", "251.3", "ge", "*", "0", "unaffected"),
+        Affected("sys-apps/systemd-utils", "251.3", "lt", "*", "0", "vulnerable"),
+        Affected("sys-apps/systemd-utils", "251.3", "ge", "*", "0", "unaffected"),
+        Affected("sys-apps/systemd-tmpfiles", "251.3", "lt", "*", "0", "vulnerable"),
+        Affected("sys-fs/udev", "251.3", "lt", "*", "0", "vulnerable"),
+    ]
+    db.session.merge(glsa)
 
-    # the atom has no version, and we don't want this to throw an
-    # exception
-    glsa.generate_mail_table()
+    table = glsa.generate_mail_table()
+
+    expected = """
+Package                    Vulnerable    Unaffected
+-------------------------  ------------  ------------
+sys-apps/systemd           < 251.3       >= 251.3
+sys-apps/systemd-tmpfiles  < 251.3       Vulnerable!
+sys-apps/systemd-utils     < 251.3       >= 251.3
+sys-fs/udev                < 251.3       Vulnerable!
+""".strip()
+    assert assert_diff(expected, table)
