@@ -221,3 +221,39 @@ sys-apps/systemd-utils     < 251.3       >= 251.3
 sys-fs/udev                < 251.3       Vulnerable!
 """.strip()
     assert assert_diff(expected, table)
+
+    glsa = GLSA()
+    # glsa-202305-02
+    glsa.affected = [
+        Affected("dev-lang/python", "3.8.15_p3", "lt", "*", "3.8", "vulnerable"),
+        Affected("dev-lang/python", "3.8.15_p3", "ge", "*", "3.8", "unaffected"),
+        Affected("dev-lang/python", "3.9.15_p3", "lt", "*", "3.9", "vulnerable"),
+        Affected("dev-lang/python", "3.9.15_p3", "ge", "*", "3.9", "unaffected"),
+        Affected("dev-lang/python", "3.10.8_p3", "lt", "*", "3.10", "vulnerable"),
+        Affected("dev-lang/python", "3.10.8_p3", "ge", "*", "3.10", "unaffected"),
+        Affected("dev-lang/python", "3.11.0_p2", "lt", "*", "3.11", "vulnerable"),
+        Affected("dev-lang/python", "3.11.0_p2", "ge", "*", "3.11", "unaffected"),
+        Affected(
+            "dev-lang/python", "3.12.0_alpha1_p2", "lt", "*", "3.12", "vulnerable"
+        ),
+        Affected(
+            "dev-lang/python", "3.12.0_alpha1_p2", "ge", "*", "3.12", "unaffected"
+        ),
+        Affected("dev-lang/pypy3", "7.3.9_p9", "lt", "*", "0", "vulnerable"),
+        Affected("dev-lang/pypy3", "7.3.9_p9", "ge", "*", "0", "unaffected"),
+    ]
+    db.session.merge(glsa)
+
+    table = glsa.generate_mail_table()
+
+    expected = """
+Package          Vulnerable               Unaffected
+---------------  -----------------------  ------------------------
+dev-lang/pypy3   < 7.3.9_p9               >= 7.3.9_p9
+dev-lang/python  < 3.8.15_p3:3.8          >= 3.8.15_p3:3.8
+                 < 3.9.15_p3:3.9          >= 3.9.15_p3:3.9
+                 < 3.10.8_p3:3.10         >= 3.10.8_p3:3.10
+                 < 3.11.0_p2:3.11         >= 3.11.0_p2:3.11
+                 < 3.12.0_alpha1_p2:3.12  >= 3.12.0_alpha1_p2:3.12
+""".strip()
+    assert assert_diff(expected, table)
