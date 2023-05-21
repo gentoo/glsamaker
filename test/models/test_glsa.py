@@ -170,7 +170,7 @@ def test_generate_mail(db):
 
 
 # https://gist.github.com/angelsenra/60397a72f29e58a7a4c27ed80c6c62d9
-def test_generate_mail_signed(app, gpghome):
+def test_generate_mail_signed(app, db, gpghome):
     gpg = gnupg.GPG(gnupghome=gpghome)
     subkey_fprint = list(gpg.list_keys()[0]["subkey_info"].keys())[0]
     with app.app_context():
@@ -178,6 +178,7 @@ def test_generate_mail_signed(app, gpghome):
         # something that will generate the mail properly as we're not
         # testing just how properly it's generated.
         glsa = main.xml_to_glsa(f"{glsas[0]}.xml")
+        db.session.merge(glsa)
         generated_mail = glsa.generate_mail(
             smtpuser=SMTPUSER,
             replyto="security@gentoo.org",
