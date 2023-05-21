@@ -35,10 +35,9 @@ applications.
 Affected packages
 =================
 
-    -------------------------------------------------------------------
-     Package              /     Vulnerable     /            Unaffected
-    -------------------------------------------------------------------
-  1  dev-java/commons-fileupload  <= 1.3                  Vulnerable!
+Package                      Vulnerable    Unaffected
+---------------------------  ------------  ------------
+dev-java/commons-fileupload  <= 1.3        Vulnerable!
 
 Description
 ===========

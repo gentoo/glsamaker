@@ -33,13 +33,12 @@ project.
 Affected packages
 =================
 
-    -------------------------------------------------------------------
-     Package              /     Vulnerable     /            Unaffected
-    -------------------------------------------------------------------
-  1  www-client/firefox         < 91.12.0:esr          >= 91.12.0:esr
-                                < 103.0:rapid          >= 103.0:rapid
-  2  www-client/firefox-bin     < 91.12.0:esr          >= 91.12.0:esr
-                                < 103.0:rapid          >= 103.0:rapid
+Package                 Vulnerable     Unaffected
+----------------------  -------------  --------------
+www-client/firefox      < 91.12.0:esr  >= 91.12.0:esr
+                        < 103.0:rapid  >= 103.0:rapid
+www-client/firefox-bin  < 91.12.0:esr  >= 91.12.0:esr
+                        < 103.0:rapid  >= 103.0:rapid
 
 Description
 ===========

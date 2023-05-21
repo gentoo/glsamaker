@@ -38,9 +38,6 @@ EMPTY BACKGROUND
 Affected packages
 =================
 
-    -------------------------------------------------------------------
-     Package              /     Vulnerable     /            Unaffected
-    -------------------------------------------------------------------
 {{ glsa.generate_mail_table() }}
 
 Description

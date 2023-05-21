@@ -32,10 +32,9 @@ A system and service manager.
 Affected packages
 =================
 
-    -------------------------------------------------------------------
-     Package              /     Vulnerable     /            Unaffected
-    -------------------------------------------------------------------
-  1  sys-apps/systemd           < 248.5                      >= 248.5
+Package           Vulnerable    Unaffected
+----------------  ------------  ------------
+sys-apps/systemd  < 248.5       >= 248.5
 
 Description
 ===========
