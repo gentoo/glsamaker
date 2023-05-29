@@ -20,6 +20,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
+from glsamaker.app import bgo
 from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
 from glsamaker.extensions import db, login_manager
 from glsamaker.models.bug import Bug
