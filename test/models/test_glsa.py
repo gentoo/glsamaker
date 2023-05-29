@@ -4,9 +4,21 @@ import gnupg
 from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff
 
 from glsamaker import main
+from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
+
+
+def test_get_bugs(db):
+    ids = ["1234", "4321", "1111", "2222"]
+    glsa = GLSA()
+    for x in ids:
+        glsa.bugs.append(Bug.new(x))
+
+    db.session.merge(glsa)
+
+    assert sorted(ids) == glsa.get_bugs()
 
 
 def test_resolution_xml():
