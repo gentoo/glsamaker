@@ -245,6 +245,7 @@ class GLSA(base):
                 .filter(
                     Affected.pkg == package,
                     Affected.range_type == "vulnerable",
+                    glsa_to_affected.columns.glsa_id == self.glsa_id,
                 )
             )
 
@@ -254,6 +255,7 @@ class GLSA(base):
                 .filter(
                     Affected.pkg == package,
                     Affected.range_type == "unaffected",
+                    glsa_to_affected.columns.glsa_id == self.glsa_id,
                 )
             )
 
