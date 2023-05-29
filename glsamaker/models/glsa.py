@@ -190,6 +190,7 @@ class GLSA(base):
             .filter(
                 glsa_to_affected.columns.affected_id == Affected.affected_id,
                 glsa_to_affected.columns.glsa_id == self.glsa_id,
+                Affected.pkg == package,
             )
             .distinct()
             .all()
