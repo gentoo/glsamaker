@@ -9,6 +9,7 @@ from tabulate import tabulate
 from glsamaker.app import config
 from glsamaker.extensions import base, db
 from glsamaker.glsarepo import GLSARepo
+from glsamaker.models.bug import Bug
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
@@ -102,8 +103,18 @@ class GLSA(base):
     def get_reference_texts(self):
         return [ref.ref_text for ref in self.get_references()]
 
-    def get_bugs(self):
-        return [bug.bug_id for bug in self.bugs]
+    def get_bugs(self) -> list[str]:
+        items = (
+            db.session.query(Bug.bug_id)
+            .join(glsa_to_bug)
+            .filter(glsa_to_bug.columns.glsa_id == self.glsa_id)
+            .order_by(Bug.bug_id)
+            .distinct()
+            .all()
+        )
+
+        # above query returns a structure of list[Tuple[str,]], prune that down
+        return [item[0] for item in items]
 
     def get_bugs_links(self):
         lst = []
