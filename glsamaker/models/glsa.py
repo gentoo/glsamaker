@@ -137,7 +137,7 @@ class GLSA(base):
                 "Something has gone horribly wrong with GLSA {}!".format(self.id)
             )
             app.logger.error("{} has multiple arches: {}".format(pkg, ret))
-        return list(ret)[0]
+        return list(ret)[0].replace(",", " ")
 
     def get_affected_for_pkg(self, pn):
         return list(filter(lambda x: x.pkg == pn, self.affected))
