@@ -2,7 +2,16 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from glsamaker.views import parse_atoms
+from glsamaker.views import atom_to_affected, parse_atoms
+from glsamaker.models.glsa import GLSA
+
+
+def test_atom_to_affected():
+    glsa = GLSA()
+    glsa.affected = [
+        atom_to_affected("dev-libs/libebml", "arm,ppc,sparc,x86", "unaffected")
+    ]
+    assert glsa.get_affected_arch("dev-libs/libebml") == "arm ppc sparc x86"
 
 
 def test_parse_atoms_unaffected():
