@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from glsamaker.views import atom_to_affected, parse_atoms
 from glsamaker.models.glsa import GLSA
+from glsamaker.views import atom_to_affected, parse_atoms
 
 
 def test_atom_to_affected():
@@ -60,3 +60,8 @@ def test_unauthenticated(app, client, endpoint):
 
     assert response.status_code == 302
     assert response.location == "/login"
+
+
+def test_authenticated(app, auth):
+    response = auth.get("/drafts")
+    assert response.status_code == 200
