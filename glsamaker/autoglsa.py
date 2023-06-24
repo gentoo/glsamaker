@@ -209,7 +209,7 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
     glsa.product_type = "ebuild"
 
     packages = get_max_versions(bugs)
-    glsa.bugs = [Bug.new(str(bug.id)) for bug in bugs]
+    glsa.bugs = [Bug(str(bug.id)) for bug in bugs]
     aliases = bugs_aliases([bug.bug_id for bug in glsa.bugs])
     glsa.references = [Reference.new(alias) for alias in aliases]
     glsa.affected = generate_affected(packages)
