@@ -83,6 +83,7 @@ def test_commit_bugs(app, db, gitrepo, gpghome):
         glsa.glsa_id = 1
         glsa.title = "Foo Bar: Multiple vulnerabilities"
         glsa.bugs = [Bug("654321"), Bug("123456")]
+        db.session.merge(glsa)
         repo.commit(glsa)
 
     expected = """[ GLSA 1 ] Foo Bar: Multiple vulnerabilities
