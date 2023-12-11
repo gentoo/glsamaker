@@ -11,6 +11,14 @@ services:
       - ./glsa:/var/lib/glsamaker/glsa
     ports:
       - "127.0.0.1:8080:8080"
+    # debian bullseye (at least) has a very high open file limit which
+    # triggers a possible bug in snakeoil in which it tries to close
+    # all *possible* file descriptors rather than some subset of open
+    # files..
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 1024
     depends_on:
       db:
         condition: service_healthy
