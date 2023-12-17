@@ -121,7 +121,7 @@ def test_glsa_impact(a, expected):
     assert glsa_impact([mock]) == expected
 
 
-def test_autogenerate_glsa(app, db):
+def test_generate_resolution(app, db):
     glsa = GLSA()
     glsa.glsa_id = "1"
 
