@@ -87,3 +87,38 @@ def test_edit_glsa(app, auth, db):
     response = auth.get(f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}")
 
     assert response.status_code == 200
+
+    glsa_data = {
+        # see views.GLSAForm for what's required here
+        "title": "glsa title",
+        "synopsis": "glsa synopsis",
+        "product_type": "ebuild",
+        "bugs": "123456,654321",
+        "access": "remote",
+        "background": "glsa background",
+        "description": "glsa description",
+        "impact": "glsa impact",
+        "impact_type": "normal",
+        "workaround": "glsa workaround",
+        "resolution": "glsa resolution",
+        "references": "glsa references",
+        "submit": "Submit",
+    }
+
+    # a trivial submit test
+    response = auth.post(
+        f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
+        follow_redirects=True,
+        data=glsa_data,
+    )
+
+    assert response.status_code == 200
+
+    # TODO: test for idempotence too
+    response = auth.post(
+        f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
+        follow_redirects=True,
+        data=glsa_data,
+    )
+
+    assert response.status_code == 200
