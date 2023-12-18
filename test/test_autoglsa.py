@@ -153,3 +153,23 @@ def test_generate_resolution(app, db):
 # emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
 """.strip()
     )
+
+
+def test_autogenerate_glsa(app, db):
+    bug = Mock()
+    bug.id = 828936
+    bug.whiteboard = "A0"
+    bug.product = "Gentoo Security"
+    bug.component = "Vulnerabilities"
+    bug.assignee = "security@gentoo.org"
+    bug.summary = (
+        "<games-server/minecraft-server-1.18.1 remote code execution via bundled log4j"
+    )
+
+    glsa, errors = autogenerate_glsa([bug])
+
+    assert len(errors) == 1
+
+    e = errors[0]
+    assert isinstance(e, NoAtomInSummary)
+    assert e.bug_id == bug.id
