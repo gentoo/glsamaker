@@ -1,3 +1,4 @@
+import uuid
 from unittest.mock import MagicMock
 
 import pytest
@@ -73,5 +74,16 @@ def test_newbugs(app, auth):
         data={"bugs": "828936"},
         follow_redirects=True,
     )
+
+    assert response.status_code == 200
+
+
+def test_edit_glsa(app, auth, db):
+    glsa = GLSA()
+    glsa.draft = True
+    glsa.glsa_id = str(uuid.uuid4())
+    db.session.merge(glsa)
+
+    response = auth.get(f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}")
 
     assert response.status_code == 200

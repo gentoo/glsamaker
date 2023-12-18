@@ -253,8 +253,10 @@ def edit_glsa(glsa_id=None):
         return redirect("/drafts")
 
     if glsa_id:
+        error_bugs = []
         # get errors from newbugs if present
-        error_bugs = request.args.get("error_bugs").split(",")
+        if "error_bugs" in request.args:
+            error_bugs = request.args.get("error_bugs").split(",")
 
         return render_template(
             "edit_glsa.html",
