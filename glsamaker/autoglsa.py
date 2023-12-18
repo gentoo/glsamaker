@@ -9,8 +9,7 @@ from bugzilla.bug import Bug as BugzillaBug
 from flask import current_app as app
 from pkgcore.ebuild import atom as atom_mod
 from pkgcore.ebuild.atom import atom as Atom
-from pkgcore.ebuild.errors import InvalidCPV
-from pkgcore.ebuild.errors import MalformedAtom
+from pkgcore.ebuild.errors import InvalidCPV, MalformedAtom
 
 from glsamaker.app import bgo
 from glsamaker.extensions import db
