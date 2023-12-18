@@ -14,7 +14,7 @@ def test_get_bugs(db):
     ids = ["1234", "4321", "1111", "2222"]
     glsa = GLSA()
     for x in ids:
-        glsa.bugs.append(Bug(x))
+        glsa.bugs.append(Bug.new(x))
 
     db.session.merge(glsa)
 

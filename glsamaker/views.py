@@ -200,7 +200,7 @@ def edit_glsa(glsa_id=None):
         glsa.title = form.title.data.strip()
         glsa.synopsis = form.synopsis.data.strip()
         glsa.product_type = form.product_type.data.strip()
-        glsa.bugs = [Bug(bug.strip()) for bug in form.bugs.data.split(",")]
+        glsa.bugs = [Bug.new(bug.strip()) for bug in form.bugs.data.split(",")]
         glsa.access = form.access.data.strip()
         glsa.affected = parse_atoms(request, "unaffected") + parse_atoms(
             request, "vulnerable"
