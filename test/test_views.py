@@ -65,3 +65,13 @@ def test_unauthenticated(app, client, endpoint):
 def test_authenticated(app, auth):
     response = auth.get("/drafts")
     assert response.status_code == 200
+
+
+def test_newbugs(app, auth):
+    response = auth.post(
+        "/newbugs",
+        data={"bugs": "828936"},
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
