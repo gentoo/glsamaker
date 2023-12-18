@@ -6,6 +6,14 @@
 {% else %}
 <h1>Edit GLSA</h1>
 {% endif %}
+{% if error_bugs %}
+<p><b>Error: couldn't retrieve atoms from some bug summaries! You will need to handle ingesting data from these bugs manually:</b></p>
+<ul>
+{% for bug in error_bugs %}
+<li><p><a href="https://bugs.gentoo.org/{{ bug }}">bug #{{ bug }}</a></p></li>
+{% endfor %}
+</ul>
+{% endif %}
 <h3>{{ glsa.glsa_id | default('Unreleased', true) }}</h3>
 <form method="post">
 	<table>

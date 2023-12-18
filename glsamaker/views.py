@@ -5,7 +5,7 @@ from logging.config import dictConfig
 import bcrypt
 from flask import Blueprint, Response
 from flask import current_app as app
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
@@ -21,7 +21,7 @@ from wtforms import (
 from wtforms.validators import DataRequired
 
 from glsamaker.app import bgo
-from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
+from glsamaker.autoglsa import NoAtomInSummary, autogenerate_glsa, bugs_aliases
 from glsamaker.extensions import db, login_manager
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
@@ -29,6 +29,8 @@ from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 from glsamaker.models.user import User
 
+# TOOD: set up "unauthenticated" and "authenticated" blueprint
+# contexts
 blueprint = Blueprint("public", __name__, static_folder="../static")
 
 dictConfig(
@@ -251,8 +253,15 @@ def edit_glsa(glsa_id=None):
         return redirect("/drafts")
 
     if glsa_id:
+        # get errors from newbugs if present
+        error_bugs = request.args.get("error_bugs").split(",")
+
         return render_template(
-            "edit_glsa.html", form=form, glsa=glsa, current_user=current_user
+            "edit_glsa.html",
+            form=form,
+            glsa=glsa,
+            current_user=current_user,
+            error_bugs=error_bugs,
         )
     return render_template(
         "edit_glsa.html", form=form, glsa=glsa, current_user=current_user, new=True
@@ -267,15 +276,17 @@ def newbugs():
         return render_template("newbugs.html", form=form)
     elif request.method == "POST" and form.validate_on_submit():
         bugs = [int(bug) for bug in form.bugs.data.split(",")]
-        try:
-            glsa = autogenerate_glsa(bgo.getbugs(bugs))
-            glsa.requester = current_user.id
-            db.session.add(glsa)
-            db.session.commit()
-            return redirect("/edit_glsa/{}".format(glsa.glsa_id))
-        except:
-            # TODO: catch failures from glsa generation
-            raise
+        glsa, errors = autogenerate_glsa(bgo.getbugs(bugs))
+        glsa.requester = current_user.id
+        db.session.add(glsa)
+        db.session.commit()
+        return redirect(
+            url_for(
+                "public.edit_glsa",
+                glsa_id=glsa.glsa_id,
+                error_bugs=",".join([str(e.bug_id) for e in errors]),
+            )
+        )
 
 
 @blueprint.route("/archive")

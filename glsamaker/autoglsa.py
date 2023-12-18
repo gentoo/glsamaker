@@ -2,7 +2,7 @@ import itertools
 import re
 import uuid
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Tuple
 
 import bracex
 from bugzilla.bug import Bug as BugzillaBug
@@ -10,6 +10,7 @@ from flask import current_app as app
 from pkgcore.ebuild import atom as atom_mod
 from pkgcore.ebuild.atom import atom as Atom
 from pkgcore.ebuild.errors import InvalidCPV
+from pkgcore.ebuild.errors import MalformedAtom
 
 from glsamaker.app import bgo
 from glsamaker.extensions import db
@@ -41,6 +42,69 @@ class FirstGlsaException(Exception):
     pass
 
 
+class NoAtomInSummary(Exception):
+    def __init__(self, bug: int = 0):
+        self.bug_id = bug
+
+
+def atoms_in_bug_summary(summary: str) -> Dict[str, Atom]:
+    max_versions: Dict[str, Atom] = {}
+
+    # It's common for people to do things like
+    # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
+    # '<foo/bar-1.2', '<foo/bar- 2.2', which is invalid
+    # This converts it into '<foo/bar-{1.2,2.2}: blah blah' instead.
+    summary = re.sub("({.*) (.*})", r"\1\2", summary)
+
+    # The previous regex substitution doesn't quite get all of the
+    # cases of a space between brackets when commas are involved,
+    # so just sledgehammer the extra space away. Probably a way to
+    # do it with re.sub.
+    summary = summary.replace(", ", ",")
+
+    # Get the part of the summary with the affected packages,
+    # before the :
+    summary = summary.split(":")[0]
+
+    # Expand '<foo/bar-{1.2,2.2}' into
+    # ['<foo/bar-1.2', '<foo/bar-2.2']
+    summaries = bracex.expand(summary)
+
+    # Finally, account for the summaries that start out like
+    # '<foo/bar-1.2 <foo/baz-1.3' by splitting each summary in
+    # summaries then flattening the resulting list, giving us a
+    # clean list of each of the packages in the summary
+    summaries = list(itertools.chain(*[x.split() for x in summaries]))
+
+    for summary in summaries:
+        try:
+            # Hack to ensure atoms beginning with = are treated
+            # the way we want them to be. = matters for bug
+            # targeting, but generally not for GLSAs, since we
+            # generally want people to upgrade unconditionally.
+            # See also the apache test for this.
+            package = summary.replace("=", "<")
+            atom = atom_mod.atom(package)
+            unversioned_atom = str(atom.unversioned_atom)
+            if unversioned_atom in max_versions:
+                max_versions[unversioned_atom] = max(
+                    atom, max_versions[unversioned_atom]
+                )
+            else:
+                max_versions[unversioned_atom] = atom
+        except (InvalidCPV, MalformedAtom):
+            # Not fatal if a summary is screwed up enough to fail
+            # out here, we'll be able to figure things out when we
+            # edit the GLSA. Just pass the relevant information to the
+            # caller to handle.
+            app.logger.info("Encountered an autoglsa failure: ")
+            app.logger.info("Summaries: " + str(summaries))
+            app.logger.info("Summary: " + summary)
+            app.logger.info("Package: " + package)
+            raise NoAtomInSummary
+    return max_versions
+
+
 def validate_bugs(bugs: list[BugzillaBug]):
     whiteboards = [bug.whiteboard for bug in bugs]
     products = [bug.product for bug in bugs]
@@ -67,60 +131,31 @@ def validate_bugs(bugs: list[BugzillaBug]):
         raise IllegalBugException([bug.id for bug in assignees])
 
 
-def get_max_versions(bugs: list[BugzillaBug]) -> list[Atom]:
+def get_max_versions(
+    bugs: list[BugzillaBug],
+) -> Tuple[list[Atom], list[NoAtomInSummary]]:
+    errors: list[NoAtomInSummary] = []
     max_versions: Dict[str, Atom] = {}
+
     for bug in bugs:
-        # It's common for people to do things like
-        # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
-        # '<foo/bar-1.2', '<foo/bar- 2.2', which is invalid
-        # This converts it into '<foo/bar-{1.2,2.2}: blah blah' instead.
-        summary = re.sub("({.*) (.*})", r"\1\2", bug.summary)
+        try:
+            # collect the highest version per atom per bug
+            max_versions_in_bug = atoms_in_bug_summary(bug.summary)
 
-        # The previous regex substitution doesn't quite get all of the
-        # cases of a space between brackets when commas are involved,
-        # so just sledgehammer the extra space away. Probably a way to
-        # do it with re.sub.
-        summary = summary.replace(", ", ",")
-
-        # Get the part of the summary with the affected packages,
-        # before the :
-        summary = summary.split(":")[0]
-
-        # Expand '<foo/bar-{1.2,2.2}' into
-        # ['<foo/bar-1.2', '<foo/bar-2.2']
-        summaries = bracex.expand(summary)
-
-        # Finally, account for the summaries that start out like
-        # '<foo/bar-1.2 <foo/baz-1.3' by splitting each summary in
-        # summaries then flattening the resulting list, giving us a
-        # clean list of each of the packages in the summary
-        summaries = list(itertools.chain(*[x.split() for x in summaries]))
-
-        for summary in summaries:
-            try:
-                # Hack to ensure atoms beginning with = are treated
-                # the way we want them to be. = matters for bug
-                # targeting, but generally not for GLSAs, since we
-                # generally want people to upgrade unconditionally.
-                # See also the apache test for this.
-                package = summary.replace("=", "<")
-                atom = atom_mod.atom(package)
-                unversioned_atom = str(atom.unversioned_atom)
-                if unversioned_atom in max_versions:
-                    max_versions[unversioned_atom] = max(
-                        atom, max_versions[unversioned_atom]
+            # iterate through the packages in this bug to collect the
+            # latest version per package across bugs
+            for package in list(max_versions_in_bug.keys()):
+                # now merge together the global max_versions
+                if package in max_versions:
+                    max_versions[package] = max(
+                        max_versions[package], max_versions_in_bug[package]
                     )
                 else:
-                    max_versions[unversioned_atom] = atom
-            except InvalidCPV:
-                # Not fatal if a summary is screwed up enough to fail
-                # out here, we'll be able to figure things out when we
-                # edit the GLSA.
-                app.logger.info("Encountered an autoglsa failure on bug: " + bug.id)
-                app.logger.info("Summaries: " + str(summaries))
-                app.logger.info("Summary: " + summary)
-                app.logger.info("Package: " + package)
-    return list(max_versions.values())
+                    max_versions[package] = max_versions_in_bug[package]
+        except NoAtomInSummary as e:
+            e.bug_id = bug.id
+            errors.append(e)
+    return list(max_versions.values()), errors
 
 
 def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
@@ -199,7 +234,7 @@ def generate_resolution(glsa: GLSA, proper_name: str) -> str:
     return resolution
 
 
-def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
+def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSummary]]:
     app.logger.info("Autogenerating GLSA from bugs: " + str([bug.id for bug in bugs]))
     validate_bugs(bugs)
     glsa = GLSA()
@@ -208,11 +243,12 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
     glsa.requested_time = datetime.now()
     glsa.product_type = "ebuild"
 
-    packages = get_max_versions(bugs)
+    packages, errors = get_max_versions(bugs)
+
     glsa.bugs = [Bug(str(bug.id)) for bug in bugs]
     aliases = bugs_aliases([bug.bug_id for bug in glsa.bugs])
     glsa.references = [Reference.new(alias) for alias in aliases]
-    glsa.affected = generate_affected(packages)
+
     glsa.impact_type = glsa_impact(bugs)
     glsa.workaround = "There is no known workaround at this time."
 
@@ -220,22 +256,24 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> GLSA:
         ["multiple vulnerabilities" in bug.summary.lower() for bug in bugs]
     )
 
-    try:
-        # These are somewhat more speculative than the previous
-        last = previous_glsa(str(packages[0].unversioned_atom))
-        glsa.product = last.product
-        glsa.background = last.background
-        proper_name = last.title.split(":")[0]
-        glsa.title = proper_name + ": "
-        glsa.description = MULTI_DESCRIPTION.format(proper_name)
+    if packages:
+        glsa.affected = generate_affected(packages)
+        try:
+            # These are somewhat more speculative than the previous
+            last = previous_glsa(str(packages[0].unversioned_atom))
+            glsa.product = last.product
+            glsa.background = last.background
+            proper_name = last.title.split(":")[0]
+            glsa.title = proper_name + ": "
+            glsa.description = MULTI_DESCRIPTION.format(proper_name)
 
-        glsa.resolution = generate_resolution(glsa, proper_name)
-    except FirstGlsaException:
-        glsa.title = ", ".join([package.package for package in packages])
-        glsa.title += ": "
+            glsa.resolution = generate_resolution(glsa, proper_name)
+        except FirstGlsaException:
+            glsa.title = ", ".join([package.package for package in packages])
+            glsa.title += ": "
 
     if multiple:
         glsa.title += "Multiple Vulnerabilities"
         glsa.impact = IMPACT
 
-    return glsa
+    return (glsa, errors)

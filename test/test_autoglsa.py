@@ -3,7 +3,13 @@ from unittest.mock import Mock
 import pytest
 from pkgcore.ebuild import atom as atom_mod
 
-from glsamaker.autoglsa import generate_resolution, get_max_versions, glsa_impact
+from glsamaker.autoglsa import (
+    NoAtomInSummary,
+    autogenerate_glsa,
+    generate_resolution,
+    get_max_versions,
+    glsa_impact,
+)
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 
@@ -93,7 +99,8 @@ def test_get_max_versions(a, expected):
         bugs[i].summary = a[i]
     # Don't care about the ordering of the return here, so sort just
     # to ensure similarity
-    assert sorted(get_max_versions(bugs)) == sorted(expected)
+    versions, _ = get_max_versions(bugs)
+    assert sorted(versions) == sorted(expected)
 
 
 @pytest.mark.parametrize(
