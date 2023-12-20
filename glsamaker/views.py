@@ -282,11 +282,15 @@ def newbugs():
         glsa.requester = current_user.id
         db.session.add(glsa)
         db.session.commit()
+        if errors:
+            error_bugs = ",".join([str(e.bug_id) for e in errors])
+            return redirect(
+                url_for("public.edit_glsa", glsa_id=glsa.glsa_id, error_bugs=error_bugs)
+            )
         return redirect(
             url_for(
                 "public.edit_glsa",
                 glsa_id=glsa.glsa_id,
-                error_bugs=",".join([str(e.bug_id) for e in errors]),
             )
         )
 
