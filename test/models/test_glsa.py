@@ -232,7 +232,7 @@ sys-apps/systemd-tmpfiles  < 251.3       Vulnerable!
 sys-apps/systemd-utils     < 251.3       >= 251.3
 sys-fs/udev                < 251.3       Vulnerable!
 """.strip()
-    assert assert_diff(expected, table)
+    assert assert_diff(expected.splitlines(), table.splitlines())
 
     glsa = GLSA()
     # glsa-202305-02
@@ -268,7 +268,7 @@ dev-lang/python  < 3.8.15_p3:3.8          >= 3.8.15_p3:3.8
                  < 3.11.0_p2:3.11         >= 3.11.0_p2:3.11
                  < 3.12.0_alpha1_p2:3.12  >= 3.12.0_alpha1_p2:3.12
 """.strip()
-    assert assert_diff(expected, table)
+    assert assert_diff(expected.splitlines(), table.splitlines())
 
     glsa = GLSA()
     glsa.affected = [
