@@ -269,3 +269,23 @@ dev-lang/python  < 3.8.15_p3:3.8          >= 3.8.15_p3:3.8
                  < 3.12.0_alpha1_p2:3.12  >= 3.12.0_alpha1_p2:3.12
 """.strip()
     assert assert_diff(expected, table)
+
+    glsa = GLSA()
+    glsa.affected = [
+        Affected("net-libs/webkit-gtk", "2.40.5", "ge", "*", "4", "unaffected"),
+        Affected("net-libs/webkit-gtk", "2.40.5", "ge", "*", "4.1", "unaffected"),
+        Affected("net-libs/webkit-gtk", "2.40.5", "ge", "*", "6", "unaffected"),
+        Affected("net-libs/webkit-gtk", "2.40.5", "lt", "*", "4", "vulnerable"),
+    ]
+    db.session.merge(glsa)
+
+    table = glsa.generate_mail_table()
+
+    expected = """
+Package              Vulnerable    Unaffected
+-------------------  ------------  -------------
+net-libs/webkit-gtk  < 2.40.5:4    >= 2.40.5:4
+                                   >= 2.40.5:4.1
+                                   >= 2.40.5:6
+""".strip()
+    assert assert_diff(expected.splitlines(), table.splitlines())
