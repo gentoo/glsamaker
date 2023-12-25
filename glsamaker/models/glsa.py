@@ -86,7 +86,7 @@ class GLSA(base):
             n = max(ids) + 1
         return "{}-{:02}".format(date, n)
 
-    def get_references(self):
+    def get_references(self) -> list[Reference]:
         # Join References with glsa_to_ref to find which references
         # are in the GLSA (`self`), so we can return the list of
         # references ordered by the reference text.
@@ -101,7 +101,7 @@ class GLSA(base):
         )
         return sorted(references)
 
-    def get_reference_texts(self):
+    def get_reference_texts(self) -> list[str]:
         return [ref.ref_text for ref in self.get_references()]
 
     def get_bugs(self) -> list[str]:
@@ -117,7 +117,7 @@ class GLSA(base):
         # above query returns a structure of list[Tuple[str,]], prune that down
         return [item[0] for item in items]
 
-    def get_bugs_links(self):
+    def get_bugs_links(self) -> list[str]:
         lst = []
         link = '<a href="https://bugs.gentoo.org/BUG" title="Bug BUG" target="_blank" rel="noopener">BUG</a>'
 
@@ -126,7 +126,7 @@ class GLSA(base):
             lst.append(x)
         return lst
 
-    def get_pkgs(self):
+    def get_pkgs(self) -> list[str]:
         return sorted(list(set([pkg.pkg for pkg in self.affected])))
 
     def get_affected_arch(self, pn):
@@ -140,17 +140,17 @@ class GLSA(base):
             app.logger.error("{} has multiple arches: {}".format(pkg, ret))
         return list(ret)[0].replace(",", " ")
 
-    def get_affected_for_pkg(self, pn):
+    def get_affected_for_pkg(self, pn) -> list[Affected]:
         return list(filter(lambda x: x.pkg == pn, self.affected))
 
-    def get_unaffected(self):
+    def get_unaffected(self) -> list[Affected]:
         return list(filter(lambda x: x.range_type == "unaffected", self.affected))
 
-    def get_vulnerable(self):
+    def get_vulnerable(self) -> list[Affected]:
         return list(filter(lambda x: x.range_type == "vulnerable", self.affected))
 
     @property
-    def resolution_xml(self):
+    def resolution_xml(self) -> list[str]:
         lines = self.resolution.splitlines()
         ret = []
         in_code = False
@@ -184,7 +184,7 @@ class GLSA(base):
         return ret
 
     @property
-    def resolution_text(self):
+    def resolution_text(self) -> str:
         lines = self.resolution.splitlines()
         ret = []
 
@@ -299,10 +299,10 @@ class GLSA(base):
 
         return tabulate(table, headers=headers)
 
-    def generate_xml(self):
+    def generate_xml(self) -> str:
         return render_template("glsa.xml", glsa=self)
 
-    def generate_mail_text(self):
+    def generate_mail_text(self) -> str:
         return render_template("glsa.mail", glsa=self)
 
     def generate_mail(
