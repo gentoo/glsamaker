@@ -218,12 +218,18 @@ def previous_glsa(pkg: str) -> GLSA:
     # If there's none, we've probably never GLSA'd that package before
     if len(affected) == 0:
         raise FirstGlsaException
-    return (
+
+    last_glsa = (
         db.session.query(GLSA)
         .filter(GLSA.affected.contains(affected[-1]))
         .order_by(GLSA.id.desc())
         .first()
     )
+
+    if last_glsa is None:
+        raise FirstGlsaException
+
+    return last_glsa
 
 
 def generate_resolution(glsa: GLSA, proper_name: str) -> str:
