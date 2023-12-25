@@ -221,13 +221,15 @@ class GLSA(base):
         vulnerable_versions = vulnerable_query.all()
         unaffected_versions = unaffected_query.all()
 
-        vulnerable_versionstr = "{} {}".format(
-            Affected.range_types_rev[vulnerable_versions[0].pkg_range],
-            vulnerable_versions[0].version,
-        )
-
-        if slot:
-            vulnerable_versionstr += ":{}".format(slot)
+        if len(vulnerable_versions) > 0:
+            vulnerable_versionstr = "{} {}".format(
+                Affected.range_types_rev[vulnerable_versions[0].pkg_range],
+                vulnerable_versions[0].version,
+            )
+            if slot:
+                vulnerable_versionstr += ":{}".format(slot)
+        else:
+            vulnerable_versionstr = ""
 
         if len(unaffected_versions) > 0:
             unaffected_versionstr = "{} {}".format(
