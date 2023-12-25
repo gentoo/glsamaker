@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Tuple
 
 from envelope import Envelope
 from flask import current_app as app
@@ -213,7 +214,7 @@ class GLSA(base):
         unaffected_query: Query[Affected],
         include_package: bool = True,
         slot: str = "",
-    ):
+    ) -> Tuple[str, str, str]:
         if slot:
             vulnerable_query = vulnerable_query.filter(Affected.slot == slot)
             unaffected_query = unaffected_query.filter(Affected.slot == slot)
@@ -241,11 +242,11 @@ class GLSA(base):
         else:
             unaffected_versionstr = "Vulnerable!"
 
-        return [
+        return (
             vulnerable_versions[0].pkg if include_package else "",
             vulnerable_versionstr,
             unaffected_versionstr,
-        ]
+        )
 
     def generate_mail_table(self) -> str:
         headers = ["Package", "Vulnerable", "Unaffected"]
