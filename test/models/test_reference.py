@@ -9,6 +9,7 @@ class TestReference:
         b = Reference("CVE-2022-2505")
 
         assert b < a
+        assert not b > a
 
     def test_reference_sort_error(self):
         a = Reference("differing-parts")
