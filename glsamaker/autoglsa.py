@@ -262,7 +262,7 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSumma
     )
 
     if packages:
-        glsa.affected.append(generate_affected(packages))
+        glsa.affected += generate_affected(packages)
         try:
             # These are somewhat more speculative than the previous
             last = previous_glsa(str(packages[0].unversioned_atom))

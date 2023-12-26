@@ -57,7 +57,9 @@ class GLSA(base):
             name="access_types",
         )
     )
-    affected = db.relationship("Affected", secondary="glsa_to_affected")
+    affected: Mapped[list[Affected]] = relationship(
+        "Affected", secondary="glsa_to_affected"
+    )
     background = db.Column(db.String())
     description = db.Column(db.String())
     impact_type = db.Column(
