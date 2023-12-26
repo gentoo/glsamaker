@@ -28,7 +28,7 @@ RESOLUTION = (
     "All {} users should upgrade to the latest version:\n"
     "\n"
     "# emerge --sync\n"
-    '# emerge --ask --oneshot --verbose "{}"'
+    '# emerge --ask --oneshot --verbose "{}"\n\n'
 )
 IMPACT = "Please review the referenced CVE identifiers for details."
 
@@ -236,7 +236,7 @@ def generate_resolution(glsa: GLSA, proper_name: str) -> str:
     resolution = ""
     for x in glsa.get_unaffected():
         resolution += RESOLUTION.format(proper_name, x.versioned_atom())
-    return resolution
+    return resolution.strip()
 
 
 def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSummary]]:

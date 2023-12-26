@@ -154,6 +154,41 @@ def test_generate_resolution(app, db):
 """.strip()
     )
 
+    with app.app_context():
+        glsa.affected = [
+            Affected(
+                "www-client/firefox",
+                "104.0",
+                Affected.range_types[">="],
+                "*",
+                "rapid",
+                "unaffected",
+            ),
+            Affected(
+                "www-client/firefox-bin",
+                "104.0",
+                Affected.range_types[">="],
+                "*",
+                "rapid",
+                "unaffected",
+            ),
+        ]
+        output = generate_resolution(glsa, "Mozilla Firefox")
+
+    assert (
+        output
+        == """All Mozilla Firefox users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
+
+All Mozilla Firefox users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose ">=www-client/firefox-bin-104.0:rapid"
+""".strip()
+    )
+
 
 def test_autogenerate_glsa(app, db):
     bug = Mock()
