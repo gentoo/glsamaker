@@ -222,6 +222,14 @@ class GLSA(base):
         vulnerable_versions = vulnerable_query.all()
         unaffected_versions = unaffected_query.all()
 
+        # the caller should ensure that there's only one package in
+        # the queries that we're fed here
+        # if not - problem!
+        pkgs = {affected.pkg for affected in vulnerable_versions + unaffected_versions}
+
+        if len(pkgs) != 1:
+            raise RuntimeError
+
         if len(vulnerable_versions) > 0:
             vulnerable_versionstr = "{} {}".format(
                 Affected.range_types_rev[vulnerable_versions[0].pkg_range],
@@ -243,7 +251,7 @@ class GLSA(base):
             unaffected_versionstr = "Vulnerable!"
 
         return (
-            vulnerable_versions[0].pkg if include_package else "",
+            list(pkgs)[0] if include_package else "",
             vulnerable_versionstr,
             unaffected_versionstr,
         )

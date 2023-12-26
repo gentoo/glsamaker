@@ -289,3 +289,19 @@ net-libs/webkit-gtk  < 2.40.5:4    >= 2.40.5:4
                                    >= 2.40.5:6
 """.strip()
     assert assert_diff(expected.splitlines(), table.splitlines())
+
+    glsa = GLSA()
+    glsa.affected = [
+        Affected("www-client/firefox-bin", "102.12.0", "ge", "*", "esr", "unaffected"),
+        Affected("www-client/firefox-bin", "102.12.0", "lt", "*", "esr", "unaffected"),
+    ]
+    db.session.merge(glsa)
+
+    table = glsa.generate_mail_table()
+
+    expected = """
+Package                 Vulnerable    Unaffected
+----------------------  ------------  ------------
+www-client/firefox-bin                >= 102.12.0
+""".strip()
+    assert assert_diff(expected.splitlines(), table.splitlines())
