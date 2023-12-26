@@ -1,9 +1,10 @@
 from datetime import datetime
-from typing import Tuple
+from typing import List, Tuple
 
 from envelope import Envelope
 from flask import current_app as app
 from flask import render_template
+from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.orm.query import Query
 from tabulate import tabulate
 
@@ -29,7 +30,7 @@ class GLSA(base):
     announced = db.Column(db.Date())
     revision_count = db.Column(db.Integer())
     revised_date = db.Column(db.Date())
-    bugs = db.relationship("Bug", secondary="glsa_to_bug")
+    bugs: Mapped[list[Bug]] = relationship("Bug", secondary="glsa_to_bug")
     # TODO: lots of variation here, we should cleanup eventually
     access = db.Column(
         db.Enum(
@@ -65,7 +66,9 @@ class GLSA(base):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
-    references = db.relationship("Reference", secondary="glsa_to_ref")
+    references: Mapped[List[Reference]] = relationship(
+        "Reference", secondary="glsa_to_ref"
+    )
     # TODO: bugReady metadata tag?
     requester = db.Column(db.Integer, db.ForeignKey(User.id))
     submitter = db.Column(db.Integer, db.ForeignKey(User.id))
