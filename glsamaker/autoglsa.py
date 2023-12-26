@@ -252,6 +252,7 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSumma
 
     glsa.bugs += [Bug.new(str(bug.id)) for bug in bugs]
     aliases = bugs_aliases([bug.bug_id for bug in glsa.bugs])
+    aliases = list(filter(lambda x: Reference.valid_reference(x), aliases))
     glsa.references += [Reference.new(alias) for alias in aliases]
 
     glsa.impact_type = glsa_impact(bugs)
