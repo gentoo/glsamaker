@@ -12,8 +12,10 @@ class TestReference:
         assert not b > a
 
     def test_reference_sort_error(self):
-        a = Reference("differing-parts")
-        b = Reference("differing")
+        # testing that an error is thrown if we try to sort references
+        # with differing formats
+        a = Reference("CVE-2023-12345")
+        b = Reference("CVE-2023")
 
         try:
             a > b
