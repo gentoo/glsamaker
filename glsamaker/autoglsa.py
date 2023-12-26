@@ -186,7 +186,7 @@ def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
     return ret
 
 
-def bugs_aliases(bugs):
+def bugs_aliases(bugs: list[BugzillaBug]) -> list[str]:
     ret = []
     bugs = bgo.getbugs(bugs)
     for bug in bugs:
