@@ -37,3 +37,13 @@ class TestReference:
     )
     def test_reference_url(self, identifier, url):
         assert Reference(identifier).url == url
+
+    def test_valid_reference(self):
+        invalid_references = ["-fno-common", "VE-2023-0001", "2023-1234"]
+        valid_references = ["CVE-2023-1234", "TALOS-2023-1234"]
+
+        for reference in valid_references:
+            assert Reference.valid_reference(reference)
+
+        for reference in invalid_references:
+            assert not Reference.valid_reference(reference)

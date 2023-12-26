@@ -1,4 +1,10 @@
+from typing import TypeGuard
+
 from glsamaker.extensions import base, db
+
+
+class InvalidReferenceFormatException(Exception):
+    pass
 
 
 class Reference(base):
@@ -7,8 +13,31 @@ class Reference(base):
     ref_text = db.Column(db.String(), primary_key=True)
     url = db.Column(db.String())
 
+    PREFIXES = [
+        "CVE",
+        "GHSA",
+        "GStreamer",
+        "MFSA",
+        "TALOS",
+        "TROVE",
+        "VMSA",
+        "WNPA-SEC",
+        "WSA",
+        "XSA",
+        "YSA",
+        "ZDI-CAN",
+    ]
+
     def __init__(self, ref_text, url=None):
+        # note that we can't actually raise exception on a validation
+        # failure here yet because there are lots of old references
+        # that wouldn't pass the validation, and this would block the
+        # ingestion of old GLSAs
+        # if not self.valid_reference(ref_text):
+        #     raise InvalidReferenceFormatException
+
         self.ref_text = ref_text
+
         if url:
             self.url = url
         else:
@@ -30,6 +59,18 @@ class Reference(base):
         if row:
             return row
         return Reference(ref, url)
+
+    @classmethod
+    def valid_reference(cls, ref_text: str) -> bool:
+        # not using a lambda here and returning a type of
+        # TypeGuard[object] seemingly for:
+        # https://github.com/python/mypy/issues/12682
+        def _ref_startswith_prefix(prefix: str) -> TypeGuard[object]:
+            return ref_text.startswith(prefix)
+
+        if not any(filter(_ref_startswith_prefix, cls.PREFIXES)):
+            return False
+        return True
 
     def __lt__(self, other) -> bool:
         parts = self.ref_text.split("-")
