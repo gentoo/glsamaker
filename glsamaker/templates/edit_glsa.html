@@ -136,6 +136,9 @@
             <tr>
                 <td>References</td>
                 <td>{{ form.references(size=50) }}</td>
+                {% for error in form.references.errors %}
+                <p style="color: red;">{{ error }}</span>
+                {% endfor %}
             </tr>
             <tr>
                 <td>Requester</td>

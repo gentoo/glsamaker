@@ -1,3 +1,7 @@
+from __future__ import (  # needed to reference class types from within the class
+    annotations,
+)
+
 import uuid
 from datetime import date, datetime
 from logging.config import dictConfig
@@ -18,10 +22,10 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 
 from glsamaker.app import bgo
-from glsamaker.autoglsa import NoAtomInSummary, autogenerate_glsa, bugs_aliases
+from glsamaker.autoglsa import autogenerate_glsa, bugs_aliases
 from glsamaker.extensions import db, login_manager
 from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
@@ -76,6 +80,18 @@ class GLSAForm(FlaskForm):
     release = BooleanField("Release")
     ack = BooleanField("Ack")
     submit = SubmitField("Submit")
+
+    @classmethod
+    def validate_references(cls, form: GLSAForm, field: StringField):
+        message = "Invalid references: {}"
+        references = [ref.strip() for ref in field.data.split(",")]
+        invalid_references = list(
+            filter(lambda x: not Reference.valid_reference(x), references)
+        )
+        if invalid_references:
+            message = message.format(", ".join(invalid_references))
+            app.logger.info(message)
+            raise ValidationError(message)
 
 
 class BugForm(FlaskForm):
