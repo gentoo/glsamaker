@@ -1,27 +1,33 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}
-<h1>Drafts</h1>
-<table class="bordered">
-	<tr>
-		<th class="bordered">GLSA ID</th>
-		<th class="bordered">Title</th>
-		<th class="bordered">Requested At</th>
-		<th class="bordered">Requested By</th>
-		<th class="bordered">Acked By</th>
-	</tr>
-	{% for glsa in glsas %}
-	<tr>
-		<td class="bordered"><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
-		<td class="bordered">{{ glsa.title }}</td>
-		<td class="bordered">{{ glsa.requested_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
-		<td class="bordered">{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
-		<td class="bordered">
-			{% if glsa.acked_by %}
-			{{ uid_to_nick(glsa.acked_by) | default("") }}
-			{% endif %}
-		</td>
-	</tr>
-	{% endfor %}
-</table>
+<div class="container">
+    <div class="row">
+        <h1>Drafts</h1>
+    </div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th class="bordered">GLSA ID</th>
+                <th class="bordered">Title</th>
+                <th class="bordered">Requested At</th>
+                <th class="bordered">Requested By</th>
+                <th class="bordered">Acked By</th>
+            </tr>
+            {% for glsa in glsas %}
+            <tr>
+                <td class="bordered"><a href="/glsa/{{ glsa.glsa_id }}">{{ glsa.glsa_id }}</a></td>
+                <td class="bordered">{{ glsa.title }}</td>
+                <td class="bordered">{{ glsa.requested_time.strftime("%Y-%m-%d %H:%M") | default("Unknown", true) }}</td>
+                <td class="bordered">{{ uid_to_nick(glsa.requester) | default("Unknown", true) }}</td>
+                <td class="bordered">
+                    {% if glsa.acked_by %}
+                    {{ uid_to_nick(glsa.acked_by) | default("") }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,8 +1,14 @@
-<form method="post">
-    {{ form.hidden_tag() }}
-    <tr>
-        <td>Bugs: </td>
-        <td>{{ form.bugs }}</td>
-    </tr>
-    <tr><td>{{ form.submit }}</td></tr>
-</form>
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+<div class="container">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <tr>
+            <td>Bugs: </td>
+            <td>{{ form.bugs }}</td>
+        </tr>
+        <tr><td>{{ form.submit }}</td></tr>
+    </form>
+</div>
+{% endblock %}

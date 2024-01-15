@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Login</h1>
-{% if error %}
-<p>Invalid user or password</p>
-{% endif %}
-<form method="post">
-    {{ form.hidden_tag() }}
-	<div>
-		<label>{{ form.username.label }}</label>
-		{{ form.username }}
-	</div>
-	<div>
-		<label>{{ form.password.label }}</label>
-		{{ form.password }}
-	</div>
-    {{ form.submit }}
-</form>
+{% include "navbar.html" %}
+<div class="container">
+    <h1>Login</h1>
+    {% if error %}
+    <p>Invalid user or password</p>
+    {% endif %}
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            <label>{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div>
+            <label>{{ form.password.label }}</label>
+            {{ form.password }}
+        </div>
+        {{ form.submit }}
+    </form>
+</div>
 {% endblock %}

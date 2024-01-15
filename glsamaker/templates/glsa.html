@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% macro package_table(packages) %}
-<table class="bordered">
+<table class="table">
 	<tr>
 		<th>Atom</th>
 		<th>Arch</th>
@@ -15,120 +15,124 @@
 {% endmacro %}
 {% block body %}
 {% include "navbar.html" %}
-<h2>GLSA</h2>
-{% if glsa.draft %}
-<a href="/edit_glsa/{{ glsa.glsa_id }}">Edit</a>
-{% else %}
-<form method="get" action="/glsa/{{ glsa.glsa_id }}/xml">
-	<button type="submit">Download XML</button>
-</form>
-<form method="get" action="/glsa/{{ glsa.glsa_id }}/mail">
-	<button type="submit">Download mailable text</button>
-</form>
-<form method="get" action="/glsa/{{ glsa.glsa_id }}/sendmail">
-	<button type="submit">Send email</button>
-</form>
-{% endif %}
-<table class="bordered">
-	<tr>
-		<th>Field</th>
-		<th>Content</th>
-	</tr>
-	<tr>
-		<td class="bordered">ID</td>
-		<td class="bordered">{{ glsa.glsa_id }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Title</td>
-		<td class="bordered">{{ glsa.title }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Synopsis</td>
-		<td class="bordered">{{ glsa.synopsis }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Product Type</td>
-		<td class="bordered">{{ glsa.product_type }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Announced</td>
-		<td class="bordered">{{ glsa.announced }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Revision Count</td>
-		<td class="bordered">{{ glsa.revision_count }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Revision Date</td>
-		<td class="bordered">{{ glsa.revised_date }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Bugs</td>
-		<td class="bordered">{{ ', '.join(glsa.get_bugs_links()) | safe }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Access</td>
-		<td class="bordered">{{ glsa.access }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Unaffected</td>
-		<td class="bordered">
-			{{ package_table(glsa.get_unaffected()) }}
-		</td>
-	</tr>
-	<tr>
-		<td class="bordered">Vulnerable</td>
-		<td class="bordered">
-			{{ package_table(glsa.get_vulnerable()) }}
-		</td>
-	</tr>
-	<tr>
-		<td class="bordered">Background</td>
-		<td class="bordered">{{ glsa.background }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Description</td>
-		<td class="bordered">{{ glsa.description }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Impact Type</td>
-		<td class="bordered">{{ glsa.impact_type }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Impact</td>
-		<td class="bordered">{{ glsa.impact }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Workaround</td>
-		<td class="bordered">{{ glsa.workaround }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Resolution</td>
-		<td style="white-space:pre-wrap" class="bordered">{{ glsa.resolution }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">References</td>
-		<td class="bordered">{{ ', '.join(glsa.get_reference_texts()) }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Requester</td>
-		<td class="bordered">{{ uid_to_nick(glsa.requester) }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Submitter</td>
-		<td class="bordered">{{ uid_to_nick(glsa.submitter) }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Requested</td>
-		<td class="bordered">{{ glsa.requested_time }}</td>
-	</tr>
-	<tr>
-		<td class="bordered">Submitted</td>
-		<td class="bordered">{{ glsa.submitted_time }}</td>
-	</tr>
-</table>
-{% if glsa.draft %}
-<p style="white-space: pre-wrap">{{ glsa.generate_xml() }}</p>
-<p style="white-space: pre-wrap">{{ glsa.generate_mail_text() }}</p>
-{% endif %}
+<div class="container">
+    <h2>GLSA</h2>
+    {% if glsa.draft %}
+    <a href="/edit_glsa/{{ glsa.glsa_id }}">Edit</a>
+    {% else %}
+    <form method="get" action="/glsa/{{ glsa.glsa_id }}/xml">
+        <button type="submit">Download XML</button>
+    </form>
+    <form method="get" action="/glsa/{{ glsa.glsa_id }}/mail">
+        <button type="submit">Download mailable text</button>
+    </form>
+    <form method="get" action="/glsa/{{ glsa.glsa_id }}/sendmail">
+        <button type="submit">Send email</button>
+    </form>
+    {% endif %}
+    <table class="table">
+        <tr>
+            <th>Field</th>
+            <th>Content</th>
+        </tr>
+        <tr>
+            <td class="bordered">ID</td>
+            <td class="bordered">{{ glsa.glsa_id }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Title</td>
+            <td class="bordered">{{ glsa.title }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Synopsis</td>
+            <td class="bordered">{{ glsa.synopsis }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Product Type</td>
+            <td class="bordered">{{ glsa.product_type }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Announced</td>
+            <td class="bordered">{{ glsa.announced }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Revision Count</td>
+            <td class="bordered">{{ glsa.revision_count }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Revision Date</td>
+            <td class="bordered">{{ glsa.revised_date }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Bugs</td>
+            <td class="bordered">{{ ', '.join(glsa.get_bugs_links()) | safe }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Access</td>
+            <td class="bordered">{{ glsa.access }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Unaffected</td>
+            <td class="bordered">
+                {{ package_table(glsa.get_unaffected()) }}
+            </td>
+        </tr>
+        <tr>
+            <td class="bordered">Vulnerable</td>
+            <td class="bordered">
+                {{ package_table(glsa.get_vulnerable()) }}
+            </td>
+        </tr>
+        <tr>
+            <td class="bordered">Background</td>
+            <td class="bordered">{{ glsa.background }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Description</td>
+            <td class="bordered">{{ glsa.description }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Impact Type</td>
+            <td class="bordered">{{ glsa.impact_type }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Impact</td>
+            <td class="bordered">{{ glsa.impact }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Workaround</td>
+            <td class="bordered">{{ glsa.workaround }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Resolution</td>
+            <td style="white-space:pre-wrap" class="bordered">{{ glsa.resolution }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">References</td>
+            <td class="bordered">{{ ', '.join(glsa.get_reference_texts()) }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Requester</td>
+            <td class="bordered">{{ uid_to_nick(glsa.requester) }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Submitter</td>
+            <td class="bordered">{{ uid_to_nick(glsa.submitter) }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Requested</td>
+            <td class="bordered">{{ glsa.requested_time }}</td>
+        </tr>
+        <tr>
+            <td class="bordered">Submitted</td>
+            <td class="bordered">{{ glsa.submitted_time }}</td>
+        </tr>
+    </table>
+    {% if glsa.draft %}
+    <h2>GLSA XML</h2>
+    <pre style="white-space: pre-wrap">{{ glsa.generate_xml() }}</pre>
+    <h2>GLSA Mail</h2>
+    <pre style="white-space: pre-wrap">{{ glsa.generate_mail_text() }}</pre>
+    {% endif %}
+</div>
 {% endblock %}
