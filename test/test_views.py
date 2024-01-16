@@ -101,7 +101,7 @@ def test_edit_glsa(app, auth, db):
         "impact_type": "normal",
         "workaround": "glsa workaround",
         "resolution": "glsa resolution",
-        "references": "glsa references",
+        "references": "CVE-2000-1234",
         "submit": "Submit",
     }
 
@@ -114,6 +114,16 @@ def test_edit_glsa(app, auth, db):
 
     assert response.status_code == 200
 
+    glsas_with_id = db.session.query(GLSA).filter(GLSA.glsa_id == glsa.glsa_id).all()
+
+    # should only be one with this ID
+    assert len(glsas_with_id) == 1
+
+    glsa_in_db: GLSA = glsas_with_id[0]
+
+    assert glsa_in_db.title == glsa_data["title"]
+    assert glsa_in_db.synopsis == glsa_data["synopsis"]
+
     # TODO: test for idempotence too
     response = auth.post(
         f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
@@ -122,3 +132,19 @@ def test_edit_glsa(app, auth, db):
     )
 
     assert response.status_code == 200
+
+    # submit a new change with invalid reference data
+    glsa_data["references"] = "invalid references"
+    response = auth.post(
+        f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
+        follow_redirects=True,
+        data=glsa_data,
+    )
+
+    glsa_in_db: GLSA = (
+        db.session.query(GLSA).filter(GLSA.glsa_id == glsa.glsa_id).first()
+    )
+
+    # should still be only one reference - newly input reference
+    # should be rejected
+    assert len(glsa_in_db.references) == 1
