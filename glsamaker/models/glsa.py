@@ -1,3 +1,4 @@
+import traceback
 from datetime import datetime
 from typing import List, Tuple
 
@@ -315,8 +316,32 @@ class GLSA(base):
     def generate_xml(self) -> str:
         return render_template("glsa.xml", glsa=self)
 
+    def generate_xml_safe(self) -> str:
+        try:
+            return self.generate_xml()
+        except Exception:
+            app.logger.info(f"XML generation error in {self.glsa_id}:")
+            for affected in self.affected:
+                app.logger.info(
+                    f"  Affected({affected.pkg}, {affected.version}, {affected.pkg_range}, {affected.arch}, {affected.slot}, {affected.range_type})"
+                )
+            app.logger.info(traceback.format_exc())
+            return "Error generating GLSA XML!"
+
     def generate_mail_text(self) -> str:
         return render_template("glsa.mail", glsa=self)
+
+    def generate_mail_text_safe(self) -> str:
+        try:
+            return self.generate_mail_text()
+        except Exception:
+            app.logger.info(f"Mail generation error in {self.glsa_id}:")
+            for affected in self.affected:
+                app.logger.info(
+                    f"  Affected({affected.pkg}, {affected.version}, {affected.pkg_range}, {affected.arch}, {affected.slot}, {affected.range_type})"
+                )
+            app.logger.info(traceback.format_exc())
+            return "Error generating GLSA mail!"
 
     def generate_mail(
         self,

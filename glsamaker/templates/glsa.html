@@ -130,9 +130,9 @@
     </table>
     {% if glsa.draft %}
     <h2>GLSA XML</h2>
-    <pre style="white-space: pre-wrap">{{ glsa.generate_xml() }}</pre>
+    <pre style="white-space: pre-wrap">{{ glsa.generate_xml_safe() | default("Error generating!", true) }}</pre>
     <h2>GLSA Mail</h2>
-    <pre style="white-space: pre-wrap">{{ glsa.generate_mail_text() }}</pre>
+    <pre style="white-space: pre-wrap">{{ glsa.generate_mail_text_safe() | default("Error generating!", true) }}</pre>
     {% endif %}
 </div>
 {% endblock %}
