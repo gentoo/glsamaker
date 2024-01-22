@@ -10,7 +10,7 @@ import bcrypt
 from flask import Blueprint, Response
 from flask import current_app as app
 from flask import redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user
+from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from pkgcore.ebuild.atom import atom
 from sqlalchemy import asc
@@ -60,6 +60,7 @@ dictConfig(
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
+    remember = BooleanField("Remember Me")
     submit = SubmitField("Sign In")
 
 
@@ -115,13 +116,16 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        remember = form.remember.data
         user = db.session.query(User).filter_by(nick=username).first()
         if user and user.password:
             if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
                 # Success, so login user and redirect to homepage
-                login_user(user)
+                login_user(user, remember=remember)
                 app.logger.info(
-                    "Successful login for '{}', id '{}'".format(username, user.id)
+                    "Successful login for '{}', id '{}', {}".format(
+                        username, user.id, remember
+                    )
                 )
                 return redirect("/")
             # Otherwise, return a generic error message to the user,
@@ -140,6 +144,13 @@ def login():
     if request.method == "POST":
         return render_template("login.html", form=form, error=True)
     return render_template("login.html", form=form)
+
+
+@blueprint.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/login")
 
 
 @blueprint.route("/")
