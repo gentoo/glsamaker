@@ -165,8 +165,13 @@ def generate_affected(atoms: list[atom_mod.atom]) -> list[Affected]:
         ret.append(
             Affected(
                 str(atom.unversioned_atom),
-                atom.fullver,
-                Affected.range_types[atom.op],
+                # conditionals to handle cases where there's no fixed
+                # version and all versions are vulnerable - convention
+                # for these packages is to make the "vulnerable"
+                # version the latest version in tree; GLSA editors can
+                # adjust the version as necessary
+                atom.fullver if atom.fullver else "9999",
+                Affected.range_types[atom.op] if atom.op else "le",
                 "*",
                 atom.slot,
                 "vulnerable",

@@ -208,3 +208,17 @@ def test_autogenerate_glsa(app, db):
     e = errors[0]
     assert isinstance(e, NoAtomInSummary)
     assert e.bug_id == bug.id
+
+    bug.id = 713098
+    bug.summary = "dev-java/xmlrpc: Multiple vulnerabilities (CVE-2016-{5002,5003}. CVE-2019-17570)"
+
+    glsa, errors = autogenerate_glsa([bug])
+
+    assert len(errors) == 0
+    assert len(glsa.affected) == 1
+
+    assert glsa.affected[0].pkg == "dev-java/xmlrpc"
+    assert glsa.affected[0].range_type == "vulnerable"
+
+    db.session.merge(glsa)
+    assert glsa.generate_mail_table()
