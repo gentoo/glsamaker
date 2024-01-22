@@ -2,6 +2,5 @@
 .tox
 build
 etc
-glsa
 glsamaker.egg-info
 venv

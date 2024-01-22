@@ -1,4 +1,6 @@
+import os
 import tempfile
+from pathlib import Path
 
 import gnupg
 from util import GPG_TEST_PASSPHRASE, SMTPUSER, assert_diff
@@ -8,6 +10,14 @@ from glsamaker.models.bug import Bug
 from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
+
+GLSA_FILE_DIR = Path(os.path.dirname(__file__)) / ".." / "files" / "glsa"
+GLSAS = [
+    GLSA_FILE_DIR / "glsa-202107-39",
+    GLSA_FILE_DIR / "glsa-202107-48",
+    GLSA_FILE_DIR / "glsa-202107-55",
+    GLSA_FILE_DIR / "glsa-slotted-firefox",
+]
 
 
 def test_get_bugs(db):
@@ -128,14 +138,6 @@ def test_get_references(db):
     assert glsa.get_reference_texts() == sorted(cves)
 
 
-glsas = [
-    "test/files/glsa/glsa-202107-39",
-    "test/files/glsa/glsa-202107-48",
-    "test/files/glsa/glsa-202107-55",
-    "test/files/glsa/glsa-slotted-firefox",
-]
-
-
 def striplines(lines):
     return [line.strip() for line in lines]
 
@@ -149,7 +151,7 @@ def test_regenerate_xml(db):
     # TODO: instead of diffing literal strings of XML, we should be
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
-    for glsa_path in glsas:
+    for glsa_path in GLSAS:
         xml_path = "{}.xml".format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
@@ -159,7 +161,7 @@ def test_regenerate_xml(db):
 
 
 def test_generate_mail_from_xml(db):
-    for glsa_path in glsas:
+    for glsa_path in GLSAS:
         xml_path = "{}.xml".format(glsa_path)
         mail_path = "{}.mail".format(glsa_path)
         glsa = main.xml_to_glsa(xml_path)
@@ -189,7 +191,7 @@ def test_generate_mail_signed(app, db, gpghome):
         # Doesn't matter which GLSA we use here, we only need
         # something that will generate the mail properly as we're not
         # testing just how properly it's generated.
-        glsa = main.xml_to_glsa(f"{glsas[0]}.xml")
+        glsa = main.xml_to_glsa(f"{GLSAS[0]}.xml")
         db.session.merge(glsa)
         generated_mail = glsa.generate_mail(
             smtpuser=SMTPUSER,
