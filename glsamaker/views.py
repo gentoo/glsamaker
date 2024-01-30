@@ -240,19 +240,22 @@ def edit_glsa(glsa_id=None):
         glsa.workaround = form.workaround.data.strip()
         glsa.resolution = form.resolution.data.strip()
 
+        alias_refs = bugs_aliases([bug.bug_id for bug in glsa.bugs])
+
         # There may already be references, but the references we
         # already have might also be bug aliases. Use list() and set()
         # hackery to ensure list uniqueness
-        alias_refs = list(set(bugs_aliases([bug.bug_id for bug in glsa.bugs])))
-        glsa.references = list(
+        references = list(
             set(
                 [
-                    Reference.new(text.strip())
-                    for text in (form.references.data.split(", ") + alias_refs)
+                    text
+                    for text in (form.references.data.split(",") + alias_refs)
                     if text.strip()
                 ]
             )
         )
+
+        glsa.references = [Reference.new(reference) for reference in references]
         glsa.requested_time = datetime.now()
 
         # Release it!
