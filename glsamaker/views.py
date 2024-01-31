@@ -248,7 +248,7 @@ def edit_glsa(glsa_id=None):
         references = list(
             set(
                 [
-                    text
+                    text.strip()
                     for text in (form.references.data.split(",") + alias_refs)
                     if text.strip()
                 ]
