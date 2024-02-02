@@ -85,6 +85,8 @@ class GLSAForm(FlaskForm):
     @classmethod
     def validate_references(cls, form: GLSAForm, field: StringField):
         message = "Invalid references: {}"
+        if not field.data:
+            return
         references = [ref.strip() for ref in field.data.split(",")]
         invalid_references = list(
             filter(lambda x: not Reference.valid_reference(x), references)

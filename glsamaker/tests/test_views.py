@@ -176,3 +176,17 @@ def test_edit_glsa(app, auth, db):
     # len([CVE-2000-1234, CVE-2000-4321]) == 2
     # "notaref" should be excluded
     assert len(glsa_in_db.references) == 2
+
+    # empty references is valid
+    glsa_data["references"] = ""
+    response = auth.post(
+        f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
+        follow_redirects=True,
+        data=glsa_data,
+    )
+
+    glsa_in_db: GLSA = (
+        db.session.query(GLSA).filter(GLSA.glsa_id == glsa.glsa_id).first()
+    )
+
+    assert len(glsa_in_db.references) == 0
