@@ -255,7 +255,11 @@ def edit_glsa(glsa_id=None):
             )
         )
 
-        glsa.references = [Reference.new(reference) for reference in references]
+        glsa.references = [
+            Reference.new(reference)
+            for reference in references
+            if Reference.valid_reference(reference)
+        ]
         glsa.requested_time = datetime.now()
 
         # Release it!

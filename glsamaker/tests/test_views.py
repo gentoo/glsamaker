@@ -1,5 +1,5 @@
 import uuid
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -148,3 +148,31 @@ def test_edit_glsa(app, auth, db):
     # should still be only one reference - newly input reference
     # should be rejected
     assert len(glsa_in_db.references) == 1
+
+    # test that invalid references in bug aliases don't get added to
+    # the GLSA
+    glsa_data["references"] = "CVE-2000-1234"
+    with patch("glsamaker.app.bgo.getbugs") as mock_getbugs:
+        bug_1 = MagicMock()
+        bug_2 = MagicMock()
+
+        bug_1.alias = ["notaref"]
+        bug_2.alias = ["CVE-2000-4321"]
+
+        bug_1.blocks = None
+        bug_2.blocks = None
+
+        mock_getbugs.return_value = [bug_1, bug_2]
+        response = auth.post(
+            f"/edit_glsa/{db.session.query(GLSA).first().glsa_id}",
+            follow_redirects=True,
+            data=glsa_data,
+        )
+
+    glsa_in_db: GLSA = (
+        db.session.query(GLSA).filter(GLSA.glsa_id == glsa.glsa_id).first()
+    )
+
+    # len([CVE-2000-1234, CVE-2000-4321]) == 2
+    # "notaref" should be excluded
+    assert len(glsa_in_db.references) == 2
