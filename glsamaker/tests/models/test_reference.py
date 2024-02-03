@@ -39,6 +39,8 @@ class TestReference:
                 "YSA-2021-03",
                 "https://www.yubico.com/support/security-advisories/YSA-2021-03",
             ),
+            ("XSA-123", "https://xenbits.xen.org/xsa/advisory-123.html"),
+            ("XSAGARBAGE", None),
         ],
     )
     def test_reference_url(self, identifier, url):

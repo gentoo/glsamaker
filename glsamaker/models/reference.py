@@ -52,6 +52,11 @@ class Reference(base):
                 self.url += f"{ref.lower()}.html"
             elif ref_text.startswith("YSA"):
                 self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
+            elif ref_text.startswith("XSA"):
+                ref_text_components = ref_text.split("-")
+                if len(ref_text_components) > 1:
+                    xsa_id = ref_text_components[1]
+                    self.url = f"https://xenbits.xen.org/xsa/advisory-{xsa_id}.html"
 
     # TODO: see bug.py's new TODO
     @classmethod
