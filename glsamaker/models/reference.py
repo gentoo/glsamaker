@@ -16,6 +16,7 @@ class Reference(base):
     PREFIXES = [
         "CVE",
         "GHSA",
+        "GLIBC-SA",
         "GStreamer",
         "MFSA",
         "TALOS",
