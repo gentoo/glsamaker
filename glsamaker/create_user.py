@@ -25,7 +25,7 @@ def add_user(db: SQLAlchemy, nick: str, pw_hash: str) -> None:
 
 if __name__ == "__main__":
     if not len(sys.argv) >= 2:
-        print("Usage: {} nick hash".format(sys.argv[0]))
+        print(f"Usage: {sys.argv[0]} nick hash")
         sys.exit(1)
 
     nick = sys.argv[1]

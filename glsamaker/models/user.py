@@ -31,5 +31,5 @@ def nick_to_uid(nick):
 
 
 def create_user(nick, password=None):
-    app.logger.info("Creating user {}".format(nick))
+    app.logger.info(f"Creating user {nick}")
     db.session.merge(User(nick, password))

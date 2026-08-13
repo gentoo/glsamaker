@@ -1,6 +1,6 @@
 import os
 import tempfile
-from typing import Generator
+from collections.abc import Generator
 
 import git
 import gnupg

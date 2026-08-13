@@ -1,6 +1,5 @@
 import traceback
 from datetime import datetime
-from typing import List, Tuple
 
 from envelope import Envelope
 from flask import current_app as app
@@ -69,7 +68,7 @@ class GLSA(base):
     impact = db.Column(db.String())
     workaround = db.Column(db.String())
     resolution = db.Column(db.String())
-    references: Mapped[List[Reference]] = relationship(
+    references: Mapped[list[Reference]] = relationship(
         "Reference", secondary="glsa_to_ref"
     )
     # TODO: bugReady metadata tag?
@@ -84,13 +83,13 @@ class GLSA(base):
     @classmethod
     def next_id(cls):
         now = datetime.now()
-        date = "{}{:02}".format(now.year, now.month)
+        date = f"{now.year}{now.month:02}"
         query = db.session.query(cls).filter(cls.glsa_id.startswith(date)).all()
         n = 1
         if query:
             ids = [int(x.glsa_id.split("-")[1]) for x in query]
             n = max(ids) + 1
-        return "{}-{:02}".format(date, n)
+        return f"{date}-{n:02}"
 
     def get_references(self) -> list[Reference]:
         # Join References with glsa_to_ref to find which references
@@ -140,10 +139,8 @@ class GLSA(base):
         for pkg in [pkg for pkg in self.affected if pkg.pkg == pn]:
             ret.add(pkg.arch)
         if len(ret) > 1:
-            app.logger.error(
-                "Something has gone horribly wrong with GLSA {}!".format(self.id)
-            )
-            app.logger.error("{} has multiple arches: {}".format(pkg, ret))
+            app.logger.error(f"Something has gone horribly wrong with GLSA {self.id}!")
+            app.logger.error(f"{pkg} has multiple arches: {ret}")
         return list(ret)[0].replace(",", " ")
 
     def get_affected_for_pkg(self, pn) -> list[Affected]:
@@ -220,7 +217,7 @@ class GLSA(base):
         unaffected_query: Query[Affected],
         include_package: bool = True,
         slot: str = "",
-    ) -> Tuple[str, str, str]:
+    ) -> tuple[str, str, str]:
         if slot:
             vulnerable_query = vulnerable_query.filter(Affected.slot == slot)
             unaffected_query = unaffected_query.filter(Affected.slot == slot)

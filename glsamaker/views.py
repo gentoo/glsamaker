@@ -125,23 +125,21 @@ def login():
                 # Success, so login user and redirect to homepage
                 login_user(user, remember=remember)
                 app.logger.info(
-                    "Successful login for '{}', id '{}', {}".format(
-                        username, user.id, remember
-                    )
+                    f"Successful login for '{username}', id '{user.id}', {remember}"
                 )
                 return redirect("/")
             # Otherwise, return a generic error message to the user,
             # but log exactly what happened
-            app.logger.info("Login attempt for '{}' with bad password".format(username))
+            app.logger.info(f"Login attempt for '{username}' with bad password")
         elif not user:
-            app.logger.info("Login attempt from unknown user '{}'".format(username))
+            app.logger.info(f"Login attempt from unknown user '{username}'")
         elif not user.password:
-            app.logger.info("Login attempt for passwordless user '{}'".format(username))
+            app.logger.info(f"Login attempt for passwordless user '{username}'")
         else:
             app.logger.info("Unexpected error in login")
-            app.logger.info("User: {}".format(username))
-            app.logger.info("Password: {}".format(password))
-            app.logger.info("User query: {}".format(user))
+            app.logger.info(f"User: {username}")
+            app.logger.info(f"Password: {password}")
+            app.logger.info(f"User query: {user}")
 
     if request.method == "POST":
         return render_template("login.html", form=form, error=True)
@@ -186,8 +184,8 @@ def parse_atoms(request, range_type):
     ret = []
     # TODO: these need to be properly in the flask form for proper
     # validation, but flask forms with lists is hard
-    atoms = request.form.getlist("{}[]".format(range_type))
-    arches = request.form.getlist("{}_arch[]".format(range_type))
+    atoms = request.form.getlist(f"{range_type}[]")
+    arches = request.form.getlist(f"{range_type}_arch[]")
     for pkg, arch in zip(atoms, arches):
         pkg = pkg.strip()
         arch = arch.strip()
@@ -359,9 +357,7 @@ def glsa_mail(glsa_id):
         mail,
         mimetype="text/plain",
         headers={
-            "Content-disposition": "attachment; filename=glsa-{}.mail".format(
-                advisory.glsa_id
-            )
+            "Content-disposition": f"attachment; filename=glsa-{advisory.glsa_id}.mail"
         },
     )
 
@@ -376,9 +372,7 @@ def glsa_xml(glsa_id):
         advisory.generate_xml(),
         mimetype="text/plain",
         headers={
-            "Content-disposition": "attachment; filename=glsa-{}.xml".format(
-                advisory.glsa_id
-            )
+            "Content-disposition": f"attachment; filename=glsa-{advisory.glsa_id}.xml"
         },
     )
 

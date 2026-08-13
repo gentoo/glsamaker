@@ -1,5 +1,4 @@
 import os
-from typing import Tuple
 
 import gnupg
 from flask import current_app as app
@@ -22,7 +21,7 @@ class GLSARepo:
         self.repo.config_writer().set_value("user", "name", "GLSAMaker").release()
         self.repo.config_writer().set_value("user", "email", self.smtpuser).release()
 
-    def get_key(self) -> Tuple[str, str]:
+    def get_key(self) -> tuple[str, str]:
         gpg = gnupg.GPG(gnupghome=self.gpghome)
         primary_key = gpg.list_keys()[0]
 
@@ -59,7 +58,7 @@ class GLSARepo:
         return (signing_subkeys[0][0], signing_subkeys[0][3])
 
     def commit(self, glsa):
-        filename = os.path.join(self.repo_path, "glsa-{}.xml".format(glsa.glsa_id))
+        filename = os.path.join(self.repo_path, f"glsa-{glsa.glsa_id}.xml")
         with open(filename, "w+") as f:
             f.write(glsa.generate_xml())
         self.repo.git.add(filename)
@@ -101,6 +100,6 @@ class GLSARepo:
 
     def push(self):
         # TODO: we should handle StrictHostKeyChecking better
-        ssh_command = "ssh -i {} -o StrictHostKeyChecking=no".format(self.ssh_key)
+        ssh_command = f"ssh -i {self.ssh_key} -o StrictHostKeyChecking=no"
         with self.repo.git.custom_environment(GIT_SSH_COMMAND=ssh_command):
             self.repo.remotes.origin.push(signed=True)

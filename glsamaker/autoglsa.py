@@ -2,7 +2,6 @@ import itertools
 import re
 import uuid
 from datetime import datetime
-from typing import Dict, Tuple
 
 import bracex
 from bugzilla.bug import Bug as BugzillaBug
@@ -46,8 +45,8 @@ class NoAtomInSummary(Exception):
         self.bug_id = bug
 
 
-def atoms_in_bug_summary(summary: str) -> Dict[str, Atom]:
-    max_versions: Dict[str, Atom] = {}
+def atoms_in_bug_summary(summary: str) -> dict[str, Atom]:
+    max_versions: dict[str, Atom] = {}
 
     # It's common for people to do things like
     # '<foo/bar-{1.2, 2.2}: blah blah' which expands to
@@ -132,9 +131,9 @@ def validate_bugs(bugs: list[BugzillaBug]):
 
 def get_max_versions(
     bugs: list[BugzillaBug],
-) -> Tuple[list[Atom], list[NoAtomInSummary]]:
+) -> tuple[list[Atom], list[NoAtomInSummary]]:
     errors: list[NoAtomInSummary] = []
-    max_versions: Dict[str, Atom] = {}
+    max_versions: dict[str, Atom] = {}
 
     for bug in bugs:
         try:
@@ -244,7 +243,7 @@ def generate_resolution(glsa: GLSA, proper_name: str) -> str:
     return resolution.strip()
 
 
-def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSummary]]:
+def autogenerate_glsa(bugs: list[BugzillaBug]) -> tuple[GLSA, list[NoAtomInSummary]]:
     app.logger.info("Autogenerating GLSA from bugs: " + str([bug.id for bug in bugs]))
     validate_bugs(bugs)
     glsa = GLSA()

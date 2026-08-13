@@ -6,7 +6,7 @@ from glsamaker.models.reference import Reference
 class TestReference:
     def test_reference_validity(self):
         for prefix in Reference.PREFIXES:
-            assert Reference.valid_reference("{}-foo".format(prefix))
+            assert Reference.valid_reference(f"{prefix}-foo")
 
     def test_reference_sort(self):
         a = Reference("CVE-2022-24713")

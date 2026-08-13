@@ -173,7 +173,7 @@ def populate_glsa_db():
         # format before checking the db for its existence
         glsa = os.path.splitext(xml)[0].replace("glsa-", "")
         if not db.session.query(GLSA).filter(GLSA.glsa_id == glsa).first():
-            app.logger.debug("Ingesting {}".format(xml))
+            app.logger.debug(f"Ingesting {xml}")
             with open(os.path.join("glsa", xml), "r") as xml:
                 glsa = xml_to_glsa(xml)
                 db.session.merge(glsa)

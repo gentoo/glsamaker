@@ -152,7 +152,7 @@ def test_regenerate_xml(db):
     # diffing actual xml contents.. somehow. Currently, we're often
     # testing for inconsequential whitespace differences
     for glsa_path in GLSAS:
-        xml_path = "{}.xml".format(glsa_path)
+        xml_path = f"{glsa_path}.xml"
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
         glsa_contents = striplines(file_contents(xml_path))
@@ -162,8 +162,8 @@ def test_regenerate_xml(db):
 
 def test_generate_mail_from_xml(db):
     for glsa_path in GLSAS:
-        xml_path = "{}.xml".format(glsa_path)
-        mail_path = "{}.mail".format(glsa_path)
+        xml_path = f"{glsa_path}.xml"
+        mail_path = f"{glsa_path}.mail"
         glsa = main.xml_to_glsa(xml_path)
         db.session.merge(glsa)
         mail_contents = [line.strip("\n") for line in file_contents(mail_path)]
