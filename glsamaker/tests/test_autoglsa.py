@@ -209,8 +209,10 @@ def test_autogenerate_glsa(app, db):
     glsa, errors = autogenerate_glsa([bug])
 
     assert len(errors) == 0
-    assert len(glsa.affected) == 1
 
+    assert glsa.synopsis == "Multiple vulnerabilities have been found in xmlrpc."
+
+    assert len(glsa.affected) == 1
     assert glsa.affected[0].pkg == "dev-java/xmlrpc"
     assert glsa.affected[0].range_type == "vulnerable"
 
@@ -223,8 +225,8 @@ def test_autogenerate_glsa(app, db):
     glsa, errors = autogenerate_glsa([bug])
 
     assert len(errors) == 0
-    assert len(glsa.affected) == 2
 
+    assert len(glsa.affected) == 2
     assert glsa.affected[0].pkg == "dev-perl/HTTP-Daemon"
     assert glsa.affected[0].range_type == "vulnerable"
     assert glsa.affected[1].pkg == "dev-perl/HTTP-Daemon"

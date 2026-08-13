@@ -19,6 +19,10 @@ from glsamaker.models.reference import Reference
 
 LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
 
+MULTI_SYNOPSIS = (
+    # TODO: Perhaps add ', the worst of which ...' based on the summary?
+    "Multiple vulnerabilities have been found in {}."
+)
 MULTI_DESCRIPTION = (
     "Multiple vulnerabilities have been discovered in {}. "
     "Please review the CVE identifiers referenced below for details."
@@ -275,13 +279,17 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> tuple[GLSA, list[NoAtomInSumma
             glsa.background = last.background
             proper_name = last.title.split(":")[0]
             glsa.title = proper_name + ": "
+            # TODO: These should probably check `multiple`
+            glsa.synopsis = MULTI_SYNOPSIS.format(proper_name)
             glsa.description = MULTI_DESCRIPTION.format(proper_name)
 
             glsa.resolution = generate_resolution(glsa, proper_name)
         except FirstGlsaException:
             glsa.title = ", ".join([package.package for package in packages])
             glsa.title += ": "
-            glsa.resolution = generate_resolution(glsa, glsa.title.split(":")[0])
+            guessed_proper_name = glsa.title.split(":")[0]
+            glsa.synopsis = MULTI_SYNOPSIS.format(guessed_proper_name)
+            glsa.resolution = generate_resolution(glsa, guessed_proper_name)
 
     if multiple:
         glsa.title += "Multiple Vulnerabilities"
