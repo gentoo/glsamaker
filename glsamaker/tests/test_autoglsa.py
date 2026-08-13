@@ -211,6 +211,9 @@ def test_autogenerate_glsa(app, db):
     assert len(errors) == 0
 
     assert glsa.synopsis == "Multiple vulnerabilities have been found in xmlrpc."
+    assert glsa.description == """
+Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE identifiers referenced below for details.
+""".strip()
 
     assert len(glsa.affected) == 1
     assert glsa.affected[0].pkg == "dev-java/xmlrpc"

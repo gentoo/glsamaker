@@ -289,6 +289,7 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> tuple[GLSA, list[NoAtomInSumma
             glsa.title += ": "
             guessed_proper_name = glsa.title.split(":")[0]
             glsa.synopsis = MULTI_SYNOPSIS.format(guessed_proper_name)
+            glsa.description = MULTI_DESCRIPTION.format(guessed_proper_name)
             glsa.resolution = generate_resolution(glsa, guessed_proper_name)
 
     if multiple:
