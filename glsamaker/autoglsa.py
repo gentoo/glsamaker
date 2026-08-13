@@ -23,9 +23,17 @@ MULTI_SYNOPSIS = (
     # TODO: Perhaps add ', the worst of which ...' based on the summary?
     "Multiple vulnerabilities have been found in {}."
 )
+SYNOPSIS = (
+    # TODO: Perhaps add a guess based on the title
+    "A vulnerability has been discovered in {}."
+)
 MULTI_DESCRIPTION = (
     "Multiple vulnerabilities have been discovered in {}. "
     "Please review the CVE identifiers referenced below for details."
+)
+DESCRIPTION = (
+    "A vulnerability has been discovered in {}. "
+    "Please review the CVE identifier referenced below for details."
 )
 RESOLUTION = (
     "All {} users should upgrade to the latest version:\n"
@@ -279,17 +287,24 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> tuple[GLSA, list[NoAtomInSumma
             glsa.background = last.background
             proper_name = last.title.split(":")[0]
             glsa.title = proper_name + ": "
-            # TODO: These should probably check `multiple`
-            glsa.synopsis = MULTI_SYNOPSIS.format(proper_name)
-            glsa.description = MULTI_DESCRIPTION.format(proper_name)
+            if multiple:
+                glsa.synopsis = MULTI_SYNOPSIS.format(proper_name)
+                glsa.description = MULTI_DESCRIPTION.format(proper_name)
+            else:
+                glsa.synopsis = SYNOPSIS.format(proper_name)
+                glsa.description = DESCRIPTION.format(proper_name)
 
             glsa.resolution = generate_resolution(glsa, proper_name)
         except FirstGlsaException:
             glsa.title = ", ".join([package.package for package in packages])
             glsa.title += ": "
             guessed_proper_name = glsa.title.split(":")[0]
-            glsa.synopsis = MULTI_SYNOPSIS.format(guessed_proper_name)
-            glsa.description = MULTI_DESCRIPTION.format(guessed_proper_name)
+            if multiple:
+                glsa.synopsis = MULTI_SYNOPSIS.format(guessed_proper_name)
+                glsa.description = MULTI_DESCRIPTION.format(guessed_proper_name)
+            else:
+                glsa.synopsis = SYNOPSIS.format(guessed_proper_name)
+                glsa.description = DESCRIPTION.format(guessed_proper_name)
             glsa.resolution = generate_resolution(glsa, guessed_proper_name)
 
     if multiple:

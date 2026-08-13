@@ -235,6 +235,11 @@ Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE i
     assert glsa.affected[1].pkg == "dev-perl/HTTP-Daemon"
     assert glsa.affected[1].range_type == "unaffected"
 
+    assert glsa.synopsis == "A vulnerability has been discovered in HTTP-Daemon."
+    assert glsa.description == """
+A vulnerability has been discovered in HTTP-Daemon. Please review the CVE identifier referenced below for details.
+""".strip()
+
     assert glsa.resolution == """
 All HTTP-Daemon users should upgrade to the latest version:
 
