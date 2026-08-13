@@ -282,6 +282,7 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> Tuple[GLSA, list[NoAtomInSumma
         except FirstGlsaException:
             glsa.title = ", ".join([package.package for package in packages])
             glsa.title += ": "
+            glsa.resolution = generate_resolution(glsa, glsa.title.split(":")[0])
 
     if multiple:
         glsa.title += "Multiple Vulnerabilities"

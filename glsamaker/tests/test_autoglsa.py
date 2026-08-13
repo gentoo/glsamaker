@@ -222,3 +222,26 @@ def test_autogenerate_glsa(app, db):
 
     db.session.merge(glsa)
     assert glsa.generate_mail_table()
+
+    bug.id = 908905
+    bug.summary = "<dev-perl/HTTP-Daemon-6.160.0: Incorrect handling of multiple Content-Length headers"
+
+    glsa, errors = autogenerate_glsa([bug])
+
+    assert len(errors) == 0
+    assert len(glsa.affected) == 2
+
+    assert glsa.affected[0].pkg == "dev-perl/HTTP-Daemon"
+    assert glsa.affected[0].range_type == "vulnerable"
+    assert glsa.affected[1].pkg == "dev-perl/HTTP-Daemon"
+    assert glsa.affected[1].range_type == "unaffected"
+
+    assert glsa.resolution == """
+All HTTP-Daemon users should upgrade to the latest version:
+
+# emerge --sync
+# emerge --ask --oneshot --verbose ">=dev-perl/HTTP-Daemon-6.160.0"
+""".strip()
+
+    db.session.merge(glsa)
+    assert glsa.generate_mail_table()
