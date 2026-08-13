@@ -9,19 +9,6 @@ services:
       - ./glsa:/var/lib/glsamaker/glsa
     ports:
       - "127.0.0.1:8080:8080"
-    # on <glibc-2.34, such as what's in debian, os.closefrom as used
-    # in snakeoil runs a long, long loop of close() syscalls rather
-    # than the far faster close_range syscall
-    # snakeoil calls os.closefrom with an upper limit of the maximum
-    # in the current environment, so let's limit that maximum to
-    # reduce cpu burn
-    # see also:
-    # https://bugs.python.org/issue40423
-    # close_range(2)
-    ulimits:
-      nofile:
-        soft: 1024
-        hard: 1024
     depends_on:
       db:
         condition: service_healthy
