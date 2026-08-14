@@ -17,7 +17,7 @@ from glsamaker.models.glsa import GLSA
 from glsamaker.models.package import Affected
 from glsamaker.models.reference import Reference
 
-LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABC~" for y in "01234"]
+LEGAL_WHITEBOARDS = [str(x) + str(y) for x in "ABCD~" for y in "01234"]
 
 MULTI_SYNOPSIS = (
     # TODO: Perhaps add ', the worst of which ...' based on the summary?
