@@ -14,6 +14,7 @@ class Reference(base):
     url = db.Column(db.String())
 
     PREFIXES = [
+        "CAN",
         "CVE",
         "GHSA",
         "GLIBC-SA",
