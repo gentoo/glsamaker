@@ -286,6 +286,17 @@ def autogenerate_glsa(bugs: list[BugzillaBug]) -> tuple[GLSA, list[NoAtomInSumma
             glsa.product = last.product
             glsa.background = last.background
             proper_name = last.title.split(":")[0]
+
+            # Avoid the case where the first GLSA for a package was combined
+            # with another if it would lead to a confusing title.
+            #
+            # It's only a problem if this GLSA is for a single package
+            # rather than multiple again.
+            if len(packages) == 1 and (
+                "," in proper_name or "and" in proper_name.split()
+            ):
+                proper_name = packages[0].package
+
             glsa.title = proper_name + ": "
             if multiple:
                 glsa.synopsis = MULTI_SYNOPSIS.format(proper_name)
