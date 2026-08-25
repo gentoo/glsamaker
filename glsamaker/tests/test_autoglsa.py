@@ -1,3 +1,4 @@
+import textwrap
 from unittest.mock import Mock
 
 import pytest
@@ -145,11 +146,12 @@ def test_generate_resolution(app, db):
         ]
         output = generate_resolution(glsa, "Mozilla Firefox")
 
-    assert output == """All Mozilla Firefox users should upgrade to the latest version:
+    assert output == textwrap.dedent("""
+	All Mozilla Firefox users should upgrade to the latest version:
 
-# emerge --sync
-# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
-""".strip()
+	# emerge --sync
+	# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
+    """).strip()
 
     with app.app_context():
         glsa.affected = [
@@ -172,16 +174,17 @@ def test_generate_resolution(app, db):
         ]
         output = generate_resolution(glsa, "Mozilla Firefox")
 
-    assert output == """All Mozilla Firefox users should upgrade to the latest version:
+    assert output == textwrap.dedent("""
+	All Mozilla Firefox users should upgrade to the latest version:
 
-# emerge --sync
-# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
+	# emerge --sync
+	# emerge --ask --oneshot --verbose ">=www-client/firefox-104.0:rapid"
 
-All Mozilla Firefox users should upgrade to the latest version:
+	All Mozilla Firefox users should upgrade to the latest version:
 
-# emerge --sync
-# emerge --ask --oneshot --verbose ">=www-client/firefox-bin-104.0:rapid"
-""".strip()
+	# emerge --sync
+	# emerge --ask --oneshot --verbose ">=www-client/firefox-bin-104.0:rapid"
+    """).strip()
 
 
 def test_autogenerate_glsa(app, db):
@@ -211,9 +214,9 @@ def test_autogenerate_glsa(app, db):
     assert len(errors) == 0
 
     assert glsa.synopsis == "Multiple vulnerabilities have been found in xmlrpc."
-    assert glsa.description == """
-Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE identifiers referenced below for details.
-""".strip()
+    assert glsa.description == textwrap.dedent("""
+	Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE identifiers referenced below for details.
+    """).strip()
 
     assert len(glsa.affected) == 1
     assert glsa.affected[0].pkg == "dev-java/xmlrpc"
@@ -236,16 +239,16 @@ Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE i
     assert glsa.affected[1].range_type == "unaffected"
 
     assert glsa.synopsis == "A vulnerability has been discovered in HTTP-Daemon."
-    assert glsa.description == """
-A vulnerability has been discovered in HTTP-Daemon. Please review the CVE identifier referenced below for details.
-""".strip()
+    assert glsa.description == textwrap.dedent("""
+	A vulnerability has been discovered in HTTP-Daemon. Please review the CVE identifier referenced below for details.
+    """).strip()
 
-    assert glsa.resolution == """
-All HTTP-Daemon users should upgrade to the latest version:
+    assert glsa.resolution == textwrap.dedent("""
+	All HTTP-Daemon users should upgrade to the latest version:
 
-# emerge --sync
-# emerge --ask --oneshot --verbose ">=dev-perl/HTTP-Daemon-6.160.0"
-""".strip()
+	# emerge --sync
+	# emerge --ask --oneshot --verbose ">=dev-perl/HTTP-Daemon-6.160.0"
+    """).strip()
 
     db.session.merge(glsa)
     assert glsa.generate_mail_table()
