@@ -187,68 +187,70 @@ def test_generate_resolution(app, db):
     """).strip()
 
 
-def test_autogenerate_glsa(app, db):
+def test_autogenerate_glsa(app, db, subtests):
     bug = Mock()
-    bug.id = 828936
-    bug.whiteboard = "A0"
-    bug.product = "Gentoo Security"
-    bug.component = "Vulnerabilities"
-    bug.assignee = "security@gentoo.org"
-    bug.summary = (
-        "<games-server/minecraft-server-1.18.1 remote code execution via bundled log4j"
-    )
 
-    glsa, errors = autogenerate_glsa([bug])
+    with subtests.test(msg="malformed summary"):
+        bug.id = 828936
+        bug.whiteboard = "A0"
+        bug.product = "Gentoo Security"
+        bug.component = "Vulnerabilities"
+        bug.assignee = "security@gentoo.org"
+        bug.summary = "<games-server/minecraft-server-1.18.1 remote code execution via bundled log4j"
 
-    assert len(errors) == 1
+        glsa, errors = autogenerate_glsa([bug])
 
-    e = errors[0]
-    assert isinstance(e, NoAtomInSummary)
-    assert e.bug_id == bug.id
+        assert len(errors) == 1
 
-    bug.id = 713098
-    bug.summary = "dev-java/xmlrpc: Multiple vulnerabilities (CVE-2016-{5002,5003}. CVE-2019-17570)"
+        e = errors[0]
+        assert isinstance(e, NoAtomInSummary)
+        assert e.bug_id == bug.id
 
-    glsa, errors = autogenerate_glsa([bug])
+    with subtests.test(msg="multiple, unfixed"):
+        bug.id = 713098
+        bug.summary = "dev-java/xmlrpc: Multiple vulnerabilities (CVE-2016-{5002,5003}. CVE-2019-17570)"
 
-    assert len(errors) == 0
+        glsa, errors = autogenerate_glsa([bug])
 
-    assert glsa.synopsis == "Multiple vulnerabilities have been found in xmlrpc."
-    assert glsa.description == textwrap.dedent("""
-	Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE identifiers referenced below for details.
-    """).strip()
+        assert len(errors) == 0
 
-    assert len(glsa.affected) == 1
-    assert glsa.affected[0].pkg == "dev-java/xmlrpc"
-    assert glsa.affected[0].range_type == "vulnerable"
+        assert glsa.synopsis == "Multiple vulnerabilities have been found in xmlrpc."
+        assert glsa.description == textwrap.dedent("""
+	    Multiple vulnerabilities have been discovered in xmlrpc. Please review the CVE identifiers referenced below for details.
+        """).strip()
 
-    db.session.merge(glsa)
-    assert glsa.generate_mail_table()
+        assert len(glsa.affected) == 1
+        assert glsa.affected[0].pkg == "dev-java/xmlrpc"
+        assert glsa.affected[0].range_type == "vulnerable"
 
-    bug.id = 908905
-    bug.summary = "<dev-perl/HTTP-Daemon-6.160.0: Incorrect handling of multiple Content-Length headers"
+        db.session.merge(glsa)
+        assert glsa.generate_mail_table()
 
-    glsa, errors = autogenerate_glsa([bug])
+    with subtests.test(msg="single synposis, desc"):
+        bug.id = 908905
+        bug.summary = "<dev-perl/HTTP-Daemon-6.160.0: Incorrect handling of multiple Content-Length headers"
 
-    assert len(errors) == 0
+        glsa, errors = autogenerate_glsa([bug])
 
-    assert len(glsa.affected) == 2
-    assert glsa.affected[0].pkg == "dev-perl/HTTP-Daemon"
-    assert glsa.affected[0].range_type == "vulnerable"
-    assert glsa.affected[1].pkg == "dev-perl/HTTP-Daemon"
-    assert glsa.affected[1].range_type == "unaffected"
+        assert len(errors) == 0
 
-    assert glsa.synopsis == "A vulnerability has been discovered in HTTP-Daemon."
-    assert glsa.description == textwrap.dedent("""
-	A vulnerability has been discovered in HTTP-Daemon. Please review the CVE identifier referenced below for details.
-    """).strip()
+        assert len(glsa.affected) == 2
+        assert glsa.affected[0].pkg == "dev-perl/HTTP-Daemon"
+        assert glsa.affected[0].range_type == "vulnerable"
+        assert glsa.affected[1].pkg == "dev-perl/HTTP-Daemon"
+        assert glsa.affected[1].range_type == "unaffected"
 
-    assert glsa.resolution == textwrap.dedent("""
-	All HTTP-Daemon users should upgrade to the latest version:
+        assert glsa.synopsis == "A vulnerability has been discovered in HTTP-Daemon."
+        assert glsa.description == textwrap.dedent("""
+	    A vulnerability has been discovered in HTTP-Daemon. Please review the CVE identifier referenced below for details.
+        """).strip()
 
-	# emerge --sync
-	# emerge --ask --oneshot --verbose ">=dev-perl/HTTP-Daemon-6.160.0"
-    """).strip()
+        assert glsa.resolution == textwrap.dedent("""
+	    All HTTP-Daemon users should upgrade to the latest version:
 
-    db.session.merge(glsa)
-    assert glsa.generate_mail_table()
+	    # emerge --sync
+	    # emerge --ask --oneshot --verbose ">=dev-perl/HTTP-Daemon-6.160.0"
+        """).strip()
+
+        db.session.merge(glsa)
+        assert glsa.generate_mail_table()
