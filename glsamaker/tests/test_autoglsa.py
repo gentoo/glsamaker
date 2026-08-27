@@ -263,7 +263,7 @@ def test_autogenerate_glsa(app, db, subtests):
 
         assert len(errors) == 0
 
-        assert len(glsa.affected) == 3*2
+        assert len(glsa.affected) == 3 * 2
         assert glsa.affected[0].pkg == "www-client/chromium"
         assert glsa.affected[0].range_type == "vulnerable"
         assert glsa.affected[2].pkg == "www-client/google-chrome"
@@ -282,7 +282,7 @@ def test_autogenerate_glsa(app, db, subtests):
 
         assert len(errors) == 0
 
-        assert len(glsa.affected) == 3*2
+        assert len(glsa.affected) == 3 * 2
         assert glsa.affected[0].pkg == "www-client/chromium"
         assert glsa.affected[0].range_type == "vulnerable"
         assert glsa.affected[2].pkg == "www-client/google-chrome"
@@ -292,3 +292,40 @@ def test_autogenerate_glsa(app, db, subtests):
 
         db.session.merge(glsa)
         assert glsa.generate_mail_table()
+
+
+# pytest doesn't support subtest+xfail yet: https://github.com/pytest-dev/pytest/issues/14101
+@pytest.mark.xfail(reason="not yet implemented")
+def test_auto_multi_pkg_resolution(app, db, subtests):
+    bug = Mock()
+
+    bug.id = 931653
+    bug.whiteboard = "A0"
+    bug.product = "Gentoo Security"
+    bug.component = "Vulnerabilities"
+    bug.assignee = "security@gentoo.org"
+    bug.summary = "<www-client/chromium-124.0.6367.201, <www-client/google-chrome-124.0.6367.201, <www-client/microsoft-edge-124.0.2478.97: Multiple vulnerabilities"
+
+    glsa, errors = autogenerate_glsa([bug])
+
+    assert len(errors) == 0
+    assert len(glsa.affected) == 3 * 2
+    assert glsa.resolution == textwrap.dedent("""
+        All Chromium users should upgrade to the latest version:
+
+        # emerge --sync
+        # emerge --ask --oneshot --verbose ">=www-client/chromium-124.0.6367.201"
+
+        All Google Chrome users should upgrade to the latest version:
+
+        # emerge --sync
+        # emerge --ask --oneshot --verbose ">=www-client/google-chrome-124.0.6367.201"
+
+        All Microsoft Edge users should upgrade to the latest version:
+
+        # emerge --sync
+        # emerge --ask --oneshot --verbose ">=www-client/microsoft-edge-124.0.2478.97"
+    """).strip()
+
+    db.session.merge(glsa)
+    assert glsa.generate_mail_table()
