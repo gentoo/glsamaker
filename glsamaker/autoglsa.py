@@ -80,6 +80,9 @@ def atoms_in_bug_summary(summary: str) -> dict[str, Atom]:
     # ['<foo/bar-1.2', '<foo/bar-2.2']
     summaries = bracex.expand(summary)
 
+    # Handle "app-misc/foo, app-misc/bar: ..."
+    summaries = [summary.replace(",", " ") for summary in summaries]
+
     # Finally, account for the summaries that start out like
     # '<foo/bar-1.2 <foo/baz-1.3' by splitting each summary in
     # summaries then flattening the resulting list, giving us a

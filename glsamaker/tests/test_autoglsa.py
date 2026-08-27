@@ -254,3 +254,41 @@ def test_autogenerate_glsa(app, db, subtests):
 
         db.session.merge(glsa)
         assert glsa.generate_mail_table()
+
+    with subtests.test(msg="multiple pkgs"):
+        bug.id = 931653
+        bug.summary = "<www-client/chromium-124.0.6367.201 <www-client/google-chrome-124.0.6367.201 <www-client/microsoft-edge-124.0.2478.97: Multiple vulnerabilities"
+
+        glsa, errors = autogenerate_glsa([bug])
+
+        assert len(errors) == 0
+
+        assert len(glsa.affected) == 3*2
+        assert glsa.affected[0].pkg == "www-client/chromium"
+        assert glsa.affected[0].range_type == "vulnerable"
+        assert glsa.affected[2].pkg == "www-client/google-chrome"
+        assert glsa.affected[2].range_type == "vulnerable"
+        assert glsa.affected[4].pkg == "www-client/microsoft-edge"
+        assert glsa.affected[4].range_type == "vulnerable"
+
+        db.session.merge(glsa)
+        assert glsa.generate_mail_table()
+
+    with subtests.test(msg="multiple pkgs w/ comma"):
+        bug.id = 931653
+        bug.summary = "<www-client/chromium-124.0.6367.201, <www-client/google-chrome-124.0.6367.201, <www-client/microsoft-edge-124.0.2478.97: Multiple vulnerabilities"
+
+        glsa, errors = autogenerate_glsa([bug])
+
+        assert len(errors) == 0
+
+        assert len(glsa.affected) == 3*2
+        assert glsa.affected[0].pkg == "www-client/chromium"
+        assert glsa.affected[0].range_type == "vulnerable"
+        assert glsa.affected[2].pkg == "www-client/google-chrome"
+        assert glsa.affected[2].range_type == "vulnerable"
+        assert glsa.affected[4].pkg == "www-client/microsoft-edge"
+        assert glsa.affected[4].range_type == "vulnerable"
+
+        db.session.merge(glsa)
+        assert glsa.generate_mail_table()
