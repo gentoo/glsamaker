@@ -114,9 +114,9 @@ License
 =======
 
 {% if glsa.submitted_time %}
-Copyright {{ glsa.submitted_time.year }} Gentoo Foundation, Inc; referenced text
+Copyright {{ glsa.submitted_time.year }} Gentoo Authors; referenced text
 {% else %}
-Copyright YEAR Gentoo Foundation, Inc; referenced text
+Copyright YEAR Gentoo Authors; referenced text
 {% endif %}
 belongs to its owner(s).
 
