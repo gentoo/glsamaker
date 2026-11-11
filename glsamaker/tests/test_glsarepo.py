@@ -90,6 +90,9 @@ def test_commit_bugs(app, db, gitrepo, gpghome):
 
 Bug: https://bugs.gentoo.org/123456
 Bug: https://bugs.gentoo.org/654321
+Acked-by: None <none@gentoo.org>
+Co-authored-by: None <none@gentoo.org>
+Reported-by: None <none@gentoo.org>
 Signed-off-by: GLSAMaker <glsamaker@gentoo.org>
 """
 

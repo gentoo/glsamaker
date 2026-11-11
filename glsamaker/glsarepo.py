@@ -5,6 +5,8 @@ from flask import current_app as app
 from git import Repo
 from git.exc import GitCommandError
 
+from glsamaker.models.user import uid_to_nick
+
 
 class GLSARepo:
     def __init__(self, path, password, gpghome, signing_key=None, ssh_key=None):
@@ -85,10 +87,14 @@ class GLSARepo:
             message += [f"Bug: https://bugs.gentoo.org/{bug}"]
 
         try:
+            # TODO: don't assume gentoo.org
             self.repo.git.commit(
                 "--message",
                 "\n".join(message),
                 f"--gpg-sign={fingerprint}",
+                f"--trailer='Acked-by: <{uid_to_nick(glsa.acked_by)}@gentoo.org>'",
+                f"--trailer='Reported-by: <{uid_to_nick(glsa.requester)}@gentoo.org>'",
+                f"--trailer='Co-authored-by: <{uid_to_nick(glsa.submitter)}@gentoo.org>'",
                 "--signoff",
             )
         except GitCommandError:
