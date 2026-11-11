@@ -92,10 +92,13 @@ class GLSARepo:
                 "--message",
                 "\n".join(message),
                 f"--gpg-sign={fingerprint}",
-                f"--trailer='Acked-by: <{uid_to_nick(glsa.acked_by)}@gentoo.org>'",
-                f"--trailer='Reported-by: <{uid_to_nick(glsa.requester)}@gentoo.org>'",
-                f"--trailer='Co-authored-by: <{uid_to_nick(glsa.submitter)}@gentoo.org>'",
                 "--signoff",
+                "--trailer",
+                f"Acked-by: <{uid_to_nick(glsa.acked_by)}@gentoo.org>",
+                "--trailer",
+                f"Reported-by: <{uid_to_nick(glsa.requester)}@gentoo.org>",
+                "--trailer",
+                f"Co-authored-by: <{uid_to_nick(glsa.submitter)}@gentoo.org>",
             )
         except GitCommandError:
             # If anything went wrong while committing, blow away our
