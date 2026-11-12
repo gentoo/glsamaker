@@ -64,6 +64,9 @@ class Reference(base):
                 self.url = (
                     f"https://www.mozilla.org/en-US/security/advisories/{mfsa_id}/"
                 )
+            elif ref_text.startswith("WNPA-SEC"):
+                wnpa_id = ref_text.lower()
+                self.url = f"https://www.wireshark.org/security/{wnpa_id}.html"
             elif ref_text.startswith("YSA"):
                 self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
             elif ref_text.startswith("XSA"):

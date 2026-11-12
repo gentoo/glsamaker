@@ -54,6 +54,10 @@ class TestReference:
                 "https://www.mozilla.org/en-US/security/advisories/mfsa2026-128/",
             ),
             (
+                "WNPA-SEC-2023-23",
+                "https://www.wireshark.org/security/wnpa-sec-2023-23.html",
+            ),
+            (
                 "YSA-2021-03",
                 "https://www.yubico.com/support/security-advisories/YSA-2021-03",
             ),
