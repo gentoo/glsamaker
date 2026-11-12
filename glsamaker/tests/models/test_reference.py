@@ -44,6 +44,16 @@ class TestReference:
                 "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2024-0001;hb=HEAD",
             ),
             (
+                "MFSA2026-128",
+                "https://www.mozilla.org/en-US/security/advisories/mfsa2026-128/",
+            ),
+            # Include a canonicalised format too
+            # TODO: Handle this on the BZ side with triage/state bot instead?
+            (
+                "MFSA-2026-128",
+                "https://www.mozilla.org/en-US/security/advisories/mfsa2026-128/",
+            ),
+            (
                 "YSA-2021-03",
                 "https://www.yubico.com/support/security-advisories/YSA-2021-03",
             ),

@@ -55,6 +55,15 @@ class Reference(base):
                 self.url = f"https://github.com/advisories/{self.ref_text}"
             elif ref_text.startswith("GLIBC-SA"):
                 self.url = f"https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/{self.ref_text};hb=HEAD"
+            elif ref_text.startswith("MFSA"):
+                # Upstream's format is MFSA{YEAR}-{ID}, but include the more
+                # canonical Gentoo form with 'MFSA-' too.
+                mfsa_id = ref_text.lower()
+                if "mfsa-" in mfsa_id:
+                    mfsa_id = mfsa_id.replace("-", "", 1)
+                self.url = (
+                    f"https://www.mozilla.org/en-US/security/advisories/{mfsa_id}/"
+                )
             elif ref_text.startswith("YSA"):
                 self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
             elif ref_text.startswith("XSA"):
