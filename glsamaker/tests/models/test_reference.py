@@ -36,6 +36,10 @@ class TestReference:
                 "https://gstreamer.freedesktop.org/security/sa-2021-0001.html",
             ),
             (
+                "GHSA-23hg-53q6-hqfg",
+                "https://github.com/advisories/GHSA-23hg-53q6-hqfg",
+            ),
+            (
                 "YSA-2021-03",
                 "https://www.yubico.com/support/security-advisories/YSA-2021-03",
             ),

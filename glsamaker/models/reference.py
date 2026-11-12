@@ -51,6 +51,8 @@ class Reference(base):
                 self.url = "https://gstreamer.freedesktop.org/security/"
                 ref = ref_text.replace("GStreamer-", "")
                 self.url += f"{ref.lower()}.html"
+            elif ref_text.startswith("GHSA"):
+                self.url = f"https://github.com/advisories/{self.ref_text}"
             elif ref_text.startswith("YSA"):
                 self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
             elif ref_text.startswith("XSA"):
