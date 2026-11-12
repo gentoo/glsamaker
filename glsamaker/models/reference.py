@@ -53,6 +53,8 @@ class Reference(base):
                 self.url += f"{ref.lower()}.html"
             elif ref_text.startswith("GHSA"):
                 self.url = f"https://github.com/advisories/{self.ref_text}"
+            elif ref_text.startswith("GLIBC-SA"):
+                self.url = f"https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/{self.ref_text};hb=HEAD"
             elif ref_text.startswith("YSA"):
                 self.url = f"https://www.yubico.com/support/security-advisories/{self.ref_text}"
             elif ref_text.startswith("XSA"):

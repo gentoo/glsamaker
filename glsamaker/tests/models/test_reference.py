@@ -40,6 +40,10 @@ class TestReference:
                 "https://github.com/advisories/GHSA-23hg-53q6-hqfg",
             ),
             (
+                "GLIBC-SA-2024-0001",
+                "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2024-0001;hb=HEAD",
+            ),
+            (
                 "YSA-2021-03",
                 "https://www.yubico.com/support/security-advisories/YSA-2021-03",
             ),
